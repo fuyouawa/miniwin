@@ -55,21 +55,11 @@ void WidgetEngine::DealWithQueue() {
 WidgetEngine::WidgetEngine()
 	: root_{ std::make_shared<WidgetTreeNode>(nullptr, nullptr, true) },
 	is_painting_{ false },
-	ui_thread_id_{ std::this_thread::get_id() },
-	app_{ nullptr }
+	ui_thread_id_{ std::this_thread::get_id() }
 {}
 
 
 void WidgetEngine::InitializeWidget(Widget* widget, Widget* parent) {
-	assert(app_);
-	if (app_->is_executing()) {
-		if (widget->widget_type_ == Widget::Type::kMainWindow) {
-			throw std::runtime_error("The MainWindow must be instantiated before calling Application::Execute!");
-		}
-	}
-	if (GetMainWindow()) {
-		throw std::runtime_error("You can only instantiate one MainWindow!");
-	}
 	assert(IsInUiThread());
 	assert(!widget->owning_node_);
 	auto node_ptr = WidgetTreeNode::Instantiate(widget);
@@ -181,15 +171,6 @@ void WidgetEngine::CloseAll() {
 	for (auto& child : root_->children_) {
 		CloseWidget(child->widget_);
 	}
-}
-
-Widget* WidgetEngine::GetMainWindow() {
-	for (auto& node : root_->children_) {
-		if (node->widget_->widget_type_ == Widget::Type::kMainWindow) {
-			return node->widget_;
-		}
-	}
-	return nullptr;
 }
 }
 }

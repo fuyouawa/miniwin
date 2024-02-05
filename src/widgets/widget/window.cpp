@@ -2,7 +2,7 @@
 #include <mvcgui/internal/wrapper/graphic_utils.h>
 #include <mvcgui/tools/algorithm.h>
 #include <mvcgui/core/drawer.h>
-#include <mvcgui/core/winutils.h>
+#include <imgui/imgui.h>
 
 namespace mvcgui {
 Window::Window(AbstractWindow* parent, std::u8string_view title, bool show)
@@ -33,6 +33,7 @@ void Window::OnPaintBegin()
 	if (is_showing()) {
 		bool open = true;
 		Drawer::BeginWindow(title_, has_close_button_ ? &open : nullptr, flags_, size_);
+		is_docking_ = ImGui::IsWindowDocked();
 		// 获取当前窗体句柄, 然后判断是否改变
 		// 如果改变则说明当前窗体脱离或者停靠到了某个窗体
 		hwnd_ = internal::GraphicUtils::GetCurrentWindow();
@@ -52,7 +53,7 @@ void Window::OnPaintBegin()
 void Window::OnDockingChanged() {
 	// 如果当前窗体非停靠窗, 说明是从默认窗体上剥离出来, 或者从停靠状态取消的窗体, 需要重设置顶状态
 	// 如果当前窗体是停靠窗, 则不改变置顶状态
-	if (!WinUtils::IsWindowDocked()) {
+	if (!is_docking_) {
 		internal::GraphicUtils::SetWindowTop(hwnd_, *top_sc_);
 	}
 }

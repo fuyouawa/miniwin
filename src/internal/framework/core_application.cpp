@@ -185,8 +185,6 @@ CoreApplication::CoreApplication()
         style.WindowRounding = 0.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
-
-    WidgetEngine::instance().app_ = this;
 }
 
 void CoreApplication::DoFps() {

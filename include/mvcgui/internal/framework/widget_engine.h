@@ -10,7 +10,6 @@ namespace mvcgui {
 class Widget;
 
 namespace internal {
-class CoreApplication;
 class WidgetTreeNode;
 using WidgetTreeNodePtr = std::shared_ptr<WidgetTreeNode>;
 
@@ -42,8 +41,6 @@ public:
 
 	void CloseAll();
 
-	Widget* GetMainWindow();
-
 private:
 	WidgetEngine();
 
@@ -59,7 +56,6 @@ private:
 	std::vector<WidgetTreeNodePtr> close_node_queue_;
 	std::vector<Functor> pending_functors_queue_;
 	std::mutex func_queue_mutex_;
-	CoreApplication* app_;
 };
 }
 }

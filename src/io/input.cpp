@@ -2,14 +2,13 @@
 #include <imgui/imgui.h>
 
 namespace mvcgui {
-bool Input::GetKeyDown(KeyCode kc)
+bool Input::IsIoKeyDown(IoKeyCode kc)
 {
 	auto& io = ImGui::GetIO();
 	switch (kc)
 	{
-	case mvcgui::KeyCode::kCtrl:
+	case mvcgui::IoKeyCode::kCtrl:
 		return io.KeyCtrl;
-		break;
 	default:
 		assert(false);
 		return false;

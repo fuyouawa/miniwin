@@ -20,7 +20,6 @@ class Widget : public Object {
 public:
     enum class Type {
         kWindow,
-        kMainWindow,
         kControl,
         kMinimumControl
     };

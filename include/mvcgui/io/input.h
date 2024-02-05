@@ -1,14 +1,19 @@
 #pragma once
 
 namespace mvcgui {
-enum class KeyCode
+enum class IoKeyCode
 {
 	kCtrl
+};
+
+enum class KeyCode
+{
+	//TODO KeyCode
 };
 
 class Input
 {
 public:
-	static bool GetKeyDown(KeyCode kc);
+	static bool IsIoKeyDown(IoKeyCode kc);
 };
 }

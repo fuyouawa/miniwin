@@ -17,7 +17,7 @@ void SelectionItemDelegate::Paint(const AbstractItemView& view, const ModelIndex
 	bool is_selected = view.is_selected_item(index);
 	bool tmp = is_selected;
 	if (Drawer::Selectable(text, &tmp, flags::selectable::kSpanAllColumns | flags::selectable::kAllowOverlap)) {
-        if (Input::GetKeyDown(KeyCode::kCtrl)) {
+        if (Input::IsIoKeyDown(IoKeyCode::kCtrl)) {
             Emit(on_selection_changed_, index, !is_selected);
         }
         else {

@@ -28,10 +28,7 @@ enum Flags {
     kNoDocking = 1 << 19,  // Disable docking of this window
     kNoNav = kNoNavInputs | kNoNavFocus,
     kNoDecoration = kNoTitleBar | kNoResize | kNoScrollbar | kNoCollapse,
-    kNoInputs = kNoMouseInputs | kNoNavInputs | kNoNavFocus,
-
-    // [Internal]
-    kNavFlattened = 1 << 23,  // [BETA] On child window: share focus scope, allow gamepad/keyboard navigation to cross over parent border to this child or between sibling child windows.
+    kNoInputs = kNoMouseInputs | kNoNavInputs | kNoNavFocus
 };
 }
 namespace combobox {

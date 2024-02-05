@@ -1,7 +1,8 @@
 #include <mvcgui/core/application.h>
 #include <mvcgui/internal/framework/widget_engine.h>
 #include <assert.h>
-#include <mvcgui/io/font.h>
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 
 namespace mvcgui {
 Application::Application()
@@ -29,9 +30,12 @@ void Application::OnAppExit() {
 
 void Application::OnDpiScaleChanged()
 {
-    FontUtil::Clear();
-    FontUtil::AddFont("C:/Windows/Fonts/msyh.ttc", cur_scale_.x * 16.0f);
-    FontUtil::Rebuild();
+    auto& io = ImGui::GetIO();
+    io.Fonts->Clear();
+    io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/msyh.ttc", 16 * cur_scale_.x, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+    io.Fonts->Build();
+    ImGui_ImplOpenGL3_DestroyFontsTexture();
+    ImGui_ImplOpenGL3_CreateFontsTexture();
 }
 
 void Application::WindowWannaClose() {

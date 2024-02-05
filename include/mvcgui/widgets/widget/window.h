@@ -13,6 +13,7 @@ public:
 	void EnableCloseButton(bool b);
 
 	bool has_close_button() const { return has_close_button_; }
+	bool is_docking() const { return is_docking_; }
 
 	Signal<> on_close_btn_clicked_;
 
@@ -25,6 +26,7 @@ protected:
 	ScopeCondition top_sc_;
 	void* hwnd_;
 	void* prev_hwnd_;
+	bool is_docking_;
 
 private:
 	bool has_close_button_;
