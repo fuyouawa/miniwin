@@ -42,7 +42,7 @@ void Window::OnPaintBegin()
 			prev_hwnd_ = hwnd_;
 		}
 		if (top_sc_.is_changed() && hwnd_) {
-			internal::GraphicUtils::SetWindowTop(hwnd_, *top_sc_);
+			internal::GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
 		}
 		if (!open) {
 			Emit(on_close_btn_clicked_);
@@ -54,7 +54,7 @@ void Window::OnDockingChanged() {
 	// 如果当前窗体非停靠窗, 说明是从默认窗体上剥离出来, 或者从停靠状态取消的窗体, 需要重设置顶状态
 	// 如果当前窗体是停靠窗, 则不改变置顶状态
 	if (!is_docking_) {
-		internal::GraphicUtils::SetWindowTop(hwnd_, *top_sc_);
+		internal::GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
 	}
 }
 

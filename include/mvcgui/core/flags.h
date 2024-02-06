@@ -82,5 +82,29 @@ enum Flags {
     kEscapeClearsAll = 1 << 20,  // Escape key clears content if not empty, and deactivate otherwise (contrast to default behavior of Escape to revert)
 };
 }
+namespace table_column {
+enum Flags {
+    // Input configuration flags
+    kNone = 0,
+    kDisabled = 1 << 0,   // Overriding/master disable flag: hide column, won't show in context menu (unlike calling TableSetColumnEnabled() which manipulates the user accessible state)
+    kDefaultHide = 1 << 1,   // Default as a hidden/disabled column.
+    kDefaultSort = 1 << 2,   // Default as a sorting column.
+    kWidthFixed = 1 << 4,   // Column will not stretch. Preferable with horizontal scrolling enabled (default if table sizing policy is _SizingFixedFit and table is resizable).
+    kNoResize = 1 << 5,   // Disable manual resizing.
+    kNoReorder = 1 << 6,   // Disable manual reordering this column, this will also prevent other columns from crossing over this column.
+    kNoHide = 1 << 7,   // Disable ability to hide/disable this column.
+    kNoClip = 1 << 8,   // Disable clipping for this column (all NoClip columns will render in a same draw command).
+    kNoSort = 1 << 9,   // Disable ability to sort on this field (even if ImGuiTableFlags_Sortable is set on the table).
+    kNoSortAscending = 1 << 10,  // Disable ability to sort in the ascending direction.
+    kNoSortDescending = 1 << 11,  // Disable ability to sort in the descending direction.
+    kNoHeaderLabel = 1 << 12,  // TableHeadersRow() will not submit horizontal label for this column. Convenient for some small columns. Name will still appear in context menu or in angled headers.
+    kNoHeaderWidth = 1 << 13,  // Disable header text width contribution to automatic column width.
+    kPreferSortAscending = 1 << 14,  // Make the initial sort direction Ascending when first sorting on this column (default).
+    kPreferSortDescending = 1 << 15,  // Make the initial sort direction Descending when first sorting on this column.
+    kIndentEnable = 1 << 16,  // Use current Indent value when entering cell (default for column 0).
+    kIndentDisable = 1 << 17,  // Ignore current Indent value when entering cell (default for columns > 0). Indentation changes _within_ the cell will still be honored.
+    kAngledHeader = 1 << 18,  // TableHeadersRow() will submit an angled header row for this column. Note this will add an extra row.
+};
+}
 }
 }

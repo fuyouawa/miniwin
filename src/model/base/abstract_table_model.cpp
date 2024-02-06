@@ -3,5 +3,4 @@
 #include <format>
 
 namespace mvcgui {
-
 }

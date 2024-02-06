@@ -166,7 +166,7 @@ int CoreApplication::Execute()
 }
 
 CoreApplication::CoreApplication()
-    : fps_{ 100 },
+    : fps_{ 60 },
     delta_time_{ 0 }
 {
     // Setup Dear ImGui context

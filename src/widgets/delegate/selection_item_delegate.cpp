@@ -1,5 +1,4 @@
 #include <mvcgui/widgets/delegate/selection_item_delegate.h>
-#include <mvcgui/widgets/view/base/abstract_item_view.h>
 #include <mvcgui/model/base/abstract_item_model.h>
 #include <mvcgui/core/drawer.h>
 #include <mvcgui/io/input.h>
@@ -11,10 +10,9 @@ SelectionItemDelegate::SelectionItemDelegate()
 {
 }
 
-void SelectionItemDelegate::Paint(const AbstractItemView& view, const ModelIndex& index) {
-	auto model = view.model();
+void SelectionItemDelegate::Paint(AbstractItemModelPtr model, const ModelIndex& index) {
 	auto text = model->text(index);
-	bool is_selected = view.is_selected_item(index);
+	bool is_selected = model->is_selected(index);
 	bool tmp = is_selected;
 	if (Drawer::Selectable(text, &tmp, flags::selectable::kSpanAllColumns | flags::selectable::kAllowOverlap)) {
         if (Input::IsIoKeyDown(IoKeyCode::kCtrl)) {

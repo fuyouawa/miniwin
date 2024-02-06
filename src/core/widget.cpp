@@ -2,6 +2,7 @@
 #include <imgui/imgui.h>
 #include <mvcgui/core/application.h>
 #include <mvcgui/tools/container.h>
+#include <mvcgui/tools/algorithm.h>
 #include <mvcgui/internal/framework/widget_engine.h>
 
 namespace mvcgui {
@@ -149,11 +150,6 @@ void Widget::OnExit()
 
 void Widget::EnableFlags(bool b, int flags)
 {
-    if (b) {
-        flags_ |= flags;
-    }
-    else {
-        flags_ &= (~flags);
-    }
+    flags_ = mvcgui::EnableFlags(flags_, flags, b);
 }
 }

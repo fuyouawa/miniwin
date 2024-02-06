@@ -1,8 +1,8 @@
 #pragma once
-#include <mvcgui/widgets/view/base/abstract_list_view.h>
+#include <mvcgui/widgets/view/base/abstract_item_view.h>
 
 namespace mvcgui {
-class ListView : public AbstractListView
+class ListView : public AbstractItemView
 {
 public:
 	ListView(Widget* const parent, std::u8string_view label, bool show = true);

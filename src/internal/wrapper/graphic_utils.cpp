@@ -13,7 +13,7 @@ void* GraphicUtils::GetCurrentWindow() {
 	return ImGui::GetWindowViewport()->PlatformHandle;
 }
 
-void GraphicUtils::SetWindowTop(void* window, bool b) {
+void GraphicUtils::EnableWindowTop(void* window, bool b) {
 	glfwSetWindowAttrib(CastWin(window), GLFW_FLOATING, b);
 }
 }

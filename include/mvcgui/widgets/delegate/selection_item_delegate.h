@@ -7,6 +7,6 @@ class SelectionItemDelegate : public AbstractItemDelegate
 public:
 	SelectionItemDelegate();
 
-	void Paint(const AbstractItemView& view, const ModelIndex& index) override;
+	void Paint(AbstractItemModelPtr model, const ModelIndex& index) override;
 };
 }

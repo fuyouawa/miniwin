@@ -1,5 +1,6 @@
 #include <mvcgui/core/drawer.h>
 #include <imgui/imgui.h>
+#include <mvcgui/core/flags.h>
 
 namespace mvcgui {
 const char* cstr(std::u8string_view str) {
@@ -68,7 +69,50 @@ bool Drawer::BeginListBox(std::u8string_view label, const Vector2& size)
 	return ImGui::BeginListBox(cstr(label), Cast(size));
 }
 
+void Drawer::ListItems(AbstractItemModelPtr model, AbstractItemDelegatePtr delegate) {
+	ImGuiListClipper chipper;
+	chipper.Begin(static_cast<int>(model->row_count()));
+	while (chipper.Step()) {
+		for (size_t i = chipper.DisplayStart; i < chipper.DisplayEnd; i++) {
+			delegate->Paint(model, i);
+		}
+	}
+}
+
 void Drawer::EndListBox() {
 	ImGui::EndListBox();
+}
+
+bool Drawer::BeginTable(std::u8string_view label, size_t column, int flags, const Vector2& size, float inner_width) {
+	return ImGui::BeginTable(cstr(label), static_cast<int>(column), flags, Cast(size), inner_width);
+}
+
+void Drawer::EndTable() {
+	ImGui::EndTable();
+}
+void Drawer::TableColumns(AbstractTableModelPtr model)
+{
+	assert(model->row_count() == 1);
+	for (size_t col = 0; col < model->column_count(); col++) {
+		auto label = cstr(model->text({ 0, col }));
+		auto data = model->hori_header_data(col);
+		if (data.width != 0) {
+			assert(data.flags & flags::table_column::kWidthFixed);
+		}
+		ImGui::TableSetupColumn(label, data.flags, data.width, data.id);
+	}
+}
+
+void Drawer::TableItems(AbstractItemModelPtr model, AbstractItemDelegatePtr delegate) {
+	ImGuiListClipper chipper;
+	chipper.Begin(static_cast<int>(model->row_count()));
+	while (chipper.Step()) {
+		for (size_t row = chipper.DisplayStart; row < chipper.DisplayEnd; row++) {
+			for (size_t col = 0; col < model->column_count(); col++) {
+				ImGui::TableSetColumnIndex(static_cast<int>(col));
+				delegate->Paint(model, { row, col });
+			}
+		}
+	}
 }
 }

@@ -15,15 +15,10 @@ public:
 
 	size_t row_count() const override;
 
-	void set_system_data(const ModelIndex& idx, const SystemData& data) override;
-	void set_user_data(const ModelIndex& idx, const UserData& data) override;
-	void set_text(const ModelIndex& idx, std::u8string_view text) override;
-
-	const SystemData& system_data(const ModelIndex& idx) const override;
-	const UserData& user_data(const ModelIndex& idx) const override;
-	const std::u8string& text(const ModelIndex& idx) const override;
+	void set_item_data(const ModelIndex& idx, ModelItemData&& data) override;
+	const ModelItemData& item_data(const ModelIndex& idx) const override;
 
 protected:
-	std::vector<ItemDataNode> data_list_;
+	std::vector<ModelItemData> item_datas_;
 };
 }

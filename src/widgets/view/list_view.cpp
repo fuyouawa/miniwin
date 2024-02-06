@@ -5,18 +5,18 @@
 
 namespace mvcgui {
 ListView::ListView(Widget* const parent, std::u8string_view label, bool show)
-	: AbstractListView{ parent, label,
-		Instantiate<StandardListModel>(),
-		Instantiate<SelectionItemDelegate>(),
-		show }
+	: AbstractItemView{ parent, label, show },
+	listbox_open_{ false }
 {
+	set_model(Instantiate<StandardListModel>());
+	set_delegate(Instantiate<SelectionItemDelegate>());
 }
 
 void ListView::OnItemShowablePaintBegin()
 {
 	listbox_open_ = Drawer::BeginListBox(label_);
 	if (listbox_open_) {
-		PaintItems();
+		Drawer::ListItems(model_, delegate_);
 	}
 }
 

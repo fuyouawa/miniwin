@@ -5,7 +5,7 @@ namespace internal {
 class GraphicUtils {
 public:
 	static void* GetCurrentWindow();
-	static void SetWindowTop(void* window, bool b);
+	static void EnableWindowTop(void* window, bool b);
 };
 }
 }

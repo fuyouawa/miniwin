@@ -5,6 +5,8 @@
 #include <functional>
 #include <mvcgui/tools/container.h>
 #include <mvcgui/model/base/abstract_list_model.h>
+#include <mvcgui/model/base/abstract_table_model.h>
+#include <mvcgui/widgets/delegate/base/abstract_item_delegate.h>
 
 namespace mvcgui {
 class Drawer
@@ -68,6 +70,22 @@ public:
 		const Vector2& size = Vector2::Zero
 	);
 
+	static void ListItems(AbstractItemModelPtr model, AbstractItemDelegatePtr delegate);
+
 	static void EndListBox();
+
+	static bool BeginTable(
+		std::u8string_view label,
+		size_t column,
+		int flags = 0,
+		const Vector2& size = { 0, 200 },
+		float inner_width = 0.0f
+	);
+
+	static void TableColumns(AbstractTableModelPtr model);
+
+	static void TableItems(AbstractItemModelPtr model, AbstractItemDelegatePtr delegate);
+
+	static void EndTable();
 };
 }
