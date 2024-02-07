@@ -18,7 +18,7 @@ struct ModelItemData
 	bool selection;
 };
 
-class InsertedItems
+class InsertedItems : NonCopyMoveable
 {
 public:
 	InsertedItems() { assert(false); }
@@ -41,18 +41,23 @@ public:
 	virtual ~AbstractItemModel() = default;
 
 	virtual InsertedItems InsertRow(size_t row);
+	virtual void set_row_count(size_t count);
+
 	virtual InsertedItems InsertRows(size_t row, size_t count) = 0;
 	virtual void RemoveRows(size_t row, size_t count) = 0;
-	virtual void set_row_count(size_t count) = 0;
 	virtual size_t row_count() const = 0;
 
 	virtual InsertedItems InsertColumn(size_t col);
+	virtual void set_column_count(size_t count);
+
 	virtual InsertedItems InsertColumns(size_t col, size_t count) = 0;
 	virtual void RemoveColumns(size_t col, size_t count) = 0;
-	virtual void set_column_count(size_t count) = 0;
 	virtual size_t column_count() const = 0;
 
 	virtual void Clear() = 0;
+
+	virtual void set_item_data(const ModelIndex& idx, ModelItemData&& data) = 0;
+	virtual const ModelItemData& item_data(const ModelIndex& idx) const = 0;
 
 	virtual void set_system_data(const ModelIndex& idx, SystemData&& data);
 	virtual void set_user_data(const ModelIndex& idx, UserData&& data);
@@ -67,7 +72,10 @@ public:
 	virtual std::vector<ModelIndex> GetSelectionItems() const;
 	virtual void ClearSelection();
 
-	virtual void set_item_data(const ModelIndex& idx, ModelItemData&& data) = 0;
-	virtual const ModelItemData& item_data(const ModelIndex& idx) const = 0;
+	Signal<size_t, size_t> on_rows_inserted_;
+	Signal<size_t, size_t> on_rows_removed_;
+
+	Signal<size_t, size_t> on_columns_inserted_;
+	Signal<size_t, size_t> on_columns_removed_;
 };
 }

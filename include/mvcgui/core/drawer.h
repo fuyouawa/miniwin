@@ -4,11 +4,19 @@
 #include <vector>
 #include <functional>
 #include <mvcgui/tools/container.h>
-#include <mvcgui/model/base/abstract_list_model.h>
-#include <mvcgui/model/base/abstract_table_model.h>
-#include <mvcgui/widgets/delegate/base/abstract_item_delegate.h>
 
 namespace mvcgui {
+class ModelIndex;
+class AbstractListModel;
+class AbstractItemModel;
+class AbstractItemDelegate;
+class AbstractTableModel;
+
+using AbstractListModelPtr = std::shared_ptr<AbstractListModel>;
+using AbstractItemModelPtr = std::shared_ptr<AbstractItemModel>;
+using AbstractItemDelegatePtr = std::shared_ptr<AbstractItemDelegate>;
+using AbstractTableModelPtr = std::shared_ptr<AbstractTableModel>;
+
 class Drawer
 {
 public:
@@ -84,7 +92,7 @@ public:
 
 	static void TableColumns(AbstractTableModelPtr model);
 
-	static void TableItems(AbstractItemModelPtr model, AbstractItemDelegatePtr delegate);
+	static void TableItems(AbstractTableModelPtr model, AbstractItemDelegatePtr delegate);
 
 	static void EndTable();
 };

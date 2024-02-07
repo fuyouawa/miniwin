@@ -10,16 +10,11 @@ public:
 
 	size_t column_count() const override { return 1; }
 
-	Signal<ModelIndex> on_item_text_changed_;
-	Signal<ModelIndex, size_t> on_rows_inserted_;
-	Signal<ModelIndex, size_t> on_rows_removed_;
-
 private:
 	InsertedItems InsertColumn(size_t col) override { assert(false); return {}; }
 	InsertedItems InsertColumns(size_t col, size_t count) override { assert(false); return {}; }
 	void RemoveColumns(size_t col, size_t count) override { assert(false); }
 	void set_column_count(size_t count) override { assert(false); }
-	size_t column_count() const override { assert(false); return -1; }
 };
 
 using AbstractListModelPtr = std::shared_ptr<AbstractListModel>;

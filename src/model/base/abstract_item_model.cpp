@@ -46,6 +46,30 @@ InsertedItems AbstractItemModel::InsertColumn(size_t col) {
 	return InsertColumns(col, 1);
 }
 
+void AbstractItemModel::set_row_count(size_t count) {
+	auto row_n = row_count();
+
+	if (count == row_n) return;
+	if (count > row_n) {
+		InsertRows(row_n - 1, count - row_n);
+	}
+	else {
+		RemoveRows(count, count - row_n);
+	}
+}
+
+void AbstractItemModel::set_column_count(size_t count) {
+	auto col_n = column_count();
+
+	if (count == col_n) return;
+	if (count > col_n) {
+		InsertColumns(col_n - 1, count - col_n);
+	}
+	else {
+		RemoveRows(count, count - col_n);
+	}
+}
+
 
 void AbstractItemModel::set_system_data(const ModelIndex& idx, SystemData&& data) {
 	auto d = item_data(idx);

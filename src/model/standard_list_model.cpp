@@ -7,7 +7,7 @@ StandardListModel::StandardListModel()
 
 InsertedItems StandardListModel::InsertRows(size_t row, size_t count) {
 	item_datas_.insert(item_datas_.begin() + row, count, {});
-	Emit(on_rows_inserted_, ModelIndex{ row }, count);
+	Emit(on_rows_inserted_, row, count);
 	return InsertedItems{ shared_from_this(), { row, row + count } };
 }
 
@@ -15,11 +15,7 @@ void StandardListModel::RemoveRows(size_t row, size_t count) {
 	auto beg = item_datas_.begin() + row;
 	auto end = beg + count;
 	item_datas_.erase(beg, end);
-	Emit(on_rows_removed_, ModelIndex{ row }, count);
-}
-
-void StandardListModel::set_row_count(size_t count) {
-	item_datas_.resize(count);
+	Emit(on_rows_removed_, row, count);
 }
 
 void StandardListModel::Clear() {

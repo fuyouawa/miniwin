@@ -1,6 +1,9 @@
 #include <mvcgui/core/drawer.h>
 #include <imgui/imgui.h>
 #include <mvcgui/core/flags.h>
+#include <mvcgui/model/base/abstract_list_model.h>
+#include <mvcgui/model/base/abstract_table_model.h>
+#include <mvcgui/widgets/delegate/base/abstract_item_delegate.h>
 
 namespace mvcgui {
 const char* cstr(std::u8string_view str) {
@@ -90,26 +93,25 @@ bool Drawer::BeginTable(std::u8string_view label, size_t column, int flags, cons
 void Drawer::EndTable() {
 	ImGui::EndTable();
 }
-void Drawer::TableColumns(AbstractTableModelPtr model)
-{
-	assert(model->row_count() == 1);
+void Drawer::TableColumns(AbstractTableModelPtr model) {
 	for (size_t col = 0; col < model->column_count(); col++) {
-		auto label = cstr(model->text({ 0, col }));
-		auto data = model->hori_header_data(col);
+		auto& data = model->hori_header_data(col);
 		if (data.width != 0) {
 			assert(data.flags & flags::table_column::kWidthFixed);
 		}
-		ImGui::TableSetupColumn(label, data.flags, data.width, data.id);
+		ImGui::TableSetupColumn(cstr(data.text), data.flags, data.width, data.id);
 	}
+	ImGui::TableHeadersRow();
 }
 
-void Drawer::TableItems(AbstractItemModelPtr model, AbstractItemDelegatePtr delegate) {
+void Drawer::TableItems(AbstractTableModelPtr model, AbstractItemDelegatePtr delegate) {
 	ImGuiListClipper chipper;
 	chipper.Begin(static_cast<int>(model->row_count()));
 	while (chipper.Step()) {
 		for (size_t row = chipper.DisplayStart; row < chipper.DisplayEnd; row++) {
+			ImGui::TableNextRow();
 			for (size_t col = 0; col < model->column_count(); col++) {
-				ImGui::TableSetColumnIndex(static_cast<int>(col));
+				ImGui::TableNextColumn();
 				delegate->Paint(model, { row, col });
 			}
 		}

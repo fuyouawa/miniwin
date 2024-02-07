@@ -10,7 +10,6 @@ public:
 	InsertedItems InsertRows(size_t row, size_t count) override;
 	void RemoveRows(size_t row, size_t count) override;
 
-	void set_row_count(size_t count) override;
 	void Clear() override;
 
 	size_t row_count() const override;
