@@ -56,15 +56,11 @@ public:
 
 	virtual void Clear() = 0;
 
-	virtual void set_item_data(const ModelIndex& idx, ModelItemData&& data) = 0;
-	virtual const ModelItemData& item_data(const ModelIndex& idx) const = 0;
-
-	virtual void set_system_data(const ModelIndex& idx, SystemData&& data);
+	//TODO ·¢ËÍÐÅºÅ
 	virtual void set_user_data(const ModelIndex& idx, UserData&& data);
 	virtual void set_text(const ModelIndex& idx, std::u8string_view text);
 	virtual void set_selection(const ModelIndex& idx, bool b);
 
-	virtual const SystemData& system_data(const ModelIndex& idx) const;
 	virtual const UserData& user_data(const ModelIndex& idx) const;
 	virtual const std::u8string& text(const ModelIndex& idx) const;
 	virtual bool is_selected(const ModelIndex& idx) const;
@@ -74,8 +70,14 @@ public:
 
 	Signal<size_t, size_t> on_rows_inserted_;
 	Signal<size_t, size_t> on_rows_removed_;
-
 	Signal<size_t, size_t> on_columns_inserted_;
 	Signal<size_t, size_t> on_columns_removed_;
+
+protected:
+	virtual void set_system_data(const ModelIndex& idx, SystemData&& data);
+	virtual const SystemData& system_data(const ModelIndex& idx) const;
+
+	virtual void set_item_data(const ModelIndex& idx, ModelItemData&& data) = 0;
+	virtual const ModelItemData& item_data(const ModelIndex& idx) const = 0;
 };
 }

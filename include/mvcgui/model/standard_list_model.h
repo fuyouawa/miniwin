@@ -18,6 +18,6 @@ public:
 	const ModelItemData& item_data(const ModelIndex& idx) const override;
 
 protected:
-	std::vector<ModelItemData> item_datas_;
+	std::vector<ModelItemData> list_items_;
 };
 }

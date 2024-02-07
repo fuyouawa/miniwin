@@ -17,16 +17,23 @@ public:
 
 	void Clear() override;
 
+	float row_minimum_height(size_t row) const override;
+	void set_row_minimum_height(size_t row, float height) override;
+private:
 	void set_item_data(const ModelIndex& idx, ModelItemData&& data) override;
 	const ModelItemData& item_data(const ModelIndex& idx) const override;
 
-	const TableHorizontalHeaderData& hori_header_data(size_t column) override;
-	void set_hori_header_data(size_t column, TableHorizontalHeaderData&& data) override;
+	const TableColumnData& column_data(size_t column) const override;
+	void set_column_data(size_t column, TableColumnData&& data) override;
 
-private:
-	using RowData = std::vector<ModelItemData>;
+	struct RowConfig {
+		float minimun_height{ 0 };
+	};
 
-	std::vector<TableHorizontalHeaderData> hori_header_datas_;
-	std::list<RowData> item_datas_;
+	using RowItemsData = std::vector<ModelItemData>;
+	using RowData = std::pair<RowItemsData, RowConfig>;
+
+	std::vector<TableColumnData> column_datas_;
+	std::list<RowData> table_items_;
 };
 }

@@ -93,15 +93,25 @@ bool Drawer::BeginTable(std::u8string_view label, size_t column, int flags, cons
 void Drawer::EndTable() {
 	ImGui::EndTable();
 }
-void Drawer::TableColumns(AbstractTableModelPtr model) {
+void Drawer::TableColumns(AbstractTableModelPtr model, bool angled_header) {
 	for (size_t col = 0; col < model->column_count(); col++) {
-		auto& data = model->hori_header_data(col);
-		if (data.width != 0) {
-			assert(data.flags & flags::table_column::kWidthFixed);
+		auto text = cstr(model->column_text(col));
+		auto width = model->column_width(col);
+		auto flags = model->column_flags(col);
+		auto id = model->column_id(col);
+		if (width != 0) {
+			assert(model->column_flags(col) & flags::table_column::kWidthFixed);
 		}
-		ImGui::TableSetupColumn(cstr(data.text), data.flags, data.width, data.id);
+		if (angled_header)
+			flags |= ImGuiTableColumnFlags_AngledHeader;
+		ImGui::TableSetupColumn(text, flags, width, id);
 	}
-	ImGui::TableHeadersRow();
+	if (angled_header) {
+		ImGui::TableAngledHeadersRow();
+	}
+	else {
+		ImGui::TableHeadersRow();
+	}
 }
 
 void Drawer::TableItems(AbstractTableModelPtr model, AbstractItemDelegatePtr delegate) {
@@ -109,7 +119,7 @@ void Drawer::TableItems(AbstractTableModelPtr model, AbstractItemDelegatePtr del
 	chipper.Begin(static_cast<int>(model->row_count()));
 	while (chipper.Step()) {
 		for (size_t row = chipper.DisplayStart; row < chipper.DisplayEnd; row++) {
-			ImGui::TableNextRow();
+			ImGui::TableNextRow(ImGuiTableRowFlags_None, model->row_minimum_height(row));
 			for (size_t col = 0; col < model->column_count(); col++) {
 				ImGui::TableNextColumn();
 				delegate->Paint(model, { row, col });

@@ -90,7 +90,7 @@ public:
 		float inner_width = 0.0f
 	);
 
-	static void TableColumns(AbstractTableModelPtr model);
+	static void TableColumns(AbstractTableModelPtr model, bool angled_header = false);
 
 	static void TableItems(AbstractTableModelPtr model, AbstractItemDelegatePtr delegate);
 

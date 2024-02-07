@@ -103,7 +103,6 @@ enum Flags {
     kPreferSortDescending = 1 << 15,  // Make the initial sort direction Descending when first sorting on this column.
     kIndentEnable = 1 << 16,  // Use current Indent value when entering cell (default for column 0).
     kIndentDisable = 1 << 17,  // Ignore current Indent value when entering cell (default for columns > 0). Indentation changes _within_ the cell will still be honored.
-    kAngledHeader = 1 << 18,  // TableHeadersRow() will submit an angled header row for this column. Note this will add an extra row.
 };
 }
 }

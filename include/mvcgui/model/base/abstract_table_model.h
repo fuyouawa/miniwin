@@ -3,11 +3,11 @@
 #include <mvcgui/core/signal.h>
 
 namespace mvcgui {
-struct TableHorizontalHeaderData {
-	unsigned id;
-	int flags;
-	float width;
-	std::u8string text = u8"Default";
+struct TableColumnData {
+	unsigned id{ 0 };
+	int flags{ 0 };
+	float width{ 0.0f };
+	std::u8string text{ u8"Default" };
 };
 
 class AbstractTableModel : public AbstractItemModel
@@ -15,8 +15,23 @@ class AbstractTableModel : public AbstractItemModel
 public:
 	AbstractTableModel() = default;
 
-	virtual const TableHorizontalHeaderData& hori_header_data(size_t column) = 0;
-	virtual void set_hori_header_data(size_t column, TableHorizontalHeaderData&& data) = 0;
+	virtual float row_minimum_height(size_t row) const = 0;
+	virtual void set_row_minimum_height(size_t row, float height) = 0;
+
+	virtual unsigned column_id(size_t column) const;
+	virtual int column_flags(size_t column) const;
+	virtual float column_width(size_t column) const;
+	virtual const std::u8string& column_text(size_t column) const;
+
+	//TODO ·¢ËÍÐÅºÅ
+	virtual void set_column_id(size_t column, unsigned id);
+	virtual void set_column_flags(size_t column, int flags);
+	virtual void set_column_width(size_t column, float width);
+	virtual void set_column_text(size_t column, std::u8string_view text);
+
+protected:
+	virtual const TableColumnData& column_data(size_t column) const = 0;
+	virtual void set_column_data(size_t column, TableColumnData&& data) = 0;
 };
 
 using AbstractTableModelPtr = std::shared_ptr<AbstractTableModel>;
