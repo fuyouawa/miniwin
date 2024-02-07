@@ -1,6 +1,6 @@
 #include <mvcgui/widgets/view/list_view.h>
 #include <mvcgui/model/standard_list_model.h>
-#include <mvcgui/widgets/delegate/selection_item_delegate.h>
+#include <mvcgui/delegate/selection_item_delegate.h>
 #include <mvcgui/core/drawer.h>
 
 namespace mvcgui {

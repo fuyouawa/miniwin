@@ -1,4 +1,4 @@
-#include <mvcgui/widgets/delegate/selection_item_delegate.h>
+#include <mvcgui/delegate/selection_item_delegate.h>
 #include <mvcgui/model/base/abstract_item_model.h>
 #include <mvcgui/core/drawer.h>
 #include <mvcgui/io/input.h>

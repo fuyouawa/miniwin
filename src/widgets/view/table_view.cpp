@@ -1,7 +1,7 @@
 #include <mvcgui/widgets/view/table_view.h>
 #include <mvcgui/core/drawer.h>
 #include <mvcgui/model/standard_table_model.h>
-#include <mvcgui/widgets/delegate/selection_item_delegate.h>
+#include <mvcgui/delegate/selection_item_delegate.h>
 
 namespace mvcgui {
 TableView::TableView(Widget* const parent, std::u8string_view label, bool show)

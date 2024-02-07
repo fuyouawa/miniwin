@@ -1,4 +1,4 @@
-#include <mvcgui/widgets/delegate/base/abstract_item_delegate.h>
+#include <mvcgui/delegate/base/abstract_item_delegate.h>
 
 namespace mvcgui {
 AbstractItemDelegate::AbstractItemDelegate()

@@ -1,6 +1,6 @@
 #include <mvcgui/widgets/view/base/abstract_item_view.h>
 #include <mvcgui/model/base/abstract_item_model.h>
-#include <mvcgui/widgets/delegate/base/abstract_item_delegate.h>
+#include <mvcgui/delegate/base/abstract_item_delegate.h>
 #include <mvcgui/tools/algorithm.h>
 
 namespace mvcgui {

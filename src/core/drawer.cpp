@@ -3,7 +3,7 @@
 #include <mvcgui/core/flags.h>
 #include <mvcgui/model/base/abstract_list_model.h>
 #include <mvcgui/model/base/abstract_table_model.h>
-#include <mvcgui/widgets/delegate/base/abstract_item_delegate.h>
+#include <mvcgui/delegate/base/abstract_item_delegate.h>
 
 namespace mvcgui {
 const char* cstr(std::u8string_view str) {
