@@ -1,6 +1,6 @@
-#include <mvcgui/widgets/widget/base/abstract_button.h>
+#include <fugui/widgets/widget/base/abstract_button.h>
 
-namespace mvcgui {
+namespace fugui {
 AbstractButton::AbstractButton(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractMinimumControl{ parent, label, show },
 	cur_checked_{ false },

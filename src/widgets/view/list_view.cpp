@@ -1,9 +1,9 @@
-#include <mvcgui/widgets/view/list_view.h>
-#include <mvcgui/model/standard_list_model.h>
-#include <mvcgui/delegate/selection_item_delegate.h>
-#include <mvcgui/core/drawer.h>
+#include <fugui/widgets/view/list_view.h>
+#include <fugui/model/standard_list_model.h>
+#include <fugui/delegate/selection_item_delegate.h>
+#include <fugui/core/drawer.h>
 
-namespace mvcgui {
+namespace fugui {
 ListView::ListView(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractItemView{ parent, label, show },
 	listbox_open_{ false }

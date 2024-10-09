@@ -1,10 +1,10 @@
-#include <mvcgui/widgets/widget/window.h>
-#include <mvcgui/internal/wrapper/graphic_utils.h>
-#include <mvcgui/tools/algorithm.h>
-#include <mvcgui/core/drawer.h>
+#include <fugui/widgets/widget/window.h>
+#include <fugui/internal/wrapper/graphic_utils.h>
+#include <fugui/tools/algorithm.h>
+#include <fugui/core/drawer.h>
 #include <imgui/imgui.h>
 
-namespace mvcgui {
+namespace fugui {
 Window::Window(AbstractWindow* parent, std::u8string_view title, bool show)
 	: AbstractWindow{ parent, title, show },
 	top_sc_{ false },

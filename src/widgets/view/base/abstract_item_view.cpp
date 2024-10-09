@@ -1,9 +1,9 @@
-#include <mvcgui/widgets/view/base/abstract_item_view.h>
-#include <mvcgui/model/base/abstract_item_model.h>
-#include <mvcgui/delegate/base/abstract_item_delegate.h>
-#include <mvcgui/tools/algorithm.h>
+#include <fugui/widgets/view/base/abstract_item_view.h>
+#include <fugui/model/base/abstract_item_model.h>
+#include <fugui/delegate/base/abstract_item_delegate.h>
+#include <fugui/tools/algorithm.h>
 
-namespace mvcgui {
+namespace fugui {
 AbstractItemView::AbstractItemView(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractMinimumControl{ parent, label, show },
 	cur_idx_{ ModelIndex::kInvalid },

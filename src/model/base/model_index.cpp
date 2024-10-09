@@ -1,7 +1,7 @@
-#include <mvcgui/model/base/model_index.h>
+#include <fugui/model/base/model_index.h>
 #include <numeric>
 
-namespace mvcgui {
+namespace fugui {
 constexpr auto kInvalidValue = std::numeric_limits<size_t>::max();
 
 ModelIndex ModelIndex::kInvalid{ kInvalidValue, kInvalidValue };

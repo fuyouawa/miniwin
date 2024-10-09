@@ -1,10 +1,10 @@
-#include <mvcgui/core/application.h>
-#include <mvcgui/internal/framework/widget_engine.h>
-#include <assert.h>
+#include <fugui/core/application.h>
+#include <fugui/internal/framework/widget_engine.h>
+#include <cassert>
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 
-namespace mvcgui {
+namespace fugui {
 Application::Application()
     : internal::CoreApplication{},
     close_in_next_frame_{ false }

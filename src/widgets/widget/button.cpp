@@ -1,8 +1,8 @@
-#include <mvcgui/widgets/widget/button.h>
-#include <mvcgui/core/drawer.h>
-#include <mvcgui/tools/algorithm.h>
+#include <fugui/widgets/widget/button.h>
+#include <fugui/core/drawer.h>
+#include <fugui/tools/algorithm.h>
 
-namespace mvcgui {
+namespace fugui {
 Button::Button(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractButton{ parent, label, show }
 {

@@ -1,8 +1,8 @@
-#include <mvcgui/widgets/widget/input_text.h>
-#include <mvcgui/core/drawer.h>
-#include <mvcgui/tools/algorithm.h>
+#include <fugui/widgets/widget/input_text.h>
+#include <fugui/core/drawer.h>
+#include <fugui/tools/algorithm.h>
 
-namespace mvcgui {
+namespace fugui {
 InputText::InputText(Widget* const parent, std::u8string_view label, bool show, size_t capacity)
 	: AbstractMinimumControl{ parent, label, show },
 	text_buf_(capacity)

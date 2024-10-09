@@ -1,4 +1,4 @@
-#include <mvcgui/internal/framework/core_application.h>
+#include <fugui/internal/framework/core_application.h>
 
 #include <imgui/imgui.cpp>
 #include <imgui/imgui_draw.cpp>
@@ -7,7 +7,7 @@
 
 #include <imgui/imgui.h>
 #include <chrono>
-#include <mvcgui/internal/framework/widget_engine.h>
+#include <fugui/internal/framework/widget_engine.h>
 
 #include <imgui/backends/imgui_impl_opengl3.cpp>
 #include <imgui/backends/imgui_impl_glfw.cpp>
@@ -31,7 +31,7 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
-namespace mvcgui {
+namespace fugui {
 namespace internal {
 int CoreApplication::Execute()
 {

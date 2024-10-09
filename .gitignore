@@ -33,3 +33,5 @@
 /.vs/mvcgui
 /x64/Debug
 /mvcgui
+/.vs
+/out/build/x64-Debug

@@ -1,6 +1,6 @@
-#include <mvcgui/model/standard_table_model.h>
+#include <fugui/model/standard_table_model.h>
 
-namespace mvcgui {
+namespace fugui {
 StandardTableModel::StandardTableModel()
 	: AbstractTableModel{}
 {

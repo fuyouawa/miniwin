@@ -1,8 +1,8 @@
-#include <mvcgui/model/base/abstract_table_model.h>
+#include <fugui/model/base/abstract_table_model.h>
 #include <stdexcept>
 #include <format>
 
-namespace mvcgui {
+namespace fugui {
 unsigned AbstractTableModel::column_id(size_t column) const {
 	return column_data(column).id;
 }

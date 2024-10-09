@@ -1,7 +1,7 @@
-#include <mvcgui/widgets/widget/base/abstract_control.h>
+#include <fugui/widgets/widget/base/abstract_control.h>
 #include <imgui/imgui_internal.h>
 
-namespace mvcgui {
+namespace fugui {
 AbstractControl::AbstractControl(Widget* const parent, std::u8string_view label, bool show)
 	: Widget{ parent, show }, label_{ label }
 {

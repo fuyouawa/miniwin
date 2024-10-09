@@ -1,9 +1,9 @@
-#include <mvcgui/core/object.h>
+#include <fugui/core/object.h>
 #include <assert.h>
-#include <mvcgui/tools/algorithm.h>
-#include <mvcgui/core/signal.h>
+#include <fugui/tools/algorithm.h>
+#include <fugui/core/signal.h>
 
-namespace mvcgui {
+namespace fugui {
 Object::Object()
 	: owner_thread_id_{ std::this_thread::get_id() },
 	is_destroyed_{ false }

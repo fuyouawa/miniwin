@@ -1,6 +1,6 @@
-#include <mvcgui/model/base/abstract_item_model.h>
+#include <fugui/model/base/abstract_item_model.h>
 
-namespace mvcgui {
+namespace fugui {
 InsertedItems::InsertedItems(AbstractItemModelPtr model, const ModelIndexRange& range)
 	: model_{ model },
 	range_{ range }

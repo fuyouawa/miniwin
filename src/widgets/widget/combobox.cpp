@@ -1,9 +1,9 @@
-#include <mvcgui/widgets/widget/combobox.h>
-#include <mvcgui/model/standard_list_model.h>
-#include <mvcgui/tools/algorithm.h>
-#include <mvcgui/core/drawer.h>
+#include <fugui/widgets/widget/combobox.h>
+#include <fugui/model/standard_list_model.h>
+#include <fugui/tools/algorithm.h>
+#include <fugui/core/drawer.h>
 
-namespace mvcgui {
+namespace fugui {
 ComboBox::ComboBox(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractMinimumControl{ parent, label, show },
 	cur_idx_{ 0 },

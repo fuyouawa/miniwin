@@ -1,8 +1,8 @@
-#include <mvcgui/widgets/widget/selectable.h>
-#include <mvcgui/core/drawer.h>
-#include <mvcgui/tools/algorithm.h>
+#include <fugui/widgets/widget/selectable.h>
+#include <fugui/core/drawer.h>
+#include <fugui/tools/algorithm.h>
 
-namespace mvcgui {
+namespace fugui {
 Selectable::Selectable(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractMinimumControl{ parent, label, show },
 	cur_selected_{ false },

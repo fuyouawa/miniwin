@@ -1,11 +1,11 @@
-#include <mvcgui/core/widget.h>
+#include <fugui/core/widget.h>
 #include <imgui/imgui.h>
-#include <mvcgui/core/application.h>
-#include <mvcgui/tools/container.h>
-#include <mvcgui/tools/algorithm.h>
-#include <mvcgui/internal/framework/widget_engine.h>
+#include <fugui/core/application.h>
+#include <fugui/tools/container.h>
+#include <fugui/tools/algorithm.h>
+#include <fugui/internal/framework/widget_engine.h>
 
-namespace mvcgui {
+namespace fugui {
 Widget::Widget(Widget* const parent, bool show)
     : Object{},
     enable_sc_{ true },
@@ -150,6 +150,6 @@ void Widget::OnExit()
 
 void Widget::EnableFlags(bool b, int flags)
 {
-    flags_ = mvcgui::EnableFlags(flags_, flags, b);
+    flags_ = fugui::EnableFlags(flags_, flags, b);
 }
 }

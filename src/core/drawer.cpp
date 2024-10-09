@@ -1,11 +1,11 @@
-#include <mvcgui/core/drawer.h>
+#include <fugui/core/drawer.h>
 #include <imgui/imgui.h>
-#include <mvcgui/core/flags.h>
-#include <mvcgui/model/base/abstract_list_model.h>
-#include <mvcgui/model/base/abstract_table_model.h>
-#include <mvcgui/delegate/base/abstract_item_delegate.h>
+#include <fugui/core/flags.h>
+#include <fugui/model/base/abstract_list_model.h>
+#include <fugui/model/base/abstract_table_model.h>
+#include <fugui/delegate/base/abstract_item_delegate.h>
 
-namespace mvcgui {
+namespace fugui {
 const char* cstr(std::u8string_view str) {
 	return reinterpret_cast<const char*>(str.data());
 }

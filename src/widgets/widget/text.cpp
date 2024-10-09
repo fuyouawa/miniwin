@@ -1,8 +1,8 @@
-#include <mvcgui/widgets/widget/text.h>
-#include <mvcgui/core/drawer.h>
-#include <mvcgui/tools/algorithm.h>
+#include <fugui/widgets/widget/text.h>
+#include <fugui/core/drawer.h>
+#include <fugui/tools/algorithm.h>
 
-namespace mvcgui {
+namespace fugui {
 Text::Text(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractMinimumControl{ parent, label, show }
 {

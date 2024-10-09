@@ -1,11 +1,11 @@
-#include <mvcgui/internal/framework/widget_engine.h>
-#include <mvcgui/internal/framework/widget_tree.h>
-#include <mvcgui/internal/framework/core_application.h>
+#include <fugui/internal/framework/widget_engine.h>
+#include <fugui/internal/framework/widget_tree.h>
+#include <fugui/internal/framework/core_application.h>
 #include <format>
-#include <mvcgui/tools/algorithm.h>
-#include <mvcgui/core/widget.h>
+#include <fugui/tools/algorithm.h>
+#include <fugui/core/widget.h>
 
-namespace mvcgui {
+namespace fugui {
 namespace internal {
 void RecursionPrintWidgetTree(WidgetTreeNode* root, size_t layer) {
 	std::string str(layer * 4, ' ');

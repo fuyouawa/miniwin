@@ -1,9 +1,9 @@
-#include <mvcgui/widgets/view/table_view.h>
-#include <mvcgui/core/drawer.h>
-#include <mvcgui/model/standard_table_model.h>
-#include <mvcgui/delegate/selection_item_delegate.h>
+#include <fugui/widgets/view/table_view.h>
+#include <fugui/core/drawer.h>
+#include <fugui/model/standard_table_model.h>
+#include <fugui/delegate/selection_item_delegate.h>
 
-namespace mvcgui {
+namespace fugui {
 TableView::TableView(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractItemView{ parent, label, show },
 	table_open_{ false }

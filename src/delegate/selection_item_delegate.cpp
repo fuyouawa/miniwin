@@ -1,10 +1,10 @@
-#include <mvcgui/delegate/selection_item_delegate.h>
-#include <mvcgui/model/base/abstract_item_model.h>
-#include <mvcgui/core/drawer.h>
-#include <mvcgui/io/input.h>
-#include <mvcgui/core/flags.h>
+#include <fugui/delegate/selection_item_delegate.h>
+#include <fugui/model/base/abstract_item_model.h>
+#include <fugui/core/drawer.h>
+#include <fugui/io/input.h>
+#include <fugui/core/flags.h>
 
-namespace mvcgui {
+namespace fugui {
 SelectionItemDelegate::SelectionItemDelegate()
 	: AbstractItemDelegate{}
 {

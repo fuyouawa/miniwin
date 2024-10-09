@@ -1,8 +1,8 @@
-#include <mvcgui/widgets/widget/checkbox.h>
-#include <mvcgui/tools/algorithm.h>
-#include <mvcgui/core/drawer.h>
+#include <fugui/widgets/widget/checkbox.h>
+#include <fugui/tools/algorithm.h>
+#include <fugui/core/drawer.h>
 
-namespace mvcgui {
+namespace fugui {
 CheckBox::CheckBox(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractButton{ parent, label, show }
 {

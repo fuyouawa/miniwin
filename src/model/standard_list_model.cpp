@@ -1,6 +1,6 @@
-#include <mvcgui/model/standard_list_model.h>
+#include <fugui/model/standard_list_model.h>
 
-namespace mvcgui {
+namespace fugui {
 StandardListModel::StandardListModel()
 	: AbstractListModel{ }
 {}

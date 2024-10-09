@@ -1,7 +1,7 @@
-#include <mvcgui/core/widget.h>
-#include <mvcgui/internal/framework/widget_tree.h>
+#include <fugui/core/widget.h>
+#include <fugui/internal/framework/widget_tree.h>
 
-namespace mvcgui {
+namespace fugui {
 namespace internal {
 WidgetTreeNode::WidgetTreeNode(Widget* widget, WidgetTreeNodePtr parent, bool is_root)
 	: widget_{ widget },
