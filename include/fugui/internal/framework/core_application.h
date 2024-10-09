@@ -9,7 +9,7 @@ class CoreApplication : public NonCopyable
 public:
 	CoreApplication();
 
-	int Execute();
+	int Execute(std::u8string_view window_title);
 
 	bool is_executing() const { return is_executing_; }
 

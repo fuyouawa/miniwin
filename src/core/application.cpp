@@ -32,7 +32,7 @@ void Application::OnDpiScaleChanged()
 {
     auto& io = ImGui::GetIO();
     io.Fonts->Clear();
-    io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/msyh.ttc", 16 * cur_scale_.x, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+    io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/msyh.ttc", 16 * cur_scale_.x, nullptr, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
     io.Fonts->Build();
     ImGui_ImplOpenGL3_DestroyFontsTexture();
     ImGui_ImplOpenGL3_CreateFontsTexture();

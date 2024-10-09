@@ -33,7 +33,7 @@ static void glfw_error_callback(int error, const char* description)
 
 namespace fugui {
 namespace internal {
-int CoreApplication::Execute()
+int CoreApplication::Execute(std::u8string_view window_title)
 {
     is_executing_ = true;
     OnInitizlize();
@@ -66,7 +66,7 @@ int CoreApplication::Execute()
 #endif
 // Create window with graphics context
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, reinterpret_cast<const char*>(window_title.data()), nullptr, nullptr);
     if (window == nullptr) {
         glfwTerminate();
         return -1;
