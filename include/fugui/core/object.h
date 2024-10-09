@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <thread>
-#include <unordered_set>
 #include <fugui/tools/container.h>
 #include <fugui/core/signal.h>
 
@@ -26,7 +25,7 @@ class Object : public AbstractObject
 	friend class ConnectedSignal;
 public:
 	Object();
-	~Object();
+	~Object() override;
 
 	virtual void Destroy();
 
@@ -71,9 +70,4 @@ protected:
 private:
 	std::vector<SignalBase*> auto_disconnect_signal_queue_;
 };
-
-template<std::derived_from<Object> T, typename... Args>
-std::shared_ptr<T> Instantiate(Args&&... args) {
-	return std::make_shared<T>(std::forward<Args>(args)...);
-}
 }

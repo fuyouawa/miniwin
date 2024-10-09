@@ -13,11 +13,12 @@ set(HEAD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(FUGUI_LIB fugui)
 set(GLFW_LIB glfw)
 
+set(GUI_HEAD_PATH ${PROJECT_SOURCE_DIR})
 set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third-party)
 set(IMGUI_HEAD_PATH ${THIRD_PARTY_DIR})
 set(GLFW_HEAD_PATH ${THIRD_PARTY_DIR}/glfw/include)
 
-add_subdirectory(src)
+add_subdirectory(gui)
 add_subdirectory(example)
 
 

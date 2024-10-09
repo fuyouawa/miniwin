@@ -1,52 +1,48 @@
 #pragma once
-#include <functional>
-#include <memory>
-#include <string_view>
-#include <fugui/tools/scope_variable.h>
 #include <fugui/core/object.h>
 #include <fugui/core/signal.h>
-#include <vector>
 
 namespace fugui {
 namespace internal {
 class WidgetTreeNode;
 class WidgetEngine;
-using WidgetTreeNodePtr = std::shared_ptr<WidgetTreeNode>;
+
+class WidgetPrivate;
 }
+
+enum class WidgetType {
+    kWindow,
+    kControl,
+    kMinimumControl
+};
 
 class Widget : public Object {
     friend class internal::WidgetTreeNode;
     friend class internal::WidgetEngine;
 public:
-    enum class Type {
-        kWindow,
-        kControl,
-        kMinimumControl
-    };
 
     Widget(Widget* const parent, bool show);
-    virtual ~Widget();
+    ~Widget() override;
 
     void Show();
     void Close();
     void Hide();
-    void EnableFlags(bool b, int flags);
+    void EnableFlags(bool b, int flags) const;
 
-    void set_enable(bool b);
-    void set_pause(bool b);
+    void set_enable(bool b) const;
 
     virtual Widget* parent() const;
     virtual void set_parent(Widget* parent);
 
-    //TODO sizeºÍposµÄapi
-    auto size() const { return size_; }
-    void set_size(const Vector2& size) { size_ = size; }
+    Vector2 size() const;
+    void set_size(const Vector2& size) const;
 
     bool is_showing() const;
     bool is_hiding() const;
     bool is_closed() const;
     bool enable() const;
-    auto& id() const { return id_; }
+    int flags() const;
+    WidgetType widget_type() const;
 
     void Invoke(Functor&& func, InvokeType type = InvokeType::kAuto) const override;
 
@@ -70,20 +66,9 @@ protected:
     virtual void OnDisable() {}
     virtual void OnHide() {}
 
-    ScopeCondition enable_sc_;
-    ScopeCondition visible_sc_;
-    Vector2 size_;
-
-    bool is_painting_children_;
-
-    int flags_;
-    bool pause_;
-    bool initialized_;
-    Type widget_type_;
-    std::u8string id_;
+    WidgetType widget_type_;
 
 private:
-    internal::WidgetTreeNodePtr owning_node_;
-    bool resume_visible_;
+    internal::WidgetPrivate* p_;
 };
 }

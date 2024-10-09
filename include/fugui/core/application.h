@@ -1,8 +1,8 @@
 #pragma once
-#include <fugui/internal/framework/core_application.h>
+#include <fugui/core/core_application.h>
 
 namespace fugui {
-class Application : public internal::CoreApplication
+class Application : public CoreApplication
 {
 public:
 	Application();
