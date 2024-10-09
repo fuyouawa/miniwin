@@ -2,8 +2,7 @@
 
 namespace fugui {
 AbstractWindow::AbstractWindow(AbstractWindow* const parent, std::u8string_view title, bool show)
-	: Widget{ parent, show }, title_{ title }
+	: Widget{ parent, show, WidgetType::kWindow }, title_{ title }
 {
-	widget_type_ = WidgetType::kWindow;
 }
 }

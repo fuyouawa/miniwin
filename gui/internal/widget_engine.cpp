@@ -97,7 +97,7 @@ void WidgetEngine::ModifyParent(Widget* widget, Widget* new_parent) {
 		assert(std::ranges::find(parent->children_, node) == parent->children_.end());
 	}
 	if (!parent->is_root_) {
-		if (parent->widget_->widget_type_ == WidgetType::kMinimumControl) {
+		if (parent->widget_->p_->widget_type_ == WidgetType::kMinimumControl) {
 			throw std::invalid_argument("You cannot attach control's parent to a minimum control!");
 		}
 	}

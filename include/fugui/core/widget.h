@@ -11,6 +11,7 @@ class WidgetPrivate;
 }
 
 enum class WidgetType {
+    kNone,
     kWindow,
     kControl,
     kMinimumControl
@@ -21,7 +22,7 @@ class Widget : public Object {
     friend class internal::WidgetEngine;
 public:
 
-    Widget(Widget* const parent, bool show);
+    Widget(Widget* const parent, bool show, WidgetType widget_type);
     ~Widget() override;
 
     void Show();
@@ -65,8 +66,6 @@ protected:
     virtual void OnEnable() {}
     virtual void OnDisable() {}
     virtual void OnHide() {}
-
-    WidgetType widget_type_;
 
 private:
     internal::WidgetPrivate* p_;

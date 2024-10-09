@@ -7,10 +7,10 @@
 #include <gui/core/widget_p.h>
 
 namespace fugui {
-Widget::Widget(Widget* const parent, bool show)
-    : widget_type_{ WidgetType::kWindow }
+Widget::Widget(Widget* const parent, bool show, WidgetType widget_type)
 {
     p_ = new internal::WidgetPrivate();
+    p_->widget_type_ = widget_type;
     internal::WidgetEngine::instance().InitializeWidget(this, parent);
     if (!show) {
         Hide();
@@ -73,7 +73,7 @@ int Widget::flags() const {
 }
 
 WidgetType Widget::widget_type() const {
-    return widget_type_;
+    return p_->widget_type_;
 }
 
 void Widget::Invoke(Functor&& func, InvokeType type) const {

@@ -18,14 +18,15 @@ public:
     bool is_painting_children_;
     bool initialized_;
     int flags_;
+    WidgetType widget_type_;
 
     WidgetPrivate()
-        : enable_sc_(true),
-        visible_sc_(true),
-        resume_visible_(false),
-        is_painting_children_(false),
-        initialized_(false),
-        flags_(0)
+	    : enable_sc_(true),
+	      visible_sc_(true),
+	      resume_visible_(false),
+	      is_painting_children_(false),
+	      initialized_(false),
+	      flags_(0), widget_type_()
     {
     }
 };

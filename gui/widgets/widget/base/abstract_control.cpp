@@ -3,10 +3,10 @@
 
 namespace fugui {
 AbstractControl::AbstractControl(Widget* const parent, std::u8string_view label, bool show)
-	: Widget{ parent, show }, label_{ label }
+	: Widget{ parent, show, WidgetType::kControl }, label_{ label }
 {
-	widget_type_ = WidgetType::kControl;
 }
+
 void AbstractControl::OnPaintBegin()
 {
 	Widget::OnPaintBegin();
@@ -27,6 +27,5 @@ void AbstractControl::OnPaintEnd()
 AbstractMinimumControl::AbstractMinimumControl(Widget* const parent, std::u8string_view label, bool show)
 	: AbstractControl{ parent, label, show }
 {
-	widget_type_ = WidgetType::kMinimumControl;
 }
 }
