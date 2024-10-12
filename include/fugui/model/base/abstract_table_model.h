@@ -1,6 +1,5 @@
 #pragma once
 #include <fugui/model/base/abstract_item_model.h>
-#include <fugui/core/signal.h>
 
 namespace fugui {
 struct TableColumnData {
@@ -23,7 +22,7 @@ public:
 	virtual float column_width(size_t column) const;
 	virtual const std::u8string& column_text(size_t column) const;
 
-	//TODO ·¢ËÍĞÅºÅ
+	//TODO å‘é€ä¿¡å·
 	virtual void set_column_id(size_t column, unsigned id);
 	virtual void set_column_flags(size_t column, int flags);
 	virtual void set_column_width(size_t column, float width);

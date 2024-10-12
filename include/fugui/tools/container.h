@@ -1,6 +1,4 @@
 #pragma once
-#include <ranges>
-
 namespace fugui {
 struct Vector2
 {

@@ -1,163 +1,116 @@
+#include <format>
 #include <fugui/core/widget.h>
-#include <imgui/imgui.h>
 #include <fugui/tools/container.h>
-#include <gui/tools/algorithm.h>
+#include <fugui/tools/scope_variable.h>
+
+#include <gui/core/widget_impl.h>
 #include <gui/internal/widget_engine.h>
-#include <gui/tools/scope_variable.h>
-#include <gui/core/widget_p.h>
 
 namespace fugui {
-Widget::Widget(Widget* const parent, bool show, WidgetType widget_type)
+Widget::Widget(Widget* parent, std::u8string_view name, bool show, WidgetType widget_type)
+    : Object(parent, name)
 {
-    p_ = new internal::WidgetPrivate();
-    p_->widget_type_ = widget_type;
-    internal::WidgetEngine::instance().InitializeWidget(this, parent);
+    impl_ = std::make_unique<Impl>(this);
+    impl_->widget_type_ = widget_type;
     if (!show) {
         Hide();
     }
 }
 
-Widget::~Widget() {
-    assert(is_destroyed_);
-    delete p_;
+Widget::~Widget()
+{
 }
 
 void Widget::Show() {
-    assert(!is_closed());
-    internal::WidgetEngine::instance().ModifyVisible(this, true);
-}
-
-void Widget::Close() {
-    internal::WidgetEngine::instance().CloseWidget(this);
+    impl_->set_visible(true);
 }
 
 void Widget::Hide() {
-    assert(!is_closed());
-    internal::WidgetEngine::instance().ModifyVisible(this, false);
+    impl_->set_visible(false);
 }
 
-void Widget::set_enable(bool b) const { p_->enable_sc_.set_control(b); }
-
-Widget* Widget::parent() const {
-    return internal::WidgetEngine::instance().GetParent(this);
+const Widget* Widget::parent_widget() const
+{
+    auto w = dynamic_cast<const Widget*>(parent());
+    assert(w);
+    return w;
 }
 
-void Widget::set_parent(Widget* parent) {
-    internal::WidgetEngine::instance().ModifyParent(this, parent);
+Widget* Widget::parent_widget()
+{
+    auto w = dynamic_cast<Widget*>(parent());
+    assert(w);
+    return w;
 }
+
+void Widget::set_parent(Widget* parent) const
+{
+    Object::set_parent(parent);
+}
+
+void Widget::set_enable(bool b) const { impl_->set_enable(b); }
+
 
 Vector2 Widget::size() const {
-    return p_->size_sc_.get();
+    return impl_->size_sc_.get();
 }
 
 void Widget::set_size(const Vector2& size) const {
-    p_->size_sc_.set_control(size);
+    impl_->size_sc_.set_control(size);
 }
 
 bool Widget::is_showing() const {
-    return *p_->visible_sc_ && !is_destroyed_;
+    return *impl_->visible_sc_;
 }
 
 bool Widget::is_hiding() const {
-    return !*p_->visible_sc_ && !is_destroyed_;
+    return !*impl_->visible_sc_;
 }
 
-bool Widget::is_closed() const {
-    return is_destroyed_;
-}
+bool Widget::enabled() const { return impl_->enabled(); }
 
-bool Widget::enable() const { return *p_->enable_sc_; }
+bool Widget::visible() const {
+    return impl_->visible();
+}
 
 int Widget::flags() const {
-    return p_->flags_;
+    return impl_->flags_;
 }
 
 WidgetType Widget::widget_type() const {
-    return p_->widget_type_;
+    return impl_->widget_type_;
 }
 
-void Widget::Invoke(Functor&& func, InvokeType type) const {
-    switch (type)
-    {
-    case InvokeType::kAuto:
-        if (IsInOwnerThread()) {
-            Invoke(std::move(func), InvokeType::kDirect);
-        }
-        else {
-            Invoke(std::move(func), InvokeType::kQueued);
-        }
-        break;
-    case InvokeType::kDirect:
-        func();
-        break;
-    case InvokeType::kQueued:
-        internal::WidgetEngine::instance().InvokeInNextFrame(std::move(func));
-        break;
-    default:
-        assert(false);
-        break;
-    }
-}
+// void Widget::Invoke(Functor&& func, InvokeType type) const {
+//     switch (type)
+//     {
+//     case InvokeType::kAuto:
+//         if (IsInOwnerThread()) {
+//             Invoke(std::move(func), InvokeType::kDirect);
+//         }
+//         else {
+//             Invoke(std::move(func), InvokeType::kQueued);
+//         }
+//         break;
+//     case InvokeType::kDirect:
+//         func();
+//         break;
+//     case InvokeType::kQueued:
+//         internal::WidgetEngine::instance().InvokeInNextFrame(std::move(func));
+//         break;
+//     default:
+//         assert(false);
+//         break;
+//     }
+// }
 
-void Widget::Destroy() {
-    OnDestroy();
-    Object::Destroy();
-}
-
-void Widget::OnEnter()
+void Widget::PaintBegin() const
 {
-    p_->enable_sc_.Entry();
-    p_->visible_sc_.Entry();
-
-    if (p_->enable_sc_.is_changed()) {
-        if (*p_->enable_sc_) {
-            Emit(on_enable_);
-            OnEnable();
-        }
-        else {
-            Emit(on_disable_);
-            OnDisable();
-        }
-    }
-
-    if (p_->visible_sc_.is_changed()) {
-        if (*p_->visible_sc_) {
-            Emit(on_show_);
-            OnShow();
-        }
-        else {
-            Emit(on_hide_);
-            OnHide();
-        }
-    }
+    impl_->PaintBegin();
 }
 
-void Widget::OnPaintBegin()
+void Widget::PaintEnd() const
 {
-    if (!*p_->enable_sc_) {
-        ImGui::BeginDisabled();
-    }
-}
-
-void Widget::OnUpdate() {
-}
-
-void Widget::OnPaintEnd()
-{
-    if (!*p_->enable_sc_) {
-        ImGui::EndDisabled();
-    }
-}
-
-void Widget::OnExit()
-{
-    p_->enable_sc_.Exit();
-    p_->visible_sc_.Exit();
-    p_->initialized_ = true;
-}
-
-void Widget::EnableFlags(bool b, int flags) const
-{
-    p_->flags_ = fugui::EnableFlags(p_->flags_, flags, b);
+    impl_->PaintEnd();
 }
 }

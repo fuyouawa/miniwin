@@ -1,15 +1,9 @@
 #pragma once
 #include <fugui/core/object.h>
-#include <fugui/core/signal.h>
+
+#include <fugui/tools/container.h>
 
 namespace fugui {
-namespace internal {
-class WidgetTreeNode;
-class WidgetEngine;
-
-class WidgetPrivate;
-}
-
 enum class WidgetType {
     kNone,
     kWindow,
@@ -18,56 +12,46 @@ enum class WidgetType {
 };
 
 class Widget : public Object {
-    friend class internal::WidgetTreeNode;
-    friend class internal::WidgetEngine;
 public:
-
-    Widget(Widget* const parent, bool show, WidgetType widget_type);
+    Widget(Widget* parent, std::u8string_view name, bool show, WidgetType widget_type);
     ~Widget() override;
 
     void Show();
-    void Close();
     void Hide();
-    void EnableFlags(bool b, int flags) const;
+
+    const Widget* parent_widget() const;
+    Widget* parent_widget();
+    void set_parent(Widget* parent) const;
 
     void set_enable(bool b) const;
-
-    virtual Widget* parent() const;
-    virtual void set_parent(Widget* parent);
 
     Vector2 size() const;
     void set_size(const Vector2& size) const;
 
     bool is_showing() const;
     bool is_hiding() const;
-    bool is_closed() const;
-    bool enable() const;
+    bool enabled() const;
+    bool visible() const;
     int flags() const;
     WidgetType widget_type() const;
 
-    void Invoke(Functor&& func, InvokeType type = InvokeType::kAuto) const override;
-
-    Signal<> on_enable_;
-    Signal<> on_disable_;
-    Signal<> on_show_;
-    Signal<> on_hide_;
+    MW_SIGNALS_BEGIN(Widget)
+    MW_SIGNAL(OnEnableChanged, (bool) b)
+    MW_SIGNAL(OnVisbleChanged, (bool) b)
+    MW_SIGNALS_END()
 
 protected:
-    void Destroy() override;
-
-    virtual void OnEnter();
-    virtual void OnPaintBegin();
-    virtual void OnUpdate();
-    virtual void OnPaintEnd();
-    virtual void OnExit();
-
-    virtual void OnShow() {}
-    virtual void OnDestroy() {}
-    virtual void OnEnable() {}
-    virtual void OnDisable() {}
-    virtual void OnHide() {}
+    virtual void PaintBegin() const;
+    virtual void PaintEnd() const;
+    virtual void DoEnable(bool b) {}
+    virtual void DoShow() {}
+    virtual void DoHide() {}
 
 private:
-    internal::WidgetPrivate* p_;
+    using Object::set_parent;
+
+    friend class WidgetsDriver;
+    class Impl;
+    std::unique_ptr<Impl> impl_;
 };
 }

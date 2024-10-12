@@ -19,7 +19,7 @@ set(IMGUI_HEAD_PATH ${THIRD_PARTY_DIR})
 set(GLFW_HEAD_PATH ${THIRD_PARTY_DIR}/glfw/include)
 
 add_subdirectory(gui)
-add_subdirectory(example)
+# add_subdirectory(example)
 
 
 add_subdirectory(${THIRD_PARTY_DIR}/glfw)

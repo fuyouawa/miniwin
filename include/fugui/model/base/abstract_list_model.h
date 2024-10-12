@@ -1,6 +1,5 @@
 #pragma once
 #include <fugui/model/base/abstract_item_model.h>
-#include <fugui/core/signal.h>
 
 namespace fugui {
 class AbstractListModel : public AbstractItemModel

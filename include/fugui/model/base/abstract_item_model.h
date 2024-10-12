@@ -1,7 +1,10 @@
 #pragma once
 #include <fugui/core/object.h>
+#include <string>
 #include <any>
+
 #include <fugui/model/base/model_index.h>
+#include "fugui/tools/property.h"
 
 namespace fugui {
 class AbstractItemModel;
@@ -68,10 +71,10 @@ public:
 	virtual std::vector<ModelIndex> GetSelectionItems() const;
 	virtual void ClearSelection();
 
-	Signal<size_t, size_t> on_rows_inserted_;
-	Signal<size_t, size_t> on_rows_removed_;
-	Signal<size_t, size_t> on_columns_inserted_;
-	Signal<size_t, size_t> on_columns_removed_;
+	//Signal<size_t, size_t> on_rows_inserted_;
+	//Signal<size_t, size_t> on_rows_removed_;
+	//Signal<size_t, size_t> on_columns_inserted_;
+	//Signal<size_t, size_t> on_columns_removed_;
 
 protected:
 	virtual void set_system_data(const ModelIndex& idx, SystemData&& data);

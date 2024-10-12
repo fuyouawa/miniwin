@@ -1,22 +1,17 @@
 #pragma once
-#include <fugui/core/core_application.h>
+#include <memory>
+#include <string_view>
 
 namespace fugui {
-class Application : public CoreApplication
+class Application
 {
 public:
 	Application();
 
-protected:
-	void OnInitizlize() override;
-	void OnProcess() override;
-	bool IsDone() override;
-	void OnAppExit() override;
+    int Execute(bool hide_main_window = true, std::u8string_view window_title = u8"FuGui App");
 
-	void OnDpiScaleChanged() override;
-
-	void WindowWannaClose() override;
-
-	bool close_in_next_frame_;
+private:
+    class Impl;
+    std::unique_ptr<Impl> impl_;
 };
 }

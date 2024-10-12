@@ -1,73 +1,101 @@
 #pragma once
-#include <memory>
-#include <thread>
-#include <fugui/tools/container.h>
-#include <fugui/core/signal.h>
+#include <fugui/core/objectdefs.h>
+#include <string_view>
 
 namespace fugui {
-class Object;
-
-class ConnectedSignal : NonCopyMoveable
+class Object
 {
 public:
-	ConnectedSignal(Object* receiver, SignalBase* signal);
+    class Disconnecter
+    {
+    public:
+        Disconnecter() = default;
+        Disconnecter(std::function<bool()>&& func);
 
-	void AutoDisConnect();
+        bool Disconnect() const;
 
-private:
-	Object* receiver_;
-	SignalBase* signal_;
-};
+    private:
+        std::function<bool()> func_;
+    };
 
+    Object(Object* parent, std::u8string_view name);
+    virtual ~Object();
 
-class Object : public AbstractObject
-{
-	friend class ConnectedSignal;
-public:
-	Object();
-	~Object() override;
+    const Object* parent() const;
+    Object* parent();
+    void set_parent(Object* parent) const;
 
-	virtual void Destroy();
+    std::u8string_view name() const;
+    void set_name(std::u8string_view name) const;
 
-	bool is_closed() const;
+    int flags() const;
+    void set_flags(int flags);
+    void set_flags_active(int flags, bool b);
 
-	template<std::derived_from<Object> T>
-	auto as() {
-		return dynamic_cast<T*>(this);
-	}
+    const std::vector<Object*>& children() const;
 
-	template<typename... Args>
-	ConnectedSignal Connect(
-		Signal<Args...>& signal,
-		typename Signal<Args...>::Slot&& slot,
-		ConnectionType conn_type = ConnectionType::kUnique,
-		InvokeType invoke_type = InvokeType::kAuto)
-	{
-		signal.Connect(this, std::move(slot), conn_type, invoke_type);
-		return { this, &signal };
-	}
+    virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 
-	template<typename... Args, typename... Args2>
-	void Emit(Signal<Args...>& signal, Args2&&... args) const {
-		signal.Emit(this, std::forward<Args2>(args)...);
-	}
+    MW_SIGNALS_BEGIN(Object)
+    MW_SIGNAL(OnDestroy)
+    MW_SIGNALS_END()
 
-	template<typename... Args>
-	void DisConnect(Signal<Args...>& signal) const {
-		signal.DisConnect(this);
-	}
+    template<typename Signal, typename Func, typename... Args>
+        requires std::is_member_function_pointer_v<Signal> && std::is_member_function_pointer_v<Func>
+    Disconnecter Connect(
+        Signal signal,
+        const Object* receiver,
+        Func slot,
+        ConnectionFlags connection_flags = ConnectionFlags::kUnique,
+        InvokeType invoke_type = InvokeType::kAuto) const
+    {
+        using SlotObject = internal::MemberSlotObject<Func, Args...>;
 
-	bool IsInOwnerThread() const;
-	void Invoke(Functor&& func, InvokeType type = InvokeType::kAuto) const override;
+        return ConnectImpl(typeid(signal),
+            receiver,
+            std::make_unique<SlotObject>(slot),
+            connection_flags,
+            invoke_type);
+    }
 
-	Signal<> on_destroy_;
+    template<typename Signal, typename... Args>
+        requires std::is_member_function_pointer_v<Signal>
+    Disconnecter Connect(
+        Signal signal,
+        const Object* receiver,
+        std::function<Args...> slot,
+        ConnectionFlags connection_flags = ConnectionFlags::kUnique,
+        InvokeType invoke_type = InvokeType::kAuto) const
+    {
+        using SlotObject = internal::FunctorSlotObject<Args...>;
+
+        return ConnectImpl(typeid(signal),
+            receiver,
+            std::make_unique<SlotObject>(slot),
+            connection_flags,
+            invoke_type);
+    }
 
 protected:
-	std::thread::id owner_thread_id_;
+    template<class Signal, class... Args>
+    void EmitSignal(Signal signal, Args&&... args) const {
+        using SlotArgsStore = internal::SlotArgsStore<Args...>;
 
-	bool is_destroyed_;
+        EmitSignalImpl(typeid(signal),
+            std::make_shared<SlotArgsStore>(std::forward<Args>(args)...));
+    }
 
 private:
-	std::vector<SignalBase*> auto_disconnect_signal_queue_;
+    Disconnecter ConnectImpl(const std::type_info& signal_info,
+        const Object* receiver,
+        internal::SlotObjectPtr&& slot_obj,
+        ConnectionFlags connection_flags,
+        InvokeType invoke_type) const;
+
+    void EmitSignalImpl(const std::type_info& signal_info,
+        const internal::SlotArgsStoreSharedPtr& args_store) const;
+
+    class Impl;
+    std::unique_ptr<Impl> impl_;
 };
 }

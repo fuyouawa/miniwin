@@ -14,8 +14,8 @@ public:
 
 	virtual void Paint(AbstractItemModelPtr model, const ModelIndex& index) = 0;
 
-	Signal<ModelIndex> on_current_index_changed_;
-	Signal<ModelIndex, bool> on_selection_changed_;
+	//Signal<ModelIndex> on_current_index_changed_;
+	//Signal<ModelIndex, bool> on_selection_changed_;
 };
 
 using AbstractItemDelegatePtr = std::shared_ptr<AbstractItemDelegate>;
