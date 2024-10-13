@@ -102,6 +102,9 @@ enum class ConnectionFlags {
 ConnectionFlags operator|(ConnectionFlags x, ConnectionFlags y);
 ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 
+template<class T>
+using PureType = std::remove_cvref_t<std::remove_pointer_t<T>>;
+
 #define __MINIWIN_COMMON_IF_TRUE ,
 
 #define _MW_SIGNAL_ARG_TO_DECL(arg) \
@@ -114,17 +117,17 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 #define _MW_SIGNAL_ARGS_DECL(...) \
     _MINIWIN_FOR(_MW_SIGNAL_ARGS_DECL_IMPL, _MINIWIN_COUNT(__VA_ARGS__), __VA_ARGS__)
 
-#define _MW_SIGNAL_NO_ARGS(name)        \
-public:                                 \
-    void name() {                       \
-        EmitSignal(&std::remove_pointer_t<decltype(this)>::name); \
-    }                                   \
+#define _MW_SIGNAL_NO_ARGS(name)                       \
+public:                                                \
+    void name() const {                                \
+        EmitSignal(&PureType<decltype(this)>::name);   \
+    }                                                  \
 
-#define _MW_SIGNAL_HAS_ARGS(name, ...)                  \
-public:                                                 \
-    void name(_MW_SIGNAL_ARGS_DECL(__VA_ARGS__)) {      \
-        EmitSignal(&std::remove_pointer_t<decltype(this)>::name, __VA_ARGS__);    \
-    }                                                   \
+#define _MW_SIGNAL_HAS_ARGS(name, ...)                             \
+public:                                                            \
+    void name(_MW_SIGNAL_ARGS_DECL(__VA_ARGS__)) const {           \
+        EmitSignal(&PureType<decltype(this)>::name, __VA_ARGS__);  \
+    }                                                              \
 
 #define _MW_SIGNAL(name, ...) \
     _MINIWIN_IF_ELSE(_MINIWIN_IS_EMPTY(__VA_ARGS__), _MW_SIGNAL_NO_ARGS(name), _MW_SIGNAL_HAS_ARGS(name, __VA_ARGS__))

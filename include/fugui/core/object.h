@@ -34,7 +34,7 @@ public:
     const std::vector<Object*>& children() const;
 
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
-    
+
     MW_SIGNAL(OnDestroy)
 
     template<typename Signal, typename Func, typename... Args>
