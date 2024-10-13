@@ -89,10 +89,10 @@ void Object::Invoke(std::function<void()>&& func, InvokeType invoke_type) const
 }
 
 Object::Disconnecter Object::ConnectImpl(const std::type_info& signal_info,
-                         const Object* receiver,
-                         internal::SlotObjectPtr&& slot_obj,
-                         ConnectionFlags connection_flags,
-                         InvokeType invoke_type) const
+                                         const Object* receiver,
+                                         internal::SlotObjectPtr&& slot_obj,
+                                         ConnectionFlags connection_flags,
+                                         InvokeType invoke_type) const
 {
     assert(receiver);
     assert(slot_obj);

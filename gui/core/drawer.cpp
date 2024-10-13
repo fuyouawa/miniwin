@@ -100,7 +100,7 @@ void Drawer::TableColumns(AbstractTableModelPtr model, bool angled_header) {
 		auto flags = model->column_flags(col);
 		auto id = model->column_id(col);
 		if (width != 0) {
-			assert(model->column_flags(col) & flags::table_column::kWidthFixed);
+			assert(model->column_flags(col) & kTableColumnWidthFixed);
 		}
 		if (angled_header)
 			flags |= ImGuiTableColumnFlags_AngledHeader;

@@ -64,14 +64,6 @@ bool Widget::orphaned() const
     return impl_->orphaned_;
 }
 
-bool Widget::is_showing() const {
-    return *impl_->visible_sc_;
-}
-
-bool Widget::is_hiding() const {
-    return !*impl_->visible_sc_;
-}
-
 bool Widget::enabled() const { return impl_->enabled(); }
 
 bool Widget::visible() const {

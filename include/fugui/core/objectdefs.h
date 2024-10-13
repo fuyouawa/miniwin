@@ -114,10 +114,17 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 #define _MW_SIGNAL_ARGS_DECL(...) \
     _MINIWIN_FOR(_MW_SIGNAL_ARGS_DECL_IMPL, _MINIWIN_COUNT(__VA_ARGS__), __VA_ARGS__)
 
-#define _MW_SIGNAL_NO_ARGS(name) public: void name() { EmitSignal(&_ObjectType::name); }
+#define _MW_SIGNAL_NO_ARGS(name)        \
+public:                                 \
+    void name() {                       \
+        EmitSignal(&_ObjectType::name); \
+    }                                   \
 
-#define _MW_SIGNAL_HAS_ARGS(name, ...) \
-    public: void name(_MW_SIGNAL_ARGS_DECL(__VA_ARGS__)) { EmitSignal(&_ObjectType::name, __VA_ARGS__); }
+#define _MW_SIGNAL_HAS_ARGS(name, ...)                  \
+public:                                                 \
+    void name(_MW_SIGNAL_ARGS_DECL(__VA_ARGS__)) {      \
+        EmitSignal(&_ObjectType::name, __VA_ARGS__);    \
+    }                                                   \
 
 #define _MW_SIGNAL(name, ...) \
     _MINIWIN_IF_ELSE(_MINIWIN_IS_EMPTY(__VA_ARGS__), _MW_SIGNAL_NO_ARGS(name), _MW_SIGNAL_HAS_ARGS(name, __VA_ARGS__))

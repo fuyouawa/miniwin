@@ -1,9 +1,10 @@
-#pragma once
 #include "imgui/imgui.h"
 #include "gui/widgets/window_impl.h"
 
 #include "gui/core/widgets_driver.h"
 #include "gui/tools/graphic_utils.h"
+
+#include "gui/core/drawer.h"
 
 namespace fugui {
 Window::Impl::Impl(Window* owner)
@@ -17,10 +18,8 @@ void Window::Impl::PaintBegin()
     top_sc_.Entry();
 
     bool open = true;
-    ImGui::Begin(
-        reinterpret_cast<const char*>(owner_->title().data()),
-        has_close_button_ ? &open : nullptr,
-        owner_->flags());
+    Drawer::BeginWindow(owner_->title(), has_close_button_ ? &open : nullptr, owner_->flags());
+
     is_docking_ = ImGui::IsWindowDocked();
     // 获取当前窗体句柄, 然后判断是否改变
     // 如果改变则说明当前窗体脱离或者停靠到了某个窗体
@@ -39,7 +38,7 @@ void Window::Impl::PaintBegin()
 
 void Window::Impl::PaintEnd()
 {
-    ImGui::End();
+    Drawer::EndWindow();
     top_sc_.Exit();
 }
 

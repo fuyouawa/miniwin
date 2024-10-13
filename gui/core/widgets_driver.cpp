@@ -113,7 +113,7 @@ std::thread::id WidgetsDriver::ui_thread_id() const
 
 void WidgetsDriver::UpdateRecursion(Widget* widget)
 {
-    if (widget->is_showing())
+    if (widget->visible())
     {
         widget->PaintBegin();
         for (auto& o : widget->children())
@@ -130,7 +130,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
 
 void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget)
 {
-    if (widget->is_showing())
+    if (widget->visible())
     {
         widget->UpdateEarly();
         for (auto& o : widget->children())

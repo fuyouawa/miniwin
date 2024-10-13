@@ -1,8 +1,8 @@
 #pragma once
-#include <fugui/widgets/widget/base/abstract_control.h>
+#include <fugui/widgets/base/abstract_control.h>
 
 namespace fugui {
-class InputText : public AbstractMinimumControl
+class InputText : public AbstractControl
 {
 public:
     InputText(Widget* const parent, std::u8string_view label, bool show = true, size_t capacity = 256);
@@ -13,7 +13,7 @@ public:
     void set_capaity(size_t c) { text_buf_.resize(c); }
     
 protected:
-    void OnItemShowablePaintBegin() override;
+    void PaintBegin() override;
 
 private:
     std::vector<char8_t> text_buf_;

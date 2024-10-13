@@ -7,8 +7,7 @@ namespace fugui {
 enum class WidgetType {
     kNone,
     kWindow,
-    kControl,
-    kMinimumControl
+    kControl
 };
 
 class Widget : public Object {
@@ -27,16 +26,14 @@ public:
     void set_widget_parent(Widget* parent) const;
     const std::vector<Widget*>& widget_children() const;
 
-    void set_enable(bool b) const;
+    virtual void set_enable(bool b) const;
 
-    Vector2 size() const;
-    void set_size(const Vector2& size) const;
+    virtual Vector2 size() const;
+    virtual void set_size(const Vector2& size) const;
 
-    bool orphaned() const;
-    bool is_showing() const;
-    bool is_hiding() const;
-    bool enabled() const;
-    bool visible() const;
+    virtual bool orphaned() const;
+    virtual bool enabled() const;
+    virtual bool visible() const;
     WidgetType widget_type() const;
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
