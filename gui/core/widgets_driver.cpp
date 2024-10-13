@@ -13,6 +13,7 @@ WidgetsDriver& WidgetsDriver::instance()
     if (!initialized)
     {
         inst.ui_thread_id_ = std::this_thread::get_id();
+        initialized = true;
     }
     return inst;
 }
@@ -89,9 +90,9 @@ void WidgetsDriver::DoPendingOperations()
     }
 }
 
-bool WidgetsDriver::IsEmpty() const
+bool WidgetsDriver::IsDone() const
 {
-    return windows_.empty();
+    return windows_.empty() && pending_operations_.empty();
 }
 
 void WidgetsDriver::CloseAll()

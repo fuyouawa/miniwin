@@ -36,6 +36,10 @@ Application::Application()
     impl_ = std::make_unique<Impl>(this);
 }
 
+Application::~Application()
+{
+}
+
 int Application::Execute(bool hide_main_window, std::u8string_view window_title)
 {
     impl_->OnAppStart();

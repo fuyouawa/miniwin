@@ -7,6 +7,7 @@ class Application
 {
 public:
 	Application();
+    ~Application();
 
     int Execute(bool hide_main_window = true, std::u8string_view window_title = u8"FuGui App");
 

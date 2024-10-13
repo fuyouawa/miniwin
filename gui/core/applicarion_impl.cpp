@@ -8,16 +8,16 @@
 
 namespace fugui {
 Application::Impl::Impl(Application* owner)
-    : owner_(owner)
+    : close_in_next_frame_(false), is_executing_(false), delta_time_(0), cur_scale_(), prev_scale_(), owner_(owner)
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
@@ -44,7 +44,7 @@ void Application::Impl::OnProcess()
 
 bool Application::Impl::IsDone()
 {
-    return WidgetsDriver::instance().IsEmpty();
+    return WidgetsDriver::instance().IsDone();
 }
 
 void Application::Impl::OnDpiScaleChanged()

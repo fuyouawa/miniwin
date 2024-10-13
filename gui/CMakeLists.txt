@@ -10,12 +10,9 @@ include_directories(${IMGUI_HEAD_PATH}/imgui)
 include_directories(${GLFW_HEAD_PATH})
 include_directories(${GUI_HEAD_PATH})
 
-# file(GLOB_RECURSE SRC ${PROJECT_SOURCE_DIR}/*.cpp)
-
 aux_source_directory(./tools SRC)
 aux_source_directory(./core SRC)
 aux_source_directory(./widgets SRC)
-aux_source_directory(./internal SRC)
 
 add_library(${FUGUI_LIB} STATIC ${SRC})
 

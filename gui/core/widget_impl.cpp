@@ -7,9 +7,12 @@
 namespace fugui {
 Widget::Impl::Impl(Widget* owner)
     : enable_sc_(true),
-    visible_sc_(true),
-    is_painting_children_(false),
-    widget_type_(), owner_(owner)
+      visible_sc_(true),
+      is_painting_children_(false),
+      orphaned_(false),
+      dirty_(false),
+      widget_type_(),
+      owner_(owner)
 {
 }
 
@@ -64,9 +67,13 @@ void Widget::Impl::PaintEnd()
 
 const Widget* Widget::Impl::widget_parent() const
 {
-    auto p = dynamic_cast<const Widget*>(owner_->parent());
-    assert(p);
-    return p;
+    if (auto p = owner_->parent())
+    {
+        auto p2 = dynamic_cast<const Widget*>(p);
+        assert(p2);
+        return p2;
+    }
+    return nullptr;
 }
 
 void Widget::Impl::set_widget_parent(Widget* parent)

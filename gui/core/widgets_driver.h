@@ -12,7 +12,7 @@ class WidgetsDriver
 public:
     static WidgetsDriver& instance();
 
-    bool IsEmpty() const;
+    bool IsDone() const;
     void CloseAll();
     void RegisterWindow(Window* window);
 

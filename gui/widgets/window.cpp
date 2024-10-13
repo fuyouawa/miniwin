@@ -2,7 +2,6 @@
 #include "gui/widgets/window_impl.h"
 
 namespace fugui {
-
 Window::Window(std::u8string_view title, bool show)
 	: Widget(nullptr, title, show, WidgetType::kWindow)
 {
