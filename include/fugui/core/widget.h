@@ -11,7 +11,6 @@ enum class WidgetType {
 };
 
 class Widget : public Object {
-    MW_OBJECT(Widget)
 public:
     Widget(Widget* parent, std::u8string_view name, bool show, WidgetType widget_type);
     ~Widget() override;

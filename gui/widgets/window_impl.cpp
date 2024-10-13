@@ -32,7 +32,7 @@ void Window::Impl::PaintBegin()
         internal::GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
     }
     if (!open) {
-        //TODO OnClose
+        owner_->Close();
     }
 }
 

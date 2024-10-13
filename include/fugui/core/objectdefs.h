@@ -117,21 +117,17 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 #define _MW_SIGNAL_NO_ARGS(name)        \
 public:                                 \
     void name() {                       \
-        EmitSignal(&_ObjectType::name); \
+        EmitSignal(&std::remove_pointer_t<decltype(this)>::name); \
     }                                   \
 
 #define _MW_SIGNAL_HAS_ARGS(name, ...)                  \
 public:                                                 \
     void name(_MW_SIGNAL_ARGS_DECL(__VA_ARGS__)) {      \
-        EmitSignal(&_ObjectType::name, __VA_ARGS__);    \
+        EmitSignal(&std::remove_pointer_t<decltype(this)>::name, __VA_ARGS__);    \
     }                                                   \
 
 #define _MW_SIGNAL(name, ...) \
     _MINIWIN_IF_ELSE(_MINIWIN_IS_EMPTY(__VA_ARGS__), _MW_SIGNAL_NO_ARGS(name), _MW_SIGNAL_HAS_ARGS(name, __VA_ARGS__))
-
-#define MW_OBJECT(o)     \
-private:                        \
-    using _ObjectType = o;
 
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 }

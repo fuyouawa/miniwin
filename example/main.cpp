@@ -10,7 +10,12 @@ public:
 	ExampleWindow(const std::u8string_view& title, bool show)
 		: Window(title, show)
 	{
+        text_ = new fugui::Text(this, u8"jjbb");
+        input_text_ = new fugui::InputText(this, u8"6665", u8"fffff");
 	}
+
+    fugui::Text* text_;
+    fugui::InputText* input_text_;
 };
 
 int main() {

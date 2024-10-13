@@ -2,24 +2,24 @@
 #include <gui/core/drawer.h>
 
 namespace fugui {
-InputText::InputText(Widget* const parent, std::u8string_view label, bool show, size_t capacity)
-	: AbstractControl{ parent, label, show },
-	text_buf_(capacity)
+InputText::InputText(Widget* const parent, std::u8string_view label, std::u8string_view initial_text, bool show)
+	: AbstractControl{ parent, label, show }
 {
+    set_text(initial_text);
 }
 
 void InputText::set_text(std::u8string_view text)
 {
-	if (text_buf_.size() <= text.size()) {
-        text_buf_.resize(text_buf_.size());
-	}
-    std::ranges::copy(text, text_buf_.begin());
+    text_ = text;
+}
+
+std::u8string_view InputText::text() const
+{
+    return text_;
 }
 
 void InputText::PaintBegin() {
     AbstractControl::PaintBegin();
-	Drawer::InputText(label(), text_buf_, [this](auto& data) {
-		return 0;
-	}, flags(), size());
+	Drawer::InputText(label(), &text_, flags(), size());
 }
 }

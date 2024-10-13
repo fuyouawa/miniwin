@@ -1,7 +1,6 @@
 #include "gui/core/widgets_driver.h"
 #include "gui/core/widget_impl.h"
 #include "gui/widgets/window_impl.h"
-#include <ranges>
 
 #include <cassert>
 
@@ -32,17 +31,23 @@ void WidgetsDriver::Update()
     }
 }
 
-namespace  {
-constexpr auto kOrphanedFilter = std::ranges::views::filter([](const Widget* w) {return w->orphaned(); });
-}
-
 void WidgetsDriver::ClearDirty()
 {
-    auto orphaned_win = windows_ | kOrphanedFilter;
-    for (auto it = orphaned_win.begin(); it != orphaned_win.end(); ++it)
     {
-        windows_.erase(it.base());
-        delete* it;
+        std::vector<std::vector<Window*>::iterator> orphaned_win_iters;
+        for (auto it = windows_.begin(); it != windows_.end(); ++it)
+        {
+            if ((*it)->orphaned())
+            {
+                orphaned_win_iters.push_back(it);
+            }
+        }
+        for (auto it : orphaned_win_iters)
+        {
+            auto w = *it;
+            windows_.erase(it);
+            delete w;
+        }
     }
     for (auto& win : windows_)
     {
@@ -149,10 +154,18 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
 {
     if (widget->impl_->dirty_)
     {
-        auto orphaned_children = widget->widget_children() | kOrphanedFilter;
-        for (auto c : orphaned_children)
+        auto& wc = widget->widget_children();
+        std::vector<std::vector<Widget*>::const_iterator> orphaned_children_iters;
+        for (auto it = wc.begin(); it != wc.end(); ++it)
         {
-            delete c;
+            if ((*it)->orphaned())
+            {
+                orphaned_children_iters.push_back(it);
+            }
+        }
+        for (auto it : orphaned_children_iters)
+        {
+            delete *it;
         }
         widget->impl_->dirty_ = false;
     }

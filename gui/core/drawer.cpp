@@ -1,5 +1,7 @@
 #include <gui/core/drawer.h>
 #include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
+#include <imgui/misc/cpp/imgui_stdlib.cpp>
 
 namespace fugui {
 namespace {
@@ -28,18 +30,54 @@ bool Drawer::Selectable(std::u8string_view label, bool* is_selected, int flags, 
 	return ImGui::Selectable(cstr(label), is_selected, flags, Cast(size));
 }
 
-bool Drawer::InputText(std::u8string_view label,
-	std::vector<char8_t>& buffer,
-	const InputTextCallback& cb,
-	int flags,
-	const Vector2& size)
+struct InputTextCallback_UserData
 {
-	return ImGui::InputText(cstr(label), reinterpret_cast<char*>(buffer.data()), buffer.size(), flags, [](ImGuiInputTextCallbackData* data) {
-		auto& callback = *reinterpret_cast<const InputTextCallback*>(data->UserData);
-		InputTextCallbackData mydata{};
+    std::u8string* Str;
+    ImGuiInputTextCallback  ChainCallback;
+    void* ChainCallbackUserData;
+};
 
-		return callback(mydata);
-	}, (void*)&cb);
+static int InputTextCallback(ImGuiInputTextCallbackData* data)
+{
+    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
+    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
+    {
+        // Resize string callback
+        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+        auto str = user_data->Str;
+        IM_ASSERT(data->Buf == (char*)str->c_str());
+        str->resize(data->BufTextLen);
+        data->Buf = (char*)str->c_str();
+    }
+    else if (user_data->ChainCallback)
+    {
+        // Forward to user callback, if any
+        data->UserData = user_data->ChainCallbackUserData;
+        return user_data->ChainCallback(data);
+    }
+    return 0;
+}
+
+bool Drawer::InputText(std::u8string_view label,
+    std::u8string* buffer,
+    int flags,
+    const Vector2& size)
+{
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+
+    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = buffer;
+    cb_user_data.ChainCallback = nullptr;
+    cb_user_data.ChainCallbackUserData = nullptr;
+
+    return ImGui::InputText(
+        cstr(label),
+        (char*)buffer->c_str(),
+        buffer->capacity() + 1,
+        flags,
+        InputTextCallback,
+        &cb_user_data);
 }
 
 bool Drawer::BeginWindow(std::u8string_view title, bool* open, int flags) {

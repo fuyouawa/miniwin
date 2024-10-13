@@ -1,5 +1,4 @@
-#include <fugui/widgets/widget/base/abstract_button.h>
-#include "abstract_button.h"
+#include <fugui/widgets/base/abstract_button.h>
 
 namespace fugui {
 AbstractButton::AbstractButton(Widget* const parent, std::u8string_view label, bool show)

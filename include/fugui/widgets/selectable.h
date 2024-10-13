@@ -4,7 +4,6 @@
 namespace fugui {
 class Selectable : public AbstractControl
 {
-    MW_OBJECT(Selectable)
 public:
     Selectable(Widget* parent, std::u8string_view label, bool show = true);
 

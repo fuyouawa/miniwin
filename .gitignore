@@ -30,9 +30,8 @@
 *.exe
 *.out
 *.app
-/.vs/mvcgui
-/x64/Debug
-/mvcgui
+
+/x64
 /.vs
-/out/build/x64-Debug
-/out/build/x64-Release
+/out
+/bin

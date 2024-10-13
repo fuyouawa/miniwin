@@ -13,6 +13,7 @@ include_directories(${GUI_HEAD_PATH})
 aux_source_directory(./tools SRC)
 aux_source_directory(./core SRC)
 aux_source_directory(./widgets SRC)
+aux_source_directory(./widgets/base SRC)
 
 add_library(${FUGUI_LIB} STATIC ${SRC})
 

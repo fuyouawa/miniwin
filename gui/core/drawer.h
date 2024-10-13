@@ -1,8 +1,7 @@
 #pragma once
-#include <string_view>
 #include <memory>
-#include <vector>
 #include <functional>
+#include <string>
 #include <fugui/tools/container.h>
 
 namespace fugui {
@@ -20,11 +19,6 @@ using AbstractTableModelPtr = std::shared_ptr<AbstractTableModel>;
 class Drawer
 {
 public:
-	struct InputTextCallbackData {
-		//TODO InputTextCallbackDataÌî³ä×Ö¶Î
-	};
-	using InputTextCallback = std::function<int(const InputTextCallbackData&)>;
-
 	static bool CheckBox(
 		std::u8string_view label,
 		bool* checked,
@@ -58,8 +52,7 @@ public:
 
 	static bool InputText(
 		std::u8string_view label,
-		std::vector<char8_t>& buffer,
-		const InputTextCallback& cb,
+		std::u8string* buffer,
 		int flags = 0,
 		const Vector2& size = Vector2::Zero
 	);

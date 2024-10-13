@@ -4,7 +4,6 @@
 namespace fugui {
 class AbstractButton : public AbstractControl
 {
-    MW_OBJECT(AbstractButton)
 public:
 	AbstractButton(Widget* const parent, std::u8string_view label, bool show);
 
