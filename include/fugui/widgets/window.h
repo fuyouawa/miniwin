@@ -18,10 +18,13 @@ public:
 	bool is_docking() const;
 
 protected:
-	void PaintBegin() const override;
-	void PaintEnd() const override;
+	void PaintBegin() override;
+	void PaintEnd() override;
 
 private:
+    using Widget::widget_parent;
+    using Widget::set_widget_parent;
+
     class Impl;
 	std::unique_ptr<Impl> impl_;
 };

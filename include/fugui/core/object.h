@@ -22,7 +22,6 @@ public:
     virtual ~Object();
 
     const Object* parent() const;
-    Object* parent();
     void set_parent(Object* parent) const;
 
     std::u8string_view name() const;

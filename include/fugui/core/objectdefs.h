@@ -82,9 +82,14 @@ public:
 }//namespace internal
 
 enum class InvokeType {
-    kAuto,      // 如果调用对象和调用方是同一个线程，则就是kDirect；反之就是kQueued
-    kDirect,    // 直接调用
-    kQueued     // 如果是UI对象，会加入调用队列，确保在UI线程执行；反之则和kDirect一样
+    // 如果非UI对象，则直接调用
+    // 如果是UI对象，并且调用方也在UI线程，则直接调用；反之如果调用方不在UI线程，则加入UI调用队列
+    kAuto,
+    // 直接调用
+    kDirect,
+    // 如果非UI对象，则直接调用
+    // 如果是UI对象，会加入UI调用队列
+    kQueued
 };
 
 enum class ConnectionFlags {
