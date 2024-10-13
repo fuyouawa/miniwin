@@ -9,7 +9,7 @@ Widget::Impl::Impl(Widget* owner)
     : enable_sc_(true),
     visible_sc_(true),
     is_painting_children_(false),
-    flags_(0), widget_type_(), owner_(owner)
+    widget_type_(), owner_(owner)
 {
 }
 

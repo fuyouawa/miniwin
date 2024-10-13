@@ -12,6 +12,7 @@ enum class WidgetType {
 };
 
 class Widget : public Object {
+    MW_OBJECT(Widget)
 public:
     Widget(Widget* parent, std::u8string_view name, bool show, WidgetType widget_type);
     ~Widget() override;
@@ -40,10 +41,8 @@ public:
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
 
-    MW_SIGNALS_BEGIN(Widget)
     MW_SIGNAL(OnEnableChanged, (bool) b)
     MW_SIGNAL(OnVisbleChanged, (bool) b)
-    MW_SIGNALS_END()
 
 protected:
     virtual void UpdateEarly();

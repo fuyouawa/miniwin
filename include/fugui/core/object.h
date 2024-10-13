@@ -5,6 +5,7 @@
 namespace fugui {
 class Object
 {
+    MW_OBJECT(Object)
 public:
     class Disconnecter
     {
@@ -35,9 +36,7 @@ public:
 
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 
-    MW_SIGNALS_BEGIN(Object)
     MW_SIGNAL(OnDestroy)
-    MW_SIGNALS_END()
 
     template<typename Signal, typename Func, typename... Args>
         requires std::is_member_function_pointer_v<Signal> && std::is_member_function_pointer_v<Func>
