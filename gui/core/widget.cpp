@@ -78,10 +78,6 @@ bool Widget::visible() const {
     return impl_->visible();
 }
 
-int Widget::flags() const {
-    return impl_->flags_;
-}
-
 WidgetType Widget::widget_type() const {
     return impl_->widget_type_;
 }

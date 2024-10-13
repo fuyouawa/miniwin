@@ -36,7 +36,6 @@ public:
     bool is_hiding() const;
     bool enabled() const;
     bool visible() const;
-    int flags() const;
     WidgetType widget_type() const;
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;

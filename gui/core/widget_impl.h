@@ -12,7 +12,6 @@ public:
     ScopeCondition visible_sc_;
     ScopeVariable<Vector2> size_sc_;
     bool is_painting_children_;
-    int flags_;
     bool orphaned_;
     bool dirty_;
     WidgetType widget_type_;
