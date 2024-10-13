@@ -1,12 +1,15 @@
 #pragma once
 #include "imgui/imgui.h"
 #include "gui/widgets/window_impl.h"
-#include "gui/internal/graphic_utils.h"
+
+#include "gui/core/widgets_driver.h"
+#include "gui/tools/graphic_utils.h"
 
 namespace fugui {
 Window::Impl::Impl(Window* owner)
     : owner_(owner)
 {
+    WidgetsDriver::instance().RegisterWindow(owner_);
 }
 
 void Window::Impl::PaintBegin()

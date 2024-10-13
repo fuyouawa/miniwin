@@ -1,4 +1,4 @@
-#include <gui/internal/graphic_utils.h>
+#include <gui/tools/graphic_utils.h>
 #include <imgui/imgui.h>
 #include <GLFW/glfw3.h>
 

@@ -1,5 +1,5 @@
+#include "gui/core/widgets_driver.h"
 #include "gui/widgets/window_impl.h"
-#include <gui/core/drawer.h>
 
 namespace fugui {
 
@@ -23,7 +23,6 @@ void Window::set_title(std::u8string_view title) const {
 
 void Window::EnableTop(bool b) const
 {
-    parent();
     impl_->top_sc_.set_control(b);
 }
 
@@ -40,13 +39,13 @@ bool Window::is_docking() const {
 	return impl_->is_docking_;
 }
 
-void Window::PaintBegin() const
+void Window::PaintBegin()
 {
 	Widget::PaintBegin();
     impl_->PaintBegin();
 }
 
-void Window::PaintEnd() const
+void Window::PaintEnd()
 {
     impl_->PaintEnd();
 	Widget::PaintEnd();

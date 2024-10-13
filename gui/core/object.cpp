@@ -43,11 +43,6 @@ const Object* Object::parent() const
     return impl_->parent_;
 }
 
-Object* Object::parent()
-{
-    return impl_->parent_;
-}
-
 void Object::set_parent(Object* parent) const
 {
     impl_->set_parent(parent);
