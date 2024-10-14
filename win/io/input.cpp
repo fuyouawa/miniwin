@@ -7,7 +7,7 @@ bool Input::IsIoKeyDown(IoKeyCode kc)
 	auto& io = ImGui::GetIO();
 	switch (kc)
 	{
-	case miniwin::IoKeyCode::kCtrl:
+	case IoKeyCode::kCtrl:
 		return io.KeyCtrl;
 	default:
 		assert(false);

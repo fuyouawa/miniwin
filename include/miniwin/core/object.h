@@ -3,6 +3,14 @@
 #include <string_view>
 
 namespace miniwin {
+enum class ObjectType
+{
+    Widget,
+    Model,
+    Delegate,
+    SelectionModel
+};
+
 class Object
 {
 public:
@@ -18,7 +26,7 @@ public:
         std::function<bool()> func_;
     };
 
-    Object(Object* parent, std::u8string_view name);
+    Object(Object* parent, std::u8string_view name, ObjectType object_type);
     virtual ~Object();
 
     const Object* parent() const;
@@ -27,6 +35,7 @@ public:
     std::u8string_view name() const;
     void set_name(std::u8string_view name) const;
 
+    ObjectType object_type() const;
     int flags() const;
     void set_flags(int flags);
     void set_flags_active(int flags, bool b);

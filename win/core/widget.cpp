@@ -9,7 +9,7 @@
 
 namespace miniwin {
 Widget::Widget(Widget* parent, std::u8string_view name, bool show, WidgetType widget_type)
-    : Object(parent, name)
+    : Object(parent, name, ObjectType::Widget)
 {
     impl_ = std::make_unique<Impl>(this);
     impl_->widget_type_ = widget_type;

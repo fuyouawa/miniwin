@@ -11,7 +11,7 @@ class AbstractItemModel;
 class AbstractItemDelegate;
 class AbstractTableModel;
 
-using AbstractListModelPtr = std::shared_ptr<AbstractListModel>;
+using AbstractListModelPtr = std::shared_ptr<AbstractItemModel>;
 using AbstractItemModelPtr = std::shared_ptr<AbstractItemModel>;
 using AbstractItemDelegatePtr = std::shared_ptr<AbstractItemDelegate>;
 using AbstractTableModelPtr = std::shared_ptr<AbstractTableModel>;

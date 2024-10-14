@@ -7,7 +7,8 @@ namespace miniwin {
 enum class WidgetType {
     kNone,
     kWindow,
-    kControl
+    kControl,
+    kView
 };
 
 class Widget : public Object {

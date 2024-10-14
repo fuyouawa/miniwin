@@ -55,6 +55,7 @@ public:
     Object* owner_ = nullptr;
     Object* parent_ = nullptr;
     std::u8string name_;
+    ObjectType object_type_;
     int flags_;
     std::vector<Object*> children_;
     std::vector<ConnectionPtr> connected_sender_connections_;    // 连接到的发送者
