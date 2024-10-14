@@ -36,6 +36,8 @@ public:
     void Select(const ItemSelection& selection, SelectionType selection_type);
     void Clear();
 
+    bool IsSelected(const ModelIndex& index) const;
+
     MW_SIGNAL(OnSelectionChanged, (ItemSelection) selection, (SelectionType) selection_type)
 
 private:

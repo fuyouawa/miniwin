@@ -40,11 +40,11 @@ size_t StandardItemModel::column_count() const
     return impl_->column_count();
 }
 
-std::optional<const std::any&> StandardItemModel::user_data(const ModelIndex& index) const
+std::optional<std::reference_wrapper<const std::any>> StandardItemModel::user_data(const ModelIndex& index) const
 {
     if (auto opt = impl_->item(index); opt.has_value())
     {
-        return opt.value().user_data;
+        return opt.value().get().user_data;
     }
     return std::nullopt;
 }
@@ -59,7 +59,7 @@ std::u8string_view StandardItemModel::text(const ModelIndex& index) const
 {
     if (auto opt = impl_->item(index); opt.has_value())
     {
-        return opt.value().text;
+        return opt.value().get().text;
     }
     return nullptr;
 }
@@ -74,7 +74,7 @@ int StandardItemModel::flags(const ModelIndex& index) const
 {
     if (auto opt = impl_->item(index); opt.has_value())
     {
-        return opt.value().flags;
+        return opt.value().get().flags;
     }
     return 0;
 }

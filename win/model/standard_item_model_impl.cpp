@@ -89,7 +89,7 @@ void StandardItemModel::Impl::RemoveColumns(size_t column, size_t count)
     column_count_ -= count;
 }
 
-std::optional<StandardItem&> StandardItemModel::Impl::item(const ModelIndex& idx)
+std::optional<std::reference_wrapper<StandardItem>> StandardItemModel::Impl::item(const ModelIndex& idx)
 {
     assert(idx.valid());
     assert(idx.row <= row_count() && idx.column <= column_count());

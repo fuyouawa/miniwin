@@ -1,4 +1,5 @@
 #include <win/model/item_selection_model_impl.h>
+#include <cassert>
 
 namespace miniwin {
 ItemSelection::ItemSelection(const ModelIndex& top_left, const ModelIndex& bottom_right)
@@ -37,5 +38,11 @@ void ItemSelectionModel::Select(const ItemSelection& selection, SelectionType se
 void ItemSelectionModel::Clear()
 {
     Select(ItemSelection{}, SelectionType::Clear);
+}
+
+bool ItemSelectionModel::IsSelected(const ModelIndex& index) const
+{
+    assert(index.valid());
+    return impl_->Contains(index);
 }
 }

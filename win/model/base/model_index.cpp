@@ -2,6 +2,12 @@
 #include <cassert>
 
 namespace miniwin {
+ModelIndex::ModelIndex(int row, int column)
+    : row(row),
+    column(column)
+{
+}
+
 bool ModelIndex::valid() const
 {
     return row > 0 && column > 0;

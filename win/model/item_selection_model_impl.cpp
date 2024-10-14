@@ -26,13 +26,13 @@ void ItemSelectionModel::Impl::Select(const ItemSelection& selection, ItemSelect
 {
     switch (selection_type)
     {
-    case ItemSelectionModel::SelectionType::Clear:
+    case SelectionType::Clear:
         selections_.clear();
         break;
-    case ItemSelectionModel::SelectionType::Select:
+    case SelectionType::Select:
         selections_.push_back(selection);
         break;
-    case ItemSelectionModel::SelectionType::Deselect:
+    case SelectionType::Deselect:
     {
         auto res = std::ranges::find(selections_, selection);
         if (res == selections_.end())
@@ -43,9 +43,9 @@ void ItemSelectionModel::Impl::Select(const ItemSelection& selection, ItemSelect
         selections_.erase(res);
         break;
     }
-    case ItemSelectionModel::SelectionType::ClearSelect:
+    case SelectionType::ClearSelect:
         selections_.clear();
-        selections_.push_back(range);
+        selections_.push_back(selection);
         break;
     default:
         assert(false);

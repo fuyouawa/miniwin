@@ -30,7 +30,7 @@ public:
     void InsertColumns(size_t column, size_t count);
     void RemoveColumns(size_t column, size_t count);
 
-    std::optional<StandardItem&> item(const ModelIndex& idx);
+    std::optional<std::reference_wrapper<StandardItem>> item(const ModelIndex& idx);
     StandardItem& GetOrCreateItem(const ModelIndex& idx);
 
     void Clear();

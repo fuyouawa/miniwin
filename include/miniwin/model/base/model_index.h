@@ -2,8 +2,10 @@
 
 namespace miniwin {
 struct ModelIndex {
-    int row = 0;
-    int column = 0;
+    ModelIndex(int row = 0, int column = 0);
+
+    int row;
+    int column;
 
     bool valid() const;
 };

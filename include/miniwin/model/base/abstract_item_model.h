@@ -29,7 +29,7 @@ public:
 
 	virtual void Clear() = 0;
 
-    virtual std::optional<const std::any&> user_data(const ModelIndex& index) const = 0;
+    virtual std::optional<std::reference_wrapper<const std::any>> user_data(const ModelIndex& index) const = 0;
 	virtual void set_user_data(const ModelIndex& index, std::any&& data) = 0;
 
     virtual std::u8string_view text(const ModelIndex& index) const = 0;
