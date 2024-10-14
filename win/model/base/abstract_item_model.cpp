@@ -1,40 +1,6 @@
-#include <cassert>
 #include <miniwin/model/base/abstract_item_model.h>
 
 namespace miniwin {
-bool ModelIndex::valid() const
-{
-    return row > 0 && column > 0;
-}
-
-bool operator==(const ModelIndex& x, const ModelIndex& y) {
-    return x.row == y.row && x.column == y.column;
-}
-ModelIndex& operator+=(ModelIndex& x, const ModelIndex& y) {
-    x.row += y.row;
-    x.column += y.column;
-    return x;
-}
-ModelIndex& operator-=(ModelIndex& x, const ModelIndex& y) {
-    assert(x.row >= y.row);
-    assert(x.column >= y.column);
-    x.row -= y.row;
-    x.column -= y.column;
-    return x;
-}
-
-ModelIndex operator+(const ModelIndex& x, const ModelIndex& y)
-{
-    auto tmp = x;
-    return tmp += y;
-}
-
-ModelIndex operator-(const ModelIndex& x, const ModelIndex& y)
-{
-    auto tmp = x;
-    return tmp -= y;
-}
-
 AbstractItemModel::AbstractItemModel()
     : Object(nullptr, u8"Model", ObjectType::Model)
 {
@@ -80,26 +46,5 @@ void AbstractItemModel::set_column_count(size_t count)
     else {
         RemoveRows(count, count - col_n);
     }
-}
-
-std::vector<ModelIndex> AbstractItemModel::GetSelectionItems() const {
-	std::vector<ModelIndex> res{};
-	for (int i = 0; i < static_cast<int>(row_count()); i++) {
-		for (int j = 0; j < static_cast<int>(column_count()); j++) {
-			ModelIndex idx{ i, j };
-			if (is_selected(idx)) {
-				res.push_back(idx);
-			}
-		}
-	}
-	return res;
-}
-
-void AbstractItemModel::ClearSelection() {
-	for (int i = 0; i < static_cast<int>(row_count()); i++) {
-		for (int j = 0; j < static_cast<int>(column_count()); j++) {
-			set_selection({ i, j }, false);
-		}
-	}
 }
 }

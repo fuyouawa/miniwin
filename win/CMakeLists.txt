@@ -14,6 +14,11 @@ aux_source_directory(./tools SRC)
 aux_source_directory(./core SRC)
 aux_source_directory(./widgets SRC)
 aux_source_directory(./widgets/base SRC)
+aux_source_directory(./delegate SRC)
+aux_source_directory(./delegate/base SRC)
+aux_source_directory(./io SRC)
+aux_source_directory(./model SRC)
+aux_source_directory(./model/base SRC)
 
 add_library(${MINIWIN_LIB} STATIC ${SRC})
 

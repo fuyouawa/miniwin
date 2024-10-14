@@ -15,14 +15,14 @@ public:
     void RemoveColumns(size_t column, size_t count) override;
     size_t column_count() const override;
 
-    std::optional<const std::any&> user_data(const ModelIndex& idx) const override;
-    void set_user_data(const ModelIndex& idx, std::any&& data) override;
+    std::optional<const std::any&> user_data(const ModelIndex& index) const override;
+    void set_user_data(const ModelIndex& index, std::any&& data) override;
 
-    std::u8string_view text(const ModelIndex& idx) const override;
-    void set_text(const ModelIndex& idx, std::u8string_view text) override;
+    std::u8string_view text(const ModelIndex& index) const override;
+    void set_text(const ModelIndex& index, std::u8string_view text) override;
 
-    int flags(const ModelIndex& idx) const override;
-    void set_flags(const ModelIndex& idx, int flags) override;
+    int flags(const ModelIndex& index) const override;
+    void set_flags(const ModelIndex& index, int flags) override;
 
     void Clear() override;
 

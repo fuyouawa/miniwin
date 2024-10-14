@@ -40,48 +40,48 @@ size_t StandardItemModel::column_count() const
     return impl_->column_count();
 }
 
-std::optional<const std::any&> StandardItemModel::user_data(const ModelIndex& idx) const
+std::optional<const std::any&> StandardItemModel::user_data(const ModelIndex& index) const
 {
-    if (auto opt = impl_->item(idx); opt.has_value())
+    if (auto opt = impl_->item(index); opt.has_value())
     {
         return opt.value().user_data;
     }
     return std::nullopt;
 }
 
-void StandardItemModel::set_user_data(const ModelIndex& idx, std::any&& data)
+void StandardItemModel::set_user_data(const ModelIndex& index, std::any&& data)
 {
-    auto& i = impl_->GetOrCreateItem(idx);
+    auto& i = impl_->GetOrCreateItem(index);
     i.user_data = std::move(data);
 }
 
-std::u8string_view StandardItemModel::text(const ModelIndex& idx) const
+std::u8string_view StandardItemModel::text(const ModelIndex& index) const
 {
-    if (auto opt = impl_->item(idx); opt.has_value())
+    if (auto opt = impl_->item(index); opt.has_value())
     {
         return opt.value().text;
     }
     return nullptr;
 }
 
-void StandardItemModel::set_text(const ModelIndex& idx, std::u8string_view text)
+void StandardItemModel::set_text(const ModelIndex& index, std::u8string_view text)
 {
-    auto& i = impl_->GetOrCreateItem(idx);
+    auto& i = impl_->GetOrCreateItem(index);
     i.text = text;
 }
 
-int StandardItemModel::flags(const ModelIndex& idx) const
+int StandardItemModel::flags(const ModelIndex& index) const
 {
-    if (auto opt = impl_->item(idx); opt.has_value())
+    if (auto opt = impl_->item(index); opt.has_value())
     {
         return opt.value().flags;
     }
     return 0;
 }
 
-void StandardItemModel::set_flags(const ModelIndex& idx, int flags)
+void StandardItemModel::set_flags(const ModelIndex& index, int flags)
 {
-    auto& i = impl_->GetOrCreateItem(idx);
+    auto& i = impl_->GetOrCreateItem(index);
     i.flags = flags;
 }
 
