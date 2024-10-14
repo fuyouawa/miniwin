@@ -15,7 +15,7 @@ public:
     void RemoveColumns(size_t column, size_t count) override;
     size_t column_count() const override;
 
-    std::optional<std::reference_wrapper<const std::any>> user_data(const ModelIndex& index) const override;
+    std::any* user_data(const ModelIndex& index) const override;
     void set_user_data(const ModelIndex& index, std::any&& data) override;
 
     std::u8string_view text(const ModelIndex& index) const override;
