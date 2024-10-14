@@ -61,7 +61,7 @@ std::u8string_view StandardItemModel::text(const ModelIndex& index) const
     {
         return i->text;
     }
-    return nullptr;
+    return u8"";
 }
 
 void StandardItemModel::set_text(const ModelIndex& index, std::u8string_view text)
