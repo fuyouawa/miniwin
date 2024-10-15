@@ -1,5 +1,5 @@
 #include <miniwin/widgets/checkbox.h>
-#include <win/core/drawer.h>
+#include <miniwin/core/drawer.h>
 
 namespace miniwin {
 CheckBox::CheckBox(Widget* const parent, std::u8string_view label)

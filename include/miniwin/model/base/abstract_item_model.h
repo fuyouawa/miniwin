@@ -4,12 +4,23 @@
 #include <any>
 
 namespace miniwin {
+enum class Orientation
+{
+    Horizontal,
+    Vertical
+};
+
+enum class ItemRole
+{
+    Display
+};
+
 class AbstractItemModel : public Object
 {
 public:
     static AbstractItemModel* StaticEmptyModel();
 
-    AbstractItemModel();
+    AbstractItemModel(Object* parent);
 
 	virtual void InsertRow(size_t row);
     virtual void InsertRows(size_t row, size_t count) = 0;
@@ -29,7 +40,7 @@ public:
 
 	virtual void Clear() = 0;
 
-    virtual std::any* user_data(const ModelIndex& index) const = 0;
+    virtual const std::any& user_data(const ModelIndex& index) const = 0;
 	virtual void set_user_data(const ModelIndex& index, std::any&& data) = 0;
 
     virtual std::u8string_view text(const ModelIndex& index) const = 0;
@@ -38,16 +49,14 @@ public:
     virtual int flags(const ModelIndex& index) const = 0;
     virtual void set_flags(const ModelIndex& index, int flags) = 0;
 
+    virtual const std::any& header_data(int section, Orientation orientation, ItemRole role) = 0;
+    virtual void set_header_data(int section, Orientation orientation, ItemRole role, const std::any& data) = 0;
+
     virtual bool IsValidIndex(const ModelIndex& index);
 
     MW_SIGNAL(OnRowsInserted, (size_t) row, (size_t) count)
     MW_SIGNAL(OnRowsRemoved, (size_t) row, (size_t) count)
     MW_SIGNAL(OnColumnsInserted, (size_t) column, (size_t) count)
     MW_SIGNAL(OnColumnsRemoved, (size_t) column, (size_t) count)
-
-protected:
-    friend class AbstractItemView;
-    using Object::parent;
-    using Object::set_parent;
 };
 }

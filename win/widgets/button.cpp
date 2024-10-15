@@ -1,6 +1,6 @@
 #include <miniwin/widgets/button.h>
 
-#include <win/core/drawer.h>
+#include <miniwin/core/drawer.h>
 
 namespace miniwin {
 Button::Button(Widget* const parent, std::u8string_view label)

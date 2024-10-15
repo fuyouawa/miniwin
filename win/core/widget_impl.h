@@ -19,6 +19,7 @@ public:
     std::mutex pending_functors_mutex_;
     std::queue<std::function<void()>> pending_functors_;
     std::vector<Widget*> widget_children_;
+    WidgetFlags widget_flags_;
 
     explicit Impl(Widget* owner);
     ~Impl();

@@ -4,10 +4,11 @@
 #include <miniwin/io/input.h>
 #include <miniwin/core/flags.h>
 
-#include <win/core/drawer.h>
+#include <miniwin/core/drawer.h>
 
 namespace miniwin {
-SelectionItemDelegate::SelectionItemDelegate()
+SelectionItemDelegate::SelectionItemDelegate(Object* parent)
+    : AbstractItemDelegate(parent)
 {
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <miniwin/core/object.h>
+#include <miniwin/model/base/abstract_item_model.h>
 #include <miniwin/model/base/model_index.h>
 
 namespace miniwin {
@@ -22,9 +23,12 @@ public:
         ClearSelect
     };
 
-    ItemSelectionModel();
+    ItemSelectionModel(Object* parent);
 
     const ItemSelection& current_selection() const;
+
+    AbstractItemModel* model() const;
+    void set_model(AbstractItemModel* model) const;
 
     void Select(const ModelIndex& index, SelectionType selection_type);
     void Select(const ItemSelection& selection, SelectionType selection_type);
@@ -34,10 +38,6 @@ public:
 
     MW_SIGNAL(OnSelectionChanged, (ItemSelection) selection, (SelectionType) selection_type)
     MW_SIGNAL(OnClearedSelection)
-
-private:
-    friend class AbstractItemView;
-    void set_parent(Object* parent) const override;
 
     _MW_IMPL
 };

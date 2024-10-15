@@ -41,7 +41,6 @@ public:
     ObjectType object_type() const;
     int flags() const;
     void set_flags(int flags);
-    void set_flags_active(int flags, bool b);
 
     const std::vector<Object*>& children() const;
 

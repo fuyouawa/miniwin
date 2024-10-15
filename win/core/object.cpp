@@ -74,16 +74,6 @@ void Object::set_flags(int flags)
     impl_->flags_ = flags;
 }
 
-void Object::set_flags_active(int flags, bool b)
-{
-    if (b) {
-        impl_->flags_ |= flags;
-    }
-    else {
-        impl_->flags_ &= (~flags);
-    }
-}
-
 const std::vector<Object*>& Object::children() const
 {
     return impl_->children_;

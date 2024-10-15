@@ -29,7 +29,7 @@ void AbstractItemView::set_model(AbstractItemModel* model)
         impl_->model_->set_parent(this);
     }
 
-    impl_->selection_model_->set_parent(model);
+    impl_->selection_model_->set_model(model);
 }
 
 AbstractItemModel* AbstractItemView::model() const
@@ -45,11 +45,11 @@ void AbstractItemView::set_selection_model(ItemSelectionModel* selection_model)
 
     if (impl_->selection_model_)
     {
-        impl_->selection_model_->set_parent(nullptr);
+        impl_->selection_model_->set_model(nullptr);
     }
     impl_->selection_model_ = selection_model;
 
-    impl_->selection_model_->set_parent(this);
+    impl_->selection_model_->set_model(impl_->model_);
 }
 
 ItemSelectionModel* AbstractItemView::selection_model() const
@@ -63,10 +63,6 @@ void AbstractItemView::set_item_delegate(AbstractItemDelegate* item_delegate)
         return;
     assert(item_delegate);
 
-    if (impl_->item_delegate_)
-    {
-        impl_->item_delegate_->set_parent(nullptr);
-    }
     impl_->item_delegate_ = item_delegate;
 
     impl_->item_delegate_->set_parent(this);

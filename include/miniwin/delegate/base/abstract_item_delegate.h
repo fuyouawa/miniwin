@@ -8,7 +8,7 @@ class AbstractItemView;
 class AbstractItemDelegate : public Object
 {
 public:
-	AbstractItemDelegate();
+	AbstractItemDelegate(Object* parent);
 
 	virtual void Paint(AbstractItemView* view, const ModelIndex& index) = 0;
 };

@@ -1,4 +1,4 @@
-#include <win/core/drawer.h>
+#include <miniwin/core/drawer.h>
 #include <imgui/imgui.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <imgui/misc/cpp/imgui_stdlib.cpp>
@@ -87,17 +87,9 @@ bool Drawer::BeginWindow(std::u8string_view title, bool* open, int flags) {
 void Drawer::EndWindow() {
 	ImGui::End();
 }
-bool Drawer::BeginListBox(std::u8string_view label, const Vector2& size)
-{
-	return ImGui::BeginListBox(cstr(label), Cast(size));
-}
 
-void Drawer::EndListBox() {
-	ImGui::EndListBox();
-}
-
-bool Drawer::BeginTable(std::u8string_view label, size_t column, int flags, const Vector2& size, float inner_width) {
-	return ImGui::BeginTable(cstr(label), static_cast<int>(column), flags, Cast(size), inner_width);
+bool Drawer::BeginTable(std::u8string_view id, size_t column, int flags, const Vector2& size, float inner_width) {
+	return ImGui::BeginTable(cstr(id), static_cast<int>(column), flags, Cast(size), inner_width);
 }
 
 void Drawer::EndTable() {

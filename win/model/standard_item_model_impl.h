@@ -91,15 +91,16 @@ public:
         column_count_ -= count;
     }
 
-    StandardItem* item(const ModelIndex& idx) {
+    const StandardItem& item(const ModelIndex& idx) {
+        static StandardItem empty_item;
         assert(idx.valid());
         assert(idx.row <= row_count() && idx.column <= column_count());
         auto& r = items_[idx.row];
         if (r.size() <= idx.column)
         {
-            return nullptr;
+            return empty_item;
         }
-        return &r[idx.column - 1];
+        return r[idx.column - 1];
     }
     StandardItem& GetOrCreateItem(const ModelIndex& idx) {
         assert(idx.valid());

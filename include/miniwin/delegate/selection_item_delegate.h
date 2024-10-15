@@ -5,7 +5,7 @@ namespace miniwin {
 class SelectionItemDelegate : public AbstractItemDelegate
 {
 public:
-	SelectionItemDelegate();
+	SelectionItemDelegate(Object* parent);
 
 	void Paint(AbstractItemView* view, const ModelIndex& index) override;
 };

@@ -1,7 +1,8 @@
 #include "win/model/standard_item_model_impl.h"
 
 namespace miniwin {
-StandardItemModel::StandardItemModel()
+StandardItemModel::StandardItemModel(Object* parent)
+    : AbstractItemModel(parent)
 {
     impl_ = std::make_unique<Impl>(this);
 }
@@ -40,13 +41,9 @@ size_t StandardItemModel::column_count() const
     return impl_->column_count();
 }
 
-std::any* StandardItemModel::user_data(const ModelIndex& index) const
+const std::any& StandardItemModel::user_data(const ModelIndex& index) const
 {
-    if (auto i = impl_->item(index))
-    {
-        return &i->user_data;
-    }
-    return nullptr;
+    return impl_->item(index).user_data;
 }
 
 void StandardItemModel::set_user_data(const ModelIndex& index, std::any&& data)
@@ -57,11 +54,7 @@ void StandardItemModel::set_user_data(const ModelIndex& index, std::any&& data)
 
 std::u8string_view StandardItemModel::text(const ModelIndex& index) const
 {
-    if (auto i = impl_->item(index))
-    {
-        return i->text;
-    }
-    return u8"";
+    return impl_->item(index).text;
 }
 
 void StandardItemModel::set_text(const ModelIndex& index, std::u8string_view text)
@@ -72,11 +65,7 @@ void StandardItemModel::set_text(const ModelIndex& index, std::u8string_view tex
 
 int StandardItemModel::flags(const ModelIndex& index) const
 {
-    if (auto i = impl_->item(index))
-    {
-        return i->flags;
-    }
-    return 0;
+    return impl_->item(index).flags;
 }
 
 void StandardItemModel::set_flags(const ModelIndex& index, int flags)
@@ -88,5 +77,15 @@ void StandardItemModel::set_flags(const ModelIndex& index, int flags)
 void StandardItemModel::Clear()
 {
     impl_->Clear();
+}
+
+const std::any& StandardItemModel::header_data(int section, Orientation orientation, ItemRole role)
+{
+    //TODO header_data
+}
+
+void StandardItemModel::set_header_data(int section, Orientation orientation, ItemRole role, const std::any& data)
+{
+    //TODO set_header_data
 }
 }
