@@ -2,20 +2,16 @@
 #include <cassert>
 
 namespace miniwin {
-ItemSelection::ItemSelection(const ModelIndex& top_left, const ModelIndex& bottom_right)
-    : tl_(top_left), br_(bottom_right)
+bool ItemSelection::valid() const
 {
-}
-
-bool ItemSelection::Contains(const ModelIndex& index) const
-{
-    return tl_.row <= index.row && tl_.column <= index.column
-        && br_.row >= index.row && br_.column >= index.column;
+    return top_left.valid() && bottom_right.valid()
+        && top_left.row <= bottom_right.row
+        && top_left.column <= bottom_right.column;
 }
 
 bool operator==(const ItemSelection& x, const ItemSelection& y)
 {
-    return x.top_left() == y.top_left() && x.bottom_right() == y.bottom_right();
+    return x.top_left == y.top_left && x.bottom_right == y.bottom_right;
 }
 
 ItemSelectionModel::ItemSelectionModel()
@@ -31,13 +27,26 @@ void ItemSelectionModel::Select(const ModelIndex& index, SelectionType selection
 
 void ItemSelectionModel::Select(const ItemSelection& selection, SelectionType selection_type)
 {
-    impl_->Select(selection, selection_type);
+    assert(selection.valid());
+    if (selection_type == SelectionType::ClearSelect)
+    {
+        impl_->Clear();
+        selection_type = SelectionType::Select;
+    }
+    for (int row = selection.top_left.row; row <= selection.bottom_right.row; ++row)
+    {
+        for (int col = selection.top_left.column; col <= selection.bottom_right.column; ++col)
+        {
+            impl_->Select({ row, col }, selection_type == SelectionType::Select);
+        }
+    }
     OnSelectionChanged(selection, selection_type);
 }
 
 void ItemSelectionModel::Clear()
 {
-    Select(ItemSelection{}, SelectionType::Clear);
+    impl_->Clear();
+    OnClearedSelection();
 }
 
 bool ItemSelectionModel::IsSelected(const ModelIndex& index) const

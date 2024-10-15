@@ -47,4 +47,9 @@ void AbstractItemModel::set_column_count(size_t count)
         RemoveRows(count, count - col_n);
     }
 }
+
+bool AbstractItemModel::IsValidIndex(const ModelIndex& index)
+{
+    return index.valid() && index.row < row_count() && index.column < column_count();
+}
 }

@@ -24,9 +24,14 @@ void SelectionItemDelegate::Paint(AbstractItemView* view, const ModelIndex& inde
                 : ItemSelectionModel::SelectionType::Deselect);
         }
         else {
-            selection_model->Select(index, is_selected
-                ? ItemSelectionModel::SelectionType::ClearSelect
-                : ItemSelectionModel::SelectionType::Clear);
+            if (is_selected)
+            {
+                selection_model->Select(index, ItemSelectionModel::SelectionType::ClearSelect);
+            }
+            else
+            {
+                selection_model->Clear();
+            }
         }
     }
 }

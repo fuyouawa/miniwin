@@ -3,53 +3,75 @@
 #include <cassert>
 
 namespace miniwin {
-void ItemSelectionModel::Impl::Select(const ModelIndex& top_left, const ModelIndex& bottom_right)
+ItemSelectionModel::Impl::Impl(ItemSelectionModel* owner)
+    : owner_(owner), model_(nullptr)
 {
-    assert(top_left.valid() && bottom_right.valid());
-    assert(top_left.row >= bottom_right.row && top_left.column <= bottom_right.column);
-    selections_.emplace_back(top_left, bottom_right);
 }
 
 bool ItemSelectionModel::Impl::Contains(const ModelIndex& index) const
 {
-    for (auto& r : selections_)
+    auto c = GetSelectionsTableIndex(index.column);
+    if (c > selections_.size())
     {
-        if (r.Contains(index))
-        {
-            return true;
-        }
+        return false;
     }
-    return false;
+    auto& r = selections_[c];
+    if (index.row >= r.size())
+    {
+        return false;
+    }
+    auto& b = r[index.row];
+    auto i = GetSelectionIndex(index.column);
+    return b[i];
 }
 
-void ItemSelectionModel::Impl::Select(const ItemSelection& selection, ItemSelectionModel::SelectionType selection_type)
+void ItemSelectionModel::Impl::Select(const ModelIndex& index, bool is_select)
 {
-    switch (selection_type)
+    assert(model_ && model_->IsValidIndex(index));
+    EnsureIndex(index);
+    auto c = GetSelectionsTableIndex(index.column);
+    auto r& = selections_[c];
+    auto& b = r[index.row];
+    auto i = GetSelectionIndex(index.column);
+    b.set(i, is_select);
+}
+
+void ItemSelectionModel::Impl::Clear()
+{
+    selections_.clear();
+}
+
+void ItemSelectionModel::Impl::EnsureIndex(const ModelIndex& index)
+{
+    assert(model_ && model_->IsValidIndex(index));
+
+    // 确保selection表的行数不小于index的行
+    for (auto& s : selections_)
     {
-    case SelectionType::Clear:
-        selections_.clear();
-        break;
-    case SelectionType::Select:
-        selections_.push_back(selection);
-        break;
-    case SelectionType::Deselect:
-    {
-        auto res = std::ranges::find(selections_, selection);
-        if (res == selections_.end())
+        if (s.size() < index.row)
         {
-            //TODO res == ranges_.end()
-            break;
+            s.resize(index.row);
         }
-        selections_.erase(res);
-        break;
     }
-    case SelectionType::ClearSelect:
-        selections_.clear();
-        selections_.push_back(selection);
-        break;
-    default:
-        assert(false);
-        break;
+
+    // 确保selection表的列数不小于index的列
+    auto c = GetSelectionsTableIndex(index.column);
+    if (c >= selections_.size())
+    {
+        for (size_t i = 0; i < c - selections_.size() + 1; ++i)
+        {
+            selections_.emplace_back(model_->row_count());
+        }
     }
+}
+
+size_t ItemSelectionModel::Impl::GetSelectionsTableIndex(size_t column)
+{
+    return ((column + kLengthOfOneBitsetSelections) / kLengthOfOneBitsetSelections) - 1;
+}
+
+size_t ItemSelectionModel::Impl::GetSelectionIndex(size_t column)
+{
+    return column & kLengthOfOneBitsetSelections;
 }
 }

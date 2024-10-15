@@ -38,6 +38,8 @@ public:
     virtual int flags(const ModelIndex& index) const = 0;
     virtual void set_flags(const ModelIndex& index, int flags) = 0;
 
+    virtual bool IsValidIndex(const ModelIndex& index);
+
     MW_SIGNAL(OnRowsInserted, (size_t) row, (size_t) count)
     MW_SIGNAL(OnRowsRemoved, (size_t) row, (size_t) count)
     MW_SIGNAL(OnColumnsInserted, (size_t) column, (size_t) count)
