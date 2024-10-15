@@ -2,13 +2,13 @@
 #include <miniwin/core/object.h>
 #include <miniwin/model/base/model_index.h>
 #include <any>
-#include <optional>
 
 namespace miniwin {
-
 class AbstractItemModel : public Object
 {
 public:
+    static AbstractItemModel* StaticEmptyModel();
+
     AbstractItemModel();
 
 	virtual void InsertRow(size_t row);
@@ -45,7 +45,8 @@ public:
     MW_SIGNAL(OnColumnsInserted, (size_t) column, (size_t) count)
     MW_SIGNAL(OnColumnsRemoved, (size_t) column, (size_t) count)
 
-private:
+protected:
+    friend class AbstractItemView;
     using Object::parent;
     using Object::set_parent;
 };

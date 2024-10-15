@@ -55,7 +55,7 @@ private:
     using Object::set_parent;
 
     friend class WidgetsDriver;
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+
+    _MW_IMPL
 };
 }

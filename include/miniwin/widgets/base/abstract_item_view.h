@@ -16,11 +16,9 @@ public:
     virtual void set_selection_model(ItemSelectionModel* selection_model);
     ItemSelectionModel* selection_model() const;
 
-    virtual void set_item_delegate(AbstractItemDelegate* delegate);
+    virtual void set_item_delegate(AbstractItemDelegate* item_delegate);
     AbstractItemDelegate* item_delegate() const;
 
-private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    _MW_IMPL
 };
 }

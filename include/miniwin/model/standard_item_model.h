@@ -26,8 +26,6 @@ public:
 
     void Clear() override;
 
-private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    _MW_IMPL
 };
 }

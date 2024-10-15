@@ -9,7 +9,6 @@ public:
 
     }
 
-
     AbstractItemView* owner_;
     AbstractItemModel* model_;
     AbstractItemDelegate* item_delegate_;

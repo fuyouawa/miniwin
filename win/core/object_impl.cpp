@@ -83,21 +83,26 @@ void Object::Impl::ConnectionsManager::ClearDirty()
     }
 }
 
-Object::Disconnecter Object::Impl::ConnectImpl(const std::type_info& signal_info, const Object* receiver,
-                                                           internal::SlotObjectPtr&& slot_obj, ConnectionFlags connection_flags, InvokeType invoke_type)
+Object::Disconnecter Object::Impl::ConnectImpl(
+    const Object* sender,
+    const std::type_info& signal_info,
+    const Object* receiver,
+    internal::SlotObjectPtr&& slot_obj,
+    ConnectionFlags connection_flags,
+    InvokeType invoke_type)
 {
     bool has_unique_flag = (connection_flags & ConnectionFlags::kUnique) != ConnectionFlags::kNone;
     bool has_replace_flag = (connection_flags & ConnectionFlags::kReplace) != ConnectionFlags::kNone;
 
     assert(has_unique_flag && has_replace_flag);
 
-    std::scoped_lock lk{ signal_mutex(owner_), signal_mutex(receiver) };
+    std::scoped_lock lk{ signal_mutex(sender), signal_mutex(receiver) };
 
     // 如果connection_type是Unique, 表示不重复连接
     // 检测目标Signal中所有Connection的Slot是否有跟当前想连接的Slot重复的
     if (has_unique_flag || has_replace_flag) {
         // 获取当前链接的Signal Connection List
-        if (auto res = connections_manager_.map_.find(signal_info); res != connections_manager_.map_.end())
+        if (auto res = sender->impl_->connections_manager_.map_.find(signal_info); res != sender->impl_->connections_manager_.map_.end())
         {
             if (res->first != signal_info)
             {
@@ -119,14 +124,14 @@ Object::Disconnecter Object::Impl::ConnectImpl(const std::type_info& signal_info
                 {
                     (*res2)->slot_obj = std::move(slot_obj);
                 }
-                return { [this, c = *res2, &signal_info] { return DisconnectImpl(signal_info, c); } };
+                return { [c = *res2, &signal_info, sender] { return sender->impl_->DisconnectImpl(signal_info, c); } };
             }
         }
     }
 
-    auto conn = std::make_shared<Connection>(owner_, receiver, std::move(slot_obj), signal_info, connection_flags, invoke_type);
+    auto conn = std::make_shared<Connection>(sender, receiver, std::move(slot_obj), signal_info, connection_flags, invoke_type);
 
-    return AddConnectionWithoutLock(signal_info, std::move(conn));
+    return sender->impl_->AddConnectionWithoutLock(signal_info, std::move(conn));
 }
 
 void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::SlotArgsStoreSharedPtr& args_store)

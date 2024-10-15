@@ -54,4 +54,13 @@ bool ItemSelectionModel::IsSelected(const ModelIndex& index) const
     assert(index.valid());
     return impl_->Contains(index);
 }
+
+void ItemSelectionModel::set_parent(Object* parent) const
+{
+    auto m = dynamic_cast<AbstractItemModel*>(parent);
+    assert(m != nullptr);
+    Object::set_parent(parent);
+    impl_->model_ = m;
+    impl_->Clear();
+}
 }

@@ -30,7 +30,7 @@ void ItemSelectionModel::Impl::Select(const ModelIndex& index, bool is_select)
     assert(model_ && model_->IsValidIndex(index));
     EnsureIndex(index);
     auto c = GetSelectionsTableIndex(index.column);
-    auto r& = selections_[c];
+    auto& r = selections_[c];
     auto& b = r[index.row];
     auto i = GetSelectionIndex(index.column);
     b.set(i, is_select);

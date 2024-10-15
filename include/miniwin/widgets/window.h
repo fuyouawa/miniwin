@@ -25,7 +25,6 @@ private:
     using Widget::widget_parent;
     using Widget::set_widget_parent;
 
-    class Impl;
-	std::unique_ptr<Impl> impl_;
+    _MW_IMPL
 };
 }

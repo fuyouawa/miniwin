@@ -34,7 +34,9 @@ public:
     MW_SIGNAL(OnClearedSelection)
 
 private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    friend class AbstractItemView;
+    void set_parent(Object* parent) const override;
+
+    _MW_IMPL
 };
 }

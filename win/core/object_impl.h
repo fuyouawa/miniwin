@@ -33,7 +33,8 @@ public:
         void ClearDirty();
     };
 
-    Disconnecter ConnectImpl(
+    static Disconnecter ConnectImpl(
+        const Object* sender,
         const std::type_info& signal_info,
         const Object* receiver,
         internal::SlotObjectPtr&& slot_obj,

@@ -1,6 +1,9 @@
 #pragma once
 #include <miniwin/core/objectdefs.h>
+#include <miniwin/tools/function_traits.h>
 #include <string_view>
+
+#define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 
 namespace miniwin {
 enum class ObjectType
@@ -29,8 +32,8 @@ public:
     Object(Object* parent, std::u8string_view name, ObjectType object_type);
     virtual ~Object();
 
-    const Object* parent() const;
-    void set_parent(Object* parent) const;
+    virtual const Object* parent() const;
+    virtual void set_parent(Object* parent) const;
 
     std::u8string_view name() const;
     void set_name(std::u8string_view name) const;
@@ -46,40 +49,48 @@ public:
 
     MW_SIGNAL(OnDestroy)
 
-    template<typename Signal, typename Func, typename... Args>
-        requires std::is_member_function_pointer_v<Signal> && std::is_member_function_pointer_v<Func>
-    Disconnecter Connect(
+    template<std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
+    static Disconnecter Connect(
+        const Sender* sender,
         Signal signal,
-        const Object* receiver,
-        Func slot,
+        const Receiver* receiver,
+        Slot&& slot,
         ConnectionFlags connection_flags = ConnectionFlags::kUnique,
-        InvokeType invoke_type = InvokeType::kAuto) const
+        InvokeType invoke_type = InvokeType::kAuto)
     {
-        using SlotObject = internal::MemberSlotObject<Func, Args...>;
+        static_assert(internal::kIsArgumentsMatchableFunctions<Signal, Slot>);
+        using Traits = internal::FunctionTraits<Slot>;
 
-        return ConnectImpl(typeid(signal),
-            receiver,
-            std::make_unique<SlotObject>(slot),
-            connection_flags,
-            invoke_type);
-    }
+        [&] <class... Args> (std::tuple<Args...>) {
+            if constexpr (std::is_member_function_pointer_v<Slot>)
+            {
+                using Func = typename Traits::Return(Receiver::*)(Args...);
+                using SlotObject = internal::MemberSlotObject<Func, Args...>;
 
-    template<typename Signal, typename... Args>
-        requires std::is_member_function_pointer_v<Signal>
-    Disconnecter Connect(
-        Signal signal,
-        const Object* receiver,
-        std::function<Args...> slot,
-        ConnectionFlags connection_flags = ConnectionFlags::kUnique,
-        InvokeType invoke_type = InvokeType::kAuto) const
-    {
-        using SlotObject = internal::FunctorSlotObject<Args...>;
+                return ConnectImpl(sender,
+                    typeid(signal),
+                    receiver,
+                    std::make_unique<SlotObject>(slot),
+                    connection_flags,
+                    invoke_type);
+            }
+            else
+            {
+                using Functor = std::function<void(Args...)>;
+                using SlotObject = internal::FunctorSlotObject<Args...>;
 
-        return ConnectImpl(typeid(signal),
-            receiver,
-            std::make_unique<SlotObject>(slot),
-            connection_flags,
-            invoke_type);
+                Functor func = [s = std::forward<Slot>(slot)](Args&&... args) {
+                    s(std::forward<Args>(args)...);
+                    };
+
+                return ConnectImpl(sender,
+                    typeid(signal),
+                    receiver,
+                    std::make_unique<SlotObject>(std::move(func)),
+                    connection_flags,
+                    invoke_type);
+            }
+        }(typename Traits::Arguments{});
     }
 
 protected:
@@ -92,16 +103,17 @@ protected:
     }
 
 private:
-    Disconnecter ConnectImpl(const std::type_info& signal_info,
+    static Disconnecter ConnectImpl(
+        const Object* sender,
+        const std::type_info& signal_info,
         const Object* receiver,
         internal::SlotObjectPtr&& slot_obj,
         ConnectionFlags connection_flags,
-        InvokeType invoke_type) const;
+        InvokeType invoke_type);
 
     void EmitSignalImpl(const std::type_info& signal_info,
         const internal::SlotArgsStoreSharedPtr& args_store) const;
 
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    _MW_IMPL
 };
 }
