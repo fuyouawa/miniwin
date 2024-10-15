@@ -2,8 +2,8 @@
 #include <win/core/drawer.h>
 
 namespace miniwin {
-CheckBox::CheckBox(Widget* const parent, std::u8string_view label, bool show)
-	: AbstractButton{ parent, label, show }
+CheckBox::CheckBox(Widget* const parent, std::u8string_view label)
+	: AbstractButton{ parent, label }
 {
 }
 

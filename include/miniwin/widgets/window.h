@@ -5,7 +5,7 @@ namespace miniwin {
 class Window : public Widget
 {
 public:
-	Window(std::u8string_view title, bool show = true);
+	Window(std::u8string_view title);
 	~Window() override;
 
     std::u8string_view title() const;

@@ -2,8 +2,8 @@
 #include "win/widgets/window_impl.h"
 
 namespace miniwin {
-Window::Window(std::u8string_view title, bool show)
-	: Widget(nullptr, title, show, WidgetType::kWindow)
+Window::Window(std::u8string_view title)
+	: Widget(nullptr, title, WidgetType::kWindow)
 {
     impl_ = std::make_unique<Impl>(this);
 }

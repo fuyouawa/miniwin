@@ -24,6 +24,8 @@ public:
 
     ItemSelectionModel();
 
+    const ItemSelection& current_selection() const;
+
     void Select(const ModelIndex& index, SelectionType selection_type);
     void Select(const ItemSelection& selection, SelectionType selection_type);
     void Clear();

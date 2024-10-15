@@ -3,10 +3,14 @@
 #include "win/widgets/base/abstract_item_view_impl.h"
 
 namespace miniwin {
-AbstractItemView::AbstractItemView(Widget* parent, bool show)
-    : Widget(parent, u8"View", show, WidgetType::kView)
+AbstractItemView::AbstractItemView(Widget* parent)
+    : Widget(parent, u8"View", WidgetType::kView)
 {
     impl_ = std::make_unique<Impl>(this);
+}
+
+AbstractItemView::~AbstractItemView()
+{
 }
 
 void AbstractItemView::set_model(AbstractItemModel* model)

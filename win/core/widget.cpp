@@ -8,12 +8,11 @@
 #include "widgets_driver.h"
 
 namespace miniwin {
-Widget::Widget(Widget* parent, std::u8string_view name, bool show, WidgetType widget_type)
+Widget::Widget(Widget* parent, std::u8string_view name, WidgetType widget_type)
     : Object(parent, name, ObjectType::Widget)
 {
     impl_ = std::make_unique<Impl>(this);
     impl_->widget_type_ = widget_type;
-    impl_->set_visible(show);
 }
 
 Widget::~Widget()

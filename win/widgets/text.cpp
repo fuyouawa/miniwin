@@ -2,8 +2,8 @@
 #include <win/core/drawer.h>
 
 namespace miniwin {
-Text::Text(Widget* const parent, std::u8string_view label, bool show)
-	: AbstractControl{ parent, label, show }
+Text::Text(Widget* const parent, std::u8string_view label)
+	: AbstractControl{ parent, label }
 {
 }
 

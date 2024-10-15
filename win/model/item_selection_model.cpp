@@ -20,6 +20,11 @@ ItemSelectionModel::ItemSelectionModel()
     impl_ = std::make_unique<Impl>(this);
 }
 
+const ItemSelection& ItemSelectionModel::current_selection() const
+{
+    return impl_->current_selection_;
+}
+
 void ItemSelectionModel::Select(const ModelIndex& index, SelectionType selection_type)
 {
     Select(ItemSelection{ index, index }, selection_type);
@@ -33,13 +38,7 @@ void ItemSelectionModel::Select(const ItemSelection& selection, SelectionType se
         impl_->Clear();
         selection_type = SelectionType::Select;
     }
-    for (int row = selection.top_left.row; row <= selection.bottom_right.row; ++row)
-    {
-        for (int col = selection.top_left.column; col <= selection.bottom_right.column; ++col)
-        {
-            impl_->Select({ row, col }, selection_type == SelectionType::Select);
-        }
-    }
+    impl_->Select(selection, selection_type == SelectionType::Select);
     OnSelectionChanged(selection, selection_type);
 }
 

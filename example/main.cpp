@@ -8,7 +8,7 @@ class ExampleWindow : public miniwin::Window
 {
 public:
 	ExampleWindow(const std::u8string_view& title, bool show)
-		: Window(title, show)
+		: Window(title)
 	{
         text_ = new miniwin::Text(this, u8"jjbb");
         input_text_ = new miniwin::InputText(this, u8"6665", u8"fffff");

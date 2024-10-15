@@ -5,7 +5,7 @@ namespace miniwin {
 class Button : public AbstractButton
 {
 public:
-	Button(Widget* parent, std::u8string_view label, bool show = true);
+	Button(Widget* parent, std::u8string_view label);
 
 protected:
 	void PaintBegin() override;

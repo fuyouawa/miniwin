@@ -2,8 +2,8 @@
 #include <win/core/drawer.h>
 
 namespace miniwin {
-Selectable::Selectable(Widget* const parent, std::u8string_view label, bool show)
-	: AbstractControl{ parent, label, show },
+Selectable::Selectable(Widget* const parent, std::u8string_view label)
+	: AbstractControl{ parent, label },
 	cur_selected_{ false },
 	prev_selected_{ false }
 {

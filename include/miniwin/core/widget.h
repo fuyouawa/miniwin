@@ -13,7 +13,7 @@ enum class WidgetType {
 
 class Widget : public Object {
 public:
-    Widget(Widget* parent, std::u8string_view name, bool show, WidgetType widget_type);
+    Widget(Widget* parent, std::u8string_view name, WidgetType widget_type);
     ~Widget() override;
 
     static bool IsInUIThread();

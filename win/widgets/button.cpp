@@ -3,8 +3,8 @@
 #include <win/core/drawer.h>
 
 namespace miniwin {
-Button::Button(Widget* const parent, std::u8string_view label, bool show)
-	: AbstractButton{ parent, label, show }
+Button::Button(Widget* const parent, std::u8string_view label)
+	: AbstractButton{ parent, label }
 {
 }
 

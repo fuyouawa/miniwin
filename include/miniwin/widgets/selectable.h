@@ -5,7 +5,7 @@ namespace miniwin {
 class Selectable : public AbstractControl
 {
 public:
-    Selectable(Widget* parent, std::u8string_view label, bool show = true);
+    Selectable(Widget* parent, std::u8string_view label);
 
     bool is_selected() const;
     void set_selection(bool b);

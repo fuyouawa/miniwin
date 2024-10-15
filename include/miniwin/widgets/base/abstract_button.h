@@ -5,7 +5,7 @@ namespace miniwin {
 class AbstractButton : public AbstractControl
 {
 public:
-	AbstractButton(Widget* const parent, std::u8string_view label, bool show);
+	AbstractButton(Widget* parent, std::u8string_view label);
 
     bool checked() const;
     

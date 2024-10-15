@@ -5,10 +5,11 @@
 #include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {
-class AbstractItemView : Widget
+class AbstractItemView : public Widget
 {
 public:
-    AbstractItemView(Widget* parent, bool show);
+    AbstractItemView(Widget* parent);
+    ~AbstractItemView() override;
 
     virtual void set_model(AbstractItemModel* model);
     AbstractItemModel* model() const;

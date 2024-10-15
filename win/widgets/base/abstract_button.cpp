@@ -1,8 +1,8 @@
 #include <miniwin/widgets/base/abstract_button.h>
 
 namespace miniwin {
-AbstractButton::AbstractButton(Widget* const parent, std::u8string_view label, bool show)
-	: AbstractControl{ parent, label, show },
+AbstractButton::AbstractButton(Widget* parent, std::u8string_view label)
+	: AbstractControl{ parent, label },
 	cur_checked_{ false },
 	prev_checked_{ false }
 {

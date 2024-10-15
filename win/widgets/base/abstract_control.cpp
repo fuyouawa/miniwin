@@ -2,8 +2,8 @@
 #include <imgui/imgui_internal.h>
 
 namespace miniwin {
-AbstractControl::AbstractControl(Widget* const parent, std::u8string_view label, bool show)
-	: Widget{ parent, label, show, WidgetType::kControl }
+AbstractControl::AbstractControl(Widget* parent, std::u8string_view label)
+	: Widget{ parent, label, WidgetType::kControl }
 {
 }
 

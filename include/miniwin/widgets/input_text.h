@@ -6,7 +6,7 @@ namespace miniwin {
 class InputText : public AbstractControl
 {
 public:
-    InputText(Widget* parent, std::u8string_view label, std::u8string_view initial_text = u8"", bool show = true);
+    InputText(Widget* parent, std::u8string_view label, std::u8string_view initial_text = u8"");
 
     void set_text(std::u8string_view text);
     std::u8string_view text() const;
