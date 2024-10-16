@@ -18,6 +18,9 @@ public:
     std::u8string_view id() const;
     void set_id(std::u8string_view id);
 
+    TableFlags flags() const;
+    void set_flags(TableFlags flags);
+
     _MW_IMPL
 };
 }

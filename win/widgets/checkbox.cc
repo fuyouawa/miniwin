@@ -1,5 +1,5 @@
 #include <miniwin/widgets/checkbox.h>
-#include <miniwin/core/drawer.h>
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 CheckBox::CheckBox(Widget* const parent, std::u8string_view label)
@@ -13,6 +13,6 @@ void CheckBox::set_checked(bool b) {
 
 void CheckBox::PaintBegin() {
     AbstractButton::PaintBegin();
-	Drawer::CheckBox(label(), &cur_checked_, size());
+	ImGuiHelper::CheckBox(label(), &cur_checked_, size());
 }
 }

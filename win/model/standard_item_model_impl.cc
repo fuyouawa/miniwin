@@ -1,5 +1,5 @@
 #include "win/model/standard_item_model_impl.h"
-
+#include <string>
 #include <cassert>
 
 namespace miniwin {

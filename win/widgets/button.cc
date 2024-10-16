@@ -1,6 +1,6 @@
 #include <miniwin/widgets/button.h>
 
-#include <miniwin/core/drawer.h>
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 Button::Button(Widget* const parent, std::u8string_view label)
@@ -11,6 +11,6 @@ Button::Button(Widget* const parent, std::u8string_view label)
 void Button::PaintBegin()
 {
     AbstractButton::PaintBegin();
-    cur_checked_ = Drawer::Button(label(), size());
+    cur_checked_ = ImGuiHelper::Button(label(), size());
 }
 }

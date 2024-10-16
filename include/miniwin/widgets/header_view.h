@@ -5,8 +5,12 @@ namespace miniwin {
 class HeaderView : public AbstractItemView
 {
 public:
-    HeaderView(Widget* parent);
+    HeaderView(Widget* parent, Orientation orientation);
 
-    virtual void PaintSection(int index) = 0;
+    Orientation orientation();
+
+    virtual void PaintSection(int index);
+
+    _MW_IMPL
 };
 }

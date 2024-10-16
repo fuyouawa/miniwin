@@ -1,9 +1,10 @@
 #include <miniwin/tools/container.h>
+#include <miniwin/tools/mathf.h>
 
 namespace miniwin {
-Vector2 Vector2::Zero{0, 0};
+const Vector2 Vector2::kZero{ 0, 0 };
 
-bool operator==(const Vector2& x, const Vector2& y) {
-	return x.x == y.x && x.y == y.y;
+bool operator==(const Vector2& a, const Vector2& b) {
+	return Mathf::Approximately(a.x, a.x) && Mathf::Approximately(a.y, a.y);
 }
 }

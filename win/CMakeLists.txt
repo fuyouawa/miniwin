@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5...3.21 FATAL_ERROR)
-project(MINIWIN_LIB)
+project(miniwin)
 
 set(CMAKE_CXX_STANDARD 20)
 

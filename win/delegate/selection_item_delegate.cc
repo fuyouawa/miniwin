@@ -4,7 +4,7 @@
 #include <miniwin/io/input.h>
 #include <miniwin/core/flags.h>
 
-#include <miniwin/core/drawer.h>
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 SelectionItemDelegate::SelectionItemDelegate(Object* parent)
@@ -18,7 +18,7 @@ void SelectionItemDelegate::Paint(AbstractItemView* view, const ModelIndex& inde
     auto selection_model = view->SelectionModel();
     auto& text = std::any_cast<const std::u8string&>(model->Data(index));
     bool is_selected = selection_model->IsSelected(index);
-    if (Drawer::Selectable(text, &is_selected, kSelectableSpanAllColumns | kSelectableAllowOverlap)) {
+    if (ImGuiHelper::Selectable(text, &is_selected, SelectableFlags::kSpanAllColumns | SelectableFlags::kAllowOverlap)) {
         if (Input::IsIoKeyDown(IoKeyCode::kCtrl)) {
             selection_model->Select(index, is_selected
                 ? ItemSelectionModel::SelectionType::Select

@@ -1,5 +1,5 @@
 #include <miniwin/widgets/text.h>
-#include <miniwin/core/drawer.h>
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 Text::Text(Widget* const parent, std::u8string_view label)
@@ -9,6 +9,6 @@ Text::Text(Widget* const parent, std::u8string_view label)
 
 void Text::PaintBegin() {
     AbstractControl::PaintBegin();
-	Drawer::Text(label(), size());
+	ImGuiHelper::Text(label(), size());
 }
 }

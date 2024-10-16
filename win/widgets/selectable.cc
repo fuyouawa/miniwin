@@ -1,32 +1,41 @@
-#include <miniwin/widgets/selectable.h>
-#include <miniwin/core/drawer.h>
+#include "win/widgets/selectable_impl.h"
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 Selectable::Selectable(Widget* const parent, std::u8string_view label)
-	: AbstractControl{ parent, label },
-	cur_selected_{ false },
-	prev_selected_{ false }
+	: AbstractControl{ parent, label }
 {
+    impl_ = std::make_unique<Impl>(this);
 }
 
 bool Selectable::is_selected() const
 {
-    return cur_selected_;
+    return impl_->cur_selected_;
 }
 
 void Selectable::set_selection(bool b)
 {
-    cur_selected_ = b;
+    impl_->cur_selected_ = b;
+}
+
+SelectableFlags Selectable::flags() const
+{
+    return impl_->flags_;
+}
+
+void Selectable::set_flags(SelectableFlags flags)
+{
+    impl_->flags_ = flags;
 }
 
 void Selectable::PaintBegin()
 {
     AbstractControl::PaintBegin();
 
-    Drawer::Selectable(label(), &cur_selected_, flags(), size());
-    if (cur_selected_ != prev_selected_) {
-        OnSelectionChanged(cur_selected_);
+    ImGuiHelper::Selectable(label(), &impl_->cur_selected_, flags(), size());
+    if (impl_->cur_selected_ != impl_->prev_selected_) {
+        OnSelectionChanged(impl_->cur_selected_);
     }
-    prev_selected_ = cur_selected_;
+    impl_->prev_selected_ = impl_->cur_selected_;
 }
 }

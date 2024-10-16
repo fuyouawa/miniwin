@@ -63,16 +63,6 @@ ObjectType Object::object_type() const
     return impl_->object_type_;
 }
 
-int Object::flags() const
-{
-    return impl_->flags_;
-}
-
-void Object::set_flags(int flags)
-{
-    impl_->flags_ = flags;
-}
-
 const std::vector<Object*>& Object::Children() const
 {
     return impl_->children_;

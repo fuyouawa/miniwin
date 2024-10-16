@@ -1,5 +1,6 @@
 #pragma once
 #include <miniwin/core/object.h>
+#include <miniwin/core/flags.h>
 
 #include <miniwin/tools/container.h>
 
@@ -10,16 +11,6 @@ enum class WidgetType {
     kControl,
     kView
 };
-
-enum class WidgetFlags
-{
-    kNone = 0,
-    kIgnoreChildrenDraw = 1 << 0,
-    kIgnoreDraw = 1 << 1,
-};
-
-WidgetFlags operator|(WidgetFlags x, WidgetFlags y);
-WidgetFlags operator&(WidgetFlags x, WidgetFlags y);
 
 class Widget : public Object {
 public:
@@ -44,8 +35,8 @@ public:
 
     bool orphaned() const;
     WidgetType widget_type() const;
-    WidgetFlags widget_flags() const;
-    void set_widget_flags(WidgetFlags widget_flags);
+    WidgetDrawFlags draw_flags() const;
+    void set_draw_flags(WidgetDrawFlags draw_flags);
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
 

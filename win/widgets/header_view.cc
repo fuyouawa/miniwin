@@ -1,9 +1,10 @@
-#include <miniwin/widgets/header_view.h>
+#include "win/widgets/header_view_impl.h"
 
 namespace miniwin {
-HeaderView::HeaderView(Widget* parent)
+inline HeaderView::HeaderView(Widget* parent, Orientation orientation)
     : AbstractItemView(parent)
 {
-    set_widget_flags(WidgetFlags::kIgnoreDraw);
+    impl_ = std::make_unique<Impl>(this, orientation);
+    set_draw_flags(WidgetDrawFlags::kIgnoreDraw);
 }
 }

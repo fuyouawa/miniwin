@@ -8,22 +8,6 @@ namespace miniwin {
 class Widget::Impl
 {
 public:
-    ScopeCondition enable_sc_{ true };
-    ScopeCondition visible_sc_{ true };
-    ScopeVariable<Vector2> size_sc_{};
-
-    bool is_painting_children_ = false;
-    bool orphaned_ = false;
-    bool dirty_ = false;
-
-    WidgetFlags widget_flags_ = WidgetFlags::kNone;
-    WidgetType widget_type_;
-
-    Widget* owner_;
-    std::mutex pending_functors_mutex_;
-    std::queue<std::function<void()>> pending_functors_;
-    std::vector<Widget*> widget_children_;
-
     explicit Impl(Widget* owner, WidgetType widget_type);
     ~Impl();
 
@@ -44,5 +28,21 @@ public:
     void SetVisible(bool b);
     bool Enabled() const;
     void SetEnable(bool b);
+
+    ScopeCondition enable_sc_{ true };
+    ScopeCondition visible_sc_{ true };
+    ScopeVariable<Vector2> size_sc_{};
+
+    bool is_painting_children_ = false;
+    bool orphaned_ = false;
+    bool dirty_ = false;
+
+    WidgetDrawFlags draw_flags_ = WidgetDrawFlags::kNone;
+    WidgetType widget_type_;
+
+    Widget* owner_;
+    std::mutex pending_functors_mutex_;
+    std::queue<std::function<void()>> pending_functors_;
+    std::vector<Widget*> widget_children_;
 };
 }

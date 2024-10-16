@@ -40,8 +40,6 @@ public:
     void set_name(std::u8string_view name) const;
 
     ObjectType object_type() const;
-    int flags() const;
-    void set_flags(int flags);
 
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 

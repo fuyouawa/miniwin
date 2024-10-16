@@ -8,16 +8,6 @@
 #include "widgets_driver.h"
 
 namespace miniwin {
-WidgetFlags operator|(WidgetFlags x, WidgetFlags y)
-{
-    return static_cast<WidgetFlags>(static_cast<int>(x) | static_cast<int>(y));
-}
-
-WidgetFlags operator&(WidgetFlags x, WidgetFlags y)
-{
-    return static_cast<WidgetFlags>(static_cast<int>(x) & static_cast<int>(y));
-}
-
 Widget::Widget(Widget* parent, std::u8string_view name, WidgetType widget_type)
     : Object(parent, name, ObjectType::Widget)
 {
@@ -87,14 +77,14 @@ WidgetType Widget::widget_type() const {
     return impl_->widget_type_;
 }
 
-WidgetFlags Widget::widget_flags() const
+WidgetDrawFlags Widget::draw_flags() const
 {
-    return impl_->widget_flags_;
+    return impl_->draw_flags_;
 }
 
-void Widget::set_widget_flags(WidgetFlags widget_flags)
+void Widget::set_draw_flags(WidgetDrawFlags draw_flags)
 {
-    impl_->widget_flags_ = widget_flags;
+    impl_->draw_flags_ = draw_flags;
 }
 
 void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const

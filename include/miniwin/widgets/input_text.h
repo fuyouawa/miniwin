@@ -1,6 +1,5 @@
 #pragma once
 #include <miniwin/widgets/base/abstract_control.h>
-#include <string>
 
 namespace miniwin {
 class InputText : public AbstractControl
@@ -10,11 +9,13 @@ public:
 
     void set_text(std::u8string_view text);
     std::u8string_view text() const;
+
+    InputTextFlags flags() const;
+    void set_flags(InputTextFlags flags) const;
     
 protected:
     void PaintBegin() override;
 
-private:
-    std::u8string text_;
+    _MW_IMPL
 };
 }

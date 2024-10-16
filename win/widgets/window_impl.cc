@@ -1,10 +1,9 @@
-#include "imgui/imgui.h"
 #include "win/widgets/window_impl.h"
 
 #include "win/core/widgets_driver.h"
 #include "win/tools/graphic_utils.h"
 
-#include "miniwin/core/drawer.h"
+#include "miniwin/core/imgui_helper.h"
 
 namespace miniwin {
 Window::Impl::Impl(Window* owner)
@@ -18,9 +17,9 @@ void Window::Impl::PaintBegin()
     top_sc_.Entry();
 
     bool open = true;
-    Drawer::BeginWindow(owner_->title(), has_close_button_ ? &open : nullptr, owner_->flags());
+    ImGuiHelper::BeginWindow(owner_->title(), has_close_button_ ? &open : nullptr, owner_->flags());
 
-    is_docking_ = ImGui::IsWindowDocked();
+    is_docking_ = ImGuiHelper::IsWindowDocked();
     // 获取当前窗体句柄, 然后判断是否改变
     // 如果改变则说明当前窗体脱离或者停靠到了某个窗体
     hwnd_ = internal::GraphicUtils::GetCurrentWindow();
@@ -38,7 +37,7 @@ void Window::Impl::PaintBegin()
 
 void Window::Impl::PaintEnd()
 {
-    Drawer::EndWindow();
+    ImGuiHelper::EndWindow();
     top_sc_.Exit();
 }
 

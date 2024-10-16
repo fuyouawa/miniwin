@@ -11,6 +11,9 @@ public:
     std::u8string_view title() const;
     void set_title(std::u8string_view title) const;
 
+    WindowFlags flags() const;
+    void set_flags(WindowFlags flags);
+
 	void EnableTop(bool b) const;
 	void EnableCloseButton(bool b) const;
 

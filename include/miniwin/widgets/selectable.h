@@ -10,12 +10,14 @@ public:
     bool is_selected() const;
     void set_selection(bool b);
 
+    SelectableFlags flags() const;
+    void set_flags(SelectableFlags flags);
+
     MW_SIGNAL(OnSelectionChanged, (bool) selected)
 
 protected:
     void PaintBegin() override;
 
-    bool cur_selected_;
-    bool prev_selected_;
+    _MW_IMPL
 };
 }

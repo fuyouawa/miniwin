@@ -1,5 +1,5 @@
 #include "win/widgets/table_view_impl.h"
-#include <miniwin/core/drawer.h>
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 TableView::TableView(Widget* parent, std::u8string_view id)
@@ -25,10 +25,16 @@ void TableView::SetHorizontalHeader(HeaderView* header_view)
 void TableView::PaintBegin()
 {
     AbstractItemView::PaintBegin();
-    impl_->begin_table_ = Drawer::BeginTable(id(), Model()->ColumnCount(), flags(), size());
+    auto model = Model();
+    impl_->begin_table_ = ImGuiHelper::BeginTable(id(), model->ColumnCount(), flags(), size());
     if (impl_->begin_table_)
     {
-        
+        for (size_t i = 0; i < model->ColumnCount(); ++i)
+        {
+            auto text = std::any_cast<const std::u8string&>(model->HeaderData(i, Orientation::Horizontal, ItemRole::Display));
+            auto flags = std::any_cast<int>(model->HeaderData(i, Orientation::Horizontal, ItemRole::Flags));
+            ImGuiHelper::TableSetupColumn(text, static_cast<TableColumnFlags>(flags));
+        }
     }
 }
 
@@ -45,5 +51,15 @@ std::u8string_view TableView::id() const
 void TableView::set_id(std::u8string_view id)
 {
     impl_->id_ = id;
+}
+
+TableFlags TableView::flags() const
+{
+    return impl_->flags_;
+}
+
+void TableView::set_flags(TableFlags flags)
+{
+    impl_->flags_ = flags;
 }
 }

@@ -2,12 +2,13 @@
 namespace miniwin {
 struct Vector2
 {
-	static Vector2 Zero;
+    static const Vector2 kZero;
+
 	float x;
 	float y;
 };
 
-bool operator==(const Vector2& x, const Vector2& y);
+bool operator==(const Vector2& a, const Vector2& b);
 
 struct Rect
 {

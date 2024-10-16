@@ -121,22 +121,26 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
 {
     if (widget->Visible())
     {
-        if ((widget->widget_flags() & WidgetFlags::kIgnoreDraw) == WidgetFlags::kNone)
-        {
-            widget->PaintBegin();
+        auto ignore_self = (widget->draw_flags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
+        auto ignore_children = (widget->draw_flags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
 
-            if ((widget->widget_flags() & WidgetFlags::kIgnoreChildrenDraw) == WidgetFlags::kNone)
+        if (ignore_self) {
+            widget->PaintBegin();
+        }
+
+        if (ignore_children)
+        {
+            for (auto& o : widget->Children())
             {
-                for (auto& o : widget->Children())
+                auto w = dynamic_cast<Widget*>(o);
+                if (w && !w->orphaned())
                 {
-                    auto w = dynamic_cast<Widget*>(o);
-                    if (w && !w->orphaned())
-                    {
-                        UpdateRecursion(w);
-                    }
+                    UpdateRecursion(w);
                 }
             }
+        }
 
+        if (ignore_self) {
             widget->PaintEnd();
         }
     }

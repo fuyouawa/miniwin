@@ -13,6 +13,7 @@ public:
 
     void OnDockingChanged();
 
+    WindowFlags flags_ = WindowFlags::kNone;
     ScopeCondition top_sc_;
     void* hwnd_;
     void* prev_hwnd_;

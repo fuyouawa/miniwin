@@ -10,7 +10,12 @@ set(LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(EXEC_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(HEAD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+message(${CMAKE_BUILD_TYPE})
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+set(MINIWIN_LIB miniwin_d)
+else()
 set(MINIWIN_LIB miniwin)
+endif()
 set(GLFW_LIB glfw)
 
 set(GUI_HEAD_PATH ${PROJECT_SOURCE_DIR})
