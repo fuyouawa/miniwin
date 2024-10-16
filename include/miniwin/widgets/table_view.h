@@ -10,7 +10,10 @@ public:
     ~TableView() override;
 
     HeaderView* HorizontalHeader() const;
-    void SetHorizontalHeader(HeaderView* header_view);
+    void SetHorizontalHeader(HeaderView* header);
+
+    HeaderView* VerticalHeader() const;
+    void SetVerticalHeader(HeaderView* header);
 
     void PaintBegin() override;
     void PaintEnd() override;

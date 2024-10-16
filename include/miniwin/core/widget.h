@@ -40,14 +40,14 @@ public:
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
 
-    MW_SIGNAL(OnEnableChanged, (bool) b)
-    MW_SIGNAL(OnVisbleChanged, (bool) b)
-
-protected:
     virtual void UpdateEarly();
     virtual void PaintBegin();
     virtual void PaintEnd();
 
+    MW_SIGNAL(OnEnableChanged, (bool) b)
+    MW_SIGNAL(OnVisbleChanged, (bool) b)
+
+protected:
     virtual void DoEnable(bool b) {}
     virtual void DoShow() {}
     virtual void DoHide() {}
@@ -55,8 +55,6 @@ protected:
 private:
     using Object::Parent;
     using Object::SetParent;
-
-    friend class WidgetsDriver;
 
     _MW_IMPL
 };

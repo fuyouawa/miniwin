@@ -8,9 +8,12 @@ class TableView::Impl
 public:
     explicit Impl(TableView* owner);
 
+    HeaderView* Header(Orientation orientation);
+    void SetHeader(Orientation orientation, HeaderView* header);
+
     TableView* owner_;
     TableFlags flags_ = TableFlags::kNone;
-    HeaderView* horizontal_header = nullptr;
+    std::unordered_map<Orientation, HeaderView*> headers_;
     bool begin_table_ = false;
     std::u8string id_;
 };

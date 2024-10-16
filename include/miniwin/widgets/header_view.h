@@ -9,7 +9,10 @@ public:
 
     Orientation orientation();
 
-    virtual void PaintSection(int index);
+    virtual void PaintSection(size_t index);
+
+private:
+    using AbstractItemView::set_draw_flags;
 
     _MW_IMPL
 };

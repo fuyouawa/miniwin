@@ -47,6 +47,27 @@ bool ImGuiHelper::IsWindowDocked()
     return ImGui::IsWindowDocked();
 }
 
+
+void ImGuiHelper::PushID(int id)
+{
+    ImGui::PushID(id);
+}
+
+void ImGuiHelper::PushID(const void* id)
+{
+    ImGui::PushID(id);
+}
+
+void ImGuiHelper::PushID(std::string_view id)
+{
+    ImGui::PushID(id.data());
+}
+
+void ImGuiHelper::PopID()
+{
+    ImGui::PopID();
+}
+
 bool ImGuiHelper::CheckBox(std::u8string_view label, bool* checked, const Vector2& size) {
 	return ImGui::Checkbox(cstr(label), checked);
 }
@@ -108,6 +129,11 @@ void ImGuiHelper::EndTable() {
 void ImGuiHelper::TableSetupColumn(std::u8string_view label, TableColumnFlags flags, float init_width_or_weight, uint32_t user_id)
 {
     return ImGui::TableSetupColumn(cstr(label), static_cast<int>(flags), init_width_or_weight, user_id);
+}
+
+bool ImGuiHelper::TableSetColumnIndex(size_t column_n)
+{
+    return ImGui::TableSetColumnIndex(column_n);
 }
 
 void ImGuiHelper::TableNextRow(TableRowFlags row_flags, float row_min_height)

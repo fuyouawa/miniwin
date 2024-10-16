@@ -9,6 +9,11 @@ class ImGuiHelper
 public:
     static bool IsWindowDocked();
 
+    static void PushID(int id);
+    static void PushID(const void* id);
+    static void PushID(std::string_view id);
+    static void PopID();
+
 	static bool CheckBox(
 		std::u8string_view label,
 		bool* checked,
@@ -59,6 +64,8 @@ public:
         TableColumnFlags flags = TableColumnFlags::kNone,
         float init_width_or_weight = 0,
         uint32_t user_id = 0);
+
+    static bool TableSetColumnIndex(size_t column_n);
 
     static void TableNextRow(TableRowFlags row_flags = TableRowFlags::kNone, float row_min_height = 0);
 
