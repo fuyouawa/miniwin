@@ -12,7 +12,9 @@ enum class Orientation
 
 enum class ItemRole
 {
-    Display
+    Display,
+    UserData,
+    Flags
 };
 
 class AbstractItemModel : public Object
@@ -40,19 +42,13 @@ public:
 
 	virtual void Clear() = 0;
 
-    virtual const std::any& user_data(const ModelIndex& index) const = 0;
-	virtual void set_user_data(const ModelIndex& index, std::any&& data) = 0;
+    virtual const std::any& data(const ModelIndex& index, ItemRole role = ItemRole::Display) const = 0;
+    virtual void set_data(const ModelIndex& index, std::any&& data, ItemRole role = ItemRole::Display) = 0;
 
-    virtual std::u8string_view text(const ModelIndex& index) const = 0;
-	virtual void set_text(const ModelIndex& index, std::u8string_view text) = 0;
+    virtual const std::any& header_data(int section, Orientation orientation, ItemRole role = ItemRole::Display) const = 0;
+    virtual void set_header_data(int section, Orientation orientation, std::any&& data, ItemRole role = ItemRole::Display) = 0;
 
-    virtual int flags(const ModelIndex& index) const = 0;
-    virtual void set_flags(const ModelIndex& index, int flags) = 0;
-
-    virtual const std::any& header_data(int section, Orientation orientation, ItemRole role) = 0;
-    virtual void set_header_data(int section, Orientation orientation, ItemRole role, const std::any& data) = 0;
-
-    virtual bool IsValidIndex(const ModelIndex& index);
+    virtual bool IsValidIndex(const ModelIndex& index) const;
 
     MW_SIGNAL(OnRowsInserted, (size_t) row, (size_t) count)
     MW_SIGNAL(OnRowsRemoved, (size_t) row, (size_t) count)

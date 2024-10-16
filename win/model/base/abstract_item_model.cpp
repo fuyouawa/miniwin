@@ -13,20 +13,16 @@ public:
     void RemoveColumns(size_t column, size_t count) override {}
     size_t column_count() const override { return 0; }
     void Clear() override {}
-    const std::any& user_data(const ModelIndex& index) const override {
+    const std::any& data(const ModelIndex& index, ItemRole role) const override {
         static std::any empty;
         return empty;
     }
-    void set_user_data(const ModelIndex& index, std::any&& data) override {}
-    std::u8string_view text(const ModelIndex& index) const override { return u8""; }
-    void set_text(const ModelIndex& index, std::u8string_view text) override {}
-    int flags(const ModelIndex& index) const override { return 0; }
-    void set_flags(const ModelIndex& index, int flags) override {}
-    const std::any& header_data(int section, Orientation orientation, ItemRole role) override {
+    void set_data(const ModelIndex& index, std::any&& data, ItemRole role) override {}
+    const std::any& header_data(int section, Orientation orientation, ItemRole role) const override {
         static std::any empty;
         return empty;
     }
-    void set_header_data(int section, Orientation orientation, ItemRole role, const std::any& data) override {}
+    void set_header_data(int section, Orientation orientation, std::any&& data, ItemRole role) override {}
 };
 
 AbstractItemModel* AbstractItemModel::StaticEmptyModel()
@@ -82,7 +78,7 @@ void AbstractItemModel::set_column_count(size_t count)
     }
 }
 
-bool AbstractItemModel::IsValidIndex(const ModelIndex& index)
+bool AbstractItemModel::IsValidIndex(const ModelIndex& index) const
 {
     return index.valid() && index.row < row_count() && index.column < column_count();
 }

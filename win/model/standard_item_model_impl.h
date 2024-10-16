@@ -1,16 +1,12 @@
 #pragma once
 #include <cassert>
-#include <optional>
 #include <miniwin/model/standard_item_model.h>
 #include <string>
 
 namespace miniwin {
-struct StandardItem
-{
-    std::u8string text;
-    std::any user_data;
-    int flags = 0;
-};
+using StandardItem = std::unordered_map<ItemRole, std::any>;
+
+using StandardLineItems = std::vector<StandardItem>;
 
 class StandardItemModel::Impl
 {
@@ -49,14 +45,17 @@ public:
 
     void InsertRows(size_t row, size_t count) {
         assert(row <= row_count());
-        auto pos = std::next(items_.begin(), row);
-        items_.insert(pos, count, {});
+        items_.insert(items_.begin() + row, count, {});
+
+        vertical_header_items_.insert(vertical_header_items_.begin() + row, count, {});
     }
     void RemoveRows(size_t row, size_t count) {
         assert(row + count <= row_count());
-        auto start = std::next(items_.begin(), row);
-        auto end = std::next(start, count);
-        items_.erase(start, end);
+        auto pos = items_.begin() + row;
+        items_.erase(pos, pos + count);
+
+        auto pos2 = vertical_header_items_.begin() + row;
+        vertical_header_items_.erase(pos2, pos2 + count);
     }
 
     void InsertColumns(size_t column, size_t count) {
@@ -69,11 +68,11 @@ public:
                 // 如果是在当前行的列数中间插入的, 才需要真正插入
                 if (r.size() > column)
                 {
-                    auto pos = std::next(r.begin(), column);
-                    r.insert(pos, count, {});
+                    r.insert(r.begin() + column, count, {});
                 }
             }
         }
+        horizontal_header_items_.insert(horizontal_header_items_.begin() + column, count, {});
         column_count_ += count;
     }
     void RemoveColumns(size_t column, size_t count) {
@@ -83,15 +82,17 @@ public:
             if (r.size() > column)
             {
                 auto c = r.size() - column;
-                auto start = std::next(r.begin(), column);
-                auto end = std::next(start, c);
-                r.erase(start, end);
+                auto pos = r.begin() + column;
+                r.erase(pos, pos + c);
             }
         }
+        auto pos = horizontal_header_items_.begin() + column;
+        horizontal_header_items_.erase(pos, pos + count);
+
         column_count_ -= count;
     }
 
-    const StandardItem& item(const ModelIndex& idx) {
+    StandardItem& item(const ModelIndex& idx) {
         static StandardItem empty_item;
         assert(idx.valid());
         assert(idx.row <= row_count() && idx.column <= column_count());
@@ -116,10 +117,9 @@ public:
     void Clear() {
         items_.clear();
     }
-
-private:
-    using RowData = std::vector<StandardItem>;
-    std::vector<RowData> items_;
+    std::vector<StandardLineItems> items_;
     size_t column_count_;
+    StandardLineItems horizontal_header_items_;
+    StandardLineItems vertical_header_items_;
 };
 }

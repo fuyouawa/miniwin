@@ -15,19 +15,25 @@ public:
     void RemoveColumns(size_t column, size_t count) override;
     size_t column_count() const override;
 
-    const std::any& user_data(const ModelIndex& index) const override;
-    void set_user_data(const ModelIndex& index, std::any&& data) override;
+    const std::any& data(const ModelIndex& index, ItemRole role) const override;
+    void set_data(const ModelIndex& index, std::any&& data, ItemRole role) override;
 
-    std::u8string_view text(const ModelIndex& index) const override;
-    void set_text(const ModelIndex& index, std::u8string_view text) override;
+    const std::any& header_data(int section, Orientation orientation, ItemRole role) const override;
+    void set_header_data(int section, Orientation orientation, std::any&& data, ItemRole role) override;
 
-    int flags(const ModelIndex& index) const override;
-    void set_flags(const ModelIndex& index, int flags) override;
+    std::u8string_view text(const ModelIndex& index) const;
+    void set_text(const ModelIndex& index, std::u8string_view text);
+
+    int flags(const ModelIndex& index) const;
+    void set_flags(const ModelIndex& index, int flags);
+
+    std::u8string_view header_text(int section, Orientation orientation) const;
+    void set_header_text(int section, Orientation orientation, std::u8string_view text);
+
+    int header_flags(int section, Orientation orientation) const;
+    void set_header_flags(int section, Orientation orientation, int flags);
 
     void Clear() override;
-
-    const std::any& header_data(int section, Orientation orientation, ItemRole role) override;
-    void set_header_data(int section, Orientation orientation, ItemRole role, const std::any& data) override;
 
     _MW_IMPL
 };
