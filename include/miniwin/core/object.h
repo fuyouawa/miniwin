@@ -32,9 +32,9 @@ public:
     Object(Object* parent, std::u8string_view name, ObjectType object_type);
     virtual ~Object();
 
-    const Object* GetParent() const;
+    const Object* Parent() const;
     void SetParent(Object* parent) const;
-    const std::vector<Object*>& GetChildren() const;
+    const std::vector<Object*>& Children() const;
 
     std::u8string_view name() const;
     void set_name(std::u8string_view name) const;

@@ -25,15 +25,9 @@ const ItemSelection& ItemSelectionModel::current_selection() const
     return impl_->current_selection_;
 }
 
-AbstractItemModel* ItemSelectionModel::GetModel() const
+AbstractItemModel* ItemSelectionModel::Model() const
 {
     return impl_->model_;
-}
-
-void ItemSelectionModel::SetModel(AbstractItemModel* model) const
-{
-    impl_->model_ = model;
-    impl_->Clear();
 }
 
 void ItemSelectionModel::Select(const ModelIndex& index, SelectionType selection_type)

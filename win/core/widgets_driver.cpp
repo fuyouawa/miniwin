@@ -119,7 +119,7 @@ std::thread::id WidgetsDriver::ui_thread_id() const
 
 void WidgetsDriver::UpdateRecursion(Widget* widget)
 {
-    if (widget->GetVisible())
+    if (widget->Visible())
     {
         if ((widget->widget_flags() & WidgetFlags::kIgnoreDraw) == WidgetFlags::kNone)
         {
@@ -127,7 +127,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
 
             if ((widget->widget_flags() & WidgetFlags::kIgnoreChildrenDraw) == WidgetFlags::kNone)
             {
-                for (auto& o : widget->GetChildren())
+                for (auto& o : widget->Children())
                 {
                     auto w = dynamic_cast<Widget*>(o);
                     if (w && !w->orphaned())
@@ -144,10 +144,10 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
 
 void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget)
 {
-    if (widget->GetVisible())
+    if (widget->Visible())
     {
         widget->UpdateEarly();
-        for (auto& o : widget->GetChildren())
+        for (auto& o : widget->Children())
         {
             auto w = dynamic_cast<Widget*>(o);
             if (w)
@@ -162,7 +162,7 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
 {
     if (widget->impl_->dirty_)
     {
-        auto& wc = widget->GetWidgetChildren();
+        auto& wc = widget->WidgetChildren();
         std::vector<std::vector<Widget*>::const_iterator> orphaned_children_iters;
         for (auto it = wc.begin(); it != wc.end(); ++it)
         {
@@ -177,7 +177,7 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
         }
         widget->impl_->dirty_ = false;
     }
-    for (auto c : widget->GetWidgetChildren())
+    for (auto c : widget->WidgetChildren())
     {
         assert(!c->orphaned());
         ClearDirtyRecursion(c);

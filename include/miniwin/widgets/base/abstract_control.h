@@ -10,6 +10,6 @@ public:
     std::u8string_view label() const;
     void set_label(std::u8string_view label);
 
-    bool GetVisible() const override;
+    bool Visible() const override;
 };
 }

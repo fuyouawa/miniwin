@@ -12,7 +12,7 @@ TableView::~TableView()
 {
 }
 
-HeaderView* TableView::GetHorizontalHeader() const
+HeaderView* TableView::HorizontalHeader() const
 {
     return impl_->horizontal_header;
 }
@@ -25,7 +25,7 @@ void TableView::SetHorizontalHeader(HeaderView* header_view)
 void TableView::PaintBegin()
 {
     AbstractItemView::PaintBegin();
-    impl_->begin_table_ = Drawer::BeginTable(id(), GetModel()->column_count(), flags(), size());
+    impl_->begin_table_ = Drawer::BeginTable(id(), Model()->ColumnCount(), flags(), size());
     if (impl_->begin_table_)
     {
         

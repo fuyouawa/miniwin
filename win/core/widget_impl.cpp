@@ -62,7 +62,7 @@ void Widget::Impl::PaintEnd()
 
 const Widget* Widget::Impl::widget_parent() const
 {
-    if (auto p = owner_->GetParent())
+    if (auto p = owner_->Parent())
     {
         auto p2 = dynamic_cast<const Widget*>(p);
         assert(p2);
@@ -86,7 +86,7 @@ void Widget::Impl::set_widget_parent(Widget* parent)
 void Widget::Impl::OnChildrenChanged()
 {
     widget_children_.clear();
-    for (const auto c : owner_->GetChildren())
+    for (const auto c : owner_->Children())
     {
         auto w = dynamic_cast<Widget*>(c);
         if (w)
@@ -125,12 +125,12 @@ bool Widget::Impl::visible() const
     {
         return false;
     }
-    auto p = owner_->GetWidgetParent();
+    auto p = owner_->WidgetParent();
     if (!p)
     {
         return v;
     }
-    return p->GetVisible();
+    return p->Visible();
 }
 
 void Widget::Impl::set_visible(bool b)
@@ -145,12 +145,12 @@ bool Widget::Impl::enabled() const
     {
         return false;
     }
-    auto p = owner_->GetWidgetParent();
+    auto p = owner_->WidgetParent();
     if (!p)
     {
         return v;
     }
-    return p->GetEnabled();
+    return p->Enabled();
 }
 
 void Widget::Impl::set_enable(bool b)

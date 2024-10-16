@@ -12,13 +12,13 @@ public:
     ~AbstractItemView() override;
 
     virtual void SetModel(AbstractItemModel* model);
-    AbstractItemModel* GetModel() const;
+    AbstractItemModel* Model() const;
 
     virtual void SetSelectionModel(ItemSelectionModel* selection_model);
-    ItemSelectionModel* GetSelectionModel() const;
+    ItemSelectionModel* SelectionModel() const;
 
     virtual void SetItemDelegate(AbstractItemDelegate* item_delegate);
-    AbstractItemDelegate* GetItemDelegate() const;
+    AbstractItemDelegate* ItemDelegate() const;
 
     _MW_IMPL
 };

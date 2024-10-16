@@ -11,14 +11,14 @@ public:
     size_t RowCount() const override { return 0; }
     void InsertColumns(size_t column, size_t count) override {}
     void RemoveColumns(size_t column, size_t count) override {}
-    size_t column_count() const override { return 0; }
+    size_t ColumnCount() const override { return 0; }
     void Clear() override {}
-    const std::any& GetData(const ModelIndex& index, ItemRole role) const override {
+    const std::any& Data(const ModelIndex& index, ItemRole role) const override {
         static std::any empty;
         return empty;
     }
     void SetData(const ModelIndex& index, std::any&& data, ItemRole role) override {}
-    const std::any& GetHeaderData(int section, Orientation orientation, ItemRole role) const override {
+    const std::any& HeaderData(int section, Orientation orientation, ItemRole role) const override {
         static std::any empty;
         return empty;
     }
@@ -65,9 +65,9 @@ void AbstractItemModel::RemoveColumn(size_t column)
 {
     RemoveColumns(column, 1);
 }
-void AbstractItemModel::set_column_count(size_t count)
+void AbstractItemModel::SetColumnCount(size_t count)
 {
-    auto col_n = column_count();
+    auto col_n = ColumnCount();
 
     if (count == col_n) return;
     if (count > col_n) {
@@ -80,6 +80,6 @@ void AbstractItemModel::set_column_count(size_t count)
 
 bool AbstractItemModel::IsValidIndex(const ModelIndex& index) const
 {
-    return index.valid() && index.row < RowCount() && index.column < column_count();
+    return index.valid() && index.row < RowCount() && index.column < ColumnCount();
 }
 }

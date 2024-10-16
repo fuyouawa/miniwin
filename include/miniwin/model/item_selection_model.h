@@ -27,8 +27,7 @@ public:
 
     const ItemSelection& current_selection() const;
 
-    AbstractItemModel* GetModel() const;
-    void SetModel(AbstractItemModel* model) const;
+    AbstractItemModel* Model() const;
 
     void Select(const ModelIndex& index, SelectionType selection_type);
     void Select(const ItemSelection& selection, SelectionType selection_type);

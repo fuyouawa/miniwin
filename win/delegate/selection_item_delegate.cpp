@@ -14,9 +14,9 @@ SelectionItemDelegate::SelectionItemDelegate(Object* parent)
 
 void SelectionItemDelegate::Paint(AbstractItemView* view, const ModelIndex& index)
 {
-    auto model = view->GetModel();
-    auto selection_model = view->GetSelectionModel();
-    auto& text = std::any_cast<const std::u8string&>(model->GetData(index));
+    auto model = view->Model();
+    auto selection_model = view->SelectionModel();
+    auto& text = std::any_cast<const std::u8string&>(model->Data(index));
     bool is_selected = selection_model->IsSelected(index);
     if (Drawer::Selectable(text, &is_selected, kSelectableSpanAllColumns | kSelectableAllowOverlap)) {
         if (Input::IsIoKeyDown(IoKeyCode::kCtrl)) {

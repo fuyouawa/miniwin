@@ -22,7 +22,7 @@ protected:
 	void PaintEnd() override;
 
 private:
-    using Widget::GetWidgetParent;
+    using Widget::WidgetParent;
     using Widget::SetWidgetParent;
 
     _MW_IMPL

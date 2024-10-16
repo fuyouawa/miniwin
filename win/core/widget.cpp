@@ -27,6 +27,13 @@ Widget::Widget(Widget* parent, std::u8string_view name, WidgetType widget_type)
 
 Widget::~Widget()
 {
+    if (!IsInUIThread() || !orphaned())
+    {
+        throw std::exception("Do not manually delete Widget objects. "
+                             "Use the Close() function to close them first, "
+                             "and then the framework's internal Widget manager "
+                             "will handle their destruction.");
+    }
 }
 
 void Widget::Close()
@@ -34,7 +41,7 @@ void Widget::Close()
     impl_->Close();
 }
 
-const Widget* Widget::GetWidgetParent() const
+const Widget* Widget::WidgetParent() const
 {
     return impl_->widget_parent();
 }
@@ -44,7 +51,7 @@ void Widget::SetWidgetParent(Widget* parent) const
     impl_->set_widget_parent(parent);
 }
 
-const std::vector<Widget*>& Widget::GetWidgetChildren() const
+const std::vector<Widget*>& Widget::WidgetChildren() const
 {
     return impl_->widget_children_;
 }
@@ -65,9 +72,9 @@ bool Widget::orphaned() const
     return impl_->orphaned_;
 }
 
-bool Widget::GetEnabled() const { return impl_->enabled(); }
+bool Widget::Enabled() const { return impl_->enabled(); }
 
-bool Widget::GetVisible() const {
+bool Widget::Visible() const {
     return impl_->visible();
 }
 
@@ -92,7 +99,7 @@ void Widget::set_widget_flags(WidgetFlags widget_flags)
 
 void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const
 {
-    if (IsInUIThread())
+    if (IsInUIThread() && invoke_type == InvokeType::kAuto)
     {
         invoke_type = InvokeType::kDirect;
     }
@@ -119,29 +126,6 @@ bool Widget::IsInUIThread()
 {
     return std::this_thread::get_id() == WidgetsDriver::instance().ui_thread_id();
 }
-
-// void Widget::Invoke(Functor&& func, InvokeType type) const {
-//     switch (type)
-//     {
-//     case InvokeType::kAuto:
-//         if (IsInOwnerThread()) {
-//             Invoke(std::move(func), InvokeType::kDirect);
-//         }
-//         else {
-//             Invoke(std::move(func), InvokeType::kQueued);
-//         }
-//         break;
-//     case InvokeType::kDirect:
-//         func();
-//         break;
-//     case InvokeType::kQueued:
-//         internal::WidgetEngine::instance().InvokeInNextFrame(std::move(func));
-//         break;
-//     default:
-//         assert(false);
-//         break;
-//     }
-// }
 
 void Widget::UpdateEarly()
 {

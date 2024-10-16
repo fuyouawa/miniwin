@@ -38,7 +38,7 @@ Object::~Object()
     OnDestroy();
 }
 
-const Object* Object::GetParent() const
+const Object* Object::Parent() const
 {
     return impl_->parent_;
 }
@@ -73,7 +73,7 @@ void Object::set_flags(int flags)
     impl_->flags_ = flags;
 }
 
-const std::vector<Object*>& Object::GetChildren() const
+const std::vector<Object*>& Object::Children() const
 {
     return impl_->children_;
 }

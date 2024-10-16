@@ -30,13 +30,13 @@ public:
 
     virtual void Close();
 
-    const Widget* GetWidgetParent() const;
+    const Widget* WidgetParent() const;
     void SetWidgetParent(Widget* parent) const;
-    const std::vector<Widget*>& GetWidgetChildren() const;
+    const std::vector<Widget*>& WidgetChildren() const;
 
-    virtual bool GetVisible() const;
+    virtual bool Visible() const;
     virtual void SetVisible(bool b) const;
-    virtual bool GetEnabled() const;
+    virtual bool Enabled() const;
     virtual void SetEnable(bool b) const;
 
     Vector2 size() const;
@@ -62,7 +62,7 @@ protected:
     virtual void DoHide() {}
 
 private:
-    using Object::GetParent;
+    using Object::Parent;
     using Object::SetParent;
 
     friend class WidgetsDriver;

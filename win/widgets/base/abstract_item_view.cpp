@@ -29,10 +29,11 @@ void AbstractItemView::SetModel(AbstractItemModel* model)
         impl_->model_->SetParent(this);
     }
 
-    impl_->selection_model_->SetModel(model);
+    auto m = new ItemSelectionModel(this, impl_->model_);
+    SetSelectionModel(m);
 }
 
-AbstractItemModel* AbstractItemView::GetModel() const
+AbstractItemModel* AbstractItemView::Model() const
 {
     return impl_->model_;
 }
@@ -42,21 +43,17 @@ void AbstractItemView::SetSelectionModel(ItemSelectionModel* selection_model)
     if (impl_->selection_model_ == selection_model)
         return;
     assert(selection_model);
-    if (selection_model->GetModel() != impl_->model_)
+    if (selection_model->Model() != impl_->model_)
     {
         throw std::exception("AbstractItemView::SetSelectionModel() failed: "
                              "Trying to set a selection model, "
                              "which works on a different model than the view.");
     }
 
-    if (impl_->selection_model_)
-    {
-        impl_->selection_model_->SetModel(nullptr);
-    }
     impl_->selection_model_ = selection_model;
 }
 
-ItemSelectionModel* AbstractItemView::GetSelectionModel() const
+ItemSelectionModel* AbstractItemView::SelectionModel() const
 {
     return impl_->selection_model_;
 }
@@ -72,7 +69,7 @@ void AbstractItemView::SetItemDelegate(AbstractItemDelegate* item_delegate)
     impl_->item_delegate_->SetParent(this);
 }
 
-AbstractItemDelegate* AbstractItemView::GetItemDelegate() const
+AbstractItemDelegate* AbstractItemView::ItemDelegate() const
 {
     return impl_->item_delegate_;
 }

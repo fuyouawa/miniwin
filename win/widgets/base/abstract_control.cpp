@@ -17,8 +17,8 @@ void AbstractControl::set_label(std::u8string_view label)
     set_name(label);
 }
 
-bool AbstractControl::GetVisible() const
+bool AbstractControl::Visible() const
 {
-    return Widget::GetVisible() && !ImGui::GetCurrentWindow()->SkipItems;
+    return Widget::Visible() && !ImGui::GetCurrentWindow()->SkipItems;
 }
 }
