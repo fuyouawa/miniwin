@@ -19,7 +19,7 @@ void StandardItemModel::RemoveRows(size_t row, size_t count)
     OnRowsRemoved(row, count);
 }
 
-size_t StandardItemModel::row_count() const
+size_t StandardItemModel::RowCount() const
 {
     return impl_->row_count();
 }
@@ -41,7 +41,7 @@ size_t StandardItemModel::column_count() const
     return impl_->column_count();
 }
 
-const std::any& StandardItemModel::data(const ModelIndex& index, ItemRole role) const
+const std::any& StandardItemModel::GetData(const ModelIndex& index, ItemRole role) const
 {
     static std::any empty;
 
@@ -54,15 +54,15 @@ const std::any& StandardItemModel::data(const ModelIndex& index, ItemRole role) 
     return empty;
 }
 
-void StandardItemModel::set_data(const ModelIndex& index, std::any&& data, ItemRole role)
+void StandardItemModel::SetData(const ModelIndex& index, std::any&& data, ItemRole role)
 {
     auto i = impl_->GetOrCreateItem(index);
     i[role] = std::move(data);
 }
 
-std::u8string_view StandardItemModel::text(const ModelIndex& index) const
+std::u8string_view StandardItemModel::GetText(const ModelIndex& index) const
 {
-    auto& d = data(index, ItemRole::Display);
+    auto& d = GetData(index, ItemRole::Display);
     if (d.has_value())
     {
         assert(d.type() == typeid(std::u8string));
@@ -71,14 +71,14 @@ std::u8string_view StandardItemModel::text(const ModelIndex& index) const
     return u8"";
 }
 
-void StandardItemModel::set_text(const ModelIndex& index, std::u8string_view text)
+void StandardItemModel::SetText(const ModelIndex& index, std::u8string_view text)
 {
-    set_data(index, std::u8string(text), ItemRole::Display);
+    SetData(index, std::u8string(text), ItemRole::Display);
 }
 
-int StandardItemModel::flags(const ModelIndex& index) const
+int StandardItemModel::GetFlags(const ModelIndex& index) const
 {
-    auto& d = data(index, ItemRole::Flags);
+    auto& d = GetData(index, ItemRole::Flags);
     if (d.has_value())
     {
         assert(d.type() == typeid(int));
@@ -87,14 +87,14 @@ int StandardItemModel::flags(const ModelIndex& index) const
     return 0;
 }
 
-void StandardItemModel::set_flags(const ModelIndex& index, int flags)
+void StandardItemModel::SetFlags(const ModelIndex& index, int flags)
 {
-    set_data(index, flags, ItemRole::Flags);
+    SetData(index, flags, ItemRole::Flags);
 }
 
-std::u8string_view StandardItemModel::header_text(int section, Orientation orientation) const
+std::u8string_view StandardItemModel::GetHeaderText(int section, Orientation orientation) const
 {
-    auto& d = header_data(section, orientation, ItemRole::Display);
+    auto& d = GetHeaderData(section, orientation, ItemRole::Display);
     if (d.has_value())
     {
         assert(d.type() == typeid(std::u8string));
@@ -103,14 +103,14 @@ std::u8string_view StandardItemModel::header_text(int section, Orientation orien
     return u8"";
 }
 
-void StandardItemModel::set_header_text(int section, Orientation orientation, std::u8string_view text)
+void StandardItemModel::SetHeaderText(int section, Orientation orientation, std::u8string_view text)
 {
-    set_header_data(section, orientation, std::u8string(text), ItemRole::Display);
+    SetHeaderData(section, orientation, std::u8string(text), ItemRole::Display);
 }
 
-int StandardItemModel::header_flags(int section, Orientation orientation) const
+int StandardItemModel::GetHeaderFlags(int section, Orientation orientation) const
 {
-    auto& d = header_data(section, orientation, ItemRole::Display);
+    auto& d = GetHeaderData(section, orientation, ItemRole::Display);
     if (d.has_value())
     {
         assert(d.type() == typeid(int));
@@ -119,9 +119,9 @@ int StandardItemModel::header_flags(int section, Orientation orientation) const
     return 0;
 }
 
-void StandardItemModel::set_header_flags(int section, Orientation orientation, int flags)
+void StandardItemModel::SetHeaderFlags(int section, Orientation orientation, int flags)
 {
-    set_header_data(section, orientation, flags, ItemRole::Flags);
+    SetHeaderData(section, orientation, flags, ItemRole::Flags);
 }
 
 void StandardItemModel::Clear()
@@ -129,7 +129,7 @@ void StandardItemModel::Clear()
     impl_->Clear();
 }
 
-const std::any& StandardItemModel::header_data(int section, Orientation orientation, ItemRole role) const
+const std::any& StandardItemModel::GetHeaderData(int section, Orientation orientation, ItemRole role) const
 {
     static std::any empty;
     StandardLineItems* items = nullptr;
@@ -155,7 +155,7 @@ const std::any& StandardItemModel::header_data(int section, Orientation orientat
     return empty;
 }
 
-void StandardItemModel::set_header_data(int section, Orientation orientation, std::any&& data, ItemRole role)
+void StandardItemModel::SetHeaderData(int section, Orientation orientation, std::any&& data, ItemRole role)
 {
     StandardLineItems* items = nullptr;
     switch (orientation)

@@ -22,8 +22,8 @@ protected:
 	void PaintEnd() override;
 
 private:
-    using Widget::widget_parent;
-    using Widget::set_widget_parent;
+    using Widget::GetWidgetParent;
+    using Widget::SetWidgetParent;
 
     _MW_IMPL
 };

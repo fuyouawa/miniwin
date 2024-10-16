@@ -9,8 +9,8 @@ public:
     TableView(Widget* parent, std::u8string_view id);
     ~TableView() override;
 
-    HeaderView* horizontal_header() const;
-    void set_horizontal_header(HeaderView* header_view);
+    HeaderView* GetHorizontalHeader() const;
+    void SetHorizontalHeader(HeaderView* header_view);
 
     void PaintBegin() override;
     void PaintEnd() override;

@@ -23,12 +23,12 @@ public:
         ClearSelect
     };
 
-    ItemSelectionModel(Object* parent);
+    ItemSelectionModel(Object* parent, AbstractItemModel* model);
 
     const ItemSelection& current_selection() const;
 
-    AbstractItemModel* model() const;
-    void set_model(AbstractItemModel* model) const;
+    AbstractItemModel* GetModel() const;
+    void SetModel(AbstractItemModel* model) const;
 
     void Select(const ModelIndex& index, SelectionType selection_type);
     void Select(const ItemSelection& selection, SelectionType selection_type);

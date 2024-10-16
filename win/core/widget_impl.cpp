@@ -5,13 +5,8 @@
 #include <ranges>
 
 namespace miniwin {
-Widget::Impl::Impl(Widget* owner)
-    : enable_sc_(true),
-      visible_sc_(true),
-      is_painting_children_(false),
-      orphaned_(false),
-      dirty_(false),
-      widget_type_(),
+Widget::Impl::Impl(Widget* owner, WidgetType widget_type)
+    : widget_type_(widget_type),
       owner_(owner)
 {
 }
@@ -67,7 +62,7 @@ void Widget::Impl::PaintEnd()
 
 const Widget* Widget::Impl::widget_parent() const
 {
-    if (auto p = owner_->parent())
+    if (auto p = owner_->GetParent())
     {
         auto p2 = dynamic_cast<const Widget*>(p);
         assert(p2);
@@ -82,7 +77,7 @@ void Widget::Impl::set_widget_parent(Widget* parent)
         {
             // 先通知老的parent
             widget_parent()->impl_->OnChildrenChanged();
-            owner_->set_parent(parent);
+            owner_->SetParent(parent);
             // 通知新的parent
             parent->impl_->OnChildrenChanged();
         });
@@ -91,7 +86,7 @@ void Widget::Impl::set_widget_parent(Widget* parent)
 void Widget::Impl::OnChildrenChanged()
 {
     widget_children_.clear();
-    for (const auto c : owner_->children())
+    for (const auto c : owner_->GetChildren())
     {
         auto w = dynamic_cast<Widget*>(c);
         if (w)
@@ -130,12 +125,12 @@ bool Widget::Impl::visible() const
     {
         return false;
     }
-    auto p = owner_->widget_parent();
+    auto p = owner_->GetWidgetParent();
     if (!p)
     {
         return v;
     }
-    return p->visible();
+    return p->GetVisible();
 }
 
 void Widget::Impl::set_visible(bool b)
@@ -150,12 +145,12 @@ bool Widget::Impl::enabled() const
     {
         return false;
     }
-    auto p = owner_->widget_parent();
+    auto p = owner_->GetWidgetParent();
     if (!p)
     {
         return v;
     }
-    return p->enabled();
+    return p->GetEnabled();
 }
 
 void Widget::Impl::set_enable(bool b)

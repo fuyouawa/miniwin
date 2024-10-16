@@ -13,51 +13,55 @@ AbstractItemView::~AbstractItemView()
 {
 }
 
-void AbstractItemView::set_model(AbstractItemModel* model)
+void AbstractItemView::SetModel(AbstractItemModel* model)
 {
     if (impl_->model_ == model)
         return;
 
     if (impl_->model_ && impl_->model_ != AbstractItemModel::StaticEmptyModel())
     {
-        impl_->model_->set_parent(nullptr);
+        impl_->model_->SetParent(nullptr);
     }
     impl_->model_ = model ? model : AbstractItemModel::StaticEmptyModel();
 
     if (impl_->model_ != AbstractItemModel::StaticEmptyModel())
     {
-        impl_->model_->set_parent(this);
+        impl_->model_->SetParent(this);
     }
 
-    impl_->selection_model_->set_model(model);
+    impl_->selection_model_->SetModel(model);
 }
 
-AbstractItemModel* AbstractItemView::model() const
+AbstractItemModel* AbstractItemView::GetModel() const
 {
     return impl_->model_;
 }
 
-void AbstractItemView::set_selection_model(ItemSelectionModel* selection_model)
+void AbstractItemView::SetSelectionModel(ItemSelectionModel* selection_model)
 {
     if (impl_->selection_model_ == selection_model)
         return;
     assert(selection_model);
+    if (selection_model->GetModel() != impl_->model_)
+    {
+        throw std::exception("AbstractItemView::SetSelectionModel() failed: "
+                             "Trying to set a selection model, "
+                             "which works on a different model than the view.");
+    }
 
     if (impl_->selection_model_)
     {
-        impl_->selection_model_->set_model(nullptr);
+        impl_->selection_model_->SetModel(nullptr);
     }
     impl_->selection_model_ = selection_model;
-
-    impl_->selection_model_->set_model(impl_->model_);
 }
 
-ItemSelectionModel* AbstractItemView::selection_model() const
+ItemSelectionModel* AbstractItemView::GetSelectionModel() const
 {
     return impl_->selection_model_;
 }
 
-void AbstractItemView::set_item_delegate(AbstractItemDelegate* item_delegate)
+void AbstractItemView::SetItemDelegate(AbstractItemDelegate* item_delegate)
 {
     if (impl_->item_delegate_ == item_delegate)
         return;
@@ -65,10 +69,10 @@ void AbstractItemView::set_item_delegate(AbstractItemDelegate* item_delegate)
 
     impl_->item_delegate_ = item_delegate;
 
-    impl_->item_delegate_->set_parent(this);
+    impl_->item_delegate_->SetParent(this);
 }
 
-AbstractItemDelegate* AbstractItemView::item_delegate() const
+AbstractItemDelegate* AbstractItemView::GetItemDelegate() const
 {
     return impl_->item_delegate_;
 }

@@ -11,8 +11,8 @@ public:
     using BitsetSelections = std::bitset<kLengthOfOneBitsetSelections>;
     using OneBitsetSelectionsTable = std::vector<BitsetSelections>;
 
-    explicit Impl(ItemSelectionModel* owner)
-        : owner_(owner), model_(nullptr)
+    explicit Impl(ItemSelectionModel* owner, AbstractItemModel* model)
+        : owner_(owner), model_(model)
     {
     }
 
@@ -77,7 +77,7 @@ public:
         {
             for (size_t i = 0; i < c - selections_.size() + 1; ++i)
             {
-                selections_.emplace_back(model_->row_count());
+                selections_.emplace_back(model_->RowCount());
             }
         }
     }

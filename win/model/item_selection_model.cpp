@@ -14,10 +14,10 @@ bool operator==(const ItemSelection& x, const ItemSelection& y)
     return x.top_left == y.top_left && x.bottom_right == y.bottom_right;
 }
 
-ItemSelectionModel::ItemSelectionModel(Object* parent)
+ItemSelectionModel::ItemSelectionModel(Object* parent, AbstractItemModel* model)
     : Object(parent, u8"SelectionModel", ObjectType::SelectionModel)
 {
-    impl_ = std::make_unique<Impl>(this);
+    impl_ = std::make_unique<Impl>(this, model);
 }
 
 const ItemSelection& ItemSelectionModel::current_selection() const
@@ -25,12 +25,12 @@ const ItemSelection& ItemSelectionModel::current_selection() const
     return impl_->current_selection_;
 }
 
-AbstractItemModel* ItemSelectionModel::model() const
+AbstractItemModel* ItemSelectionModel::GetModel() const
 {
     return impl_->model_;
 }
 
-void ItemSelectionModel::set_model(AbstractItemModel* model) const
+void ItemSelectionModel::SetModel(AbstractItemModel* model) const
 {
     impl_->model_ = model;
     impl_->Clear();

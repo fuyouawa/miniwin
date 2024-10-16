@@ -32,8 +32,9 @@ public:
     Object(Object* parent, std::u8string_view name, ObjectType object_type);
     virtual ~Object();
 
-    virtual const Object* parent() const;
-    virtual void set_parent(Object* parent) const;
+    const Object* GetParent() const;
+    void SetParent(Object* parent) const;
+    const std::vector<Object*>& GetChildren() const;
 
     std::u8string_view name() const;
     void set_name(std::u8string_view name) const;
@@ -41,8 +42,6 @@ public:
     ObjectType object_type() const;
     int flags() const;
     void set_flags(int flags);
-
-    const std::vector<Object*>& children() const;
 
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 
@@ -60,7 +59,7 @@ public:
         static_assert(internal::kIsArgumentsMatchableFunctions<Signal, Slot>);
         using Traits = internal::FunctionTraits<Slot>;
 
-        [&] <class... Args> (std::tuple<Args...>) {
+        return [&] <class... Args> (std::tuple<Args...>) -> Disconnecter {
             if constexpr (std::is_member_function_pointer_v<Slot>)
             {
                 using Func = typename Traits::Return(Receiver::*)(Args...);

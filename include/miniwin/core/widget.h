@@ -28,24 +28,22 @@ public:
 
     static bool IsInUIThread();
 
-    virtual void Show();
     virtual void Close();
-    virtual void Hide();
 
-    const Widget* widget_parent() const;
-    void set_widget_parent(Widget* parent) const;
-    const std::vector<Widget*>& widget_children() const;
+    const Widget* GetWidgetParent() const;
+    void SetWidgetParent(Widget* parent) const;
+    const std::vector<Widget*>& GetWidgetChildren() const;
 
-    virtual void set_enable(bool b) const;
+    virtual bool GetVisible() const;
+    virtual void SetVisible(bool b) const;
+    virtual bool GetEnabled() const;
+    virtual void SetEnable(bool b) const;
 
-    virtual Vector2 size() const;
-    virtual void set_size(const Vector2& size) const;
+    Vector2 size() const;
+    void set_size(const Vector2& size) const;
 
-    virtual bool orphaned() const;
-    virtual bool enabled() const;
-    virtual bool visible() const;
+    bool orphaned() const;
     WidgetType widget_type() const;
-
     WidgetFlags widget_flags() const;
     void set_widget_flags(WidgetFlags widget_flags);
 
@@ -64,8 +62,8 @@ protected:
     virtual void DoHide() {}
 
 private:
-    using Object::parent;
-    using Object::set_parent;
+    using Object::GetParent;
+    using Object::SetParent;
 
     friend class WidgetsDriver;
 

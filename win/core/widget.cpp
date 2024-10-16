@@ -21,7 +21,7 @@ WidgetFlags operator&(WidgetFlags x, WidgetFlags y)
 Widget::Widget(Widget* parent, std::u8string_view name, WidgetType widget_type)
     : Object(parent, name, ObjectType::Widget)
 {
-    impl_ = std::make_unique<Impl>(this);
+    impl_ = std::make_unique<Impl>(this, widget_type);
     impl_->widget_type_ = widget_type;
 }
 
@@ -29,35 +29,27 @@ Widget::~Widget()
 {
 }
 
-void Widget::Show() {
-    impl_->set_visible(true);
-}
-
 void Widget::Close()
 {
     impl_->Close();
 }
 
-void Widget::Hide() {
-    impl_->set_visible(false);
-}
-
-const Widget* Widget::widget_parent() const
+const Widget* Widget::GetWidgetParent() const
 {
     return impl_->widget_parent();
 }
 
-void Widget::set_widget_parent(Widget* parent) const
+void Widget::SetWidgetParent(Widget* parent) const
 {
     impl_->set_widget_parent(parent);
 }
 
-const std::vector<Widget*>& Widget::widget_children() const
+const std::vector<Widget*>& Widget::GetWidgetChildren() const
 {
     return impl_->widget_children_;
 }
 
-void Widget::set_enable(bool b) const { impl_->set_enable(b); }
+void Widget::SetEnable(bool b) const { impl_->set_enable(b); }
 
 
 Vector2 Widget::size() const {
@@ -73,10 +65,15 @@ bool Widget::orphaned() const
     return impl_->orphaned_;
 }
 
-bool Widget::enabled() const { return impl_->enabled(); }
+bool Widget::GetEnabled() const { return impl_->enabled(); }
 
-bool Widget::visible() const {
+bool Widget::GetVisible() const {
     return impl_->visible();
+}
+
+void Widget::SetVisible(bool b) const
+{
+    impl_->set_visible(b);
 }
 
 WidgetType Widget::widget_type() const {

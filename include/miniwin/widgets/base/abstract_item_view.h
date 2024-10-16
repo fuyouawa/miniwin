@@ -11,14 +11,14 @@ public:
     AbstractItemView(Widget* parent);
     ~AbstractItemView() override;
 
-    virtual void set_model(AbstractItemModel* model);
-    AbstractItemModel* model() const;
+    virtual void SetModel(AbstractItemModel* model);
+    AbstractItemModel* GetModel() const;
 
-    virtual void set_selection_model(ItemSelectionModel* selection_model);
-    ItemSelectionModel* selection_model() const;
+    virtual void SetSelectionModel(ItemSelectionModel* selection_model);
+    ItemSelectionModel* GetSelectionModel() const;
 
-    virtual void set_item_delegate(AbstractItemDelegate* item_delegate);
-    AbstractItemDelegate* item_delegate() const;
+    virtual void SetItemDelegate(AbstractItemDelegate* item_delegate);
+    AbstractItemDelegate* GetItemDelegate() const;
 
     _MW_IMPL
 };

@@ -29,8 +29,8 @@ public:
     virtual void RemoveRow(size_t row);
 	virtual void RemoveRows(size_t row, size_t count) = 0;
 
-    virtual size_t row_count() const = 0;
-    virtual void set_row_count(size_t count);
+    virtual size_t RowCount() const = 0;
+    virtual void SetRowCount(size_t count);
 
     virtual void InsertColumn(size_t column);
     virtual void InsertColumns(size_t column, size_t count) = 0;
@@ -42,11 +42,11 @@ public:
 
 	virtual void Clear() = 0;
 
-    virtual const std::any& data(const ModelIndex& index, ItemRole role = ItemRole::Display) const = 0;
-    virtual void set_data(const ModelIndex& index, std::any&& data, ItemRole role = ItemRole::Display) = 0;
+    virtual const std::any& GetData(const ModelIndex& index, ItemRole role = ItemRole::Display) const = 0;
+    virtual void SetData(const ModelIndex& index, std::any&& data, ItemRole role = ItemRole::Display) = 0;
 
-    virtual const std::any& header_data(int section, Orientation orientation, ItemRole role = ItemRole::Display) const = 0;
-    virtual void set_header_data(int section, Orientation orientation, std::any&& data, ItemRole role = ItemRole::Display) = 0;
+    virtual const std::any& GetHeaderData(int section, Orientation orientation, ItemRole role = ItemRole::Display) const = 0;
+    virtual void SetHeaderData(int section, Orientation orientation, std::any&& data, ItemRole role = ItemRole::Display) = 0;
 
     virtual bool IsValidIndex(const ModelIndex& index) const;
 
