@@ -49,7 +49,7 @@ public:
 
     Disconnecter AddConnectionWithoutLock(const std::type_info& signal_info, ConnectionPtr conn);
 
-    void set_parent(Object* parent);
+    void SetParent(Object* parent);
 
     void DeleteChildren();
 

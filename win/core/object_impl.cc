@@ -57,7 +57,7 @@ Object::Impl::~Impl() {
     lk.unlock();
 
     DeleteChildren();
-    set_parent(nullptr);
+    SetParent(nullptr);
 }
 
 void Object::Impl::ConnectionsManager::ClearDirty()
@@ -186,7 +186,7 @@ Object::Disconnecter Object::Impl::AddConnectionWithoutLock(const std::type_info
     return { [this, conn, &signal_info] { return DisconnectImpl(signal_info, conn); } };
 }
 
-void Object::Impl::set_parent(Object* parent)
+void Object::Impl::SetParent(Object* parent)
 {
     if (owner_ == parent)
         return;

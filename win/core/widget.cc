@@ -43,12 +43,12 @@ void Widget::Close()
 
 const Widget* Widget::WidgetParent() const
 {
-    return impl_->widget_parent();
+    return impl_->WidgetParent();
 }
 
 void Widget::SetWidgetParent(Widget* parent) const
 {
-    impl_->set_widget_parent(parent);
+    impl_->SetWidgetParent(parent);
 }
 
 const std::vector<Widget*>& Widget::WidgetChildren() const
@@ -56,7 +56,7 @@ const std::vector<Widget*>& Widget::WidgetChildren() const
     return impl_->widget_children_;
 }
 
-void Widget::SetEnable(bool b) const { impl_->set_enable(b); }
+void Widget::SetEnable(bool b) const { impl_->SetEnable(b); }
 
 
 Vector2 Widget::size() const {
@@ -72,15 +72,15 @@ bool Widget::orphaned() const
     return impl_->orphaned_;
 }
 
-bool Widget::Enabled() const { return impl_->enabled(); }
+bool Widget::Enabled() const { return impl_->Enabled(); }
 
 bool Widget::Visible() const {
-    return impl_->visible();
+    return impl_->Visible();
 }
 
 void Widget::SetVisible(bool b) const
 {
-    impl_->set_visible(b);
+    impl_->SetVisible(b);
 }
 
 WidgetType Widget::widget_type() const {

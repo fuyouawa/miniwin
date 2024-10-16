@@ -45,7 +45,7 @@ const Object* Object::Parent() const
 
 void Object::SetParent(Object* parent) const
 {
-    impl_->set_parent(parent);
+    impl_->SetParent(parent);
 }
 
 std::u8string_view Object::name() const

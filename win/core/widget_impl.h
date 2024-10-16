@@ -31,8 +31,8 @@ public:
     void PaintBegin();
     void PaintEnd();
 
-    const Widget* widget_parent() const;
-    void set_widget_parent(Widget* parent);
+    const Widget* WidgetParent() const;
+    void SetWidgetParent(Widget* parent);
 
     //TODO 未来改成事件系统
     void OnChildrenChanged();
@@ -40,9 +40,9 @@ public:
     void PushPendingFunctor(std::function<void()>&& func);
     void DoPendingFunctors();
 
-    bool visible() const;
-    void set_visible(bool b);
-    bool enabled() const;
-    void set_enable(bool b);
+    bool Visible() const;
+    void SetVisible(bool b);
+    bool Enabled() const;
+    void SetEnable(bool b);
 };
 }

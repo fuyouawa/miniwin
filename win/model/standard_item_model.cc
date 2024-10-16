@@ -1,3 +1,6 @@
+#include <cassert>
+#include <string>
+
 #include "win/model/standard_item_model_impl.h"
 
 namespace miniwin {
@@ -21,7 +24,7 @@ void StandardItemModel::RemoveRows(size_t row, size_t count)
 
 size_t StandardItemModel::RowCount() const
 {
-    return impl_->row_count();
+    return impl_->RowCount();
 }
 
 void StandardItemModel::InsertColumns(size_t column, size_t count)
@@ -38,14 +41,14 @@ void StandardItemModel::RemoveColumns(size_t column, size_t count)
 
 size_t StandardItemModel::ColumnCount() const
 {
-    return impl_->column_count();
+    return impl_->ColumnCount();
 }
 
 const std::any& StandardItemModel::Data(const ModelIndex& index, ItemRole role) const
 {
     static std::any empty;
 
-    auto i = impl_->item(index);
+    auto i = impl_->Item(index);
     auto res = i.find(role);
     if (res != i.end())
     {

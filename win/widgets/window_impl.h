@@ -6,18 +6,18 @@ namespace miniwin {
 class Window::Impl
 {
 public:
-    ScopeCondition top_sc_;
-    void* hwnd_;
-    void* prev_hwnd_;
-    bool is_docking_;
-    bool has_close_button_ = true;
-    Window* owner_;
+    Impl(Window* owner);
 
     void PaintBegin();
     void PaintEnd();
 
     void OnDockingChanged();
 
-    Impl(Window* owner);
+    ScopeCondition top_sc_;
+    void* hwnd_;
+    void* prev_hwnd_;
+    bool is_docking_;
+    bool has_close_button_ = true;
+    Window* owner_;
 };
 }

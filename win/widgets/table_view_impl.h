@@ -6,14 +6,11 @@ namespace miniwin {
 class TableView::Impl
 {
 public:
-    Impl(TableView* owner)
-        : owner_(owner)
-    {
-    }
+    explicit Impl(TableView* owner);
 
     TableView* owner_;
-    HeaderView* horizontal_header;
-    bool begin_table_;
+    HeaderView* horizontal_header = nullptr;
+    bool begin_table_ = false;
     std::u8string id_;
 };
 }

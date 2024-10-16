@@ -20,7 +20,7 @@ void Widget::Impl::Close()
     orphaned_ = true;
     if (widget_type_ != WidgetType::kWindow)
     {
-        auto p = widget_parent();
+        auto p = WidgetParent();
         assert(p);
         p->impl_->dirty_ = true;
     }
@@ -60,7 +60,7 @@ void Widget::Impl::PaintEnd()
     visible_sc_.Exit();
 }
 
-const Widget* Widget::Impl::widget_parent() const
+const Widget* Widget::Impl::WidgetParent() const
 {
     if (auto p = owner_->Parent())
     {
@@ -71,12 +71,12 @@ const Widget* Widget::Impl::widget_parent() const
     return nullptr;
 }
 
-void Widget::Impl::set_widget_parent(Widget* parent)
+void Widget::Impl::SetWidgetParent(Widget* parent)
 {
     PushPendingFunctor([this, parent]
         {
             // 先通知老的parent
-            widget_parent()->impl_->OnChildrenChanged();
+            WidgetParent()->impl_->OnChildrenChanged();
             owner_->SetParent(parent);
             // 通知新的parent
             parent->impl_->OnChildrenChanged();
@@ -118,7 +118,7 @@ void Widget::Impl::DoPendingFunctors()
     }
 }
 
-bool Widget::Impl::visible() const
+bool Widget::Impl::Visible() const
 {
     auto v = visible_sc_.get();
     if (!v)
@@ -133,12 +133,12 @@ bool Widget::Impl::visible() const
     return p->Visible();
 }
 
-void Widget::Impl::set_visible(bool b)
+void Widget::Impl::SetVisible(bool b)
 {
     visible_sc_.set_control(b);
 }
 
-bool Widget::Impl::enabled() const
+bool Widget::Impl::Enabled() const
 {
     auto v = enable_sc_.get();
     if (!v)
@@ -153,7 +153,7 @@ bool Widget::Impl::enabled() const
     return p->Enabled();
 }
 
-void Widget::Impl::set_enable(bool b)
+void Widget::Impl::SetEnable(bool b)
 {
     enable_sc_.set_control(b);
 }
