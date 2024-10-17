@@ -105,17 +105,17 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 template<class T>
 using PureType = std::remove_cvref_t<std::remove_pointer_t<T>>;
 
-#define __MINIWIN_COMMON_IF_TRUE ,
+#define __MW_COMMON_IF_TRUE ,
 
 #define _MW_SIGNAL_ARG_TO_DECL(arg) \
-    _MINIWIN_EXPAND arg
+    _MW_EXPAND arg
 
 #define _MW_SIGNAL_ARGS_DECL_IMPL(i, ...) \
-    _MW_SIGNAL_ARG_TO_DECL(_MINIWIN_INDEX(i, __VA_ARGS__)) \
-    _MINIWIN_NOT_IF(_MINIWIN_INDEX_IS_END(i, __VA_ARGS__), __MINIWIN_COMMON_IF_TRUE)
+    _MW_SIGNAL_ARG_TO_DECL(_MW_INDEX(i, __VA_ARGS__)) \
+    _MW_NOT_IF(_MW_INDEX_IS_END(i, __VA_ARGS__), __MW_COMMON_IF_TRUE)
 
 #define _MW_SIGNAL_ARGS_DECL(...) \
-    _MINIWIN_FOR(_MW_SIGNAL_ARGS_DECL_IMPL, _MINIWIN_COUNT(__VA_ARGS__), __VA_ARGS__)
+    _MW_FOR(_MW_SIGNAL_ARGS_DECL_IMPL, _MW_COUNT(__VA_ARGS__), __VA_ARGS__)
 
 #define _MW_SIGNAL_NO_ARGS(name)                       \
 public:                                                \
@@ -130,7 +130,7 @@ public:                                                            \
     }                                                              \
 
 #define _MW_SIGNAL(name, ...) \
-    _MINIWIN_IF_ELSE(_MINIWIN_IS_EMPTY(__VA_ARGS__), _MW_SIGNAL_NO_ARGS(name), _MW_SIGNAL_HAS_ARGS(name, __VA_ARGS__))
+    _MW_IF_ELSE(_MW_IS_EMPTY(__VA_ARGS__), _MW_SIGNAL_NO_ARGS(name), _MW_SIGNAL_HAS_ARGS(name, __VA_ARGS__))
 
 #define _MW_IMPL                    \
 private:                            \
