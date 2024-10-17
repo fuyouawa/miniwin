@@ -27,4 +27,7 @@ add_subdirectory(win)
 add_subdirectory(example)
 
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+else()
 add_subdirectory(${THIRD_PARTY_DIR}/glfw)
+endif()

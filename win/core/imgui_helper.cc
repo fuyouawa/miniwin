@@ -39,7 +39,7 @@ int InputTextCallback(ImGuiInputTextCallbackData* data)
 }
 
 ImVec2 Cast(const Vector2& vec) {
-	return { vec.x, vec.y };
+	return { vec.x(), vec.y()};
 }
 
 bool ImGuiHelper::IsWindowDocked()

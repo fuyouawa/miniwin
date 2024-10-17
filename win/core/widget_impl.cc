@@ -55,7 +55,6 @@ void Widget::Impl::PaintEnd()
     if (!*enable_sc_) {
         ImGui::EndDisabled();
     }
-
     enable_sc_.Exit();
     visible_sc_.Exit();
 }

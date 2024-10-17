@@ -17,13 +17,7 @@ Widget::Widget(Widget* parent, std::u8string_view name, WidgetType widget_type)
 
 Widget::~Widget()
 {
-    if (!IsInUIThread() || !orphaned())
-    {
-        throw std::exception("Do not manually delete Widget objects. "
-                             "Use the Close() function to close them first, "
-                             "and then the framework's internal Widget manager "
-                             "will handle their destruction.");
-    }
+    assert(IsInUIThread() && orphaned());
 }
 
 void Widget::Close()

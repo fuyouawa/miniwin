@@ -155,6 +155,7 @@ void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::Sl
             // 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
             continue;
         }
+
         c->receiver->Invoke([receiver = c->receiver, slot_obj = &c->slot_obj, args_store]
             {
                 if (!receiver || !*slot_obj) return;

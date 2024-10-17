@@ -1,10 +1,9 @@
 #pragma once
 #include <optional>
-#include <concepts>
 #include <cassert>
 
 namespace miniwin {
-template<std::equality_comparable T>
+template<class T>
 class ScopeVariable {
 public:
 	ScopeVariable() : ScopeVariable(T{}) {}

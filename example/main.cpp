@@ -23,5 +23,5 @@ int main() {
 
 	auto window = new ExampleWindow{ u8"Example Window", true };
 
-	app.Execute(u8"FuGui Example App");
+	app.Execute();
 }

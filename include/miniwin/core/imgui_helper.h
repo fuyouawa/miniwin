@@ -17,31 +17,31 @@ public:
 	static bool CheckBox(
 		std::u8string_view label,
 		bool* checked,
-		const Vector2& size = Vector2::kZero
+		const Vector2& size = {}
 	);
 
 	static void Text(
 		std::u8string_view label,
-		const Vector2& size = Vector2::kZero
+		const Vector2& size = {}
 	);
 
 	static bool Button(
 		std::u8string_view label,
-		const Vector2& size = Vector2::kZero
+		const Vector2& size = {}
 	);
 
 	static bool Selectable(
 		std::u8string_view label,
 		bool* is_selected,
 		SelectableFlags flags = SelectableFlags::kNone,
-		const Vector2& size = Vector2::kZero
+		const Vector2& size = {}
 	);
 
 	static bool InputText(
 		std::u8string_view label,
 		std::u8string* buffer,
 		InputTextFlags flags = InputTextFlags::kNone,
-		const Vector2& size = Vector2::kZero
+		const Vector2& size = {}
 	);
 
 	static bool BeginWindow(

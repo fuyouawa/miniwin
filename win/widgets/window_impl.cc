@@ -22,13 +22,13 @@ void Window::Impl::PaintBegin()
     is_docking_ = ImGuiHelper::IsWindowDocked();
     // 获取当前窗体句柄, 然后判断是否改变
     // 如果改变则说明当前窗体脱离或者停靠到了某个窗体
-    hwnd_ = internal::GraphicUtils::GetCurrentWindow();
+    hwnd_ = GraphicUtils::GetCurrentWindow();
     if (hwnd_ && hwnd_ != prev_hwnd_) {
         OnDockingChanged();
         prev_hwnd_ = hwnd_;
     }
     if (top_sc_.is_changed() && hwnd_) {
-        internal::GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
+        GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
     }
     if (!open) {
         owner_->Close();
@@ -46,7 +46,7 @@ void Window::Impl::OnDockingChanged()
     // 如果当前窗体非停靠窗, 说明是从默认窗体上剥离出来, 或者从停靠状态取消的窗体, 需要重设置顶状态
     // 如果当前窗体是停靠窗, 则不改变置顶状态
     if (!is_docking_) {
-        internal::GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
+        GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
     }
 }
 }

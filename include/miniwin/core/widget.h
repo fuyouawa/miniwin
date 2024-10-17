@@ -3,6 +3,7 @@
 #include <miniwin/core/flags.h>
 
 #include <miniwin/tools/container.h>
+#include <miniwin/tools/property.h>
 
 namespace miniwin {
 enum class WidgetType {
@@ -12,7 +13,7 @@ enum class WidgetType {
     kView
 };
 
-class Widget : public Object {
+class Widget : public Object, public NonCopyable {
 public:
     Widget(Widget* parent, std::u8string_view name, WidgetType widget_type);
     ~Widget() override;
@@ -53,6 +54,7 @@ protected:
     virtual void DoHide() {}
 
 private:
+    friend class WidgetsDriver;
     using Object::Parent;
     using Object::SetParent;
 
