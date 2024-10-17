@@ -36,7 +36,9 @@ void TableView::PaintBegin()
 {
     AbstractItemView::PaintBegin();
     auto model = Model();
+    auto item_delegate = ItemDelegate();
     auto col_count = model->ColumnCount();
+    auto row_count = model->RowCount();
 
     impl_->begin_table_ = ImGuiHelper::BeginTable(id(), col_count, flags(), size());
     if (impl_->begin_table_)
@@ -45,23 +47,33 @@ void TableView::PaintBegin()
         if (hori_header && hori_header->Visible())
         {
             hori_header->UpdateEarly();
-            for (size_t i = 0; i < col_count; ++i)
+            for (size_t col = 0; col < col_count; ++col)
             {
-                auto text = std::any_cast<const std::u8string&>(model->HeaderData(i, Orientation::Horizontal, ItemRole::Display));
-                auto flags = std::any_cast<int>(model->HeaderData(i, Orientation::Horizontal, ItemRole::Flags));
+                auto text = std::any_cast<const std::u8string&>(model->HeaderData(col, Orientation::Horizontal, ItemRole::Display));
+                auto flags = std::any_cast<int>(model->HeaderData(col, Orientation::Horizontal, ItemRole::Flags));
                 ImGuiHelper::TableSetupColumn(text, static_cast<TableColumnFlags>(flags));
             }
             ImGuiHelper::TableNextRow(TableRowFlags::kHeaders);
 
             hori_header->PaintBegin();
-            for (size_t i = 0; i < col_count; ++i)
+            for (size_t col = 0; col < col_count; ++col)
             {
-                ImGuiHelper::TableSetColumnIndex(i);
-                ImGuiHelper::PushID(i);
-                hori_header->PaintSection(i);
+                ImGuiHelper::TableSetColumnIndex(col);
+                ImGuiHelper::PushID(col);
+                hori_header->PaintSection(col);
                 ImGuiHelper::PopID();
             }
             hori_header->PaintEnd();
+        }
+
+        for (size_t row = 0; row < row_count; ++row)
+        {
+            ImGuiHelper::TableNextRow();
+            for (size_t col = 0; col < col_count; ++col)
+            {
+                ImGuiHelper::TableSetColumnIndex(col);
+                item_delegate->Paint(this, { row, col });
+            }
         }
         //TODO 行的绘制
     }

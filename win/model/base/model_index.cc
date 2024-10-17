@@ -2,30 +2,24 @@
 #include <cassert>
 
 namespace miniwin {
-ModelIndex::ModelIndex(int row, int column)
-    : row(row),
-    column(column)
-{
-}
-
 bool ModelIndex::valid() const
 {
-    return row > 0 && column > 0;
+    return row_ != static_cast<size_t>(-1) && column_ != static_cast<size_t>(-1);
 }
 
 bool operator==(const ModelIndex& x, const ModelIndex& y) {
-    return x.row == y.row && x.column == y.column;
+    return x.row() == y.row() && x.column() == y.column();
 }
 ModelIndex& operator+=(ModelIndex& x, const ModelIndex& y) {
-    x.row += y.row;
-    x.column += y.column;
+    x.row_ += y.row_;
+    x.column_ += y.column_;
     return x;
 }
 ModelIndex& operator-=(ModelIndex& x, const ModelIndex& y) {
-    assert(x.row >= y.row);
-    assert(x.column >= y.column);
-    x.row -= y.row;
-    x.column -= y.column;
+    assert(x.row_ >= y.row_);
+    assert(x.column_ >= y.column_);
+    x.row_ -= y.row_;
+    x.column_ -= y.column_;
     return x;
 }
 

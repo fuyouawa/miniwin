@@ -5,8 +5,8 @@ namespace miniwin {
 bool ItemSelection::valid() const
 {
     return top_left.valid() && bottom_right.valid()
-        && top_left.row <= bottom_right.row
-        && top_left.column <= bottom_right.column;
+        && top_left.row() <= bottom_right.row()
+        && top_left.column() <= bottom_right.column();
 }
 
 bool operator==(const ItemSelection& x, const ItemSelection& y)

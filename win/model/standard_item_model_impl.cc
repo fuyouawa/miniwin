@@ -97,25 +97,25 @@ StandardItem& StandardItemModel::Impl::Item(const ModelIndex& idx)
 {
     static StandardItem empty_item;
     assert(idx.valid());
-    assert(idx.row <= RowCount() && idx.column <= ColumnCount());
-    auto& r = items_[idx.row];
-    if (r.size() <= idx.column)
+    assert(idx.row() <= RowCount() && idx.column() <= ColumnCount());
+    auto& r = items_[idx.row()];
+    if (r.size() <= idx.column())
     {
         return empty_item;
     }
-    return r[idx.column - 1];
+    return r[idx.column() - 1];
 }
 
 StandardItem& StandardItemModel::Impl::GetOrCreateItem(const ModelIndex& idx)
 {
     assert(idx.valid());
     assert(idx.row <= RowCount() && idx.column <= ColumnCount());
-    auto& r = items_[idx.row];
-    if (r.size() <= idx.column)
+    auto& r = items_[idx.row()];
+    if (r.size() <= idx.column())
     {
-        r.resize(idx.column);
+        r.resize(idx.column());
     }
-    return r[idx.column - 1];
+    return r[idx.column() - 1];
 }
 
 void StandardItemModel::Impl::Clear()
