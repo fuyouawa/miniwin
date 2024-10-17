@@ -45,8 +45,8 @@ public:
     virtual const std::any& Data(const ModelIndex& index, ItemRole role = ItemRole::Display) const = 0;
     virtual void SetData(const ModelIndex& index, std::any&& data, ItemRole role = ItemRole::Display) = 0;
 
-    virtual const std::any& HeaderData(int section, Orientation orientation, ItemRole role = ItemRole::Display) const = 0;
-    virtual void SetHeaderData(int section, Orientation orientation, std::any&& data, ItemRole role = ItemRole::Display) = 0;
+    virtual const std::any& HeaderData(size_t section, Orientation orientation, ItemRole role = ItemRole::Display) const = 0;
+    virtual void SetHeaderData(size_t section, Orientation orientation, std::any&& data, ItemRole role = ItemRole::Display) = 0;
 
     virtual bool IsValidIndex(const ModelIndex& index) const;
 

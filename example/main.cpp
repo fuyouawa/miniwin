@@ -18,6 +18,7 @@ public:
     miniwin::InputText* input_text_;
 };
 
+
 int main() {
 	miniwin::Application app;
 

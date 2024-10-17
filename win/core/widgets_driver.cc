@@ -150,7 +150,7 @@ void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget)
 {
     if (widget->Visible())
     {
-        widget->UpdateEarly();
+        widget->PreparePaint();
         for (auto& o : widget->Children())
         {
             auto w = dynamic_cast<Widget*>(o);

@@ -14,7 +14,6 @@ public:
     TableView* owner_;
     TableFlags flags_ = TableFlags::kNone;
     std::unordered_map<Orientation, HeaderView*> headers_;
-    bool begin_table_ = false;
     std::u8string id_;
 };
 }

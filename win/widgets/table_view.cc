@@ -40,13 +40,11 @@ void TableView::PaintBegin()
     auto col_count = model->ColumnCount();
     auto row_count = model->RowCount();
 
-    impl_->begin_table_ = ImGuiHelper::BeginTable(id(), col_count, flags(), size());
-    if (impl_->begin_table_)
+    if (ImGuiHelper::BeginTable(id(), col_count, flags(), size()))
     {
         auto hori_header = HorizontalHeader();
         if (hori_header && hori_header->Visible())
         {
-            hori_header->UpdateEarly();
             for (size_t col = 0; col < col_count; ++col)
             {
                 auto text = std::any_cast<const std::u8string&>(model->HeaderData(col, Orientation::Horizontal, ItemRole::Display));
@@ -55,7 +53,6 @@ void TableView::PaintBegin()
             }
             ImGuiHelper::TableNextRow(TableRowFlags::kHeaders);
 
-            hori_header->PaintBegin();
             for (size_t col = 0; col < col_count; ++col)
             {
                 ImGuiHelper::TableSetColumnIndex(col);
@@ -63,19 +60,28 @@ void TableView::PaintBegin()
                 hori_header->PaintSection(col);
                 ImGuiHelper::PopID();
             }
-            hori_header->PaintEnd();
         }
+
+        auto vert_header = VerticalHeader();
+        bool paint_vert_header = vert_header && vert_header->Visible();
+        if (paint_vert_header)
+            --col_count;
 
         for (size_t row = 0; row < row_count; ++row)
         {
             ImGuiHelper::TableNextRow();
+            if (paint_vert_header)
+            {
+                vert_header->PaintSection(row);
+            }
             for (size_t col = 0; col < col_count; ++col)
             {
                 ImGuiHelper::TableSetColumnIndex(col);
                 item_delegate->Paint(this, { row, col });
             }
         }
-        //TODO 行的绘制
+
+        ImGuiHelper::EndTable();
     }
 }
 

@@ -41,14 +41,22 @@ public:
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
 
-    virtual void UpdateEarly();
-    virtual void PaintBegin();
-    virtual void PaintEnd();
-
     MW_SIGNAL(OnEnableChanged, (bool) b)
     MW_SIGNAL(OnVisbleChanged, (bool) b)
 
 protected:
+    // 是所有绘制之前的准备工作
+    // 会先调用完所有Widget的PreparePaint后才会进入PaintBegin
+    virtual void PreparePaint();
+    // 开始绘制
+    // 会先调用父类的PaintBegin, 然后会递归调用所有子类的PaintBegin
+    // 相当于二叉树遍历中的左叶子
+    virtual void PaintBegin();
+    // 结束绘制
+    // 和PaintBegin相对应
+    // 相当于二叉树遍历中的右叶子
+    virtual void PaintEnd();
+
     virtual void DoEnable(bool b) {}
     virtual void DoShow() {}
     virtual void DoHide() {}

@@ -111,7 +111,7 @@ bool Widget::IsInUIThread()
     return std::this_thread::get_id() == WidgetsDriver::instance().ui_thread_id();
 }
 
-void Widget::UpdateEarly()
+void Widget::PreparePaint()
 {
     impl_->DoPendingFunctors();
 }

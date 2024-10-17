@@ -7,7 +7,7 @@ class HeaderView : public AbstractItemView
 public:
     HeaderView(Widget* parent, Orientation orientation);
 
-    Orientation orientation();
+    Orientation orientation() const;
 
     virtual void PaintSection(size_t index);
 

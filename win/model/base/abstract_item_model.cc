@@ -18,11 +18,11 @@ public:
         return empty;
     }
     void SetData(const ModelIndex& index, std::any&& data, ItemRole role) override {}
-    const std::any& HeaderData(int section, Orientation orientation, ItemRole role) const override {
+    const std::any& HeaderData(size_t section, Orientation orientation, ItemRole role) const override {
         static std::any empty;
         return empty;
     }
-    void SetHeaderData(int section, Orientation orientation, std::any&& data, ItemRole role) override {}
+    void SetHeaderData(size_t section, Orientation orientation, std::any&& data, ItemRole role) override {}
 };
 
 AbstractItemModel* AbstractItemModel::StaticEmptyModel()

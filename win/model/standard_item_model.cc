@@ -111,7 +111,7 @@ void StandardItemModel::SetFlags(const ModelIndex& index, int flags)
 }
 
 
-const std::any& StandardItemModel::HeaderData(int section, Orientation orientation, ItemRole role) const
+const std::any& StandardItemModel::HeaderData(size_t section, Orientation orientation, ItemRole role) const
 {
     StandardLineItems* items = nullptr;
     switch (orientation)
@@ -136,7 +136,7 @@ const std::any& StandardItemModel::HeaderData(int section, Orientation orientati
     return StaticEmptyData(role);
 }
 
-void StandardItemModel::SetHeaderData(int section, Orientation orientation, std::any&& data, ItemRole role)
+void StandardItemModel::SetHeaderData(size_t section, Orientation orientation, std::any&& data, ItemRole role)
 {
     StandardLineItems* items = nullptr;
     switch (orientation)
