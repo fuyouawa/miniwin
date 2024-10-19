@@ -7,15 +7,17 @@
 // - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
 // - Introduction, links and more at the top of imgui.cpp
 
-#include "imgui/imgui.h"
-#include "imgui/backends/imgui_impl_win32.h"
-#include "imgui/backends/imgui_impl_dx11.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <chrono>
 
-#include "win/core/applicarion_impl.h"
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_win32.h>
+#include <imgui/backends/imgui_impl_dx11.h>
+
 #include <miniwin/tools/converter.h>
+
+#include "applicarion_impl.h"
 
 #pragma comment(lib, "D3D11.lib")
 
@@ -41,7 +43,7 @@ int Application::Execute() {
     impl_->OnAppStart();
 
     auto class_name = Converter::Utf8ToWideString(impl_->main_window_class_name_);
-    auto window_name = Converter::Utf8ToWideString(impl_->main_window_class_name_);
+    auto window_name = Converter::Utf8ToWideString(impl_->main_window_title_);
 
     ImGui_ImplWin32_EnableDpiAwareness();
     WNDCLASSEXW wc = {

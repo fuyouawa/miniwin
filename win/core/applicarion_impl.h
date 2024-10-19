@@ -18,7 +18,7 @@ public:
 
     void DoFps() const;
 
-    bool hide_main_window_ = true;
+    bool hide_main_window_ = false;
     std::u8string main_window_class_name_ = u8"Miniwin";
     std::u8string main_window_title_ = u8"Miniwin App";
     size_t fps_ = 60;

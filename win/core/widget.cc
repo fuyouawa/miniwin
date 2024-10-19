@@ -17,7 +17,6 @@ Widget::Widget(Widget* parent, std::u8string_view name, WidgetType widget_type)
 
 Widget::~Widget()
 {
-    assert(IsInUIThread() && orphaned());
 }
 
 void Widget::Close()

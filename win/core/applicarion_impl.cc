@@ -1,9 +1,10 @@
-#include "win/core/applicarion_impl.h"
-#include "win/core/widgets_driver.h"
-#include <miniwin/tools/mathf.h>
-
 #include <cassert>
 #include <thread>
+
+#include <miniwin/tools/mathf.h>
+
+#include "applicarion_impl.h"
+#include "widgets_driver.h"
 
 namespace miniwin {
 Application::Impl::Impl(Application* owner)

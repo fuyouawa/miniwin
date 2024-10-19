@@ -12,6 +12,8 @@ public:
 
     };
 
+    static const Application* instance();
+
 	Application();
     ~Application();
 
@@ -27,9 +29,13 @@ public:
     size_t Fps() const;
     void SetFps(size_t fps);
 
+    bool IsExecuting() const;
+
     int Execute();
 
 private:
+    static Application* instance_;
+
     class Impl;
     std::unique_ptr<Impl> impl_;
 };

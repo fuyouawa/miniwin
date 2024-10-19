@@ -11,6 +11,7 @@ class WidgetsDriver
 {
 public:
     static WidgetsDriver& instance();
+    ~WidgetsDriver();
 
     bool IsDone() const;
     void CloseAll();

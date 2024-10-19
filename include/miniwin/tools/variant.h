@@ -15,38 +15,16 @@ public:
     Variant(std::u8string_view str);
 
     template <IsVariantable T>
-    Variant(T&& val)
-        : data_(std::forward<T>(val))
-    {
-    }
+    Variant(T&& val);
 
     template <IsVariantable T>
-    auto ToRef() -> decltype(auto) {
-        using Type = std::add_lvalue_reference_t<std::remove_cvref_t<T>>;
-        return std::any_cast<Type>(data_);
-    }
+    decltype(auto) ToRef();
 
     template <IsVariantable T>
-    auto ToRef() const -> decltype(auto) {
-        using Type = std::add_lvalue_reference_t<std::add_const_t<std::remove_cvref_t<T>>>;
-        return std::any_cast<Type>(data_);
-    }
+    decltype(auto) ToRef() const;
 
     template <IsVariantable T>
-    auto To() const -> decltype(auto) {
-        using Type = std::add_const_t<std::remove_cvref_t<T>>;
-        try
-        {
-            return std::any_cast<Type>(data_);
-        }
-        catch (const std::bad_any_cast& e)
-        {
-            if constexpr (std::is_default_constructible_v<T>)
-                return Type{};
-            else
-                throw std::bad_any_cast{ e };
-        }
-    }
+    decltype(auto) To() const;
 
     bool HasValue() const;
 
@@ -64,4 +42,40 @@ public:
 private:
     std::any data_;
 };
+
+template <IsVariantable T>
+Variant::Variant(T&& val): data_(std::forward<T>(val))
+{
+}
+
+template <IsVariantable T>
+decltype(auto) Variant::ToRef()
+{
+    using Type = std::add_lvalue_reference_t<std::remove_cvref_t<T>>;
+    return std::any_cast<Type>(data_);
+}
+
+template <IsVariantable T>
+decltype(auto) Variant::ToRef() const
+{
+    using Type = std::add_lvalue_reference_t<std::add_const_t<std::remove_cvref_t<T>>>;
+    return std::any_cast<Type>(data_);
+}
+
+template <IsVariantable T>
+decltype(auto) Variant::To() const
+{
+    using Type = std::add_const_t<std::remove_cvref_t<T>>;
+    try
+    {
+        return std::any_cast<Type>(data_);
+    }
+    catch (const std::bad_any_cast& e)
+    {
+        if constexpr (std::is_default_constructible_v<T>)
+            return Type{};
+        else
+            throw std::bad_any_cast{ e };
+    }
+}
 }

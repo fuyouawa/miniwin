@@ -1,5 +1,5 @@
 #include "win/core/widgets_driver.h"
-#include "win/widgets/window_impl.h"
+#include "window_impl.h"
 
 namespace miniwin {
 Window::Window(std::u8string_view title)

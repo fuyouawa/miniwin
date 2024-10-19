@@ -17,6 +17,11 @@ WidgetsDriver& WidgetsDriver::instance()
     return inst;
 }
 
+WidgetsDriver::~WidgetsDriver()
+{
+    CloseAll();
+}
+
 void WidgetsDriver::Update()
 {
     ClearDirty();
@@ -124,11 +129,11 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
         auto ignore_self = (widget->draw_flags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
         auto ignore_children = (widget->draw_flags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
 
-        if (ignore_self) {
+        if (!ignore_self) {
             widget->PaintBegin();
         }
 
-        if (ignore_children)
+        if (!ignore_children)
         {
             for (auto& o : widget->Children())
             {
@@ -140,7 +145,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
             }
         }
 
-        if (ignore_self) {
+        if (!ignore_self) {
             widget->PaintEnd();
         }
     }

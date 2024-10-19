@@ -2,7 +2,7 @@
 #include <miniwin/model/base/abstract_item_model.h>
 
 namespace miniwin {
-class StandardItemModel : AbstractItemModel
+class StandardItemModel : public AbstractItemModel
 {
 public:
     StandardItemModel(Object* parent);

@@ -1,6 +1,6 @@
 #pragma once
 #include <miniwin/widgets/window.h>
-#include "miniwin/tools/scope_variable.h"
+#include <miniwin/tools/scope_variable.h>
 
 namespace miniwin {
 class Window::Impl

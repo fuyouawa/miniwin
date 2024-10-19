@@ -1,6 +1,7 @@
+#include "abstract_item_view_impl.h"
+
 #include <cassert>
 
-#include "win/widgets/base/abstract_item_view_impl.h"
 
 namespace miniwin {
 AbstractItemView::AbstractItemView(Widget* parent)

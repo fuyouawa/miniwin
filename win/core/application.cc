@@ -1,13 +1,25 @@
-#include "win/core/applicarion_impl.h"
+#include <cassert>
+
+#include "applicarion_impl.h"
 
 namespace miniwin {
+Application* Application::instance_ = nullptr;
+
+const Application* Application::instance()
+{
+    return instance_;
+}
+
 Application::Application()
 {
+    assert(instance_ == nullptr);
+    instance_ = this;
     impl_ = std::make_unique<Impl>(this);
 }
 
 Application::~Application()
 {
+    instance_ = nullptr;
 }
 
 bool Application::IsHideMainWindow() const
@@ -48,5 +60,10 @@ size_t Application::Fps() const
 void Application::SetFps(size_t fps)
 {
     impl_->fps_ = fps;
+}
+
+bool Application::IsExecuting() const
+{
+    return impl_->is_executing_;
 }
 }

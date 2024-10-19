@@ -1,9 +1,9 @@
-#include "win/widgets/window_impl.h"
+#include "window_impl.h"
 
 #include "win/core/widgets_driver.h"
 #include "win/tools/graphic_utils.h"
 
-#include "miniwin/core/imgui_helper.h"
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 Window::Impl::Impl(Window* owner)

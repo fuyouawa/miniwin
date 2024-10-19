@@ -265,7 +265,4 @@
 #define _META_ADD_254(x) _META_ADD_253(META_INC(x))
 #define _META_ADD_255(x) _META_ADD_254(META_INC(x))
 
-#define META_PRIMITIVE_CAT(l, r) l ## r
-#define META_CAT(l, r) META_PRIMITIVE_CAT(l, r)
-
 #define _META_ADD(x, y) META_CAT(_META_ADD_, x)(y)

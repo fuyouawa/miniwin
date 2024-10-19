@@ -109,7 +109,7 @@ StandardItem& StandardItemModel::Impl::Item(const ModelIndex& idx)
 StandardItem& StandardItemModel::Impl::GetOrCreateItem(const ModelIndex& idx)
 {
     assert(idx.valid());
-    assert(idx.row <= RowCount() && idx.column <= ColumnCount());
+    assert(idx.row() <= RowCount() && idx.column() <= ColumnCount());
     auto& r = items_[idx.row()];
     if (r.size() <= idx.column())
     {
