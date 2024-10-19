@@ -53,6 +53,7 @@ public:
 
     void DeleteChildren();
 
+    bool deleting_ = false;
     Object* owner_ = nullptr;
     Object* parent_ = nullptr;
     std::u8string name_;

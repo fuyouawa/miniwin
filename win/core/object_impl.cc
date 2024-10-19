@@ -22,6 +22,7 @@ Object::Impl::Impl(Object* owner, ObjectType object_type)
 Object::Impl::~Impl() {
     std::unique_lock lk{ signal_mutex(owner_) };
 
+    deleting_ = true;
     if (!connections_manager_.map_.empty() || !connected_sender_connections_.empty())
     {
         for (auto& conns : connections_manager_.map_)
@@ -191,7 +192,9 @@ void Object::Impl::SetParent(Object* parent)
 {
     if (owner_ == parent)
         return;
-    if (parent_)
+    // 如果parent正在删除中, 就不从parent中移除自己
+    //TODO 确保当parent遍历children的时候都不应该进行删除操作
+    if (parent_ && !parent_->impl_->deleting_)
     {
         auto f = std::ranges::find(parent_->impl_->children_, owner_);
         assert(f != parent_->impl_->children_.end());
