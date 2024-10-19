@@ -14,10 +14,10 @@ public:
     void OnDockingChanged();
 
     WindowFlags flags_ = WindowFlags::kNone;
-    ScopeCondition top_sc_;
-    void* hwnd_;
-    void* prev_hwnd_;
-    bool is_docking_;
+    ScopeCondition top_sc_{ false };
+    void* hwnd_ = nullptr;
+    void* prev_hwnd_ = nullptr;
+    bool is_docking_ = false;
     bool has_close_button_ = true;
     Window* owner_;
 };

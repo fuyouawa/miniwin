@@ -46,7 +46,7 @@ Object::Impl::~Impl() {
             std::lock_guard lk2{ signal_mutex(sender) };
             if (!sender_conn || sender_conn->sender != sender)
             {
-                // 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
+                // Ҳ�����ڵ���ʱû�������Ƕμ��, ������Ӿͱ��ж���
                 continue;
             }
             sender_conn->receiver = nullptr;
@@ -99,10 +99,10 @@ Object::Disconnecter Object::Impl::ConnectImpl(
 
     std::scoped_lock lk{ signal_mutex(sender), signal_mutex(receiver) };
 
-    // 如果connection_type是Unique, 表示不重复连接
-    // 检测目标Signal中所有Connection的Slot是否有跟当前想连接的Slot重复的
+    // ���connection_type��Unique, ��ʾ���ظ�����
+    // ���Ŀ��Signal������Connection��Slot�Ƿ��и���ǰ�����ӵ�Slot�ظ���
     if (has_unique_flag || has_replace_flag) {
-        // 获取当前链接的Signal Connection List
+        // ��ȡ��ǰ���ӵ�Signal Connection List
         if (auto res = sender->impl_->connections_manager_.map_.find(signal_info); res != sender->impl_->connections_manager_.map_.end())
         {
             if (res->first != signal_info)
@@ -119,7 +119,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
             {
                 if (has_unique_flag)
                 {
-                    //TODO has_unique_flag暂时啥也不干
+                    //TODO has_unique_flag��ʱɶҲ����
                 }
                 else
                 {
@@ -152,7 +152,7 @@ void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::Sl
 
         if (!c || c->sender != owner_ || c->receiver != receiver)
         {
-            // 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
+            // Ҳ�����ڵ���ʱû�������Ƕμ��, ������Ӿͱ��ж���
             continue;
         }
 

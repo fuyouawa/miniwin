@@ -10,6 +10,10 @@ StandardItemModel::StandardItemModel(Object* parent)
     impl_ = std::make_unique<Impl>(this);
 }
 
+StandardItemModel::~StandardItemModel()
+{
+}
+
 void StandardItemModel::InsertRows(size_t row, size_t count)
 {
     impl_->InsertRows(row, count);

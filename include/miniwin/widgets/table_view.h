@@ -2,6 +2,7 @@
 #include <miniwin/widgets/base/abstract_item_view.h>
 #include <miniwin/widgets/header_view.h>
 
+
 namespace miniwin {
 class TableView : public AbstractItemView
 {
@@ -23,6 +24,8 @@ public:
 
     TableFlags flags() const;
     void set_flags(TableFlags flags);
+
+    void SetModel(AbstractItemModel* model) override;
 
     _MW_IMPL
 };

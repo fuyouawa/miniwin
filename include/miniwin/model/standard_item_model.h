@@ -6,6 +6,7 @@ class StandardItemModel : public AbstractItemModel
 {
 public:
     StandardItemModel(Object* parent);
+    ~StandardItemModel() override;
 
     void InsertRows(size_t row, size_t count) override;
     void RemoveRows(size_t row, size_t count) override;

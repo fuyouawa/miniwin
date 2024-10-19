@@ -44,7 +44,7 @@ void AbstractItemModel::SetRowCount(size_t count) {
 
 	if (count == row_n) return;
 	if (count > row_n) {
-		InsertRows(row_n - 1, count - row_n);
+		InsertRows(row_n, count - row_n);
 	}
 	else {
 		RemoveRows(count, count - row_n);
@@ -65,7 +65,7 @@ void AbstractItemModel::SetColumnCount(size_t count)
 
     if (count == col_n) return;
     if (count > col_n) {
-        InsertColumns(col_n - 1, count - col_n);
+        InsertColumns(col_n, count - col_n);
     }
     else {
         RemoveRows(count, count - col_n);

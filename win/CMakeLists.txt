@@ -4,7 +4,6 @@ project(miniwin)
 set(CMAKE_CXX_STANDARD 20)
 
 include_directories(${HEAD_PATH})
-include_directories(${HEAD_PATH})
 include_directories(${IMGUI_HEAD_PATH})
 include_directories(${IMGUI_HEAD_PATH}/imgui)
 include_directories(${GUI_HEAD_PATH})

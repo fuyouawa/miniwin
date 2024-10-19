@@ -7,7 +7,7 @@
 
 namespace miniwin {
 Window::Impl::Impl(Window* owner)
-    : hwnd_(nullptr), prev_hwnd_(nullptr), is_docking_(false), owner_(owner)
+    : owner_(owner)
 {
     WidgetsDriver::instance().RegisterWindow(owner_);
 }

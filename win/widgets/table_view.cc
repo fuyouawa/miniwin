@@ -1,5 +1,8 @@
 #include "table_view_impl.h"
+
 #include <miniwin/core/imgui_helper.h>
+
+#include <cassert>
 
 namespace miniwin {
 TableView::TableView(Widget* parent, std::u8string_view id)
@@ -109,5 +112,22 @@ TableFlags TableView::flags() const
 void TableView::set_flags(TableFlags flags)
 {
     impl_->flags_ = flags;
+}
+
+void TableView::SetModel(AbstractItemModel* model)
+{
+    AbstractItemView::SetModel(model);
+    for (auto& header : impl_->headers_)
+    {
+        auto h = header.second;
+        if (h)
+        {
+            auto m = h->Model();
+            if (!m || m == Model())
+            {
+                h->SetModel(model);
+            }
+        }
+    }
 }
 }

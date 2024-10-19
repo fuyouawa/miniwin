@@ -1,6 +1,4 @@
-#include <miniwin/model/standard_item_model.h>
-
-#include "win/widgets/table_view_impl.h"
+#include "table_view_impl.h"
 
 namespace miniwin {
 TableView::Impl::Impl(TableView* owner): owner_(owner)
@@ -9,8 +7,6 @@ TableView::Impl::Impl(TableView* owner): owner_(owner)
 
 void TableView::Impl::Init()
 {
-    auto model = new StandardItemModel(owner_);
-    owner_->SetModel(model);
     auto hori = new HeaderView(owner_, Orientation::Horizontal);
     owner_->SetHorizontalHeader(hori);
     //TODO 垂直表头
@@ -30,14 +26,14 @@ void TableView::Impl::SetHeader(Orientation orientation, HeaderView* header)
         delete h;
 
     headers_[orientation] = header;
-    h->SetWidgetParent(owner_);
-    if (!h->Model())
+    header->SetWidgetParent(owner_);
+    if (!header->Model())
     {
-        h->SetModel(owner_->Model());
+        header->SetModel(owner_->Model());
         auto sm = owner_->SelectionModel();
         if (sm)
         {
-            h->SetSelectionModel(sm);
+            header->SetSelectionModel(sm);
         }
     }
 }

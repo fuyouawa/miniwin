@@ -98,18 +98,18 @@ consteval bool MatchFunctionArguments() {
 }
 
 template<typename ExpectedFunc, typename ActualFunc>
-// åŒ¹é…ä¸¤ä¸ªå¯è°ƒç”¨å¯¹è±¡çš„å‚æ•°
-// ä¹Ÿå°±æ˜¯ActualFuncçš„æ¯ä¸ªå‚æ•°æ˜¯å¦éƒ½å¯ä»¥éšå¼è½¬æ¢ä¸ºExpectedFuncå¯¹åº”çš„å‚æ•°
+// Æ¥ÅäÁ½¸ö¿Éµ÷ÓÃ¶ÔÏóµÄ²ÎÊı
+// Ò²¾ÍÊÇActualFuncµÄÃ¿¸ö²ÎÊıÊÇ·ñ¶¼¿ÉÒÔÒşÊ½×ª»»ÎªExpectedFunc¶ÔÓ¦µÄ²ÎÊı
 constexpr bool kIsArgumentsMatchableFunctions = MatchFunctionArguments<ExpectedFunc, ActualFunc>();
 
 template<typename ExpectedFunc, typename ActualFunc>
-// åŒ¹é…ä¸¤ä¸ªå¯è°ƒç”¨å¯¹è±¡çš„è¿”å›å€¼
-// ä¹Ÿå°±æ˜¯ActualFuncçš„è¿”å›ç±»å‹æ˜¯å¦å¯ä»¥éšå¼è½¬æ¢ä¸ºExpectedFuncçš„è¿”å›ç±»å‹
+// Æ¥ÅäÁ½¸ö¿Éµ÷ÓÃ¶ÔÏóµÄ·µ»ØÖµ
+// Ò²¾ÍÊÇActualFuncµÄ·µ»ØÀàĞÍÊÇ·ñ¿ÉÒÔÒşÊ½×ª»»ÎªExpectedFuncµÄ·µ»ØÀàĞÍ
 constexpr bool kIsReturnTypeMatchableFunctions = std::is_convertible_v<typename FunctionTraits<ExpectedFunc>::Return,
     typename FunctionTraits<ActualFunc>::Return>;
 
 template<typename ExpectedFunc, typename ActualFunc>
-// åŒ¹é…ä¸¤ä¸ªå¯è°ƒç”¨å¯¹è±¡
+// Æ¥ÅäÁ½¸ö¿Éµ÷ÓÃ¶ÔÏó
 constexpr bool kIsMatchableFunctions = kIsArgumentsMatchableFunctions<ExpectedFunc, ActualFunc>&&
     kIsReturnTypeMatchableFunctions< ExpectedFunc, ActualFunc>;
 }
