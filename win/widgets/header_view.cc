@@ -14,7 +14,17 @@ Orientation HeaderView::orientation() const
     return impl_->orientation_;
 }
 
-void HeaderView::PaintSection(size_t index)
+void HeaderView::PaintSection(size_t section)
 {
+    auto model = Model();
+    auto label = model->HeaderData(section, orientation()).ToString();
+    if (orientation() == Orientation::Horizontal)
+    {
+        ImGuiHelper::TableHeader(label);
+    }
+    else
+    {
+        //TODO 垂直表头
+    }
 }
 }

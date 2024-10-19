@@ -5,6 +5,13 @@ TableView::Impl::Impl(TableView* owner): owner_(owner)
 {
 }
 
+void TableView::Impl::Init()
+{
+    auto hori = new HeaderView(owner_, Orientation::Horizontal);
+    owner_->SetHorizontalHeader(hori);
+    //TODO 垂直表头
+}
+
 HeaderView* TableView::Impl::Header(Orientation orientation)
 {
     return headers_[orientation];

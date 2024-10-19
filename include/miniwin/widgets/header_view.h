@@ -9,7 +9,7 @@ public:
 
     Orientation orientation() const;
 
-    virtual void PaintSection(size_t index);
+    virtual void PaintSection(size_t section);
 
 private:
     using AbstractItemView::set_draw_flags;

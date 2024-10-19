@@ -16,7 +16,7 @@ void SelectionItemDelegate::Paint(AbstractItemView* view, const ModelIndex& inde
 {
     auto model = view->Model();
     auto selection_model = view->SelectionModel();
-    auto& text = std::any_cast<const std::u8string&>(model->Data(index));
+    auto text = model->Data(index).ToString();
     bool is_selected = selection_model->IsSelected(index);
     if (ImGuiHelper::Selectable(text, &is_selected, SelectableFlags::kSpanAllColumns | SelectableFlags::kAllowOverlap)) {
         if (Input::IsIoKeyDown(IoKeyCode::kCtrl)) {

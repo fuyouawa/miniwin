@@ -131,6 +131,11 @@ void ImGuiHelper::TableSetupColumn(std::u8string_view label, TableColumnFlags fl
     return ImGui::TableSetupColumn(cstr(label), static_cast<int>(flags), init_width_or_weight, user_id);
 }
 
+void ImGuiHelper::TableHeader(std::u8string_view label)
+{
+    ImGui::TableHeader(cstr(label));
+}
+
 bool ImGuiHelper::TableSetColumnIndex(size_t column_n)
 {
     return ImGui::TableSetColumnIndex(column_n);

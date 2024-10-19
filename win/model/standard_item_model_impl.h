@@ -2,7 +2,7 @@
 #include <miniwin/model/standard_item_model.h>
 
 namespace miniwin {
-using StandardItem = std::unordered_map<ItemRole, std::any>;
+using StandardItem = std::unordered_map<ItemRole, Variant>;
 
 using StandardLineItems = std::vector<StandardItem>;
 

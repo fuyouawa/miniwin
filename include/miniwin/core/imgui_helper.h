@@ -65,6 +65,8 @@ public:
         float init_width_or_weight = 0,
         uint32_t user_id = 0);
 
+    static void TableHeader(std::u8string_view label);
+
     static bool TableSetColumnIndex(size_t column_n);
 
     static void TableNextRow(TableRowFlags row_flags = TableRowFlags::kNone, float row_min_height = 0);

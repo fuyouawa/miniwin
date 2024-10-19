@@ -6,6 +6,7 @@ TableView::TableView(Widget* parent, std::u8string_view id)
     : AbstractItemView(parent)
 {
     impl_ = std::make_unique<Impl>(this);
+    impl_->Init();
 }
 
 TableView::~TableView()
@@ -47,8 +48,8 @@ void TableView::PaintBegin()
         {
             for (size_t col = 0; col < col_count; ++col)
             {
-                auto text = std::any_cast<const std::u8string&>(model->HeaderData(col, Orientation::Horizontal, ItemRole::Display));
-                auto flags = std::any_cast<int>(model->HeaderData(col, Orientation::Horizontal, ItemRole::Flags));
+                auto text = model->HeaderData(col, Orientation::Horizontal, ItemRole::Display).ToString();
+                auto flags = model->HeaderData(col, Orientation::Horizontal, ItemRole::Flags).ToInt32();
                 ImGuiHelper::TableSetupColumn(text, static_cast<TableColumnFlags>(flags));
             }
             ImGuiHelper::TableNextRow(TableRowFlags::kHeaders);

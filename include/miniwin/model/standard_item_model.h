@@ -15,11 +15,11 @@ public:
     void RemoveColumns(size_t column, size_t count) override;
     size_t ColumnCount() const override;
 
-    const std::any& Data(const ModelIndex& index, ItemRole role) const override;
-    void SetData(const ModelIndex& index, std::any&& data, ItemRole role) override;
+    Variant Data(const ModelIndex& index, ItemRole role) const override;
+    void SetData(const ModelIndex& index, Variant&& data, ItemRole role) override;
 
-    const std::any& HeaderData(size_t section, Orientation orientation, ItemRole role) const override;
-    void SetHeaderData(size_t section, Orientation orientation, std::any&& data, ItemRole role) override;
+    Variant HeaderData(size_t section, Orientation orientation, ItemRole role) const override;
+    void SetHeaderData(size_t section, Orientation orientation, Variant&& data, ItemRole role) override;
 
     std::u8string_view Text(const ModelIndex& index) const;
     void SetText(const ModelIndex& index, std::u8string_view text);

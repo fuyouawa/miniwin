@@ -8,6 +8,8 @@ class TableView::Impl
 public:
     explicit Impl(TableView* owner);
 
+    void Init();
+
     HeaderView* Header(Orientation orientation);
     void SetHeader(Orientation orientation, HeaderView* header);
 

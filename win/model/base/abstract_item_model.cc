@@ -13,16 +13,10 @@ public:
     void RemoveColumns(size_t column, size_t count) override {}
     size_t ColumnCount() const override { return 0; }
     void Clear() override {}
-    const std::any& Data(const ModelIndex& index, ItemRole role) const override {
-        static std::any empty;
-        return empty;
-    }
-    void SetData(const ModelIndex& index, std::any&& data, ItemRole role) override {}
-    const std::any& HeaderData(size_t section, Orientation orientation, ItemRole role) const override {
-        static std::any empty;
-        return empty;
-    }
-    void SetHeaderData(size_t section, Orientation orientation, std::any&& data, ItemRole role) override {}
+    Variant Data(const ModelIndex& index, ItemRole role) const override { return {}; }
+    void SetData(const ModelIndex& index, Variant&& data, ItemRole role) override {}
+    Variant HeaderData(size_t section, Orientation orientation, ItemRole role) const override { return {}; }
+    void SetHeaderData(size_t section, Orientation orientation, Variant&& data, ItemRole role) override {}
 };
 
 AbstractItemModel* AbstractItemModel::StaticEmptyModel()
