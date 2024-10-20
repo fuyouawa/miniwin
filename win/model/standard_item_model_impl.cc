@@ -103,7 +103,7 @@ StandardItem& StandardItemModel::Impl::Item(const ModelIndex& idx)
     {
         return empty_item;
     }
-    return r[idx.column() - 1];
+    return r[idx.column()];
 }
 
 StandardItem& StandardItemModel::Impl::GetOrCreateItem(const ModelIndex& idx)
@@ -113,9 +113,9 @@ StandardItem& StandardItemModel::Impl::GetOrCreateItem(const ModelIndex& idx)
     auto& r = items_[idx.row()];
     if (r.size() <= idx.column())
     {
-        r.resize(idx.column());
+        r.resize(idx.column() + 1);
     }
-    return r[idx.column() - 1];
+    return r[idx.column()];
 }
 
 void StandardItemModel::Impl::Clear()

@@ -76,12 +76,19 @@ void TableView::PaintBegin()
             ImGuiHelper::TableNextRow();
             if (paint_vert_header)
             {
+                ImGuiHelper::PushID(row);
                 vert_header->PaintSection(row);
+                ImGuiHelper::PopID();
             }
-            for (size_t col = 0; col < col_count; ++col)
+            if (item_delegate)
             {
-                ImGuiHelper::TableSetColumnIndex(col);
-                item_delegate->Paint(this, { row, col });
+                for (size_t col = 0; col < col_count; ++col)
+                {
+                    ImGuiHelper::TableSetColumnIndex(col);
+                    ImGuiHelper::PushID(row * 10 + col);
+                    item_delegate->Paint(this, { row, col });
+                    ImGuiHelper::PopID();
+                }
             }
         }
 

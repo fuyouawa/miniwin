@@ -11,7 +11,7 @@ ItemSelectionModel::Impl::Impl(ItemSelectionModel* owner, AbstractItemModel* mod
 bool ItemSelectionModel::Impl::Contains(const ModelIndex& index) const
 {
     auto c = GetSelectionsTableIndex(index.column());
-    if (c > selections_.size())
+    if (c >= selections_.size())
     {
         return false;
     }

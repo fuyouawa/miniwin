@@ -22,6 +22,8 @@ public:
         model->SetHeaderText(1, miniwin::Orientation::Horizontal, u8"²âÊÔ2");
         model->SetHeaderText(2, miniwin::Orientation::Horizontal, u8"²âÊÔ3");
         model->SetHeaderText(3, miniwin::Orientation::Horizontal, u8"²âÊÔ4");
+        model->SetRowCount(3);
+        model->SetText({ 0, 0 }, u8"yiµÄÊÇ");
         table_view_->SetModel(model);
 	}
 
@@ -33,6 +35,7 @@ public:
 
 int main() {
 	miniwin::Application app;
+    app.SetHideMainWindow(true);
 
 	auto window = new ExampleWindow{ u8"Example Window", true };
 

@@ -1,5 +1,7 @@
 #include "table_view_impl.h"
 
+#include <miniwin/delegate/selection_item_delegate.h>
+
 namespace miniwin {
 TableView::Impl::Impl(TableView* owner): owner_(owner)
 {
@@ -7,6 +9,9 @@ TableView::Impl::Impl(TableView* owner): owner_(owner)
 
 void TableView::Impl::Init()
 {
+    auto d = new SelectionItemDelegate(owner_);
+    owner_->SetItemDelegate(d);
+
     auto hori = new HeaderView(owner_, Orientation::Horizontal);
     owner_->SetHorizontalHeader(hori);
     //TODO 垂直表头

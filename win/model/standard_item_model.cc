@@ -50,7 +50,7 @@ size_t StandardItemModel::ColumnCount() const
 
 Variant StandardItemModel::Data(const ModelIndex& index, ItemRole role) const
 {
-    auto i = impl_->Item(index);
+    auto& i = impl_->Item(index);
     auto res = i.find(role);
     if (res != i.end())
     {
@@ -61,7 +61,7 @@ Variant StandardItemModel::Data(const ModelIndex& index, ItemRole role) const
 
 void StandardItemModel::SetData(const ModelIndex& index, Variant&& data, ItemRole role)
 {
-    auto i = impl_->GetOrCreateItem(index);
+    auto& i = impl_->GetOrCreateItem(index);
     i[role] = std::move(data);
 }
 

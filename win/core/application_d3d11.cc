@@ -63,12 +63,11 @@ int Application::Execute() {
         hwnd = ::CreateWindowExW(WS_EX_TOOLWINDOW |
             WS_EX_NOACTIVATE |
             WS_EX_TRANSPARENT |
-            WS_EX_LAYERED |
-            WS_EX_TOPMOST,
+            WS_EX_LAYERED,
             wc.lpszClassName,
             window_name.c_str(),
-            WS_POPUP,
-            0, 0, 0, 0,
+            WS_OVERLAPPEDWINDOW,
+            0, 0, 100, 100,
             nullptr, nullptr, wc.hInstance, nullptr);
     }
     else
