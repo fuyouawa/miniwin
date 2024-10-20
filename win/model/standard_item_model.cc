@@ -76,6 +76,28 @@ void StandardItemModel::SetText(const ModelIndex& index, std::u8string_view text
     SetData(index, text, ItemRole::Display);
 }
 
+void StandardItemModel::SetRowTexts(size_t row, size_t begin_column, std::initializer_list<std::u8string_view> texts)
+{
+    assert(begin_column + texts.size() <= ColumnCount());
+    size_t i = 0;
+    for (auto t : texts)
+    {
+        SetText({ row, begin_column + i }, t);
+        ++i;
+    }
+}
+
+void StandardItemModel::SetColumnTexts(size_t begin_row, size_t column, std::initializer_list<std::u8string_view> texts)
+{
+    assert(begin_row + texts.size() <= RowCount());
+    size_t i = 0;
+    for (auto t : texts)
+    {
+        SetText({ begin_row + i, column }, t);
+        ++i;
+    }
+}
+
 int StandardItemModel::Flags(const ModelIndex& index) const
 {
     auto d = Data(index, ItemRole::Flags);
@@ -140,6 +162,28 @@ std::u8string_view StandardItemModel::HeaderText(int section, Orientation orient
 void StandardItemModel::SetHeaderText(int section, Orientation orientation, std::u8string_view text)
 {
     SetHeaderData(section, orientation, text, ItemRole::Display);
+}
+
+void StandardItemModel::SetHorizontalHeaderTexts(std::initializer_list<std::u8string_view> texts)
+{
+    assert(texts.size() <= ColumnCount());
+    size_t i = 0;
+    for (auto t : texts)
+    {
+        SetHeaderText(i, Orientation::Horizontal, t);
+        ++i;
+    }
+}
+
+void StandardItemModel::SetVerticalHeaderTexts(std::initializer_list<std::u8string_view> texts)
+{
+    assert(texts.size() <= RowCount());
+    size_t i = 0;
+    for (auto t : texts)
+    {
+        SetHeaderText(i, Orientation::Vertical, t);
+        ++i;
+    }
 }
 
 int StandardItemModel::HeaderFlags(int section, Orientation orientation) const

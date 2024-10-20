@@ -25,11 +25,17 @@ public:
     std::u8string_view Text(const ModelIndex& index) const;
     void SetText(const ModelIndex& index, std::u8string_view text);
 
+    void SetRowTexts(size_t row, size_t begin_column, std::initializer_list<std::u8string_view> texts);
+    void SetColumnTexts(size_t begin_row, size_t column, std::initializer_list<std::u8string_view> texts);
+
     int Flags(const ModelIndex& index) const;
     void SetFlags(const ModelIndex& index, int flags);
 
     std::u8string_view HeaderText(int section, Orientation orientation) const;
     void SetHeaderText(int section, Orientation orientation, std::u8string_view text);
+
+    void SetHorizontalHeaderTexts(std::initializer_list<std::u8string_view> texts);
+    void SetVerticalHeaderTexts(std::initializer_list<std::u8string_view> texts);
 
     int HeaderFlags(int section, Orientation orientation) const;
     void SetHeaderFlags(int section, Orientation orientation, int flags);

@@ -21,19 +21,12 @@ public:
         // 设置列的数量
         model->SetColumnCount(4);
         // 设置水平头部(也就是列头)的文本
-        model->SetHeaderText(0, miniwin::Orientation::Horizontal, u8"测试1");
-        model->SetHeaderText(1, miniwin::Orientation::Horizontal, u8"测试2");
-        model->SetHeaderText(2, miniwin::Orientation::Horizontal, u8"测试3");
-        model->SetHeaderText(3, miniwin::Orientation::Horizontal, u8"测试4");
+        model->SetHorizontalHeaderTexts({ u8"asd", u8"地方", u8"ooo", u8"世世代代" });
         // 设置行的数量
         model->SetRowCount(3);
         // 设置行文本
-        model->SetText({ 0, 0 }, u8"yi的是");
-        model->SetText({ 0, 1 }, u8"yi的是sss");
-        model->SetText({ 0, 2 }, u8"yi是sss");
-        model->SetText({ 0, 3 }, u8"yi的gh是sss");
-        model->SetText({ 1, 1 }, u8"hg士大夫s");
-        model->SetText({ 2, 2 }, u8"hg士dsd大夫s");
+        model->SetRowTexts(0, 0, { u8"asdd", u8"大苏打·" });
+        model->SetColumnTexts(0, 3, { u8"肯德基", u8"sd限塑袋·", u8"a的肥肉" });
         // 将model设置给TableView
         table_view_->SetModel(model);
 
