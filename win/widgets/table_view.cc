@@ -10,6 +10,7 @@ TableView::TableView(Widget* parent, std::u8string_view id)
 {
     impl_ = std::make_unique<Impl>(this);
     impl_->Init();
+    set_flags(TableFlags::kBorders);
 }
 
 TableView::~TableView()

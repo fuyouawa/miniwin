@@ -157,7 +157,7 @@ int Application::Execute() {
                 "C:\\Windows\\Fonts\\msyh.ttc",
                 16.0f * impl_->cur_dpi_scale_,
                 nullptr,
-                io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+                io.Fonts->GetGlyphRangesChineseFull());
             IM_ASSERT(font != NULL);
             if (font == NULL)
                 return false;

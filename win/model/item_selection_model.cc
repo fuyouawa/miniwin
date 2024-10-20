@@ -4,14 +4,14 @@
 namespace miniwin {
 bool ItemSelection::valid() const
 {
-    return top_left.valid() && bottom_right.valid()
-        && top_left.row() <= bottom_right.row()
-        && top_left.column() <= bottom_right.column();
+    return top_left_.valid() && bottom_right_.valid()
+        && top_left_.row() <= bottom_right_.row()
+        && top_left_.column() <= bottom_right_.column();
 }
 
 bool operator==(const ItemSelection& x, const ItemSelection& y)
 {
-    return x.top_left == y.top_left && x.bottom_right == y.bottom_right;
+    return x.top_left() == y.top_left() && x.bottom_right() == y.bottom_right();
 }
 
 ItemSelectionModel::ItemSelectionModel(Object* parent, AbstractItemModel* model)
@@ -30,20 +30,20 @@ AbstractItemModel* ItemSelectionModel::Model() const
     return impl_->model_;
 }
 
-void ItemSelectionModel::Select(const ModelIndex& index, SelectionType selection_type)
+void ItemSelectionModel::Select(size_t row, size_t column, ItemSelectionType selection_type)
 {
-    Select(ItemSelection{ index, index }, selection_type);
+    Select({ {row, column} }, selection_type);
 }
 
-void ItemSelectionModel::Select(const ItemSelection& selection, SelectionType selection_type)
+void ItemSelectionModel::Select(const ItemSelection& selection, ItemSelectionType selection_type)
 {
     assert(selection.valid());
-    if (selection_type == SelectionType::ClearSelect)
+    if (selection_type == ItemSelectionType::ClearSelect)
     {
         impl_->Clear();
-        selection_type = SelectionType::Select;
+        selection_type = ItemSelectionType::Select;
     }
-    impl_->Select(selection, selection_type == SelectionType::Select);
+    impl_->Select(selection, selection_type == ItemSelectionType::Select);
     OnSelectionChanged(selection, selection_type);
 }
 

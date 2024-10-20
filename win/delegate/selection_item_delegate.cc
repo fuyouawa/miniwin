@@ -18,16 +18,16 @@ void SelectionItemDelegate::Paint(AbstractItemView* view, const ModelIndex& inde
     auto selection_model = view->SelectionModel();
     auto text = model->Data(index).ToString();
     bool is_selected = selection_model->IsSelected(index);
-    if (ImGuiHelper::Selectable(text, &is_selected, SelectableFlags::kSpanAllColumns | SelectableFlags::kAllowOverlap)) {
+    if (ImGuiHelper::Selectable(text, &is_selected)) {
         if (Input::IsIoKeyDown(IoKeyCode::kCtrl)) {
             selection_model->Select(index, is_selected
-                ? ItemSelectionModel::SelectionType::Select
-                : ItemSelectionModel::SelectionType::Deselect);
+                ? ItemSelectionType::Select
+                : ItemSelectionType::Deselect);
         }
         else {
             if (is_selected)
             {
-                selection_model->Select(index, ItemSelectionModel::SelectionType::ClearSelect);
+                selection_model->Select(index, ItemSelectionType::ClearSelect);
             }
             else
             {

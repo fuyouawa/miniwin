@@ -27,11 +27,11 @@ bool ItemSelectionModel::Impl::Contains(const ModelIndex& index) const
 
 void ItemSelectionModel::Impl::Select(const ItemSelection& selection, bool is_select)
 {
-    EnsureIndex(selection.bottom_right);
+    EnsureIndex(selection.bottom_right());
 
-    for (size_t row = selection.top_left.row(); row <= selection.bottom_right.row(); ++row)
+    for (size_t row = selection.top_left().row(); row <= selection.bottom_right().row(); ++row)
     {
-        for (size_t col = selection.top_left.column(); col <= selection.bottom_right.column(); ++col)
+        for (size_t col = selection.top_left().column(); col <= selection.bottom_right().column(); ++col)
         {
             assert(model_ && model_->IsValidIndex({ row, col }));
             auto c = GetSelectionsTableIndex(col);
@@ -81,6 +81,6 @@ size_t ItemSelectionModel::Impl::GetSelectionsTableIndex(size_t column)
 
 size_t ItemSelectionModel::Impl::GetSelectionIndex(size_t column)
 {
-    return column & kLengthOfOneBitsetSelections;
+    return column % kLengthOfOneBitsetSelections;
 }
 }
