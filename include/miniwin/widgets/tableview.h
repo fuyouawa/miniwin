@@ -1,6 +1,6 @@
 #pragma once
 #include <miniwin/widgets/base/abstract_item_view.h>
-#include <miniwin/widgets/header_view.h>
+#include <miniwin/widgets/headerview.h>
 
 
 namespace miniwin {
@@ -15,7 +15,6 @@ public:
 
     TableFlags flags() const;
     void set_flags(TableFlags flags);
-
 
     HeaderView* HorizontalHeader() const;
     void SetHorizontalHeader(HeaderView* header);

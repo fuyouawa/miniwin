@@ -1,5 +1,5 @@
 #pragma once
-#include <miniwin/widgets/table_view.h>
+#include <miniwin/widgets/tableview.h>
 #include <string>
 
 namespace miniwin {

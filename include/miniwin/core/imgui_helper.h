@@ -7,6 +7,24 @@ namespace miniwin {
 class ImGuiHelper
 {
 public:
+	class ListClipper
+	{
+	public:
+		ListClipper();
+		~ListClipper();
+
+		void Begin(size_t items_count, float items_height = -1);
+		bool Step();
+		void End();
+
+		size_t display_start() const;
+		size_t display_end() const;
+
+	private:
+		class Impl;
+		Impl* impl_;
+	};
+
     static bool IsWindowDocked();
 
     static void PushID(int id);
@@ -82,5 +100,8 @@ public:
 		ComboBoxFlags flags = ComboBoxFlags::kNone);
 
 	static void EndCombo();
+
+	static bool BeginListBox(std::u8string_view label, const Vector2& size);
+	static void EndListBox();
 };
 }

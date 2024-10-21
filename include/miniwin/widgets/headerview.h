@@ -6,6 +6,7 @@ class HeaderView : public AbstractItemView
 {
 public:
     HeaderView(Widget* parent, Orientation orientation);
+    ~HeaderView() override;
 
     Orientation orientation() const;
 

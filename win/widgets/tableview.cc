@@ -1,4 +1,4 @@
-#include "table_view_impl.h"
+#include "tableview_impl.h"
 
 #include <miniwin/core/imgui_helper.h>
 
@@ -43,19 +43,19 @@ void TableView::SetVerticalHeader(HeaderView* header)
 void TableView::PaintBegin()
 {
     AbstractItemView::PaintBegin();
-    auto model = Model();
-    auto col_count = model->ColumnCount();
-    auto row_count = model->RowCount();
+    auto m = Model();
+    auto col_count = m->ColumnCount();
+    auto row_count = m->RowCount();
 
     if (ImGuiHelper::BeginTable(id(), col_count, flags(), size()))
     {
-        auto hori_header = HorizontalHeader();
-        if (hori_header && hori_header->Visible())
+        auto hori = HorizontalHeader();
+        if (hori && hori->Visible())
         {
             for (size_t col = 0; col < col_count; ++col)
             {
-                auto text = model->HeaderData(col, Orientation::Horizontal, ItemRole::Display).ToString();
-                auto flags = model->HeaderData(col, Orientation::Horizontal, ItemRole::Flags).ToInt32();
+                auto text = m->HeaderData(col, Orientation::Horizontal, ItemRole::Display).ToString();
+                auto flags = m->HeaderData(col, Orientation::Horizontal, ItemRole::Flags).ToInt32();
                 ImGuiHelper::TableSetupColumn(text, static_cast<TableColumnFlags>(flags));
             }
             ImGuiHelper::TableNextRow(TableRowFlags::kHeaders);
@@ -64,33 +64,33 @@ void TableView::PaintBegin()
             {
                 ImGuiHelper::TableSetColumnIndex(col);
                 ImGuiHelper::PushID(col);
-                hori_header->PaintSection(col);
+                hori->PaintSection(col);
                 ImGuiHelper::PopID();
             }
         }
 
-        auto vert_header = VerticalHeader();
-        bool paint_vert_header = vert_header && vert_header->Visible();
-        if (paint_vert_header)
+        auto vert = VerticalHeader();
+        bool show_vert = vert && vert->Visible();
+        if (show_vert)
             --col_count;
 
-        auto item_delegate = ItemDelegate();
+        auto d = ItemDelegate();
         for (size_t row = 0; row < row_count; ++row)
         {
             ImGuiHelper::TableNextRow();
-            if (paint_vert_header)
+            if (show_vert)
             {
                 ImGuiHelper::PushID(row);
-                vert_header->PaintSection(row);
+                vert->PaintSection(row);
                 ImGuiHelper::PopID();
             }
-            if (item_delegate)
+            if (d)
             {
                 for (size_t col = 0; col < col_count; ++col)
                 {
                     ImGuiHelper::TableSetColumnIndex(col);
                     ImGuiHelper::PushID(row * 10 + col);
-                    item_delegate->Paint(this, { row, col });
+                    d->Paint(this, { row, col });
                     ImGuiHelper::PopID();
                 }
             }

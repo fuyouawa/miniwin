@@ -9,6 +9,10 @@ Selectable::Selectable(Widget* const parent, std::u8string_view label)
     impl_ = std::make_unique<Impl>(this);
 }
 
+Selectable::~Selectable()
+{
+}
+
 bool Selectable::is_selected() const
 {
     return impl_->cur_selected_;

@@ -1,5 +1,5 @@
 #pragma once
-#include <miniwin/widgets/header_view.h>
+#include <miniwin/widgets/headerview.h>
 
 namespace miniwin {
 class HeaderView::Impl {

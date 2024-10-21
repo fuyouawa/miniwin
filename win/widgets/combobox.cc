@@ -2,11 +2,66 @@
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
+ComboBoxView::ComboBoxView(Widget* parent, std::u8string_view label)
+	: AbstractItemView(parent)
+{
+	impl_ = std::make_unique<Impl>(this);
+	impl_->Init();
+	set_label(label);
+}
+
+ComboBoxView::~ComboBoxView()
+{
+}
+
+std::u8string_view ComboBoxView::label() const
+{
+	return name();
+}
+
+void ComboBoxView::set_label(std::u8string_view label)
+{
+	set_name(label);
+}
+
+ComboBoxFlags ComboBoxView::flags() const
+{
+	return impl_->flags_;
+}
+
+void ComboBoxView::set_flags(ComboBoxFlags flags)
+{
+	impl_->flags_ = flags;
+}
+
+void ComboBoxView::PaintBegin()
+{
+	AbstractItemView::PaintBegin();
+	auto cs = SelectionModel()->current_selection();
+	auto m = Model();
+	auto text = m->Data(cs.top_left()).ToString();
+	if (ImGuiHelper::BeginCombo(label(), text, size(), flags()))
+	{
+		if (auto d = ItemDelegate())
+		{
+			for (size_t i = 0; i < m->RowCount(); ++i)
+			{
+				d->Paint(this, { i, 0 });
+			}
+		}
+		ImGuiHelper::EndCombo();
+	}
+}
+
 ComboBox::ComboBox(Widget* parent, std::u8string_view label)
 	: Widget(parent, u8"ComboBox", WidgetType::kView)
 {
 	impl_ = std::make_unique<Impl>(this);
 	impl_->Init(label);
+}
+
+ComboBox::~ComboBox()
+{
 }
 
 ComboBoxFlags ComboBox::flags() const

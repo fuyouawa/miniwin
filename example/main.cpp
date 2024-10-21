@@ -3,18 +3,18 @@
 
 #include "miniwin/model/standard_item_model.h"
 #include "miniwin/widgets/combobox.h"
-#include "miniwin/widgets/input_text.h"
-#include "miniwin/widgets/table_view.h"
-#include "miniwin/widgets/text.h"
+#include "miniwin/widgets/textedit.h"
+#include "miniwin/widgets/tableview.h"
+#include "miniwin/widgets/label.h"
 
 class ExampleWindow : public miniwin::Window
 {
 public:
-	ExampleWindow(const std::u8string_view& title, bool show)
+	ExampleWindow(const std::u8string_view& title)
 		: Window(title)
 	{
-        text_ = new miniwin::Text(this, u8"j士大夫jbb");
-        input_text_ = new miniwin::InputText(this, u8"6665", u8"fffff");
+        label_ = new miniwin::Label(this, u8"j士大夫jbb");
+        text_edit_ = new miniwin::TextEdit(this, u8"6665", u8"fffff");
         table_view_ = new miniwin::TableView(this);
 
         // 实例化一个Model
@@ -40,8 +40,8 @@ public:
         combobox_->AddItems({ u8"啥啥啥", u8"dff单独", u8"ff当我" });
 	}
 
-    miniwin::Text* text_;
-    miniwin::InputText* input_text_;
+    miniwin::Label* label_;
+    miniwin::TextEdit* text_edit_;
     miniwin::TableView* table_view_;
     miniwin::ComboBox* combobox_;
 };
@@ -51,7 +51,7 @@ int main() {
 	miniwin::Application app;
     app.SetHideMainWindow(true);
 
-	auto window = new ExampleWindow{ u8"Example Window", true };
+	auto window = new ExampleWindow{ u8"Example Window" };
 
 	app.Execute();
 }

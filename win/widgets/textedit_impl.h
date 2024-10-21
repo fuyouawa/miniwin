@@ -1,13 +1,13 @@
 #pragma once
-#include <miniwin/widgets/input_text.h>
+#include <miniwin/widgets/textedit.h>
 #include <string>
 
 namespace miniwin {
-class InputText::Impl {
+class TextEdit::Impl {
 public:
-    Impl(InputText* owner);
+    Impl(TextEdit* owner);
 
-    InputText* owner_;
+    TextEdit* owner_;
     std::u8string text_;
     InputTextFlags flags_ = InputTextFlags::kNone;
 };

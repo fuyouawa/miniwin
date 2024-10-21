@@ -36,10 +36,51 @@ int InputTextCallback(ImGuiInputTextCallbackData* data)
     }
     return 0;
 }
+
+ImVec2 Cast2Im(const Vector2& vec) {
+    return { vec.x(), vec.y() };
+}
 }
 
-ImVec2 Cast(const Vector2& vec) {
-	return { vec.x(), vec.y()};
+class ImGuiHelper::ListClipper::Impl
+{
+public:
+    ImGuiListClipper clipper_;
+};
+
+ImGuiHelper::ListClipper::ListClipper()
+{
+    impl_ = new Impl();
+}
+
+ImGuiHelper::ListClipper::~ListClipper()
+{
+    delete impl_;
+}
+
+void ImGuiHelper::ListClipper::Begin(size_t items_count, float items_height)
+{
+    impl_->clipper_.Begin(items_count, items_height);
+}
+
+bool ImGuiHelper::ListClipper::Step()
+{
+    return impl_->clipper_.Step();
+}
+
+void ImGuiHelper::ListClipper::End()
+{
+    impl_->clipper_.End();
+}
+
+size_t ImGuiHelper::ListClipper::display_start() const
+{
+    return impl_->clipper_.DisplayStart;
+}
+
+size_t ImGuiHelper::ListClipper::display_end() const
+{
+    return impl_->clipper_.DisplayEnd;
 }
 
 bool ImGuiHelper::IsWindowDocked()
@@ -77,7 +118,7 @@ void ImGuiHelper::Text(std::u8string_view label, const Vector2& size) {
 }
 
 bool ImGuiHelper::Button(std::u8string_view label, const Vector2& size) {
-	return ImGui::Button(cstr(label), Cast(size));
+	return ImGui::Button(cstr(label), Cast2Im(size));
 }
 
 bool ImGuiHelper::Selectable(std::u8string_view label, bool* is_selected, SelectableFlags flags, const Vector2& size) {
@@ -85,7 +126,7 @@ bool ImGuiHelper::Selectable(std::u8string_view label, bool* is_selected, Select
         cstr(label),
         is_selected,
         static_cast<int>(flags),
-        Cast(size));
+        Cast2Im(size));
 }
 
 bool ImGuiHelper::InputText(std::u8string_view label,
@@ -129,8 +170,18 @@ void ImGuiHelper::EndCombo()
     ImGui::EndCombo();
 }
 
+bool ImGuiHelper::BeginListBox(std::u8string_view label, const Vector2& size)
+{
+    return ImGui::BeginListBox(cstr(label), Cast2Im(size));
+}
+
+void ImGuiHelper::EndListBox()
+{
+    ImGui::EndListBox();
+}
+
 bool ImGuiHelper::BeginTable(std::u8string_view id, size_t column, TableFlags flags, const Vector2& size, float inner_width) {
-	return ImGui::BeginTable(cstr(id), static_cast<int>(column), static_cast<int>(flags), Cast(size), inner_width);
+	return ImGui::BeginTable(cstr(id), static_cast<int>(column), static_cast<int>(flags), Cast2Im(size), inner_width);
 }
 
 void ImGuiHelper::EndTable() {

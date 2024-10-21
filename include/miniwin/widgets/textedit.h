@@ -2,10 +2,11 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class InputText : public AbstractControl
+class TextEdit : public AbstractControl
 {
 public:
-    InputText(Widget* parent, std::u8string_view label, std::u8string_view initial_text = u8"");
+    TextEdit(Widget* parent, std::u8string_view label, std::u8string_view initial_text = u8"");
+    ~TextEdit() override;
 
     void set_text(std::u8string_view text);
     std::u8string_view text() const;

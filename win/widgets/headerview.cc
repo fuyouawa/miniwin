@@ -1,4 +1,4 @@
-#include "header_view_impl.h"
+#include "headerview_impl.h"
 
 #include <miniwin/core/imgui_helper.h>
 
@@ -9,6 +9,10 @@ HeaderView::HeaderView(Widget* parent, Orientation orientation)
     impl_ = std::make_unique<Impl>(this, orientation);
 }
 
+HeaderView::~HeaderView()
+{
+}
+
 Orientation HeaderView::orientation() const
 {
     return impl_->orientation_;
@@ -16,8 +20,8 @@ Orientation HeaderView::orientation() const
 
 void HeaderView::PaintSection(size_t section)
 {
-    auto model = Model();
-    auto label = model->HeaderData(section, orientation()).ToString();
+    auto m = Model();
+    auto label = m->HeaderData(section, orientation()).ToString();
     if (orientation() == Orientation::Horizontal)
     {
         ImGuiHelper::TableHeader(label);
