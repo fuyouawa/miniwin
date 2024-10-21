@@ -110,15 +110,15 @@ void StandardItemModel::SetFlags(const ModelIndex& index, int flags)
 }
 
 
-Variant StandardItemModel::HeaderData(size_t section, Orientation orientation, ItemRole role) const
+Variant StandardItemModel::HeaderData(size_t section, HeaderOrientation orientation, ItemRole role) const
 {
     StandardLineItems* items = nullptr;
     switch (orientation)
     {
-    case Orientation::Horizontal:
+    case HeaderOrientation::Horizontal:
         items = &impl_->horizontal_header_items_;
         break;
-    case Orientation::Vertical:
+    case HeaderOrientation::Vertical:
         items = &impl_->vertical_header_items_;
         break;
     default:
@@ -135,15 +135,15 @@ Variant StandardItemModel::HeaderData(size_t section, Orientation orientation, I
     return {};
 }
 
-void StandardItemModel::SetHeaderData(size_t section, Orientation orientation, const Variant& data, ItemRole role)
+void StandardItemModel::SetHeaderData(size_t section, HeaderOrientation orientation, const Variant& data, ItemRole role)
 {
     StandardLineItems* items = nullptr;
     switch (orientation)
     {
-    case Orientation::Horizontal:
+    case HeaderOrientation::Horizontal:
         items = &impl_->horizontal_header_items_;
         break;
-    case Orientation::Vertical:
+    case HeaderOrientation::Vertical:
         items = &impl_->vertical_header_items_;
         break;
     default:
@@ -153,13 +153,13 @@ void StandardItemModel::SetHeaderData(size_t section, Orientation orientation, c
     (*items)[section][role] = data;
 }
 
-std::u8string_view StandardItemModel::HeaderText(int section, Orientation orientation) const
+std::u8string_view StandardItemModel::HeaderText(int section, HeaderOrientation orientation) const
 {
     auto d = HeaderData(section, orientation, ItemRole::Display);
     return d.ToString();
 }
 
-void StandardItemModel::SetHeaderText(int section, Orientation orientation, std::u8string_view text)
+void StandardItemModel::SetHeaderText(int section, HeaderOrientation orientation, std::u8string_view text)
 {
     SetHeaderData(section, orientation, text, ItemRole::Display);
 }
@@ -170,7 +170,7 @@ void StandardItemModel::SetHorizontalHeaderTexts(std::initializer_list<std::u8st
     size_t i = 0;
     for (auto t : texts)
     {
-        SetHeaderText(i, Orientation::Horizontal, t);
+        SetHeaderText(i, HeaderOrientation::Horizontal, t);
         ++i;
     }
 }
@@ -181,18 +181,18 @@ void StandardItemModel::SetVerticalHeaderTexts(std::initializer_list<std::u8stri
     size_t i = 0;
     for (auto t : texts)
     {
-        SetHeaderText(i, Orientation::Vertical, t);
+        SetHeaderText(i, HeaderOrientation::Vertical, t);
         ++i;
     }
 }
 
-int StandardItemModel::HeaderFlags(int section, Orientation orientation) const
+int StandardItemModel::HeaderFlags(int section, HeaderOrientation orientation) const
 {
     auto d = HeaderData(section, orientation, ItemRole::Flags);
     return d.ToInt32();
 }
 
-void StandardItemModel::SetHeaderFlags(int section, Orientation orientation, int flags)
+void StandardItemModel::SetHeaderFlags(int section, HeaderOrientation orientation, int flags)
 {
     SetHeaderData(section, orientation, flags, ItemRole::Flags);
 }

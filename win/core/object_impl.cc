@@ -14,8 +14,8 @@ auto& signal_mutex(const Object* obj) {
 }
 }   // namespace
 
-Object::Impl::Impl(Object* owner, ObjectType object_type)
-    : owner_(owner), object_type_(object_type), connections_manager_()
+Object::Impl::Impl(Object* owner)
+    : owner_(owner), connections_manager_()
 {
 }
 

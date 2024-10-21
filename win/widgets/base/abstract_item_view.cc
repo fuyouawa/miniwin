@@ -7,7 +7,7 @@
 
 namespace miniwin {
 AbstractItemView::AbstractItemView(Widget* parent)
-    : Widget(parent, u8"View", WidgetType::kView)
+    : Widget(parent, u8"View")
 {
     impl_ = std::make_unique<Impl>(this);
 }

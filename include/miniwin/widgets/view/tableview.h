@@ -1,6 +1,6 @@
 #pragma once
 #include <miniwin/widgets/base/abstract_item_view.h>
-#include <miniwin/widgets/headerview.h>
+#include <miniwin/widgets/view/headerview.h>
 
 
 namespace miniwin {
@@ -10,11 +10,11 @@ public:
     TableView(Widget* parent, std::u8string_view id = u8"TableView");
     ~TableView() override;
 
-    std::u8string_view id() const;
-    void set_id(std::u8string_view id);
+    std::u8string_view Id() const;
+    void SetId(std::u8string_view id);
 
-    TableFlags flags() const;
-    void set_flags(TableFlags flags);
+    TableFlags Flags() const;
+    void SetFlags(TableFlags flags);
 
     HeaderView* HorizontalHeader() const;
     void SetHorizontalHeader(HeaderView* header);

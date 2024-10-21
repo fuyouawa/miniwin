@@ -12,8 +12,8 @@ public:
 	bool IsAllocMultiSelect() const;
 	void SetAllocMultiSelect(bool b);
 
-	SelectableFlags selectable_flags() const;
-	void set_selectable_flags(SelectableFlags flags);
+	SelectableFlags Flags() const;
+	void SetFlags(SelectableFlags flags);
 
 	void Paint(AbstractItemView* view, const ModelIndex& index) override;
 

@@ -5,38 +5,49 @@
 
 namespace miniwin {
 TextEdit::TextEdit(Widget* const parent, std::u8string_view label, std::u8string_view initial_text)
-	: AbstractControl{ parent, label }
+	: Widget{ parent, u8"TextEdit" }
 {
     impl_ = std::make_unique<Impl>(this);
-    set_text(initial_text);
+    SetPlainText(initial_text);
+    SetLabel(label);
 }
 
 TextEdit::~TextEdit()
 {
 }
 
-void TextEdit::set_text(std::u8string_view text)
+std::u8string_view TextEdit::Label() const
 {
-    impl_->text_ = text;
+    return impl_->label_;
 }
 
-std::u8string_view TextEdit::text() const
+void TextEdit::SetLabel(std::u8string_view label)
 {
-    return impl_->text_;
+    impl_->label_ = label;
 }
 
-InputTextFlags TextEdit::flags() const
+void TextEdit::SetPlainText(std::u8string_view text)
+{
+    impl_->text_buffer_ = text;
+}
+
+std::u8string_view TextEdit::PlainText() const
+{
+    return impl_->text_buffer_;
+}
+
+InputTextFlags TextEdit::Flags() const
 {
     return impl_->flags_;
 }
 
-inline void TextEdit::set_flags(InputTextFlags flags) const
+inline void TextEdit::SetFlags(InputTextFlags flags) const
 {
     impl_->flags_ = flags;
 }
 
 void TextEdit::PaintBegin() {
-    AbstractControl::PaintBegin();
-	ImGuiHelper::InputText(label(), &impl_->text_, flags(), size());
+    Widget::PaintBegin();
+	ImGuiHelper::InputText(Label(), &impl_->text_buffer_, Flags(), Size());
 }
 }

@@ -7,28 +7,28 @@ ListView::ListView(Widget* parent, std::u8string_view label)
 {
 	impl_ = std::make_unique<Impl>(this);
 	impl_->Init();
-	set_label(label);
+	SetText(label);
 }
 
 ListView::~ListView()
 {
 }
 
-std::u8string_view ListView::label() const
+std::u8string_view ListView::Text() const
 {
-	return name();
+	return Name();
 }
 
-void ListView::set_label(std::u8string_view label)
+void ListView::SetText(std::u8string_view label)
 {
-	set_name(label);
+	SetName(label);
 }
 
 void ListView::PaintBegin()
 {
 	AbstractItemView::PaintBegin();
 	auto m = Model();
-	if (ImGuiHelper::BeginListBox(label(), size()))
+	if (ImGuiHelper::BeginListBox(Text(), Size()))
 	{
 		if (auto d = ItemDelegate())
 		{

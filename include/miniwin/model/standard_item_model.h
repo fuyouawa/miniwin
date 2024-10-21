@@ -19,8 +19,8 @@ public:
     Variant Data(const ModelIndex& index, ItemRole role) const override;
     void SetData(const ModelIndex& index, const Variant& data, ItemRole role) override;
 
-    Variant HeaderData(size_t section, Orientation orientation, ItemRole role) const override;
-    void SetHeaderData(size_t section, Orientation orientation, const Variant& data, ItemRole role) override;
+    Variant HeaderData(size_t section, HeaderOrientation orientation, ItemRole role) const override;
+    void SetHeaderData(size_t section, HeaderOrientation orientation, const Variant& data, ItemRole role) override;
 
     std::u8string_view Text(const ModelIndex& index) const;
     void SetText(const ModelIndex& index, std::u8string_view text);
@@ -31,14 +31,14 @@ public:
     int Flags(const ModelIndex& index) const;
     void SetFlags(const ModelIndex& index, int flags);
 
-    std::u8string_view HeaderText(int section, Orientation orientation) const;
-    void SetHeaderText(int section, Orientation orientation, std::u8string_view text);
+    std::u8string_view HeaderText(int section, HeaderOrientation orientation) const;
+    void SetHeaderText(int section, HeaderOrientation orientation, std::u8string_view text);
 
     void SetHorizontalHeaderTexts(std::initializer_list<std::u8string_view> texts);
     void SetVerticalHeaderTexts(std::initializer_list<std::u8string_view> texts);
 
-    int HeaderFlags(int section, Orientation orientation) const;
-    void SetHeaderFlags(int section, Orientation orientation, int flags);
+    int HeaderFlags(int section, HeaderOrientation orientation) const;
+    void SetHeaderFlags(int section, HeaderOrientation orientation, int flags);
 
     void Clear() override;
 

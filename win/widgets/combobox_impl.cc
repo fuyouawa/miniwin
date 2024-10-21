@@ -20,9 +20,9 @@ ComboBox::Impl::Impl(ComboBox* owner)
 {
 }
 
-void ComboBox::Impl::Init(std::u8string_view label)
+void ComboBox::Impl::Init(std::u8string_view text)
 {
-	view_ = new ComboBoxView(owner_, label);
+	view_ = new ComboBoxView(owner_, text);
 	auto model = new StandardItemModel(owner_);
 	model->SetColumnCount(1);
 	view_->SetModel(model);

@@ -6,14 +6,6 @@
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 
 namespace miniwin {
-enum class ObjectType
-{
-    Widget,
-    Model,
-    Delegate,
-    SelectionModel
-};
-
 class Object
 {
 public:
@@ -29,17 +21,15 @@ public:
         std::function<bool()> func_;
     };
 
-    Object(Object* parent, std::u8string_view name, ObjectType object_type);
+    Object(Object* parent, std::u8string_view name);
     virtual ~Object();
 
     const Object* Parent() const;
     void SetParent(Object* parent) const;
     const std::vector<Object*>& Children() const;
 
-    std::u8string_view name() const;
-    void set_name(std::u8string_view name) const;
-
-    ObjectType object_type() const;
+    std::u8string_view Name() const;
+    void SetName(std::u8string_view name) const;
 
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 

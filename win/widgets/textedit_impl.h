@@ -8,7 +8,8 @@ public:
     Impl(TextEdit* owner);
 
     TextEdit* owner_;
-    std::u8string text_;
+    std::u8string text_buffer_;
+    std::u8string label_;
     InputTextFlags flags_ = InputTextFlags::kNone;
 };
 }

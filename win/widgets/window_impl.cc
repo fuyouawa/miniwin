@@ -17,7 +17,7 @@ void Window::Impl::PaintBegin()
     top_sc_.Entry();
 
     bool open = true;
-    ImGuiHelper::BeginWindow(owner_->title(), has_close_button_ ? &open : nullptr, owner_->flags());
+    ImGuiHelper::BeginWindow(owner_->Title(), is_closable_ ? &open : nullptr, owner_->Flags());
 
     is_docking_ = ImGuiHelper::IsWindowDocked();
     // 获取当前窗体句柄, 然后判断是否改变

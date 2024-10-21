@@ -5,9 +5,9 @@ namespace miniwin {
 class AbstractButton : public AbstractControl
 {
 public:
-	AbstractButton(Widget* parent, std::u8string_view label);
+	AbstractButton(Widget* parent, std::u8string_view text);
 
-    bool checked() const;
+    bool IsChecked() const;
     
     MW_SIGNAL(OnClicked)
     MW_SIGNAL(OnToggled, (bool) checked)

@@ -18,7 +18,7 @@ public:
     void* hwnd_ = nullptr;
     void* prev_hwnd_ = nullptr;
     bool is_docking_ = false;
-    bool has_close_button_ = true;
+    bool is_closable_ = true;
     Window* owner_;
 };
 }

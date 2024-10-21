@@ -1,18 +1,21 @@
 #pragma once
-#include <miniwin/widgets/base/abstract_control.h>
+#include <miniwin/core/widget.h>
 
 namespace miniwin {
-class TextEdit : public AbstractControl
+class TextEdit : public Widget
 {
 public:
     TextEdit(Widget* parent, std::u8string_view label, std::u8string_view initial_text = u8"");
     ~TextEdit() override;
 
-    void set_text(std::u8string_view text);
-    std::u8string_view text() const;
+    std::u8string_view Label() const;
+    void SetLabel(std::u8string_view label);
 
-    InputTextFlags flags() const;
-    void set_flags(InputTextFlags flags) const;
+    void SetPlainText(std::u8string_view text);
+    std::u8string_view PlainText() const;
+
+    InputTextFlags Flags() const;
+    void SetFlags(InputTextFlags flags) const;
     
 protected:
     void PaintBegin() override;

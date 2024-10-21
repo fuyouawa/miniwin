@@ -5,10 +5,10 @@ namespace miniwin {
 class AbstractControl : public Widget
 {
 public:
-	AbstractControl(Widget* parent, std::u8string_view label);
+	AbstractControl(Widget* parent, std::u8string_view text);
 	
-    std::u8string_view label() const;
-    void set_label(std::u8string_view label);
+    std::u8string_view Text() const;
+    void SetText(std::u8string_view text);
 
     bool Visible() const override;
 };

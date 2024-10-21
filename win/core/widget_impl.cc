@@ -5,9 +5,8 @@
 #include <ranges>
 
 namespace miniwin {
-Widget::Impl::Impl(Widget* owner, WidgetType widget_type)
-    : widget_type_(widget_type),
-      owner_(owner)
+Widget::Impl::Impl(Widget* owner)
+	:owner_(owner)
 {
 }
 
@@ -18,10 +17,9 @@ Widget::Impl::~Impl()
 void Widget::Impl::Close()
 {
     orphaned_ = true;
-    if (widget_type_ != WidgetType::kWindow)
+    auto p = WidgetParent();
+    if (p)
     {
-        auto p = WidgetParent();
-        assert(p);
         p->impl_->dirty_ = true;
     }
 }
@@ -64,7 +62,6 @@ const Widget* Widget::Impl::WidgetParent() const
     if (auto p = owner_->Parent())
     {
         auto p2 = dynamic_cast<const Widget*>(p);
-        assert(p2);
         return p2;
     }
     return nullptr;

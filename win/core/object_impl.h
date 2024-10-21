@@ -7,7 +7,7 @@
 namespace miniwin {
 class Object::Impl {
 public:
-    explicit Impl(Object* owner, ObjectType object_type);
+    explicit Impl(Object* owner);
 
     ~Impl();
 
@@ -57,7 +57,6 @@ public:
     Object* owner_ = nullptr;
     Object* parent_ = nullptr;
     std::u8string name_;
-    ObjectType object_type_;
     std::vector<Object*> children_;
     std::vector<ConnectionPtr> connected_sender_connections_;    // 连接到的发送者
     ConnectionsManager connections_manager_;

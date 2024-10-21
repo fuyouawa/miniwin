@@ -2,34 +2,34 @@
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
-ComboBoxView::ComboBoxView(Widget* parent, std::u8string_view label)
+ComboBoxView::ComboBoxView(Widget* parent, std::u8string_view text)
 	: AbstractItemView(parent)
 {
 	impl_ = std::make_unique<Impl>(this);
 	impl_->Init();
-	set_label(label);
+	SetText(text);
 }
 
 ComboBoxView::~ComboBoxView()
 {
 }
 
-std::u8string_view ComboBoxView::label() const
+std::u8string_view ComboBoxView::Text() const
 {
-	return name();
+	return Name();
 }
 
-void ComboBoxView::set_label(std::u8string_view label)
+void ComboBoxView::SetText(std::u8string_view text)
 {
-	set_name(label);
+	SetName(text);
 }
 
-ComboBoxFlags ComboBoxView::flags() const
+ComboBoxFlags ComboBoxView::Flags() const
 {
 	return impl_->flags_;
 }
 
-void ComboBoxView::set_flags(ComboBoxFlags flags)
+void ComboBoxView::SetFlags(ComboBoxFlags flags)
 {
 	impl_->flags_ = flags;
 }
@@ -37,10 +37,10 @@ void ComboBoxView::set_flags(ComboBoxFlags flags)
 void ComboBoxView::PaintBegin()
 {
 	AbstractItemView::PaintBegin();
-	auto cs = SelectionModel()->current_selection();
+	auto cs = SelectionModel()->CurrentSelection();
 	auto m = Model();
 	auto text = m->Data(cs.top_left()).ToString();
-	if (ImGuiHelper::BeginCombo(label(), text, size(), flags()))
+	if (ImGuiHelper::BeginCombo(Text(), text, Size(), Flags()))
 	{
 		if (auto d = ItemDelegate())
 		{
@@ -53,35 +53,35 @@ void ComboBoxView::PaintBegin()
 	}
 }
 
-ComboBox::ComboBox(Widget* parent, std::u8string_view label)
-	: Widget(parent, u8"ComboBox", WidgetType::kView)
+ComboBox::ComboBox(Widget* parent, std::u8string_view text)
+	: Widget(parent, u8"ComboBox")
 {
 	impl_ = std::make_unique<Impl>(this);
-	impl_->Init(label);
+	impl_->Init(text);
 }
 
 ComboBox::~ComboBox()
 {
 }
 
-ComboBoxFlags ComboBox::flags() const
+ComboBoxFlags ComboBox::Flags() const
 {
-	return impl_->view_->flags();
+	return impl_->view_->Flags();
 }
 
-void ComboBox::set_flags(ComboBoxFlags flags) const
+void ComboBox::SetFlags(ComboBoxFlags flags) const
 {
-	impl_->view_->set_flags(flags);
+	impl_->view_->SetFlags(flags);
 }
 
-std::u8string_view ComboBox::label() const
+std::u8string_view ComboBox::Text() const
 {
-	return impl_->view_->label();
+	return impl_->view_->Text();
 }
 
-void ComboBox::set_label(std::u8string_view label)
+void ComboBox::SetText(std::u8string_view text)
 {
-	impl_->view_->set_label(label);
+	impl_->view_->SetText(text);
 }
 
 void ComboBox::SetItemDelegate(AbstractItemDelegate* delegate)
@@ -106,7 +106,7 @@ AbstractItemModel* ComboBox::Model() const
 
 size_t ComboBox::CurrentIndex() const
 {
-	auto s = impl_->view_->SelectionModel()->current_selection();
+	auto s = impl_->view_->SelectionModel()->CurrentSelection();
 	if (s.valid())
 	{
 		return s.top_left().row();

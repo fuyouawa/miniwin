@@ -8,11 +8,10 @@
 #include "widgets_driver.h"
 
 namespace miniwin {
-Widget::Widget(Widget* parent, std::u8string_view name, WidgetType widget_type)
-    : Object(parent, name, ObjectType::Widget)
+Widget::Widget(Widget* parent, std::u8string_view name)
+    : Object(parent, name)
 {
-    impl_ = std::make_unique<Impl>(this, widget_type);
-    impl_->widget_type_ = widget_type;
+    impl_ = std::make_unique<Impl>(this);
 }
 
 Widget::~Widget()
@@ -42,15 +41,15 @@ const std::vector<Widget*>& Widget::WidgetChildren() const
 void Widget::SetEnable(bool b) const { impl_->SetEnable(b); }
 
 
-Vector2 Widget::size() const {
+Vector2 Widget::Size() const {
     return impl_->size_sc_.get();
 }
 
-void Widget::set_size(const Vector2& size) const {
+void Widget::SetSize(const Vector2& size) const {
     impl_->size_sc_.set_control(size);
 }
 
-bool Widget::orphaned() const
+bool Widget::Orphaned() const
 {
     return impl_->orphaned_;
 }
@@ -66,16 +65,12 @@ void Widget::SetVisible(bool b) const
     impl_->SetVisible(b);
 }
 
-WidgetType Widget::widget_type() const {
-    return impl_->widget_type_;
-}
-
-WidgetDrawFlags Widget::draw_flags() const
+WidgetDrawFlags Widget::DrawFlags() const
 {
     return impl_->draw_flags_;
 }
 
-void Widget::set_draw_flags(WidgetDrawFlags draw_flags)
+void Widget::SetDrawFlags(WidgetDrawFlags draw_flags)
 {
     impl_->draw_flags_ = draw_flags;
 }
@@ -107,7 +102,7 @@ void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const
 
 bool Widget::IsInUIThread()
 {
-    return std::this_thread::get_id() == WidgetsDriver::instance().ui_thread_id();
+    return std::this_thread::get_id() == WidgetsDriver::instance().UiThreadId();
 }
 
 void Widget::PreparePaint()

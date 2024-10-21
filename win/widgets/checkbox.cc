@@ -7,12 +7,12 @@ CheckBox::CheckBox(Widget* const parent, std::u8string_view label)
 {
 }
 
-void CheckBox::set_checked(bool b) {
+void CheckBox::SetChecked(bool b) {
     cur_checked_ = b;
 }
 
 void CheckBox::PaintBegin() {
     AbstractButton::PaintBegin();
-	ImGuiHelper::CheckBox(label(), &cur_checked_, size());
+	ImGuiHelper::CheckBox(Text(), &cur_checked_, Size());
 }
 }

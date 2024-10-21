@@ -3,7 +3,7 @@
 
 namespace miniwin {
 Window::Window(std::u8string_view title)
-	: Widget(nullptr, title, WidgetType::kWindow)
+	: Widget(nullptr, title)
 {
     impl_ = std::make_unique<Impl>(this);
 }
@@ -12,20 +12,20 @@ Window::~Window()
 {
 }
 
-std::u8string_view Window::title() const {
-    return name();
+std::u8string_view Window::Title() const {
+    return Name();
 }
 
-void Window::set_title(std::u8string_view title) const {
-    set_name(title);
+void Window::SetTitle(std::u8string_view title) const {
+    SetName(title);
 }
 
-WindowFlags Window::flags() const
+WindowFlags Window::Flags() const
 {
     return impl_->flags_;
 }
 
-void Window::set_flags(WindowFlags flags)
+void Window::SetFlags(WindowFlags flags)
 {
     impl_->flags_ = flags;
 }
@@ -35,16 +35,16 @@ void Window::EnableTop(bool b) const
     impl_->top_sc_.set_control(b);
 }
 
-void Window::EnableCloseButton(bool b) const
+void Window::SetClosable(bool b) const
 {
-    impl_->has_close_button_ = b;
+    impl_->is_closable_ = b;
 }
 
-bool Window::has_close_button() const {
-	return impl_->has_close_button_;
+bool Window::IsClosable() const {
+	return impl_->is_closable_;
 }
 
-bool Window::is_docking() const {
+bool Window::IsDocking() const {
 	return impl_->is_docking_;
 }
 

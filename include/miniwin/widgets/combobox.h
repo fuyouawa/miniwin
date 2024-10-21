@@ -10,14 +10,14 @@ namespace miniwin {
 class ComboBoxView : public AbstractItemView
 {
 public:
-	ComboBoxView(Widget* parent, std::u8string_view label);
+	ComboBoxView(Widget* parent, std::u8string_view text);
 	~ComboBoxView() override;
 
-	std::u8string_view label() const;
-	void set_label(std::u8string_view label);
+	std::u8string_view Text() const;
+	void SetText(std::u8string_view text);
 
-	ComboBoxFlags flags() const;
-	void set_flags(ComboBoxFlags flags);
+	ComboBoxFlags Flags() const;
+	void SetFlags(ComboBoxFlags flags);
 
 protected:
 	void PaintBegin() override;
@@ -27,14 +27,14 @@ protected:
 
 class ComboBox : public Widget {
 public:
-	ComboBox(Widget* parent, std::u8string_view label);
+	ComboBox(Widget* parent, std::u8string_view text);
 	~ComboBox() override;
 
-	ComboBoxFlags flags() const;
-	void set_flags(ComboBoxFlags flags) const;
+	ComboBoxFlags Flags() const;
+	void SetFlags(ComboBoxFlags flags) const;
 
-	std::u8string_view label() const;
-	void set_label(std::u8string_view label);
+	std::u8string_view Text() const;
+	void SetText(std::u8string_view text);
 
 	void SetItemDelegate(AbstractItemDelegate* delegate);
 	AbstractItemDelegate* ItemDelegate() const;

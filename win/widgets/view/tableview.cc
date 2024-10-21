@@ -13,7 +13,7 @@ TableView::TableView(Widget* parent, std::u8string_view id)
     impl_ = std::make_unique<Impl>(this);
     impl_->id_ = id;
     impl_->Init();
-    set_flags(TableFlags::kBorders);
+    SetFlags(TableFlags::kBorders);
 }
 
 TableView::~TableView()
@@ -22,22 +22,22 @@ TableView::~TableView()
 
 HeaderView* TableView::HorizontalHeader() const
 {
-    return impl_->Header(Orientation::Horizontal);
+    return impl_->Header(HeaderOrientation::Horizontal);
 }
 
 void TableView::SetHorizontalHeader(HeaderView* header)
 {
-    impl_->SetHeader(Orientation::Horizontal, header);
+    impl_->SetHeader(HeaderOrientation::Horizontal, header);
 }
 
 HeaderView* TableView::VerticalHeader() const
 {
-    return impl_->Header(Orientation::Vertical);
+    return impl_->Header(HeaderOrientation::Vertical);
 }
 
 void TableView::SetVerticalHeader(HeaderView* header)
 {
-    impl_->SetHeader(Orientation::Vertical, header);
+    impl_->SetHeader(HeaderOrientation::Vertical, header);
 }
 
 void TableView::PaintBegin()
@@ -47,15 +47,15 @@ void TableView::PaintBegin()
     auto col_count = m->ColumnCount();
     auto row_count = m->RowCount();
 
-    if (ImGuiHelper::BeginTable(id(), col_count, flags(), size()))
+    if (ImGuiHelper::BeginTable(Id(), col_count, Flags(), Size()))
     {
         auto hori = HorizontalHeader();
         if (hori && hori->Visible())
         {
             for (size_t col = 0; col < col_count; ++col)
             {
-                auto text = m->HeaderData(col, Orientation::Horizontal, ItemRole::Display).ToString();
-                auto flags = m->HeaderData(col, Orientation::Horizontal, ItemRole::Flags).ToInt32();
+                auto text = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Display).ToString();
+                auto flags = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Flags).ToInt32();
                 ImGuiHelper::TableSetupColumn(text, static_cast<TableColumnFlags>(flags));
             }
             ImGuiHelper::TableNextRow(TableRowFlags::kHeaders);
@@ -100,22 +100,22 @@ void TableView::PaintBegin()
     }
 }
 
-std::u8string_view TableView::id() const
+std::u8string_view TableView::Id() const
 {
     return impl_->id_;
 }
 
-void TableView::set_id(std::u8string_view id)
+void TableView::SetId(std::u8string_view id)
 {
     impl_->id_ = id;
 }
 
-TableFlags TableView::flags() const
+TableFlags TableView::Flags() const
 {
     return impl_->flags_;
 }
 
-void TableView::set_flags(TableFlags flags)
+void TableView::SetFlags(TableFlags flags)
 {
     impl_->flags_ = flags;
 }

@@ -41,7 +41,7 @@ class ItemSelectionModel : public Object
 public:
     ItemSelectionModel(Object* parent, AbstractItemModel* model);
 
-    const ItemSelection& current_selection() const;
+    const ItemSelection& CurrentSelection() const;
 
     AbstractItemModel* Model() const;
 

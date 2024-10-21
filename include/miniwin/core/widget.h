@@ -6,16 +6,9 @@
 #include <miniwin/tools/property.h>
 
 namespace miniwin {
-enum class WidgetType {
-    kNone,
-    kWindow,
-    kControl,
-    kView
-};
-
-class Widget : public Object, public NonCopyable {
+class Widget : public Object, public NonCopyMoveable {
 public:
-    Widget(Widget* parent, std::u8string_view name, WidgetType widget_type);
+    Widget(Widget* parent, std::u8string_view name);
     ~Widget() override;
 
     static bool IsInUIThread();
@@ -31,13 +24,12 @@ public:
     virtual bool Enabled() const;
     virtual void SetEnable(bool b) const;
 
-    Vector2 size() const;
-    void set_size(const Vector2& size) const;
+    Vector2 Size() const;
+    void SetSize(const Vector2& size) const;
 
-    bool orphaned() const;
-    WidgetType widget_type() const;
-    WidgetDrawFlags draw_flags() const;
-    void set_draw_flags(WidgetDrawFlags draw_flags);
+    bool Orphaned() const;
+    WidgetDrawFlags DrawFlags() const;
+    void SetDrawFlags(WidgetDrawFlags draw_flags);
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
 

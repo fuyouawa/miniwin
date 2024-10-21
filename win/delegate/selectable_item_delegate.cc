@@ -23,12 +23,12 @@ void SelectableItemDelegate::SetAllocMultiSelect(bool b)
     impl_->alloc_multi_select = b;
 }
 
-SelectableFlags SelectableItemDelegate::selectable_flags() const
+SelectableFlags SelectableItemDelegate::Flags() const
 {
     return impl_->selectable_flags_;
 }
 
-void SelectableItemDelegate::set_selectable_flags(SelectableFlags flags)
+void SelectableItemDelegate::SetFlags(SelectableFlags flags)
 {
     impl_->selectable_flags_ = flags;
 }

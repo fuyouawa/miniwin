@@ -8,17 +8,17 @@ public:
 	Window(std::u8string_view title);
 	~Window() override;
 
-    std::u8string_view title() const;
-    void set_title(std::u8string_view title) const;
+    std::u8string_view Title() const;
+    void SetTitle(std::u8string_view title) const;
 
-    WindowFlags flags() const;
-    void set_flags(WindowFlags flags);
+    WindowFlags Flags() const;
+    void SetFlags(WindowFlags flags);
 
 	void EnableTop(bool b) const;
-	void EnableCloseButton(bool b) const;
+	void SetClosable(bool b) const;
 
-	bool has_close_button() const;
-	bool is_docking() const;
+	bool IsClosable() const;
+	bool IsDocking() const;
 
 protected:
 	void PaintBegin() override;

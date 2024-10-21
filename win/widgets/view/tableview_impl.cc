@@ -12,17 +12,17 @@ void TableView::Impl::Init()
     auto d = new SelectableItemDelegate(owner_);
     owner_->SetItemDelegate(d);
 
-    auto hori = new HeaderView(owner_, Orientation::Horizontal);
+    auto hori = new HeaderView(owner_, HeaderOrientation::Horizontal);
     owner_->SetHorizontalHeader(hori);
     //TODO 垂直表头
 }
 
-HeaderView* TableView::Impl::Header(Orientation orientation)
+HeaderView* TableView::Impl::Header(HeaderOrientation orientation)
 {
     return headers_[orientation];
 }
 
-void TableView::Impl::SetHeader(Orientation orientation, HeaderView* header)
+void TableView::Impl::SetHeader(HeaderOrientation orientation, HeaderView* header)
 {
     auto h = Header(orientation);
     if (!header || header == h)

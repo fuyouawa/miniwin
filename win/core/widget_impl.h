@@ -8,7 +8,7 @@ namespace miniwin {
 class Widget::Impl
 {
 public:
-    explicit Impl(Widget* owner, WidgetType widget_type);
+    explicit Impl(Widget* owner);
     ~Impl();
 
     void Close();
@@ -38,7 +38,6 @@ public:
     bool dirty_ = false;
 
     WidgetDrawFlags draw_flags_ = WidgetDrawFlags::kNone;
-    WidgetType widget_type_;
 
     Widget* owner_;
     std::mutex pending_functors_mutex_;

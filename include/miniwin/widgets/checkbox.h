@@ -7,7 +7,7 @@ class CheckBox : public AbstractButton
 public:
 	CheckBox(Widget* parent, std::u8string_view label);
 
-    void set_checked(bool b);
+    void SetChecked(bool b);
 
 protected:
 	void PaintBegin() override;

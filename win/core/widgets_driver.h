@@ -17,7 +17,7 @@ public:
     void CloseAll();
     void RegisterWindow(Window* window);
 
-    std::thread::id ui_thread_id() const;
+    std::thread::id UiThreadId() const;
 
 private:
     friend class Application;

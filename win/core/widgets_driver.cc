@@ -29,7 +29,7 @@ void WidgetsDriver::Update()
     CallUpdateEarly();
     for (auto& win : windows_)
     {
-        if (!win->orphaned())
+        if (!win->Orphaned())
         {
             UpdateRecursion(win);
         }
@@ -42,7 +42,7 @@ void WidgetsDriver::ClearDirty()
         std::vector<std::vector<Window*>::iterator> orphaned_win_iters;
         for (auto it = windows_.begin(); it != windows_.end(); ++it)
         {
-            if ((*it)->orphaned())
+            if ((*it)->Orphaned())
             {
                 orphaned_win_iters.push_back(it);
             }
@@ -56,7 +56,7 @@ void WidgetsDriver::ClearDirty()
     }
     for (auto& win : windows_)
     {
-        assert(!win->orphaned());
+        assert(!win->Orphaned());
         ClearDirtyRecursion(win);
     }
 }
@@ -117,7 +117,7 @@ void WidgetsDriver::RegisterWindow(Window* window)
     pending_operations_.emplace(Operation::kAdd, window);
 }
 
-std::thread::id WidgetsDriver::ui_thread_id() const
+std::thread::id WidgetsDriver::UiThreadId() const
 {
     return ui_thread_id_;
 }
@@ -126,8 +126,8 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
 {
     if (widget->Visible())
     {
-        auto ignore_self = (widget->draw_flags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
-        auto ignore_children = (widget->draw_flags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
+        auto ignore_self = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
+        auto ignore_children = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
 
         if (!ignore_self) {
             widget->PaintBegin();
@@ -138,7 +138,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
             for (auto& o : widget->Children())
             {
                 auto w = dynamic_cast<Widget*>(o);
-                if (w && !w->orphaned())
+                if (w && !w->Orphaned())
                 {
                     UpdateRecursion(w);
                 }
@@ -175,7 +175,7 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
         std::vector<std::vector<Widget*>::const_iterator> orphaned_children_iters;
         for (auto it = wc.begin(); it != wc.end(); ++it)
         {
-            if ((*it)->orphaned())
+            if ((*it)->Orphaned())
             {
                 orphaned_children_iters.push_back(it);
             }
@@ -188,7 +188,7 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
     }
     for (auto c : widget->WidgetChildren())
     {
-        assert(!c->orphaned());
+        assert(!c->Orphaned());
         ClearDirtyRecursion(c);
     }
 }

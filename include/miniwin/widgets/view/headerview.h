@@ -5,15 +5,15 @@ namespace miniwin {
 class HeaderView : public AbstractItemView
 {
 public:
-    HeaderView(Widget* parent, Orientation orientation);
+    HeaderView(Widget* parent, HeaderOrientation orientation);
     ~HeaderView() override;
 
-    Orientation orientation() const;
+    HeaderOrientation Orientation() const;
 
     virtual void PaintSection(size_t section);
 
 private:
-    using AbstractItemView::set_draw_flags;
+    using AbstractItemView::SetDrawFlags;
 
     _MW_IMPL
 };

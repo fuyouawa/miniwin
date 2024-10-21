@@ -8,11 +8,11 @@ public:
     Selectable(Widget* parent, std::u8string_view label);
     ~Selectable() override;
 
-    bool is_selected() const;
-    void set_selection(bool b);
+    bool IsSelected() const;
+    void SetSelection(bool b);
 
-    SelectableFlags flags() const;
-    void set_flags(SelectableFlags flags);
+    SelectableFlags Flags() const;
+    void SetFlags(SelectableFlags flags);
 
     MW_SIGNAL(OnSelectionChanged, (bool) selected)
 

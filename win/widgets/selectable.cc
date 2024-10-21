@@ -13,22 +13,22 @@ Selectable::~Selectable()
 {
 }
 
-bool Selectable::is_selected() const
+bool Selectable::IsSelected() const
 {
     return impl_->cur_selected_;
 }
 
-void Selectable::set_selection(bool b)
+void Selectable::SetSelection(bool b)
 {
     impl_->cur_selected_ = b;
 }
 
-SelectableFlags Selectable::flags() const
+SelectableFlags Selectable::Flags() const
 {
     return impl_->flags_;
 }
 
-void Selectable::set_flags(SelectableFlags flags)
+void Selectable::SetFlags(SelectableFlags flags)
 {
     impl_->flags_ = flags;
 }
@@ -37,7 +37,7 @@ void Selectable::PaintBegin()
 {
     AbstractControl::PaintBegin();
 
-    ImGuiHelper::Selectable(label(), &impl_->cur_selected_, flags(), size());
+    ImGuiHelper::Selectable(Text(), &impl_->cur_selected_, Flags(), Size());
     if (impl_->cur_selected_ != impl_->prev_selected_) {
         OnSelectionChanged(impl_->cur_selected_);
     }

@@ -4,8 +4,9 @@
 #include "miniwin/model/standard_item_model.h"
 #include "miniwin/widgets/combobox.h"
 #include "miniwin/widgets/textedit.h"
-#include "miniwin/widgets/tableview.h"
+#include "miniwin/widgets/view/tableview.h"
 #include "miniwin/widgets/label.h"
+#include "miniwin/widgets/view/listview.h"
 
 class ExampleWindow : public miniwin::Window
 {
@@ -14,7 +15,7 @@ public:
 		: Window(title)
 	{
         label_ = new miniwin::Label(this, u8"j士大夫jbb");
-        text_edit_ = new miniwin::TextEdit(this, u8"6665", u8"fffff");
+        text_edit_ = new miniwin::TextEdit(this, u8"asdasd", u8"fffff");
         table_view_ = new miniwin::TableView(this);
 
         // 实例化一个Model
@@ -38,6 +39,7 @@ public:
 
         combobox_ = new miniwin::ComboBox(this, u8"ComboBox");
         combobox_->AddItems({ u8"啥啥啥", u8"dff单独", u8"ff当我" });
+
 	}
 
     miniwin::Label* label_;
