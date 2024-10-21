@@ -43,10 +43,10 @@ public:
 	virtual void Clear() = 0;
 
     virtual Variant Data(const ModelIndex& index, ItemRole role = ItemRole::Display) const = 0;
-    virtual void SetData(const ModelIndex& index, Variant&& data, ItemRole role = ItemRole::Display) = 0;
+    virtual void SetData(const ModelIndex& index, const Variant& data, ItemRole role = ItemRole::Display) = 0;
 
     virtual Variant HeaderData(size_t section, Orientation orientation, ItemRole role = ItemRole::Display) const = 0;
-    virtual void SetHeaderData(size_t section, Orientation orientation, Variant&& data, ItemRole role = ItemRole::Display) = 0;
+    virtual void SetHeaderData(size_t section, Orientation orientation, const Variant& data, ItemRole role = ItemRole::Display) = 0;
 
     virtual bool IsValidIndex(const ModelIndex& index) const;
 

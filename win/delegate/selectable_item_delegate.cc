@@ -1,25 +1,46 @@
-#include <miniwin/delegate/selection_item_delegate.h>
-#include <miniwin/widgets/base/abstract_item_view.h>
+#include "selectable_item_delegate_impl.h"
 
 #include <miniwin/io/input.h>
-#include <miniwin/core/flags.h>
 
 #include <miniwin/core/imgui_helper.h>
 
+#include "miniwin/widgets/base/abstract_item_view.h"
+
 namespace miniwin {
-SelectionItemDelegate::SelectionItemDelegate(Object* parent)
+SelectableItemDelegate::SelectableItemDelegate(Object* parent)
     : AbstractItemDelegate(parent)
 {
+    impl_ = std::make_unique<Impl>(this);
 }
 
-void SelectionItemDelegate::Paint(AbstractItemView* view, const ModelIndex& index)
+bool SelectableItemDelegate::IsAllocMultiSelect() const
+{
+    return impl_->alloc_multi_select;
+}
+
+void SelectableItemDelegate::SetAllocMultiSelect(bool b)
+{
+    impl_->alloc_multi_select = b;
+}
+
+SelectableFlags SelectableItemDelegate::selectable_flags() const
+{
+    return impl_->selectable_flags_;
+}
+
+void SelectableItemDelegate::set_selectable_flags(SelectableFlags flags)
+{
+    impl_->selectable_flags_ = flags;
+}
+
+void SelectableItemDelegate::Paint(AbstractItemView* view, const ModelIndex& index)
 {
     auto model = view->Model();
     auto selection_model = view->SelectionModel();
     auto text = model->Data(index).ToString();
     bool is_selected = selection_model->IsSelected(index);
     if (ImGuiHelper::Selectable(text, &is_selected)) {
-        if (Input::IsIoKeyDown(IoKeyCode::kCtrl)) {
+        if (Input::IsIoKeyDown(IoKeyCode::kCtrl) && IsAllocMultiSelect()) {
             selection_model->Select(index, is_selected
                 ? ItemSelectionType::Select
                 : ItemSelectionType::Deselect);

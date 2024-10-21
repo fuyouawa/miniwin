@@ -2,6 +2,7 @@
 #include <miniwin/widgets/window.h>
 
 #include "miniwin/model/standard_item_model.h"
+#include "miniwin/widgets/combobox.h"
 #include "miniwin/widgets/input_text.h"
 #include "miniwin/widgets/table_view.h"
 #include "miniwin/widgets/text.h"
@@ -14,7 +15,7 @@ public:
 	{
         text_ = new miniwin::Text(this, u8"j士大夫jbb");
         input_text_ = new miniwin::InputText(this, u8"6665", u8"fffff");
-        table_view_ = new miniwin::TableView(this, u8"114514");
+        table_view_ = new miniwin::TableView(this);
 
         // 实例化一个Model
         auto model = new miniwin::StandardItemModel(table_view_);
@@ -34,11 +35,15 @@ public:
         auto selection_model = table_view_->SelectionModel();
         // 设置1行2列选中
         selection_model->Select(0, 1);
+
+        combobox_ = new miniwin::ComboBox(this, u8"ComboBox");
+        combobox_->AddItems({ u8"啥啥啥", u8"dff单独", u8"ff当我" });
 	}
 
     miniwin::Text* text_;
     miniwin::InputText* input_text_;
     miniwin::TableView* table_view_;
+    miniwin::ComboBox* combobox_;
 };
 
 

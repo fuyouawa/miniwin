@@ -2,9 +2,10 @@
 #include <miniwin/core/widget.h>
 #include <miniwin/model/base/abstract_item_model.h>
 #include <miniwin/model/item_selection_model.h>
-#include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {
+class AbstractItemDelegate;
+
 class AbstractItemView : public Widget
 {
 public:

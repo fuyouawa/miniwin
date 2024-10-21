@@ -35,4 +35,7 @@ TableRowFlags operator&(TableRowFlags a, TableRowFlags b) { return And(a, b); }
 
 TableColumnFlags operator|(TableColumnFlags a, TableColumnFlags b) { return Or(a, b); }
 TableColumnFlags operator&(TableColumnFlags a, TableColumnFlags b) { return And(a, b); }
+
+ImGuiComboFlags operator|(ImGuiComboFlags a, ImGuiComboFlags b) { return Or(a, b); }
+ImGuiComboFlags operator&(ImGuiComboFlags a, ImGuiComboFlags b) { return And(a, b); }
 }

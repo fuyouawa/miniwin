@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "miniwin/delegate/base/abstract_item_delegate.h"
+
 
 namespace miniwin {
 AbstractItemView::AbstractItemView(Widget* parent)

@@ -7,17 +7,8 @@ namespace miniwin {
 class TableView : public AbstractItemView
 {
 public:
-    TableView(Widget* parent, std::u8string_view id);
+    TableView(Widget* parent, std::u8string_view id = u8"TableView");
     ~TableView() override;
-
-    HeaderView* HorizontalHeader() const;
-    void SetHorizontalHeader(HeaderView* header);
-
-    HeaderView* VerticalHeader() const;
-    void SetVerticalHeader(HeaderView* header);
-
-    void PaintBegin() override;
-    void PaintEnd() override;
 
     std::u8string_view id() const;
     void set_id(std::u8string_view id);
@@ -25,7 +16,17 @@ public:
     TableFlags flags() const;
     void set_flags(TableFlags flags);
 
+
+    HeaderView* HorizontalHeader() const;
+    void SetHorizontalHeader(HeaderView* header);
+
+    HeaderView* VerticalHeader() const;
+    void SetVerticalHeader(HeaderView* header);
+
     void SetModel(AbstractItemModel* model) override;
+
+protected:
+    void PaintBegin() override;
 
     _MW_IMPL
 };

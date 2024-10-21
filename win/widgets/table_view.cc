@@ -4,11 +4,14 @@
 
 #include <cassert>
 
+#include <miniwin/delegate/base/abstract_item_delegate.h>
+
 namespace miniwin {
 TableView::TableView(Widget* parent, std::u8string_view id)
     : AbstractItemView(parent)
 {
     impl_ = std::make_unique<Impl>(this);
+    impl_->id_ = id;
     impl_->Init();
     set_flags(TableFlags::kBorders);
 }
@@ -41,7 +44,6 @@ void TableView::PaintBegin()
 {
     AbstractItemView::PaintBegin();
     auto model = Model();
-    auto item_delegate = ItemDelegate();
     auto col_count = model->ColumnCount();
     auto row_count = model->RowCount();
 
@@ -72,6 +74,7 @@ void TableView::PaintBegin()
         if (paint_vert_header)
             --col_count;
 
+        auto item_delegate = ItemDelegate();
         for (size_t row = 0; row < row_count; ++row)
         {
             ImGuiHelper::TableNextRow();
@@ -95,11 +98,6 @@ void TableView::PaintBegin()
 
         ImGuiHelper::EndTable();
     }
-}
-
-void TableView::PaintEnd()
-{
-    AbstractItemView::PaintEnd();
 }
 
 std::u8string_view TableView::id() const

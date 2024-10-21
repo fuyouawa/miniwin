@@ -118,6 +118,17 @@ void ImGuiHelper::EndWindow() {
 	ImGui::End();
 }
 
+bool ImGuiHelper::BeginCombo(std::u8string_view label, std::u8string_view preview_value, const Vector2& size,
+	ComboBoxFlags flags)
+{
+    return ImGui::BeginCombo(cstr(label), cstr(preview_value), static_cast<int>(flags));
+}
+
+void ImGuiHelper::EndCombo()
+{
+    ImGui::EndCombo();
+}
+
 bool ImGuiHelper::BeginTable(std::u8string_view id, size_t column, TableFlags flags, const Vector2& size, float inner_width) {
 	return ImGui::BeginTable(cstr(id), static_cast<int>(column), static_cast<int>(flags), Cast(size), inner_width);
 }

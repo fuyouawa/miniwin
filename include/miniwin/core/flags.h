@@ -196,4 +196,22 @@ enum class TableColumnFlags
 
 TableColumnFlags operator|(TableColumnFlags a, TableColumnFlags b);
 TableColumnFlags operator&(TableColumnFlags a, TableColumnFlags b);
+
+enum class ImGuiComboFlags
+{
+    kNone = 0,
+    kPopupAlignLeft = 1 << 0,   // Align the popup toward the left by default
+    kHeightSmall = 1 << 1,   // Max ~4 items visible. Tip: If you want your combo popup to be a specific size you can use SetNextWindowSizeConstraints() prior to calling BeginCombo()
+    kHeightRegular = 1 << 2,   // Max ~8 items visible (default)
+    kHeightLarge = 1 << 3,   // Max ~20 items visible
+    kHeightLargest = 1 << 4,   // As many fitting items as possible
+    kNoArrowButton = 1 << 5,   // Display on the preview box without the square arrow button
+    kNoPreview = 1 << 6,   // Display only a square arrow button
+    kWidthFitPreview = 1 << 7,   // Width dynamically calculated from preview contents
+    kHeightMask_ = kHeightSmall | kHeightRegular | kHeightLarge | kHeightLargest,
+};
+
+
+ImGuiComboFlags operator|(ImGuiComboFlags a, ImGuiComboFlags b);
+ImGuiComboFlags operator&(ImGuiComboFlags a, ImGuiComboFlags b);
 }

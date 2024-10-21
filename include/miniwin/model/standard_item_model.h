@@ -17,10 +17,10 @@ public:
     size_t ColumnCount() const override;
 
     Variant Data(const ModelIndex& index, ItemRole role) const override;
-    void SetData(const ModelIndex& index, Variant&& data, ItemRole role) override;
+    void SetData(const ModelIndex& index, const Variant& data, ItemRole role) override;
 
     Variant HeaderData(size_t section, Orientation orientation, ItemRole role) const override;
-    void SetHeaderData(size_t section, Orientation orientation, Variant&& data, ItemRole role) override;
+    void SetHeaderData(size_t section, Orientation orientation, const Variant& data, ItemRole role) override;
 
     std::u8string_view Text(const ModelIndex& index) const;
     void SetText(const ModelIndex& index, std::u8string_view text);

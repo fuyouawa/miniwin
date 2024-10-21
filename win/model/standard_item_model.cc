@@ -59,10 +59,10 @@ Variant StandardItemModel::Data(const ModelIndex& index, ItemRole role) const
     return {};
 }
 
-void StandardItemModel::SetData(const ModelIndex& index, Variant&& data, ItemRole role)
+void StandardItemModel::SetData(const ModelIndex& index, const Variant& data, ItemRole role)
 {
     auto& i = impl_->GetOrCreateItem(index);
-    i[role] = std::move(data);
+    i[role] = data;
 }
 
 std::u8string_view StandardItemModel::Text(const ModelIndex& index) const
@@ -135,7 +135,7 @@ Variant StandardItemModel::HeaderData(size_t section, Orientation orientation, I
     return {};
 }
 
-void StandardItemModel::SetHeaderData(size_t section, Orientation orientation, Variant&& data, ItemRole role)
+void StandardItemModel::SetHeaderData(size_t section, Orientation orientation, const Variant& data, ItemRole role)
 {
     StandardLineItems* items = nullptr;
     switch (orientation)
@@ -150,7 +150,7 @@ void StandardItemModel::SetHeaderData(size_t section, Orientation orientation, V
         assert(false);
         break;
     }
-    (*items)[section][role] = std::move(data);
+    (*items)[section][role] = data;
 }
 
 std::u8string_view StandardItemModel::HeaderText(int section, Orientation orientation) const

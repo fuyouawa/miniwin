@@ -55,7 +55,7 @@ public:
         std::u8string_view id,
         size_t column,
         TableFlags flags = TableFlags::kNone,
-        const Vector2& size = { 0, 200 },
+        const Vector2& size = { 0, 0 },
         float inner_width = 0.0f
     );
 
@@ -74,5 +74,13 @@ public:
     static void EndTable();
 
 	static void EndWindow();
+
+	static bool BeginCombo(
+		std::u8string_view label,
+		std::u8string_view preview_value,
+		const Vector2& size = { 0, 0 },
+		ComboBoxFlags flags = ComboBoxFlags::kNone);
+
+	static void EndCombo();
 };
 }
