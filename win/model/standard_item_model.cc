@@ -68,7 +68,7 @@ void StandardItemModel::SetData(const ModelIndex& index, const Variant& data, It
 std::u8string_view StandardItemModel::Text(const ModelIndex& index) const
 {
     auto d = Data(index, ItemRole::Display);
-    return d.ToString();
+    return d.ToUtf8String();
 }
 
 void StandardItemModel::SetText(const ModelIndex& index, std::u8string_view text)
@@ -156,7 +156,7 @@ void StandardItemModel::SetHeaderData(size_t section, HeaderOrientation orientat
 std::u8string_view StandardItemModel::HeaderText(int section, HeaderOrientation orientation) const
 {
     auto d = HeaderData(section, orientation, ItemRole::Display);
-    return d.ToString();
+    return d.ToUtf8String();
 }
 
 void StandardItemModel::SetHeaderText(int section, HeaderOrientation orientation, std::u8string_view text)

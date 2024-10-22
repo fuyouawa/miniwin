@@ -4,26 +4,26 @@
 
 
 namespace miniwin {
-TextEdit::TextEdit(Widget* const parent, std::u8string_view label, std::u8string_view initial_text)
+TextEdit::TextEdit(Widget* const parent, std::u8string_view initial_text, std::u8string_view right_label)
 	: Widget{ parent, u8"TextEdit" }
 {
     impl_ = std::make_unique<Impl>(this);
     SetPlainText(initial_text);
-    SetLabel(label);
+    SetRightLabel(right_label);
 }
 
 TextEdit::~TextEdit()
 {
 }
 
-std::u8string_view TextEdit::Label() const
+std::u8string_view TextEdit::RightLabel() const
 {
-    return impl_->label_;
+    return impl_->right_label_;
 }
 
-void TextEdit::SetLabel(std::u8string_view label)
+void TextEdit::SetRightLabel(std::u8string_view label)
 {
-    impl_->label_ = label;
+    impl_->right_label_ = label;
 }
 
 void TextEdit::SetPlainText(std::u8string_view text)
@@ -48,6 +48,6 @@ inline void TextEdit::SetFlags(InputTextFlags flags) const
 
 void TextEdit::PaintBegin() {
     Widget::PaintBegin();
-	ImGuiHelper::InputText(Label(), &impl_->text_buffer_, Flags(), Size());
+	ImGuiHelper::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size());
 }
 }

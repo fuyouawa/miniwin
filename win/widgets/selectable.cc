@@ -3,8 +3,8 @@
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
-Selectable::Selectable(Widget* const parent, std::u8string_view label)
-	: AbstractControl{ parent, label }
+Selectable::Selectable(Widget* const parent, std::u8string_view text)
+	: AbstractControl{ parent, text }
 {
     impl_ = std::make_unique<Impl>(this);
 }

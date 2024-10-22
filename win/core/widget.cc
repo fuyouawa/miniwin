@@ -8,10 +8,11 @@
 #include "widgets_driver.h"
 
 namespace miniwin {
-Widget::Widget(Widget* parent, std::u8string_view name)
+Widget::Widget(Widget* parent, std::u8string_view name, std::u8string_view id)
     : Object(parent, name)
 {
     impl_ = std::make_unique<Impl>(this);
+    impl_->id_ = id;
 }
 
 Widget::~Widget()
@@ -28,7 +29,7 @@ const Widget* Widget::WidgetParent() const
     return impl_->WidgetParent();
 }
 
-void Widget::SetWidgetParent(Widget* parent) const
+void Widget::SetWidgetParent(Widget* parent)
 {
     impl_->SetWidgetParent(parent);
 }
@@ -36,6 +37,45 @@ void Widget::SetWidgetParent(Widget* parent) const
 const std::vector<Widget*>& Widget::WidgetChildren() const
 {
     return impl_->widget_children_;
+}
+
+std::optional<size_t> Widget::IndexOfWidgetChild(const Widget* child) const
+{
+    size_t i = 0;
+	for (auto& c : WidgetChildren())
+	{
+		if (c == child)
+		{
+            return i;
+		}
+        i++;
+	}
+    return std::nullopt;
+}
+
+bool Widget::SetWidgetChildIndex(const Widget* child, size_t index)
+{
+    auto cs = const_cast<std::vector<Object*>&>(Children());
+    auto index_it = cs.end();
+    auto found_it = cs.end();
+    for (size_t i = 0; i < cs.size(); ++i)
+    {
+        auto it = cs.begin() + i;
+        if (i == index)
+        {
+            index_it = it;
+        }
+        if (*it == child)
+        {
+            found_it = it;
+        }
+    }
+    if (index_it == cs.end() || found_it == cs.end())
+        return false;
+    if (index_it == found_it)
+        return true;
+    std::swap(*index_it, *found_it);
+    return true;
 }
 
 void Widget::SetEnable(bool b) const { impl_->SetEnable(b); }
@@ -47,6 +87,16 @@ Vector2 Widget::Size() const {
 
 void Widget::SetSize(const Vector2& size) const {
     impl_->size_sc_.set_control(size);
+}
+
+std::u8string_view Widget::Id() const
+{
+    return impl_->id_;
+}
+
+void Widget::SetId(std::u8string_view id)
+{
+    impl_->id_ = id;
 }
 
 bool Widget::Orphaned() const
@@ -118,5 +168,13 @@ void Widget::PaintBegin()
 void Widget::PaintEnd()
 {
     impl_->PaintEnd();
+}
+
+void Widget::OnBeforePaintChild(size_t child_index)
+{
+}
+
+void Widget::OnAfterPaintChild(size_t child_index)
+{
 }
 }

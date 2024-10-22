@@ -7,11 +7,10 @@
 #include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {
-TableView::TableView(Widget* parent, std::u8string_view id)
+TableView::TableView(Widget* parent)
     : AbstractItemView(parent)
 {
     impl_ = std::make_unique<Impl>(this);
-    impl_->id_ = id;
     impl_->Init();
     SetFlags(TableFlags::kBorders);
 }
@@ -47,14 +46,14 @@ void TableView::PaintBegin()
     auto col_count = m->ColumnCount();
     auto row_count = m->RowCount();
 
-    if (ImGuiHelper::BeginTable(Id(), col_count, Flags(), Size()))
+    if (ImGuiHelper::BeginTable(Name(), col_count, Flags(), Size()))
     {
         auto hori = HorizontalHeader();
         if (hori && hori->Visible())
         {
             for (size_t col = 0; col < col_count; ++col)
             {
-                auto text = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Display).ToString();
+                auto text = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Display).ToUtf8String();
                 auto flags = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Flags).ToInt32();
                 ImGuiHelper::TableSetupColumn(text, static_cast<TableColumnFlags>(flags));
             }
@@ -98,16 +97,6 @@ void TableView::PaintBegin()
 
         ImGuiHelper::EndTable();
     }
-}
-
-std::u8string_view TableView::Id() const
-{
-    return impl_->id_;
-}
-
-void TableView::SetId(std::u8string_view id)
-{
-    impl_->id_ = id;
 }
 
 TableFlags TableView::Flags() const

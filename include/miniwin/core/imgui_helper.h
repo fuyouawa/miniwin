@@ -2,6 +2,7 @@
 #include <string>
 #include <miniwin/tools/container.h>
 #include <miniwin/core/flags.h>
+#include <miniwin/tools/variant.h>
 
 namespace miniwin {
 class ImGuiHelper
@@ -27,10 +28,13 @@ public:
 
     static bool IsWindowDocked();
 
-    static void PushID(int id);
-    static void PushID(const void* id);
-    static void PushID(std::string_view id);
+	static void PushID(int id);
+	static void PushID(const void* id);
+	static void PushID(std::u8string_view id);
     static void PopID();
+
+	static void BeginDisabled(bool disabled = true);
+	static void EndDisabled();
 
 	static bool CheckBox(
 		std::u8string_view label,
@@ -103,5 +107,7 @@ public:
 
 	static bool BeginListBox(std::u8string_view label, const Vector2& size);
 	static void EndListBox();
+
+	static void SameLine(float offset_from_start_x = 0.0f, float spacing = -1.0f);
 };
 }

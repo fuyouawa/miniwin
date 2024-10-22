@@ -18,6 +18,5 @@ public:
     TableRowFlags row_flags_ = TableRowFlags::kNone;
     TableColumnFlags column_flags_ = TableColumnFlags::kNone;
     std::unordered_map<HeaderOrientation, HeaderView*> headers_;
-    std::u8string id_;
 };
 }

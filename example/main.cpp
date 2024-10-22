@@ -6,6 +6,7 @@
 #include "miniwin/widgets/textedit.h"
 #include "miniwin/widgets/view/tableview.h"
 #include "miniwin/widgets/label.h"
+#include "miniwin/widgets/layout/boxlayout.h"
 #include "miniwin/widgets/view/listview.h"
 
 class ExampleWindow : public miniwin::Window
@@ -15,7 +16,14 @@ public:
 		: Window(title)
 	{
         label_ = new miniwin::Label(this, u8"j士大夫jbb");
-        text_edit_ = new miniwin::TextEdit(this, u8"asdasd", u8"fffff");
+
+        text_edit_label_ = new miniwin::Label(this, u8"TextEdit Label");
+        text_edit_ = new miniwin::TextEdit(this, u8"fffff");
+
+        box_layout_ = new miniwin::HBoxLayout(this);
+        box_layout_->AddWidget(text_edit_label_);
+        box_layout_->AddWidget(text_edit_);
+
         table_view_ = new miniwin::TableView(this);
 
         // 实例化一个Model
@@ -42,7 +50,9 @@ public:
 
 	}
 
+    miniwin::HBoxLayout* box_layout_;
     miniwin::Label* label_;
+    miniwin::Label* text_edit_label_;
     miniwin::TextEdit* text_edit_;
     miniwin::TableView* table_view_;
     miniwin::ComboBox* combobox_;

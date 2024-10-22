@@ -7,11 +7,8 @@ namespace miniwin {
 class TableView : public AbstractItemView
 {
 public:
-    TableView(Widget* parent, std::u8string_view id = u8"TableView");
+    TableView(Widget* parent);
     ~TableView() override;
-
-    std::u8string_view Id() const;
-    void SetId(std::u8string_view id);
 
     TableFlags Flags() const;
     void SetFlags(TableFlags flags);

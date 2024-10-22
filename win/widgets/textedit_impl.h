@@ -9,7 +9,7 @@ public:
 
     TextEdit* owner_;
     std::u8string text_buffer_;
-    std::u8string label_;
+    std::u8string right_label_;
     InputTextFlags flags_ = InputTextFlags::kNone;
 };
 }

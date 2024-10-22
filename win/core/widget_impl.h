@@ -40,6 +40,7 @@ public:
     WidgetDrawFlags draw_flags_ = WidgetDrawFlags::kNone;
 
     Widget* owner_;
+    std::u8string id_;
     std::mutex pending_functors_mutex_;
     std::queue<std::function<void()>> pending_functors_;
     std::vector<Widget*> widget_children_;

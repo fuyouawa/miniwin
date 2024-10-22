@@ -88,7 +88,6 @@ bool ImGuiHelper::IsWindowDocked()
     return ImGui::IsWindowDocked();
 }
 
-
 void ImGuiHelper::PushID(int id)
 {
     ImGui::PushID(id);
@@ -99,7 +98,7 @@ void ImGuiHelper::PushID(const void* id)
     ImGui::PushID(id);
 }
 
-void ImGuiHelper::PushID(std::string_view id)
+void ImGuiHelper::PushID(std::u8string_view id)
 {
     ImGui::PushID(id.data());
 }
@@ -107,6 +106,16 @@ void ImGuiHelper::PushID(std::string_view id)
 void ImGuiHelper::PopID()
 {
     ImGui::PopID();
+}
+
+void ImGuiHelper::BeginDisabled(bool disabled)
+{
+    ImGui::BeginDisabled(disabled);
+}
+
+void ImGuiHelper::EndDisabled()
+{
+    ImGui::EndDisabled();
 }
 
 bool ImGuiHelper::CheckBox(std::u8string_view label, bool* checked, const Vector2& size) {
@@ -178,6 +187,11 @@ bool ImGuiHelper::BeginListBox(std::u8string_view label, const Vector2& size)
 void ImGuiHelper::EndListBox()
 {
     ImGui::EndListBox();
+}
+
+void ImGuiHelper::SameLine(float offset_from_start_x, float spacing)
+{
+    ImGui::SameLine(offset_from_start_x, spacing);
 }
 
 bool ImGuiHelper::BeginTable(std::u8string_view id, size_t column, TableFlags flags, const Vector2& size, float inner_width) {

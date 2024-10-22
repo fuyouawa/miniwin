@@ -4,11 +4,14 @@
 
 #include <miniwin/tools/container.h>
 #include <miniwin/tools/property.h>
+#include <optional>
+
+#include <miniwin/tools/variant.h>
 
 namespace miniwin {
 class Widget : public Object, public NonCopyMoveable {
 public:
-    Widget(Widget* parent, std::u8string_view name);
+    Widget(Widget* parent, std::u8string_view name, std::u8string_view id = u8"Widget");
     ~Widget() override;
 
     static bool IsInUIThread();
@@ -16,8 +19,11 @@ public:
     virtual void Close();
 
     const Widget* WidgetParent() const;
-    void SetWidgetParent(Widget* parent) const;
+    void SetWidgetParent(Widget* parent);
     const std::vector<Widget*>& WidgetChildren() const;
+
+    std::optional<size_t> IndexOfWidgetChild(const Widget* child) const;
+    bool SetWidgetChildIndex(const Widget* child, size_t index);
 
     virtual bool Visible() const;
     virtual void SetVisible(bool b) const;
@@ -26,6 +32,9 @@ public:
 
     Vector2 Size() const;
     void SetSize(const Vector2& size) const;
+
+    std::u8string_view Id() const;
+    void SetId(std::u8string_view id);
 
     bool Orphaned() const;
     WidgetDrawFlags DrawFlags() const;
@@ -48,6 +57,9 @@ protected:
     // 和PaintBegin相对应
     // 相当于二叉树遍历中的右叶子
     virtual void PaintEnd();
+
+    virtual void OnBeforePaintChild(size_t child_index);
+    virtual void OnAfterPaintChild(size_t child_index);
 
     virtual void DoEnable(bool b) {}
     virtual void DoShow() {}

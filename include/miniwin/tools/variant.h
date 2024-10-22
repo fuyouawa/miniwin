@@ -1,81 +1,64 @@
 #pragma once
-#include <any>
 #include <string>
+#include <variant>
 
-namespace miniwin {
-class Variant;
-
-template <class T>
-concept IsVariantable = !std::is_same_v<std::decay_t<T>, Variant> && std::is_copy_constructible_v<std::decay_t<T>>;
-
-class Variant {
-public:
-    Variant() = default;
-
-    Variant(std::u8string_view str);
-
-    template <IsVariantable T>
-    Variant(T&& val);
-
-    template <IsVariantable T>
-    decltype(auto) ToRef();
-
-    template <IsVariantable T>
-    decltype(auto) ToRef() const;
-
-    template <IsVariantable T>
-    decltype(auto) To() const;
-
-    bool HasValue() const;
-
-    const std::type_info& Type() const;
-
-    const std::u8string& ToStringRef() const;
-    std::u8string ToString() const;
-
-    int32_t ToInt32() const;
-    int64_t ToInt64() const;
-
-    uint32_t ToUInt32() const;
-    uint64_t ToUInt64() const;
-
-private:
-    std::any data_;
+enum class VariantType
+{
+    kEmpty,
+    kNull,
+    kChar,
+    kBool,
+    kInt32,
+    kUInt32,
+    kInt64,
+    kUInt64,
+    kFloat,
+    kDouble,
+    kString,
+    kUtf8String
 };
 
-template <IsVariantable T>
-Variant::Variant(T&& val): data_(std::forward<T>(val))
-{
-}
+namespace miniwin {
+class Variant {
+public:
+    Variant();
+    ~Variant();
 
-template <IsVariantable T>
-decltype(auto) Variant::ToRef()
-{
-    using Type = std::add_lvalue_reference_t<std::remove_cvref_t<T>>;
-    return std::any_cast<Type>(data_);
-}
+    Variant(const Variant& other);
+    Variant& operator=(const Variant& other);
 
-template <IsVariantable T>
-decltype(auto) Variant::ToRef() const
-{
-    using Type = std::add_lvalue_reference_t<std::add_const_t<std::remove_cvref_t<T>>>;
-    return std::any_cast<Type>(data_);
-}
+    Variant(std::nullptr_t);
+    Variant(char c);
+    Variant(bool b);
+    Variant(int32_t i32);
+    Variant(uint32_t u32);
+    Variant(int64_t i64);
+    Variant(uint64_t u64);
+    Variant(float f);
+    Variant(double d);
+    Variant(std::string_view str);
+    Variant(std::u8string_view str);
 
-template <IsVariantable T>
-decltype(auto) Variant::To() const
-{
-    using Type = std::add_const_t<std::remove_cvref_t<T>>;
-    try
-    {
-        return std::any_cast<Type>(data_);
-    }
-    catch (const std::bad_any_cast& e)
-    {
-        if constexpr (std::is_default_constructible_v<T>)
-            return Type{};
-        else
-            throw std::bad_any_cast{ e };
-    }
-}
+    VariantType Type() const;
+
+    bool IsNull() const;
+    bool IsEmpty() const;
+    bool IsFloatingPoint() const;
+    bool IsInteger() const;
+    bool IsNumber() const;
+
+    size_t ToInteger(bool* ok = nullptr) const;
+
+    char ToChar(bool* ok = nullptr) const;
+    bool ToBool(bool* ok = nullptr) const;
+    int32_t ToInt32(bool* ok = nullptr) const;
+    int64_t ToInt64(bool* ok = nullptr) const;
+    uint32_t ToUInt32(bool* ok = nullptr) const;
+    uint64_t ToUInt64(bool* ok = nullptr) const;
+    std::string ToString(bool* ok = nullptr) const;
+    std::u8string ToUtf8String(bool* ok = nullptr) const;
+
+private:
+    std::variant<std::monostate, std::nullptr_t, char, bool, int32_t, uint32_t, int64_t, uint64_t, float, double, char*, char8_t*> var_;
+};
 }

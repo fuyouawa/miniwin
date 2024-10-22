@@ -21,7 +21,7 @@ HeaderOrientation HeaderView::Orientation() const
 void HeaderView::PaintSection(size_t section)
 {
     auto m = Model();
-    auto label = m->HeaderData(section, Orientation()).ToString();
+    auto label = m->HeaderData(section, Orientation()).ToUtf8String();
     if (Orientation() == HeaderOrientation::Horizontal)
     {
         ImGuiHelper::TableHeader(label);

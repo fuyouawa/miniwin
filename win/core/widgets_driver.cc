@@ -29,7 +29,7 @@ void WidgetsDriver::Update()
     CallUpdateEarly();
     for (auto& win : windows_)
     {
-        if (!win->Orphaned())
+        if (!win->Orphaned() && win->Visible())
         {
             UpdateRecursion(win);
         }
@@ -124,30 +124,33 @@ std::thread::id WidgetsDriver::UiThreadId() const
 
 void WidgetsDriver::UpdateRecursion(Widget* widget)
 {
-    if (widget->Visible())
+    assert(widget->Visible());
+
+    auto ignore_self = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
+    auto ignore_children = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
+
+    if (!ignore_self) {
+        widget->PaintBegin();
+    }
+
+    if (!ignore_children)
     {
-        auto ignore_self = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
-        auto ignore_children = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
-
-        if (!ignore_self) {
-            widget->PaintBegin();
-        }
-
-        if (!ignore_children)
+        size_t i = 0;
+        for (auto& o : widget->Children())
         {
-            for (auto& o : widget->Children())
+            auto w = dynamic_cast<Widget*>(o);
+            if (w && !w->Orphaned())
             {
-                auto w = dynamic_cast<Widget*>(o);
-                if (w && !w->Orphaned())
-                {
-                    UpdateRecursion(w);
-                }
+                widget->OnBeforePaintChild(i);
+                UpdateRecursion(w);
+                widget->OnAfterPaintChild(i);
+                ++i;
             }
         }
+    }
 
-        if (!ignore_self) {
-            widget->PaintEnd();
-        }
+    if (!ignore_self) {
+        widget->PaintEnd();
     }
 }
 

@@ -1,8 +1,9 @@
 #include "win/core/widget_impl.h"
 
 #include "miniwin/widgets/window.h"
-#include "imgui/imgui.h"
 #include <ranges>
+
+#include "miniwin/core/imgui_helper.h"
 
 namespace miniwin {
 Widget::Impl::Impl(Widget* owner)
@@ -43,16 +44,14 @@ void Widget::Impl::PaintBegin()
         }
         owner_->OnVisbleChanged(*visible_sc_);
     }
-    if (!*enable_sc_) {
-        ImGui::BeginDisabled();
-    }
+    ImGuiHelper::BeginDisabled(!*enable_sc_);
+    ImGuiHelper::PushID(owner_->Id());
 }
 
 void Widget::Impl::PaintEnd()
 {
-    if (!*enable_sc_) {
-        ImGui::EndDisabled();
-    }
+    ImGuiHelper::PopID();
+    ImGuiHelper::EndDisabled();
     enable_sc_.Exit();
     visible_sc_.Exit();
 }
