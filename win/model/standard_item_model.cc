@@ -1,7 +1,8 @@
-#include <cassert>
-#include <string>
+#include "standard_item_model_impl.h"
 
-#include "win/model/standard_item_model_impl.h"
+#include <cassert>
+
+#include <string>
 
 namespace miniwin {
 StandardItemModel::StandardItemModel(Object* parent)

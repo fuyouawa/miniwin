@@ -1,5 +1,6 @@
 #include "listview_impl.h"
-#include "miniwin/delegate/base/abstract_item_delegate.h"
+
+#include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {
 ListView::ListView(Widget* parent, std::u8string_view label)

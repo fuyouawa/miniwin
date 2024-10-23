@@ -1,6 +1,7 @@
 #include "win/core/object_impl.h"
 
 #include <cassert>
+
 #include <format>
 #include <mutex>
 

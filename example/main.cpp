@@ -1,13 +1,13 @@
 #include <miniwin/core/application.h>
 #include <miniwin/widgets/window.h>
 
-#include "miniwin/model/standard_item_model.h"
-#include "miniwin/widgets/combobox.h"
-#include "miniwin/widgets/textedit.h"
-#include "miniwin/widgets/view/tableview.h"
-#include "miniwin/widgets/label.h"
-#include "miniwin/widgets/layout/boxlayout.h"
-#include "miniwin/widgets/view/listview.h"
+#include <miniwin/model/standard_item_model.h>
+#include <miniwin/widgets/combobox.h>
+#include <miniwin/widgets/textedit.h>
+#include <miniwin/widgets/view/tableview.h>
+#include <miniwin/widgets/label.h>
+#include <miniwin/widgets/layout/boxlayout.h>
+#include <miniwin/widgets/view/listview.h>
 
 class ExampleWindow : public miniwin::Window
 {

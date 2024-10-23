@@ -1,8 +1,10 @@
 #pragma once
-#include <miniwin/tools/scope_variable.h>
 #include <miniwin/core/widget.h>
+
 #include <queue>
 #include <mutex>
+
+#include <miniwin/tools/scope_variable.h>
 
 namespace miniwin {
 class Widget::Impl

@@ -1,10 +1,9 @@
 #pragma once
-#include <miniwin/core/object.h>
-
-#include <miniwin/tools/container.h>
-#include <miniwin/tools/property.h>
 #include <optional>
 
+#include <miniwin/core/object.h>
+#include <miniwin/tools/container.h>
+#include <miniwin/tools/property.h>
 #include <miniwin/tools/variant.h>
 
 namespace miniwin {
@@ -54,16 +53,16 @@ public:
     MW_SIGNAL(OnSizeChanged, (Vector2) size, (Vector2) prev_size)
 
 protected:
-    // æ˜¯æ‰€æœ‰ç»˜åˆ¶ä¹‹å‰çš„å‡†å¤‡å·¥ä½œ
-    // ä¼šå…ˆè°ƒç”¨å®Œæ‰€æœ‰Widgetçš„PreparePaintåæ‰ä¼šè¿›å…¥PaintBegin
+    // ÊÇËùÓĞ»æÖÆÖ®Ç°µÄ×¼±¸¹¤×÷
+    // »áÏÈµ÷ÓÃÍêËùÓĞWidgetµÄPreparePaintºó²Å»á½øÈëPaintBegin
     virtual void PreparePaint();
-    // å¼€å§‹ç»˜åˆ¶
-    // ä¼šå…ˆè°ƒç”¨çˆ¶ç±»çš„PaintBegin, ç„¶åä¼šé€’å½’è°ƒç”¨æ‰€æœ‰å­ç±»çš„PaintBegin
-    // ç›¸å½“äºäºŒå‰æ ‘éå†ä¸­çš„å·¦å¶å­
+    // ¿ªÊ¼»æÖÆ
+    // »áÏÈµ÷ÓÃ¸¸ÀàµÄPaintBegin, È»ºó»áµİ¹éµ÷ÓÃËùÓĞ×ÓÀàµÄPaintBegin
+    // Ïàµ±ÓÚ¶ş²æÊ÷±éÀúÖĞµÄ×óÒ¶×Ó
     virtual void PaintBegin();
-    // ç»“æŸç»˜åˆ¶
-    // å’ŒPaintBeginç›¸å¯¹åº”
-    // ç›¸å½“äºäºŒå‰æ ‘éå†ä¸­çš„å³å¶å­
+    // ½áÊø»æÖÆ
+    // ºÍPaintBeginÏà¶ÔÓ¦
+    // Ïàµ±ÓÚ¶ş²æÊ÷±éÀúÖĞµÄÓÒÒ¶×Ó
     virtual void PaintEnd();
 
     virtual void OnBeforePaintChild(size_t child_index);

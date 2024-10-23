@@ -1,5 +1,6 @@
 #pragma once
 #include <miniwin/widgets/textedit.h>
+
 #include <string>
 
 namespace miniwin {

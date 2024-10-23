@@ -1,8 +1,9 @@
 #pragma once
+#include <string_view>
+
 #include <miniwin/core/objectdefs.h>
 #include <miniwin/tools/function_traits.h>
 #include <miniwin/core/global.h>
-#include <string_view>
 
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 

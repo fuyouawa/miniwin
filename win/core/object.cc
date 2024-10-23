@@ -1,6 +1,7 @@
+#include "object_impl.h"
+
 #include <cassert>
 
-#include "object_impl.h"
 
 namespace miniwin {
 ConnectionFlags operator|(ConnectionFlags x, ConnectionFlags y)

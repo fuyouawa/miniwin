@@ -1,10 +1,8 @@
 #include "selectable_item_delegate_impl.h"
 
 #include <miniwin/io/input.h>
-
 #include <miniwin/core/imgui_helper.h>
-
-#include "miniwin/widgets/base/abstract_item_view.h"
+#include <miniwin/widgets/base/abstract_item_view.h>
 
 namespace miniwin {
 SelectableItemDelegate::SelectableItemDelegate(Object* parent)

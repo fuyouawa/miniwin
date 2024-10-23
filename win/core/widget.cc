@@ -1,9 +1,10 @@
+#include <win/core/widget_impl.h>
+
 #include <format>
+
 #include <miniwin/core/widget.h>
 #include <miniwin/tools/container.h>
 #include <miniwin/tools/scope_variable.h>
-
-#include <win/core/widget_impl.h>
 
 #include "widgets_driver.h"
 

@@ -1,5 +1,7 @@
-#include <assert.h>
 #include <miniwin/tools/converter.h>
+
+#include <cassert>
+
 #include <codecvt>
 #include <string>
 

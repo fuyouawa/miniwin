@@ -1,7 +1,9 @@
 #pragma once
 #include <miniwin/model/item_selection_model.h>
-#include <miniwin/model/base/abstract_item_model.h>
+
 #include <bitset>
+
+#include <miniwin/model/base/abstract_item_model.h>
 
 namespace miniwin {
 class ItemSelectionModel::Impl {

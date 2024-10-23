@@ -1,8 +1,7 @@
 #pragma once
-#include <miniwin/delegate/base/abstract_item_delegate.h>
-
-#include <miniwin/model/base/abstract_item_model.h>
 #include <miniwin/tools/variant.h>
+#include <miniwin/delegate/base/abstract_item_delegate.h>
+#include <miniwin/model/base/abstract_item_model.h>
 #include <miniwin/widgets/base/abstract_item_view.h>
 
 namespace miniwin {

@@ -1,5 +1,6 @@
 #ifndef WIN32
-#include "win/tools/graphic_utils.h"
+#include "graphic_utils.h"
+
 #include <GLFW/glfw3.h>
 
 namespace miniwin {

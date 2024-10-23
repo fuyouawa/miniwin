@@ -1,5 +1,6 @@
 #pragma once
 #include <miniwin/core/object.h>
+
 #include <vector>
 #include <typeindex>
 #include <string>
@@ -27,7 +28,7 @@ public:
     class ConnectionsManager
     {
     public:
-        bool dirty_; // ä¸€äº›è¿æ¥å·²ç»è¢«åˆ‡æ–­äº†, ä½†æ˜¯å¹¶æ²¡æœ‰ä»åˆ—è¡¨ä¸­ç§»é™¤
+        bool dirty_; // Ò»Ğ©Á¬½ÓÒÑ¾­±»ÇĞ¶ÏÁË, µ«ÊÇ²¢Ã»ÓĞ´ÓÁĞ±íÖĞÒÆ³ı
         std::unordered_map<std::type_index, ConnectionList> map_;
 
         void ClearDirty();
@@ -59,7 +60,7 @@ public:
     std::u8string name_;
     FlagsType flags_;
     std::vector<Object*> children_;
-    std::vector<ConnectionPtr> connected_sender_connections_;    // è¿æ¥åˆ°çš„å‘é€è€…
+    std::vector<ConnectionPtr> connected_sender_connections_;    // Á¬½Óµ½µÄ·¢ËÍÕß
     ConnectionsManager connections_manager_;
 };
 }

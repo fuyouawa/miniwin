@@ -1,5 +1,6 @@
-#include <cassert>
 #include <miniwin/tools/variant.h>
+
+#include <cassert>
 
 namespace miniwin {
 namespace {

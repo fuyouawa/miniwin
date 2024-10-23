@@ -82,21 +82,21 @@ public:
 }//namespace internal
 
 enum class InvokeType {
-    // å¦‚æžœéžUIå¯¹è±¡ï¼Œåˆ™ç›´æŽ¥è°ƒç”¨
-    // å¦‚æžœæ˜¯UIå¯¹è±¡ï¼Œå¹¶ä¸”è°ƒç”¨æ–¹ä¹Ÿåœ¨UIçº¿ç¨‹ï¼Œåˆ™ç›´æŽ¥è°ƒç”¨ï¼›åä¹‹å¦‚æžœè°ƒç”¨æ–¹ä¸åœ¨UIçº¿ç¨‹ï¼Œåˆ™åŠ å…¥UIè°ƒç”¨é˜Ÿåˆ—
+    // Èç¹û·ÇUI¶ÔÏó£¬ÔòÖ±½Óµ÷ÓÃ
+    // Èç¹ûÊÇUI¶ÔÏó£¬²¢ÇÒµ÷ÓÃ·½Ò²ÔÚUIÏß³Ì£¬ÔòÖ±½Óµ÷ÓÃ£»·´Ö®Èç¹ûµ÷ÓÃ·½²»ÔÚUIÏß³Ì£¬Ôò¼ÓÈëUIµ÷ÓÃ¶ÓÁÐ
     kAuto,
-    // ç›´æŽ¥è°ƒç”¨
+    // Ö±½Óµ÷ÓÃ
     kDirect,
-    // å¦‚æžœéžUIå¯¹è±¡ï¼Œåˆ™ç›´æŽ¥è°ƒç”¨
-    // å¦‚æžœæ˜¯UIå¯¹è±¡ï¼Œä¼šåŠ å…¥UIè°ƒç”¨é˜Ÿåˆ—
+    // Èç¹û·ÇUI¶ÔÏó£¬ÔòÖ±½Óµ÷ÓÃ
+    // Èç¹ûÊÇUI¶ÔÏó£¬»á¼ÓÈëUIµ÷ÓÃ¶ÓÁÐ
     kQueued
 };
 
 enum class ConnectionFlags {
     kNone = 0,
-    kUnique = 1 << 0,    // å¦‚æžœè¿žæŽ¥å·²å­˜åœ¨, å°†å¤±è´¥
-    kReplace = 1 << 1,   // å¦‚æžœè¿žæŽ¥å·²å­˜åœ¨, æ›¿æ¢å·²æœ‰è¿žæŽ¥
-    kSingle = 1 << 2     // ä»…è¢«è°ƒç”¨ä¸€æ¬¡, å‘å‡ºä¿¡å·æ—¶, è¿žæŽ¥å°†è‡ªåŠ¨æ–­å¼€
+    kUnique = 1 << 0,    // Èç¹ûÁ¬½ÓÒÑ´æÔÚ, ½«Ê§°Ü
+    kReplace = 1 << 1,   // Èç¹ûÁ¬½ÓÒÑ´æÔÚ, Ìæ»»ÒÑÓÐÁ¬½Ó
+    kSingle = 1 << 2     // ½ö±»µ÷ÓÃÒ»´Î, ·¢³öÐÅºÅÊ±, Á¬½Ó½«×Ô¶¯¶Ï¿ª
 };
 
 ConnectionFlags operator|(ConnectionFlags x, ConnectionFlags y);

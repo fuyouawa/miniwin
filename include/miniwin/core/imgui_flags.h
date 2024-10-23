@@ -1,5 +1,4 @@
 #pragma once
-#include <miniwin/core/global.h>
 
 namespace miniwin {
 

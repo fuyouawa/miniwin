@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "miniwin/delegate/base/abstract_item_delegate.h"
+#include <miniwin/delegate/base/abstract_item_delegate.h>
 
 
 namespace miniwin {

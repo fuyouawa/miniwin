@@ -1,9 +1,6 @@
 #include "tableview_impl.h"
 
 #include <miniwin/core/imgui_helper.h>
-
-#include <cassert>
-
 #include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {

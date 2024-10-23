@@ -1,4 +1,5 @@
 #include <miniwin/model/base/model_index.h>
+
 #include <cassert>
 
 namespace miniwin {

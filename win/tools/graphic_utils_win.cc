@@ -1,5 +1,6 @@
 #if WIN32
-#include "win/tools/graphic_utils.h"
+#include "graphic_utils.h"
+
 #include <Windows.h>
 
 namespace miniwin {

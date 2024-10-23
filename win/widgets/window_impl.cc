@@ -1,9 +1,9 @@
 #include "window_impl.h"
 
+#include <miniwin/core/imgui_helper.h>
+
 #include "win/core/widgets_driver.h"
 #include "win/tools/graphic_utils.h"
-
-#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 Window::Impl::Impl(Window* owner)
@@ -36,12 +36,12 @@ void Window::Impl::PaintBegin()
     }
 
     is_docking_ = ImGuiHelper::IsWindowDocked();
-    // è·å–å½“å‰çª—ä½“å¥æŸ„, ç„¶ååˆ¤æ–­æ˜¯å¦æ”¹å˜
-    // å¦‚æœæ”¹å˜åˆ™è¯´æ˜å½“å‰çª—ä½“è„±ç¦»æˆ–è€…åœé åˆ°äº†æŸä¸ªçª—ä½“
+    // »ñÈ¡µ±Ç°´°Ìå¾ä±ú, È»ºóÅĞ¶ÏÊÇ·ñ¸Ä±ä
+    // Èç¹û¸Ä±äÔòËµÃ÷µ±Ç°´°ÌåÍÑÀë»òÕßÍ£¿¿µ½ÁËÄ³¸ö´°Ìå
     hwnd_ = GraphicUtils::GetCurrentWindow();
     if (hwnd_ && hwnd_ != prev_hwnd_) {
-        // å¦‚æœå½“å‰çª—ä½“éåœé çª—, è¯´æ˜æ˜¯ä»é»˜è®¤çª—ä½“ä¸Šå‰¥ç¦»å‡ºæ¥, æˆ–è€…ä»åœé çŠ¶æ€å–æ¶ˆçš„çª—ä½“, éœ€è¦é‡è®¾ç½®é¡¶çŠ¶æ€
-        // å¦‚æœå½“å‰çª—ä½“æ˜¯åœé çª—, åˆ™ä¸æ”¹å˜ç½®é¡¶çŠ¶æ€
+        // Èç¹ûµ±Ç°´°Ìå·ÇÍ£¿¿´°, ËµÃ÷ÊÇ´ÓÄ¬ÈÏ´°ÌåÉÏ°şÀë³öÀ´, »òÕß´ÓÍ£¿¿×´Ì¬È¡ÏûµÄ´°Ìå, ĞèÒªÖØÉèÖÃ¶¥×´Ì¬
+        // Èç¹ûµ±Ç°´°ÌåÊÇÍ£¿¿´°, Ôò²»¸Ä±äÖÃ¶¥×´Ì¬
         if (!is_docking_) {
             GraphicUtils::EnableWindowTop(hwnd_, *top_sc_);
         }

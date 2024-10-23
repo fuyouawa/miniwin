@@ -1,8 +1,9 @@
-#include "win/core/widgets_driver.h"
-#include "win/core/widget_impl.h"
-#include "win/widgets/window_impl.h"
+#include "widgets_driver.h"
 
 #include <cassert>
+
+#include "win/core/widget_impl.h"
+#include "win/widgets/window_impl.h"
 
 namespace miniwin {
 WidgetsDriver& WidgetsDriver::instance()

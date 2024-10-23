@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+
 #include <miniwin/tools/container.h>
 #include <miniwin/core/imgui_flags.h>
+#include <miniwin/core/global.h>
 
 namespace miniwin {
 class ImGuiHelper

@@ -1,9 +1,9 @@
-#include "win/core/widget_impl.h"
+#include "widget_impl.h"
 
-#include "miniwin/widgets/window.h"
 #include <ranges>
 
-#include "miniwin/core/imgui_helper.h"
+#include <miniwin/widgets/window.h>
+#include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 Widget::Impl::Impl(Widget* owner)
