@@ -23,21 +23,11 @@ void Selectable::SetSelection(bool b)
     impl_->cur_selected_ = b;
 }
 
-SelectableFlags Selectable::Flags() const
-{
-    return impl_->flags_;
-}
-
-void Selectable::SetFlags(SelectableFlags flags)
-{
-    impl_->flags_ = flags;
-}
-
 void Selectable::PaintBegin()
 {
     AbstractControl::PaintBegin();
 
-    ImGuiHelper::Selectable(Text(), &impl_->cur_selected_, Flags(), Size());
+    ImGuiHelper::Selectable(Text(), &impl_->cur_selected_, 0, Size());
     if (impl_->cur_selected_ != impl_->prev_selected_) {
         OnSelectionChanged(impl_->cur_selected_);
     }

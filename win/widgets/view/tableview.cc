@@ -12,7 +12,6 @@ TableView::TableView(Widget* parent)
 {
     impl_ = std::make_unique<Impl>(this);
     impl_->Init();
-    SetFlags(TableFlags::kBorders);
 }
 
 TableView::~TableView()
@@ -46,7 +45,7 @@ void TableView::PaintBegin()
     auto col_count = m->ColumnCount();
     auto row_count = m->RowCount();
 
-    if (ImGuiHelper::BeginTable(Name(), col_count, Flags(), Size()))
+    if (ImGuiHelper::BeginTable(Name(), col_count, 0, Size()))
     {
         auto hori = HorizontalHeader();
         if (hori && hori->Visible())
@@ -55,9 +54,9 @@ void TableView::PaintBegin()
             {
                 auto text = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Display).ToUtf8String();
                 auto flags = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Flags).ToInt32();
-                ImGuiHelper::TableSetupColumn(text, static_cast<TableColumnFlags>(flags));
+                ImGuiHelper::TableSetupColumn(text, flags);
             }
-            ImGuiHelper::TableNextRow(TableRowFlags::kHeaders);
+            ImGuiHelper::TableNextRow(ImGuiFlags::kTableRowHeaders);
 
             for (size_t col = 0; col < col_count; ++col)
             {
@@ -97,16 +96,6 @@ void TableView::PaintBegin()
 
         ImGuiHelper::EndTable();
     }
-}
-
-TableFlags TableView::Flags() const
-{
-    return impl_->flags_;
-}
-
-void TableView::SetFlags(TableFlags flags)
-{
-    impl_->flags_ = flags;
 }
 
 void TableView::SetModel(AbstractItemModel* model)

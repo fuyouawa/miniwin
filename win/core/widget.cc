@@ -4,10 +4,15 @@
 #include <miniwin/tools/scope_variable.h>
 
 #include <win/core/widget_impl.h>
+#include "win/tools/inner.h"
 
 #include "widgets_driver.h"
+#include "miniwin/widgets/window.h"
 
 namespace miniwin {
+WidgetDrawFlags operator|(WidgetDrawFlags a, WidgetDrawFlags b) { return Or(a, b); }
+WidgetDrawFlags operator&(WidgetDrawFlags a, WidgetDrawFlags b) { return And(a, b); }
+
 Widget::Widget(Widget* parent, std::u8string_view name, std::u8string_view id)
     : Object(parent, name)
 {
@@ -85,8 +90,8 @@ Vector2 Widget::Size() const {
     return impl_->size_sc_.get();
 }
 
-void Widget::SetSize(const Vector2& size) const {
-    impl_->size_sc_.set_control(size);
+void Widget::SetSize(const Vector2& size) {
+    impl_->size_sc_.SetControl(size);
 }
 
 std::u8string_view Widget::Id() const

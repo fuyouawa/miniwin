@@ -9,7 +9,6 @@ public:
 	void Init();
 
 	ComboBoxView* owner_;
-	ComboBoxFlags flags_ = ComboBoxFlags::kNone;
 };
 
 class ComboBox::Impl

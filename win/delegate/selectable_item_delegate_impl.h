@@ -9,6 +9,5 @@ public:
 	SelectableItemDelegate* owner_;
 
 	bool alloc_multi_select = true;
-	SelectableFlags selectable_flags_ = SelectableFlags::kNone;
 };
 }

@@ -28,7 +28,7 @@ private:
     };
     using PendingOperationsQueue = std::queue<std::pair<Operation, Window*>>;
 
-    static void UpdateRecursion(Widget* widget);
+    static void UpdateRecursion(Widget* widget, bool force_ignore_children = false);
     static void CallUpdateEarlyRecursion(Widget* widget);
     static void ClearDirtyRecursion(Widget* widget);
     void Update();

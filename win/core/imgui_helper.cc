@@ -1,5 +1,6 @@
 #include <miniwin/core/imgui_helper.h>
 #include <imgui/imgui.h>
+#include "win/tools/inner.h"
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <imgui/misc/cpp/imgui_stdlib.cpp>
 
@@ -37,10 +38,14 @@ int InputTextCallback(ImGuiInputTextCallbackData* data)
     return 0;
 }
 
-ImVec2 Cast2Im(const Vector2& vec) {
+ImVec2 CastToIm(const Vector2& vec) {
     return { vec.x(), vec.y() };
 }
+Vector2 CastFromIm(const ImVec2& vec) {
+    return { vec.x, vec.y };
 }
+}
+
 
 class ImGuiHelper::ListClipper::Impl
 {
@@ -118,33 +123,62 @@ void ImGuiHelper::EndDisabled()
     ImGui::EndDisabled();
 }
 
-bool ImGuiHelper::CheckBox(std::u8string_view label, bool* checked, const Vector2& size) {
+Vector2 ImGuiHelper::GetItemRectSize()
+{
+    return CastFromIm(ImGui::GetItemRectSize());
+}
+
+void ImGuiHelper::SetNextItemWidth(float item_width)
+{
+    ImGui::SetNextItemWidth(item_width);
+}
+
+void ImGuiHelper::PushStyleVar(ImGuiFlags::StyleVar idx, float val)
+{
+    ImGui::PushStyleVar(idx, val);
+}
+
+void ImGuiHelper::PushStyleVar(ImGuiFlags::StyleVar idx, Vector2 val)
+{
+    ImGui::PushStyleVar(idx, CastToIm(val));
+}
+
+bool ImGuiHelper::IsWindowCollapsed()
+{
+    return ImGui::IsWindowCollapsed();
+}
+
+void ImGuiHelper::SetWindowCollapsed(bool collapsed, ImGuiFlags::Cond cond)
+{
+    ImGui::SetWindowCollapsed(collapsed, cond);
+}
+
+bool ImGuiHelper::CheckBox(std::u8string_view label, bool* checked) {
 	return ImGui::Checkbox(cstr(label), checked);
 }
 
-void ImGuiHelper::Text(std::u8string_view label, const Vector2& size) {
+void ImGuiHelper::Text(std::u8string_view label) {
 	return ImGui::Text(cstr(label));
 }
 
 bool ImGuiHelper::Button(std::u8string_view label, const Vector2& size) {
-	return ImGui::Button(cstr(label), Cast2Im(size));
+	return ImGui::Button(cstr(label), CastToIm(size));
 }
 
-bool ImGuiHelper::Selectable(std::u8string_view label, bool* is_selected, SelectableFlags flags, const Vector2& size) {
+bool ImGuiHelper::Selectable(std::u8string_view label, bool* is_selected, FlagsType flags, const Vector2& size) {
 	return ImGui::Selectable(
         cstr(label),
         is_selected,
-        static_cast<int>(flags),
-        Cast2Im(size));
+        flags,
+        CastToIm(size));
 }
 
 bool ImGuiHelper::InputText(std::u8string_view label,
     std::u8string* buffer,
-    InputTextFlags flags,
-    const Vector2& size)
+    FlagsType flags)
 {
-    assert((flags & InputTextFlags::kCallbackResize) == InputTextFlags::kNone);
-    flags = flags | InputTextFlags::kCallbackResize;
+    assert((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags = flags | ImGuiInputTextFlags_CallbackResize;
 
     InputTextCallbackUserData cb_user_data;
     cb_user_data.Str = buffer;
@@ -155,23 +189,22 @@ bool ImGuiHelper::InputText(std::u8string_view label,
         cstr(label),
         reinterpret_cast<char*>(const_cast<char8_t*>(buffer->c_str())),
         buffer->capacity() + 1,
-        static_cast<int>(flags),
+        flags,
         InputTextCallback,
         &cb_user_data);
 }
 
-bool ImGuiHelper::BeginWindow(std::u8string_view title, bool* open, WindowFlags flags) {
-	return ImGui::Begin(cstr(title), open, static_cast<int>(flags));
+bool ImGuiHelper::BeginWindow(std::u8string_view title, bool* open, FlagsType flags) {
+	return ImGui::Begin(cstr(title), open, flags);
 }
 
 void ImGuiHelper::EndWindow() {
 	ImGui::End();
 }
 
-bool ImGuiHelper::BeginCombo(std::u8string_view label, std::u8string_view preview_value, const Vector2& size,
-	ComboBoxFlags flags)
+bool ImGuiHelper::BeginCombo(std::u8string_view label, std::u8string_view preview_value, FlagsType flags)
 {
-    return ImGui::BeginCombo(cstr(label), cstr(preview_value), static_cast<int>(flags));
+    return ImGui::BeginCombo(cstr(label), cstr(preview_value), flags);
 }
 
 void ImGuiHelper::EndCombo()
@@ -181,7 +214,7 @@ void ImGuiHelper::EndCombo()
 
 bool ImGuiHelper::BeginListBox(std::u8string_view label, const Vector2& size)
 {
-    return ImGui::BeginListBox(cstr(label), Cast2Im(size));
+    return ImGui::BeginListBox(cstr(label), CastToIm(size));
 }
 
 void ImGuiHelper::EndListBox()
@@ -194,17 +227,28 @@ void ImGuiHelper::SameLine(float offset_from_start_x, float spacing)
     ImGui::SameLine(offset_from_start_x, spacing);
 }
 
-bool ImGuiHelper::BeginTable(std::u8string_view id, size_t column, TableFlags flags, const Vector2& size, float inner_width) {
-	return ImGui::BeginTable(cstr(id), static_cast<int>(column), static_cast<int>(flags), Cast2Im(size), inner_width);
+bool ImGuiHelper::BeginChildWindow(std::u8string_view id, const Vector2& size, int child_window_flags,
+    int window_flags)
+{
+    return ImGui::BeginChild(cstr(id), CastToIm(size), child_window_flags, window_flags);
+}
+
+void ImGuiHelper::EndChildWindow()
+{
+    return ImGui::EndChild();
+}
+
+bool ImGuiHelper::BeginTable(std::u8string_view id, size_t column, FlagsType flags, const Vector2& size, float inner_width) {
+	return ImGui::BeginTable(cstr(id), static_cast<int>(column), flags, CastToIm(size), inner_width);
 }
 
 void ImGuiHelper::EndTable() {
 	ImGui::EndTable();
 }
 
-void ImGuiHelper::TableSetupColumn(std::u8string_view label, TableColumnFlags flags, float init_width_or_weight, uint32_t user_id)
+void ImGuiHelper::TableSetupColumn(std::u8string_view label, FlagsType flags, float init_width_or_weight, uint32_t user_id)
 {
-    return ImGui::TableSetupColumn(cstr(label), static_cast<int>(flags), init_width_or_weight, user_id);
+    return ImGui::TableSetupColumn(cstr(label), flags, init_width_or_weight, user_id);
 }
 
 void ImGuiHelper::TableHeader(std::u8string_view label)
@@ -217,8 +261,8 @@ bool ImGuiHelper::TableSetColumnIndex(size_t column_n)
     return ImGui::TableSetColumnIndex(column_n);
 }
 
-void ImGuiHelper::TableNextRow(TableRowFlags row_flags, float row_min_height)
+void ImGuiHelper::TableNextRow(int row_flags, float row_min_height)
 {
-    ImGui::TableNextRow(static_cast<int>(row_flags), row_min_height);
+    ImGui::TableNextRow(row_flags, row_min_height);
 }
 }

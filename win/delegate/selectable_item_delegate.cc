@@ -23,16 +23,6 @@ void SelectableItemDelegate::SetAllocMultiSelect(bool b)
     impl_->alloc_multi_select = b;
 }
 
-SelectableFlags SelectableItemDelegate::Flags() const
-{
-    return impl_->selectable_flags_;
-}
-
-void SelectableItemDelegate::SetFlags(SelectableFlags flags)
-{
-    impl_->selectable_flags_ = flags;
-}
-
 void SelectableItemDelegate::Paint(AbstractItemView* view, const ModelIndex& index)
 {
     auto model = view->Model();

@@ -1,9 +1,16 @@
-#include <miniwin/widgets/base/abstract_control.h>
+#include "abstract_control_impl.h"
 #include <imgui/imgui_internal.h>
+
+#include "miniwin/core/imgui_helper.h"
 
 namespace miniwin {
 AbstractControl::AbstractControl(Widget* parent, std::u8string_view text)
 	: Widget{ parent, text }
+{
+    impl_ = std::make_unique<Impl>(this);
+}
+
+AbstractControl::~AbstractControl()
 {
 }
 
@@ -20,5 +27,18 @@ void AbstractControl::SetText(std::u8string_view text)
 bool AbstractControl::Visible() const
 {
     return Widget::Visible() && !ImGui::GetCurrentWindow()->SkipItems;
+}
+
+void AbstractControl::PaintBegin()
+{
+	Widget::PaintBegin();
+    impl_->PaintBegin();
+}
+
+void AbstractControl::PaintEnd()
+{
+    Widget::SetSize(ImGuiHelper::GetItemRectSize());
+    impl_->PaintEnd();
+	Widget::PaintEnd();
 }
 }

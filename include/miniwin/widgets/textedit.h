@@ -14,9 +14,6 @@ public:
     void SetPlainText(std::u8string_view text);
     std::u8string_view PlainText() const;
 
-    InputTextFlags Flags() const;
-    void SetFlags(InputTextFlags flags) const;
-    
 protected:
     void PaintBegin() override;
 

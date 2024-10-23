@@ -9,6 +9,6 @@ Label::Label(Widget* const parent, std::u8string_view text)
 
 void Label::PaintBegin() {
     AbstractControl::PaintBegin();
-	ImGuiHelper::Text(Text(), Size());
+	ImGuiHelper::Text(Text());
 }
 }

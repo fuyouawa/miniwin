@@ -31,7 +31,7 @@ void WidgetsDriver::Update()
     {
         if (!win->Orphaned() && win->Visible())
         {
-            UpdateRecursion(win);
+            UpdateRecursion(win, win->IsCollapsed());
         }
     }
 }
@@ -122,9 +122,10 @@ std::thread::id WidgetsDriver::UiThreadId() const
     return ui_thread_id_;
 }
 
-void WidgetsDriver::UpdateRecursion(Widget* widget)
+void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
 {
-    assert(widget->Visible());
+    if (!widget->Visible())
+        return;
 
     auto ignore_self = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
     auto ignore_children = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
@@ -133,7 +134,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget)
         widget->PaintBegin();
     }
 
-    if (!ignore_children)
+    if (!ignore_children || force_ignore_children)
     {
         size_t i = 0;
         for (auto& o : widget->Children())

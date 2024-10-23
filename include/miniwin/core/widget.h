@@ -1,6 +1,5 @@
 #pragma once
 #include <miniwin/core/object.h>
-#include <miniwin/core/flags.h>
 
 #include <miniwin/tools/container.h>
 #include <miniwin/tools/property.h>
@@ -9,6 +8,17 @@
 #include <miniwin/tools/variant.h>
 
 namespace miniwin {
+enum class WidgetDrawFlags
+{
+    kNone = 0,
+    kIgnoreChildrenDraw = 1 << 0,
+    kIgnoreSelfDraw = 1 << 1,
+    kIgnoreDraw = kIgnoreChildrenDraw | kIgnoreSelfDraw
+};
+
+WidgetDrawFlags operator|(WidgetDrawFlags a, WidgetDrawFlags b);
+WidgetDrawFlags operator&(WidgetDrawFlags a, WidgetDrawFlags b);
+
 class Widget : public Object, public NonCopyMoveable {
 public:
     Widget(Widget* parent, std::u8string_view name, std::u8string_view id = u8"Widget");
@@ -30,11 +40,11 @@ public:
     virtual bool Enabled() const;
     virtual void SetEnable(bool b) const;
 
-    Vector2 Size() const;
-    void SetSize(const Vector2& size) const;
-
     std::u8string_view Id() const;
     void SetId(std::u8string_view id);
+
+    virtual Vector2 Size() const;
+    virtual void SetSize(const Vector2& size);
 
     bool Orphaned() const;
     WidgetDrawFlags DrawFlags() const;
@@ -44,6 +54,7 @@ public:
 
     MW_SIGNAL(OnEnableChanged, (bool) b)
     MW_SIGNAL(OnVisbleChanged, (bool) b)
+    MW_SIGNAL(OnSizeChanged, (Vector2) size, (Vector2) prev_size)
 
 protected:
     // 是所有绘制之前的准备工作

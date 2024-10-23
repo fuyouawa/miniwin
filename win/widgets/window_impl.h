@@ -11,14 +11,12 @@ public:
     void PaintBegin();
     void PaintEnd();
 
-    void OnDockingChanged();
-
-    WindowFlags flags_ = WindowFlags::kNone;
     ScopeCondition top_sc_{ false };
+    ScopeCondition collapsed_sc_{ false };
+    bool is_closable_ = true;
     void* hwnd_ = nullptr;
     void* prev_hwnd_ = nullptr;
     bool is_docking_ = false;
-    bool is_closable_ = true;
     Window* owner_;
 };
 }

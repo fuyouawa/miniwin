@@ -17,6 +17,10 @@ public:
 	size_t Count() const;
 	bool IsEmpty() const;
 
+protected:
+	void PaintBegin() override;
+	void PaintEnd() override;
+
 private:
 	using Widget::SetWidgetChildIndex;
 	using Widget::IndexOfWidgetChild;

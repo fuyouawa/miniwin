@@ -27,15 +27,16 @@ void Widget::Impl::Close()
 
 void Widget::Impl::PaintBegin()
 {
-    enable_sc_.Entry();
-    visible_sc_.Entry();
+    enable_sc_.Enter();
+    visible_sc_.Enter();
+    size_sc_.Enter();
 
-    if (enable_sc_.is_changed()) {
+    if (enable_sc_.HasChange()) {
         owner_->OnEnableChanged(*enable_sc_);
         owner_->DoEnable(*enable_sc_);
     }
 
-    if (visible_sc_.is_changed()) {
+    if (visible_sc_.HasChange()) {
         if (*visible_sc_) {
             owner_->DoShow();
         }
@@ -44,6 +45,12 @@ void Widget::Impl::PaintBegin()
         }
         owner_->OnVisbleChanged(*visible_sc_);
     }
+
+    if (size_sc_.HasChange())
+    {
+        owner_->OnSizeChanged(*size_sc_, size_sc_.prev_value());
+    }
+
     ImGuiHelper::BeginDisabled(!*enable_sc_);
     ImGuiHelper::PushID(owner_->Id());
 }
@@ -54,6 +61,7 @@ void Widget::Impl::PaintEnd()
     ImGuiHelper::EndDisabled();
     enable_sc_.Exit();
     visible_sc_.Exit();
+    size_sc_.Exit();
 }
 
 const Widget* Widget::Impl::WidgetParent() const
@@ -130,7 +138,7 @@ bool Widget::Impl::Visible() const
 
 void Widget::Impl::SetVisible(bool b)
 {
-    visible_sc_.set_control(b);
+    visible_sc_.SetControl(b);
 }
 
 bool Widget::Impl::Enabled() const
@@ -150,6 +158,6 @@ bool Widget::Impl::Enabled() const
 
 void Widget::Impl::SetEnable(bool b)
 {
-    enable_sc_.set_control(b);
+    enable_sc_.SetControl(b);
 }
 }

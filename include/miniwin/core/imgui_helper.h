@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
 #include <miniwin/tools/container.h>
-#include <miniwin/core/flags.h>
-#include <miniwin/tools/variant.h>
+#include <miniwin/core/imgui_flags.h>
 
 namespace miniwin {
 class ImGuiHelper
@@ -36,15 +35,21 @@ public:
 	static void BeginDisabled(bool disabled = true);
 	static void EndDisabled();
 
+	static Vector2 GetItemRectSize();
+	static void SetNextItemWidth(float item_width);
+	static void PushStyleVar(ImGuiFlags::StyleVar idx, float val);
+	static void PushStyleVar(ImGuiFlags::StyleVar idx, Vector2 val);
+
+	static bool IsWindowCollapsed();
+	static void SetWindowCollapsed(bool collapsed, ImGuiFlags::Cond cond = ImGuiFlags::kCondNone);
+
 	static bool CheckBox(
 		std::u8string_view label,
-		bool* checked,
-		const Vector2& size = {}
+		bool* checked
 	);
 
 	static void Text(
-		std::u8string_view label,
-		const Vector2& size = {}
+		std::u8string_view label
 	);
 
 	static bool Button(
@@ -55,35 +60,34 @@ public:
 	static bool Selectable(
 		std::u8string_view label,
 		bool* is_selected,
-		SelectableFlags flags = SelectableFlags::kNone,
+		FlagsType flags = 0,
 		const Vector2& size = {}
 	);
 
 	static bool InputText(
 		std::u8string_view label,
 		std::u8string* buffer,
-		InputTextFlags flags = InputTextFlags::kNone,
-		const Vector2& size = {}
+		FlagsType flags = 0
 	);
 
 	static bool BeginWindow(
 		std::u8string_view title,
 		bool* open,
-		WindowFlags flags = WindowFlags::kNone
+		FlagsType flags = 0
 	);
 
 
     static bool BeginTable(
         std::u8string_view id,
         size_t column,
-        TableFlags flags = TableFlags::kNone,
+		FlagsType flags = 0,
         const Vector2& size = { 0, 0 },
         float inner_width = 0.0f
     );
 
     static void TableSetupColumn(
         std::u8string_view label,
-        TableColumnFlags flags = TableColumnFlags::kNone,
+		FlagsType flags = 0,
         float init_width_or_weight = 0,
         uint32_t user_id = 0);
 
@@ -91,7 +95,9 @@ public:
 
     static bool TableSetColumnIndex(size_t column_n);
 
-    static void TableNextRow(TableRowFlags row_flags = TableRowFlags::kNone, float row_min_height = 0);
+    static void TableNextRow(
+		FlagsType flags = 0,
+		float row_min_height = 0);
 
     static void EndTable();
 
@@ -100,8 +106,7 @@ public:
 	static bool BeginCombo(
 		std::u8string_view label,
 		std::u8string_view preview_value,
-		const Vector2& size = { 0, 0 },
-		ComboBoxFlags flags = ComboBoxFlags::kNone);
+		FlagsType flags = 0);
 
 	static void EndCombo();
 
@@ -109,5 +114,13 @@ public:
 	static void EndListBox();
 
 	static void SameLine(float offset_from_start_x = 0.0f, float spacing = -1.0f);
+
+	static bool BeginChildWindow(
+		std::u8string_view id,
+		const Vector2& size = { 0, 0 },
+		int child_window_flags = 0,
+		int window_flags = 0);
+
+	static void EndChildWindow();
 };
 }

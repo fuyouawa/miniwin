@@ -1,11 +1,13 @@
 #pragma once
 #include <miniwin/core/objectdefs.h>
 #include <miniwin/tools/function_traits.h>
+#include <miniwin/core/global.h>
 #include <string_view>
 
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 
 namespace miniwin {
+
 class Object
 {
 public:
@@ -30,6 +32,10 @@ public:
 
     std::u8string_view Name() const;
     void SetName(std::u8string_view name) const;
+
+    FlagsType Flags() const;
+    void SetFlags(FlagsType flags);
+    void EnableFlags(FlagsType flags, bool enable);
 
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 

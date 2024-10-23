@@ -1,5 +1,7 @@
 #include <miniwin/widgets/layout/layout.h>
 
+#include "miniwin/core/imgui_helper.h"
+
 namespace miniwin {
 Layout::Layout(Widget* parent)
 	: Widget(parent, u8"Layout")
@@ -57,5 +59,26 @@ size_t Layout::Count() const
 bool Layout::IsEmpty() const
 {
 	return Count() == 0;
+}
+
+void Layout::PaintBegin()
+{
+	Widget::PaintBegin();
+	float height = 0;
+	for (auto c : WidgetChildren())
+	{
+		auto h = c->Size().y();
+		if (h > height)
+			height = h;
+	}
+	auto size = Size();
+	size.set_y(height);
+	ImGuiHelper::BeginChildWindow(u8"LayoutFrame", size);
+}
+
+void Layout::PaintEnd()
+{
+	ImGuiHelper::EndChildWindow();
+	Widget::PaintEnd();
 }
 }

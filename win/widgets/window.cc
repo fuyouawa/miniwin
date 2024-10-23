@@ -1,5 +1,6 @@
 #include "win/core/widgets_driver.h"
 #include "window_impl.h"
+#include "win/core/widget_impl.h"
 
 namespace miniwin {
 Window::Window(std::u8string_view title)
@@ -16,28 +17,23 @@ std::u8string_view Window::Title() const {
     return Name();
 }
 
-void Window::SetTitle(std::u8string_view title) const {
+void Window::SetTitle(std::u8string_view title) {
     SetName(title);
 }
 
-WindowFlags Window::Flags() const
+void Window::EnableTop(bool b)
 {
-    return impl_->flags_;
+    impl_->top_sc_.SetControl(b);
 }
 
-void Window::SetFlags(WindowFlags flags)
-{
-    impl_->flags_ = flags;
-}
-
-void Window::EnableTop(bool b) const
-{
-    impl_->top_sc_.set_control(b);
-}
-
-void Window::SetClosable(bool b) const
+void Window::SetClosable(bool b)
 {
     impl_->is_closable_ = b;
+}
+
+void Window::SetCollapsed(bool b)
+{
+    impl_->collapsed_sc_.SetControl(b);
 }
 
 bool Window::IsClosable() const {
@@ -46,6 +42,11 @@ bool Window::IsClosable() const {
 
 bool Window::IsDocking() const {
 	return impl_->is_docking_;
+}
+
+bool Window::IsCollapsed() const
+{
+    return *impl_->collapsed_sc_;
 }
 
 void Window::PaintBegin()

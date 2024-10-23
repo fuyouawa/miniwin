@@ -59,6 +59,28 @@ void Object::SetName(std::u8string_view name) const
     impl_->name_ = name;
 }
 
+FlagsType Object::Flags() const
+{
+    return impl_->flags_;
+}
+
+void Object::SetFlags(FlagsType flags)
+{
+    impl_->flags_ = flags;
+}
+
+void Object::EnableFlags(FlagsType flags, bool enable)
+{
+	if (enable)
+	{
+        impl_->flags_ |= flags;
+	}
+	else
+	{
+        impl_->flags_ &= ~flags;
+	}
+}
+
 const std::vector<Object*>& Object::Children() const
 {
     return impl_->children_;

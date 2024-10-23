@@ -2,66 +2,121 @@
 #include <optional>
 #include <cassert>
 
-namespace miniwin {
-template<class T>
-class ScopeVariable {
-public:
-	ScopeVariable() : ScopeVariable(T{}) {}
-
-	template<std::convertible_to<T> E>
-	ScopeVariable(E&& init)
-		: val_{ init },
-		end_val_{ init },
-		simu_change_{ false },
-		clear_simu_change_{ false },
-		entry_{ false }
-	{}
-
-	void Entry() {
-		assert(!entry_);
-		entry_ = true;
-		if (control_val_.has_value()) {
-			val_ = std::move(control_val_.value());
-			control_val_ = std::nullopt;
+namespace miniwin
+{
+	template <class T>
+	class ScopeVariable
+	{
+	public:
+		ScopeVariable() : ScopeVariable(T{})
+		{
 		}
-		if (simu_change_) {
-			if (clear_simu_change_)
-				simu_change_ = false;
-			else
-				clear_simu_change_ = true;
+
+		template <std::convertible_to<T> E>
+		ScopeVariable(E&& init)
+			: val_{init},
+			  end_val_{init},
+			  simu_change_{false},
+			  clear_simu_change_{false},
+			  entry_{false}
+		{
 		}
+
+		/**
+		 * 进入作用域
+		 *
+		 * 如果上一次有set_control, 会在此时应用更改
+		 */
+		void Enter()
+		{
+			assert(!entry_);
+			entry_ = true;
+			if (control_val_.has_value())
+			{
+				val_ = std::move(control_val_.value());
+				control_val_ = std::nullopt;
+			}
+			if (simu_change_)
+			{
+				if (clear_simu_change_)
+					simu_change_ = false;
+				else
+					clear_simu_change_ = true;
+			}
+		}
+
+		/**
+		 * 退出作用域
+		 */
+		void Exit() noexcept(std::is_nothrow_copy_assignable_v<T>)
+		{
+			end_val_ = val_;
+			entry_ = false;
+		}
+
+		/**
+		 * 模拟发送一次数值改变
+		 */
+		void SimulateChange()
+		{
+			simu_change_ = true;
+			clear_simu_change_ = false;
+		}
+
+		/**
+		 * 设置控制数值, 会在下一次Enter的时候应用改改
+		 * @param val 要设置的数值
+		 */
+		template <std::convertible_to<T> E>
+		void SetControl(E&& val)
+			noexcept(std::is_rvalue_reference_v<decltype(val)>
+				         ? true
+				         : std::is_nothrow_copy_assignable_v<T>)
+		{
+			control_val_ = std::forward<E>(val);
+		}
+
+		template <std::convertible_to<T> E>
+		void SetValueDirectly(E&& val)
+		{
+			val_ = std::forward<E>(val);
+		}
+
+		/**
+		 * 数值是否有更改
+		 */
+		bool HasChange() const { return val_ != end_val_ || simu_change_; }
+
+		/**
+		 * 获取上一次退出时的数值
+		 */
+		decltype(auto) prev_value() const { return end_val_; }
+
+		/**
+		 * 是否进入作用域
+		 */
+		bool entry() const { return entry_; }
+
+		constexpr const T& get() const { return val_; }
+		constexpr const T& operator*() const { return get(); }
+
+	private:
+		// 上一次可能改变的数值
+		std::optional<T> control_val_;
+		// 这一次进入后的数值
+		T val_;
+		// 上一次退出时的数值
+		T end_val_;
+		bool simu_change_;
+		bool clear_simu_change_;
+		bool entry_;
+	};
+
+	template <typename T>
+	bool operator==(const ScopeVariable<T>& x, const ScopeVariable<T>& y)
+	{
+		return x.get() == y.get();
 	}
 
-	void Exit() noexcept(std::is_nothrow_copy_assignable_v<T>) {
-		end_val_ = val_;
-		entry_ = false;
-	}
-
-	void SimulateChange() { simu_change_ = true; clear_simu_change_ = false; }
-
-	template<std::convertible_to<T> E>
-	void set_control(E&& val) noexcept(std::is_rvalue_reference_v<decltype(val)> ? true : std::is_nothrow_copy_assignable_v<T>)
-	{ control_val_ = std::forward<E>(val); }
-
-	bool is_changed() const { return val_ != end_val_ || simu_change_; }
-	bool entry() const { return entry; }
-
-	constexpr const T& get() const { return val_; }
-	constexpr const T& operator*() const { return get(); }
-
-private:
-	std::optional<T> control_val_;
-	T val_;
-	T end_val_;
-	bool simu_change_;
-	bool clear_simu_change_;
-	bool entry_;
-};
-
-template<typename T>
-bool operator==(const ScopeVariable<T>& x, const ScopeVariable<T>& y) {
-	return x.get() == y.get();
-}
-
-using ScopeCondition = ScopeVariable<bool>;
+	using ScopeCondition = ScopeVariable<bool>;
 }

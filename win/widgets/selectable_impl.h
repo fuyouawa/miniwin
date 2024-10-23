@@ -7,7 +7,6 @@ public:
     Impl(Selectable* owner);
 
     Selectable* owner_;
-    SelectableFlags flags_;
     bool cur_selected_ = false;
     bool prev_selected_ = false;
 };

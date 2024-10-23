@@ -36,18 +36,8 @@ std::u8string_view TextEdit::PlainText() const
     return impl_->text_buffer_;
 }
 
-InputTextFlags TextEdit::Flags() const
-{
-    return impl_->flags_;
-}
-
-inline void TextEdit::SetFlags(InputTextFlags flags) const
-{
-    impl_->flags_ = flags;
-}
-
 void TextEdit::PaintBegin() {
     Widget::PaintBegin();
-	ImGuiHelper::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size());
+	ImGuiHelper::InputText(RightLabel(), &impl_->text_buffer_);
 }
 }

@@ -24,23 +24,13 @@ void ComboBoxView::SetText(std::u8string_view text)
 	SetName(text);
 }
 
-ComboBoxFlags ComboBoxView::Flags() const
-{
-	return impl_->flags_;
-}
-
-void ComboBoxView::SetFlags(ComboBoxFlags flags)
-{
-	impl_->flags_ = flags;
-}
-
 void ComboBoxView::PaintBegin()
 {
 	AbstractItemView::PaintBegin();
 	auto cs = SelectionModel()->CurrentSelection();
 	auto m = Model();
 	auto text = m->Data(cs.top_left()).ToUtf8String();
-	if (ImGuiHelper::BeginCombo(Text(), text, Size(), Flags()))
+	if (ImGuiHelper::BeginCombo(Text(), text))
 	{
 		if (auto d = ItemDelegate())
 		{
@@ -62,16 +52,6 @@ ComboBox::ComboBox(Widget* parent, std::u8string_view text)
 
 ComboBox::~ComboBox()
 {
-}
-
-ComboBoxFlags ComboBox::Flags() const
-{
-	return impl_->view_->Flags();
-}
-
-void ComboBox::SetFlags(ComboBoxFlags flags) const
-{
-	impl_->view_->SetFlags(flags);
 }
 
 std::u8string_view ComboBox::Text() const

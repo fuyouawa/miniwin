@@ -11,9 +11,6 @@ public:
     bool IsSelected() const;
     void SetSelection(bool b);
 
-    SelectableFlags Flags() const;
-    void SetFlags(SelectableFlags flags);
-
     MW_SIGNAL(OnSelectionChanged, (bool) selected)
 
 protected:

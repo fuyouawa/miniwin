@@ -9,16 +9,18 @@ public:
 	~Window() override;
 
     std::u8string_view Title() const;
-    void SetTitle(std::u8string_view title) const;
+    void SetTitle(std::u8string_view title);
 
-    WindowFlags Flags() const;
-    void SetFlags(WindowFlags flags);
-
-	void EnableTop(bool b) const;
-	void SetClosable(bool b) const;
+	void EnableTop(bool b);
+	void SetClosable(bool b);
+	void SetCollapsed(bool b);
 
 	bool IsClosable() const;
 	bool IsDocking() const;
+	bool IsCollapsed() const;
+
+	MW_SIGNAL(OnCollapseChanged, (bool) collapsed)
+	MW_SIGNAL(OnDockingChanged)
 
 protected:
 	void PaintBegin() override;

@@ -10,9 +10,6 @@ public:
     TableView(Widget* parent);
     ~TableView() override;
 
-    TableFlags Flags() const;
-    void SetFlags(TableFlags flags);
-
     HeaderView* HorizontalHeader() const;
     void SetHorizontalHeader(HeaderView* header);
 

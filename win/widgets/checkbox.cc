@@ -1,18 +1,18 @@
-#include <miniwin/widgets/checkbox.h>
+#include "checkbox_impl.h"
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
 CheckBox::CheckBox(Widget* const parent, std::u8string_view label)
-	: AbstractButton{ parent, label }
+	: AbstractControl(parent, label)
 {
 }
 
 void CheckBox::SetChecked(bool b) {
-    cur_checked_ = b;
+	impl_->checked_sc_.SetControl(b);
 }
 
 void CheckBox::PaintBegin() {
-    AbstractButton::PaintBegin();
-	ImGuiHelper::CheckBox(Text(), &cur_checked_, Size());
+	AbstractControl::PaintBegin();
+	impl_->PaintBegin();
 }
 }
