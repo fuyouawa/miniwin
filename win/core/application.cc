@@ -1,6 +1,7 @@
+#include "application_impl.h"
+
 #include <cassert>
 
-#include "applicarion_impl.h"
 
 namespace miniwin {
 Application* Application::instance_ = nullptr;

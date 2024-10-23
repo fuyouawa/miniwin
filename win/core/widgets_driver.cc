@@ -127,8 +127,8 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
     if (!widget->Visible())
         return;
 
-    auto ignore_self = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreSelfDraw) != WidgetDrawFlags::kNone;
-    auto ignore_children = (widget->DrawFlags() & WidgetDrawFlags::kIgnoreChildrenDraw) != WidgetDrawFlags::kNone;
+    auto ignore_self = (widget->DrawFlags() & Widget::kDrawIgnoreSelf) != 0;
+    auto ignore_children = (widget->DrawFlags() & Widget::kDrawIgnoreChildren) != 0;
 
     if (!ignore_self) {
         widget->PaintBegin();

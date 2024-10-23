@@ -7,17 +7,17 @@
 // - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
 // - Introduction, links and more at the top of imgui.cpp
 
+#include "application_impl.h"
+
 #include <d3d11.h>
 #include <tchar.h>
+
 #include <chrono>
 
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_win32.h>
 #include <imgui/backends/imgui_impl_dx11.h>
-
 #include <miniwin/tools/converter.h>
-
-#include "applicarion_impl.h"
 
 #pragma comment(lib, "D3D11.lib")
 

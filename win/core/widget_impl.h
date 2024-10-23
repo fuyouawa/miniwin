@@ -37,7 +37,7 @@ public:
     bool orphaned_ = false;
     bool dirty_ = false;
 
-    WidgetDrawFlags draw_flags_ = WidgetDrawFlags::kNone;
+    FlagsType draw_flags_ = 0;
 
     Widget* owner_;
     std::u8string id_;

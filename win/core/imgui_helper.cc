@@ -1,8 +1,7 @@
 #include <miniwin/core/imgui_helper.h>
+
 #include <imgui/imgui.h>
-#include "win/tools/inner.h"
 #include <imgui/misc/cpp/imgui_stdlib.h>
-#include <imgui/misc/cpp/imgui_stdlib.cpp>
 
 namespace miniwin {
 namespace {

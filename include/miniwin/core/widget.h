@@ -8,19 +8,16 @@
 #include <miniwin/tools/variant.h>
 
 namespace miniwin {
-enum class WidgetDrawFlags
-{
-    kNone = 0,
-    kIgnoreChildrenDraw = 1 << 0,
-    kIgnoreSelfDraw = 1 << 1,
-    kIgnoreDraw = kIgnoreChildrenDraw | kIgnoreSelfDraw
-};
-
-WidgetDrawFlags operator|(WidgetDrawFlags a, WidgetDrawFlags b);
-WidgetDrawFlags operator&(WidgetDrawFlags a, WidgetDrawFlags b);
-
 class Widget : public Object, public NonCopyMoveable {
 public:
+    enum DrawFlags
+    {
+        kDrawIgnoreNone = 0,
+        kDrawIgnoreChildren = 1 << 0,
+        kDrawIgnoreSelf = 1 << 1,
+        kDrawIgnoreDraw = kDrawIgnoreChildren | kDrawIgnoreSelf
+    };
+
     Widget(Widget* parent, std::u8string_view name, std::u8string_view id = u8"Widget");
     ~Widget() override;
 
@@ -47,8 +44,8 @@ public:
     virtual void SetSize(const Vector2& size);
 
     bool Orphaned() const;
-    WidgetDrawFlags DrawFlags() const;
-    void SetDrawFlags(WidgetDrawFlags draw_flags);
+    FlagsType DrawFlags() const;
+    void SetDrawFlags(FlagsType flags);
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
 

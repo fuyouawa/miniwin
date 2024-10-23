@@ -4,15 +4,10 @@
 #include <miniwin/tools/scope_variable.h>
 
 #include <win/core/widget_impl.h>
-#include "win/tools/inner.h"
 
 #include "widgets_driver.h"
-#include "miniwin/widgets/window.h"
 
 namespace miniwin {
-WidgetDrawFlags operator|(WidgetDrawFlags a, WidgetDrawFlags b) { return Or(a, b); }
-WidgetDrawFlags operator&(WidgetDrawFlags a, WidgetDrawFlags b) { return And(a, b); }
-
 Widget::Widget(Widget* parent, std::u8string_view name, std::u8string_view id)
     : Object(parent, name)
 {
@@ -120,14 +115,14 @@ void Widget::SetVisible(bool b) const
     impl_->SetVisible(b);
 }
 
-WidgetDrawFlags Widget::DrawFlags() const
+FlagsType Widget::DrawFlags() const
 {
     return impl_->draw_flags_;
 }
 
-void Widget::SetDrawFlags(WidgetDrawFlags draw_flags)
+void Widget::SetDrawFlags(FlagsType flags)
 {
-    impl_->draw_flags_ = draw_flags;
+    impl_->draw_flags_ = flags;
 }
 
 void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const
