@@ -66,33 +66,33 @@ void StandardItemModel::SetData(const ModelIndex& index, const Variant& data, It
     i[role] = data;
 }
 
-std::u8string_view StandardItemModel::Text(const ModelIndex& index) const
+String StandardItemModel::Text(const ModelIndex& index) const
 {
     auto d = Data(index, ItemRole::Display);
-    return d.ToUtf8String();
+    return d.ToString();
 }
 
-void StandardItemModel::SetText(const ModelIndex& index, std::u8string_view text)
+void StandardItemModel::SetText(const ModelIndex& index, const String& text)
 {
     SetData(index, text, ItemRole::Display);
 }
 
-void StandardItemModel::SetRowTexts(size_t row, size_t begin_column, std::initializer_list<std::u8string_view> texts)
+void StandardItemModel::SetRowTexts(size_t row, size_t begin_column, const StringList& texts)
 {
     assert(begin_column + texts.size() <= ColumnCount());
     size_t i = 0;
-    for (auto t : texts)
+    for (auto& t : texts)
     {
         SetText({ row, begin_column + i }, t);
         ++i;
     }
 }
 
-void StandardItemModel::SetColumnTexts(size_t begin_row, size_t column, std::initializer_list<std::u8string_view> texts)
+void StandardItemModel::SetColumnTexts(size_t begin_row, size_t column, const StringList& texts)
 {
     assert(begin_row + texts.size() <= RowCount());
     size_t i = 0;
-    for (auto t : texts)
+    for (auto& t : texts)
     {
         SetText({ begin_row + i, column }, t);
         ++i;
@@ -154,33 +154,33 @@ void StandardItemModel::SetHeaderData(size_t section, HeaderOrientation orientat
     (*items)[section][role] = data;
 }
 
-std::u8string_view StandardItemModel::HeaderText(int section, HeaderOrientation orientation) const
+String StandardItemModel::HeaderText(int section, HeaderOrientation orientation) const
 {
     auto d = HeaderData(section, orientation, ItemRole::Display);
-    return d.ToUtf8String();
+    return d.ToString();
 }
 
-void StandardItemModel::SetHeaderText(int section, HeaderOrientation orientation, std::u8string_view text)
+void StandardItemModel::SetHeaderText(int section, HeaderOrientation orientation, const String& text)
 {
     SetHeaderData(section, orientation, text, ItemRole::Display);
 }
 
-void StandardItemModel::SetHorizontalHeaderTexts(std::initializer_list<std::u8string_view> texts)
+void StandardItemModel::SetHorizontalHeaderTexts(const StringList& texts)
 {
     assert(texts.size() <= ColumnCount());
     size_t i = 0;
-    for (auto t : texts)
+    for (auto& t : texts)
     {
         SetHeaderText(i, HeaderOrientation::Horizontal, t);
         ++i;
     }
 }
 
-void StandardItemModel::SetVerticalHeaderTexts(std::initializer_list<std::u8string_view> texts)
+void StandardItemModel::SetVerticalHeaderTexts(const StringList& texts)
 {
     assert(texts.size() <= RowCount());
     size_t i = 0;
-    for (auto t : texts)
+    for (auto& t : texts)
     {
         SetHeaderText(i, HeaderOrientation::Vertical, t);
         ++i;

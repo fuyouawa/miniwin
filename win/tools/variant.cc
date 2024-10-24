@@ -36,14 +36,7 @@ Variant::Variant(const Variant& other)
 	{
 	case VariantType::kString:
 	{
-		auto s = Convert<char*>(other.var_, VariantType::kString);
-		assert(s);
-		var_ = CopyStr(s, strlen(s) + 1);
-		break;
-	}
-	case VariantType::kUtf8String:
-	{
-		auto s = Convert<char8_t*>(other.var_, VariantType::kUtf8String);
+		auto s = Convert<char8_t*>(other.var_, VariantType::kString);
 		assert(s);
 		var_ = CopyU8Str(s, strlen(reinterpret_cast<char*>(s)) + 1);
 		break;
@@ -66,12 +59,7 @@ Variant::Variant(std::nullptr_t)
 {
 }
 
-Variant::Variant(std::string_view str)
-{
-	var_ = CopyStr(str.data(), str.size() + 1);
-}
-
-Variant::Variant(std::u8string_view str)
+Variant::Variant(const String& str)
 {
 	var_ = CopyU8Str(str.data(), str.size() + 1);
 }
@@ -121,9 +109,6 @@ Variant::~Variant()
 	switch (Type())
 	{
 	case VariantType::kString:
-		delete[] std::get<char*>(var_);
-		break;
-	case VariantType::kUtf8String:
 		delete[] std::get<char8_t*>(var_);
 		break;
 	default:
@@ -182,16 +167,9 @@ size_t Variant::ToInteger(bool* ok) const
 	}
 }
 
-std::string Variant::ToString(bool* ok) const
+String Variant::ToString(bool* ok) const
 {
-	if (auto s = Convert<char*>(var_, VariantType::kString, ok))
-		return s;
-	return {};
-}
-
-std::u8string Variant::ToUtf8String(bool* ok) const
-{
-	if (auto s = Convert<char8_t*>(var_, VariantType::kUtf8String, ok))
+	if (auto s = Convert<char8_t*>(var_, VariantType::kString, ok))
 		return s;
 	return {};
 }

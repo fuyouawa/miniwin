@@ -8,11 +8,11 @@ namespace miniwin {
 class ComboBoxView : public AbstractItemView
 {
 public:
-	ComboBoxView(Widget* parent, std::u8string_view text);
+	ComboBoxView(Widget* parent, const String& text);
 	~ComboBoxView() override;
 
-	std::u8string_view Text() const;
-	void SetText(std::u8string_view text);
+	const String& Text() const;
+	void SetText(const String& text);
 
 protected:
 	void PaintBegin() override;
@@ -22,11 +22,11 @@ protected:
 
 class ComboBox : public Widget {
 public:
-	ComboBox(Widget* parent, std::u8string_view text);
+	ComboBox(Widget* parent, const String& text);
 	~ComboBox() override;
 
-	std::u8string_view Text() const;
-	void SetText(std::u8string_view text);
+	const String& Text() const;
+	void SetText(const String& text);
 
 	void SetItemDelegate(AbstractItemDelegate* delegate);
 	AbstractItemDelegate* ItemDelegate() const;
@@ -36,13 +36,13 @@ public:
 
 	size_t CurrentIndex() const;
 	Variant CurrentData(ItemRole role) const;
-	std::u8string CurrentText() const;
+	String CurrentText() const;
 
-	void AddItem(std::u8string_view text, const Variant& user_data = {});
-	void AddItems(std::initializer_list<std::u8string_view> texts);
+	void AddItem(const String& text, const Variant& user_data = {});
+	void AddItems(const StringList& texts);
 
-	void InsertItem(size_t index, std::u8string_view text, const Variant& user_data = {});
-	void InsertItems(size_t index, std::initializer_list<std::u8string_view> texts);
+	void InsertItem(size_t index, const String& text, const Variant& user_data = {});
+	void InsertItems(size_t index, const StringList& texts);
 
 	_MW_IMPL
 };

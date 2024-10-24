@@ -3,7 +3,7 @@
 #include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {
-ListView::ListView(Widget* parent, std::u8string_view label)
+ListView::ListView(Widget* parent, const String& label)
 	: AbstractItemView(parent)
 {
 	impl_ = std::make_unique<Impl>(this);
@@ -15,12 +15,12 @@ ListView::~ListView()
 {
 }
 
-std::u8string_view ListView::Text() const
+const String& ListView::Text() const
 {
 	return Name();
 }
 
-void ListView::SetText(std::u8string_view label)
+void ListView::SetText(const String& label)
 {
 	SetName(label);
 }

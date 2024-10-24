@@ -28,7 +28,7 @@ bool Object::Disconnecter::Disconnect() const
     return false;
 }
 
-Object::Object(Object* parent, std::u8string_view name)
+Object::Object(Object* parent, const String& name)
 {
 	impl_ = std::make_unique<Impl>(this);
     impl_->name_ = name;
@@ -50,12 +50,12 @@ void Object::SetParent(Object* parent) const
     impl_->SetParent(parent);
 }
 
-std::u8string_view Object::Name() const
+const String& Object::Name() const
 {
     return impl_->name_;
 }
 
-void Object::SetName(std::u8string_view name) const
+void Object::SetName(const String& name) const
 {
     impl_->name_ = name;
 }

@@ -25,7 +25,7 @@ void SelectableItemDelegate::Paint(AbstractItemView* view, const ModelIndex& ind
 {
     auto model = view->Model();
     auto selection_model = view->SelectionModel();
-    auto text = model->Data(index).ToUtf8String();
+    auto text = model->Data(index).ToString();
     bool is_selected = selection_model->IsSelected(index);
     if (ImGuiHelper::Selectable(text, &is_selected)) {
         if (Input::IsIoKeyDown(IoKeyCode::kCtrl) && IsAllocMultiSelect()) {

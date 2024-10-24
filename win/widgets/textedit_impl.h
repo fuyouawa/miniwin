@@ -9,7 +9,7 @@ public:
     Impl(TextEdit* owner);
 
     TextEdit* owner_;
-    std::u8string text_buffer_;
-    std::u8string right_label_;
+    String text_buffer_;
+    String right_label_;
 };
 }

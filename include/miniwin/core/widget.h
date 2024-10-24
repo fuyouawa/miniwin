@@ -17,7 +17,7 @@ public:
         kDrawIgnoreDraw = kDrawIgnoreChildren | kDrawIgnoreSelf
     };
 
-    Widget(Widget* parent, std::u8string_view name, std::u8string_view id = u8"Widget");
+    Widget(Widget* parent, const String& name, const String& id = u8"Widget");
     ~Widget() override;
 
     static bool IsInUIThread();
@@ -36,8 +36,8 @@ public:
     virtual bool Enabled() const;
     virtual void SetEnable(bool b) const;
 
-    std::u8string_view Id() const;
-    void SetId(std::u8string_view id);
+    const String& Id() const;
+    void SetId(const String& id);
 
     virtual Vector2 Size() const;
     virtual void SetSize(const Vector2& size);

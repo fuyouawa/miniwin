@@ -4,7 +4,7 @@
 
 
 namespace miniwin {
-TextEdit::TextEdit(Widget* const parent, std::u8string_view initial_text, std::u8string_view right_label)
+TextEdit::TextEdit(Widget* const parent, const String& initial_text, const String& right_label)
 	: Widget{ parent, u8"TextEdit" }
 {
     impl_ = std::make_unique<Impl>(this);
@@ -16,22 +16,22 @@ TextEdit::~TextEdit()
 {
 }
 
-std::u8string_view TextEdit::RightLabel() const
+const String& TextEdit::RightLabel() const
 {
     return impl_->right_label_;
 }
 
-void TextEdit::SetRightLabel(std::u8string_view label)
+void TextEdit::SetRightLabel(const String& label)
 {
     impl_->right_label_ = label;
 }
 
-void TextEdit::SetPlainText(std::u8string_view text)
+void TextEdit::SetPlainText(const String& text)
 {
     impl_->text_buffer_ = text;
 }
 
-std::u8string_view TextEdit::PlainText() const
+const String& TextEdit::PlainText() const
 {
     return impl_->text_buffer_;
 }

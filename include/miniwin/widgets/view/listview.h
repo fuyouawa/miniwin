@@ -4,11 +4,11 @@
 namespace miniwin {
 class ListView : public AbstractItemView {
 public:
-    ListView(Widget* parent, std::u8string_view text);
+    ListView(Widget* parent, const String& text);
     ~ListView() override;
 
-	std::u8string_view Text() const;
-	void SetText(std::u8string_view text);
+	const String& Text() const;
+	void SetText(const String& text);
 
 protected:
     void PaintBegin() override;

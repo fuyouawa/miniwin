@@ -5,7 +5,7 @@ namespace miniwin {
 class Button : public AbstractControl
 {
 public:
-	Button(Widget* parent, std::u8string_view text);
+	Button(Widget* parent, const String& text);
 
 	Vector2 Size() const override;
 	void SetSize(const Vector2& size) override;

@@ -57,7 +57,7 @@ public:
     bool deleting_ = false;
     Object* owner_ = nullptr;
     Object* parent_ = nullptr;
-    std::u8string name_;
+    String name_;
     FlagsType flags_;
     std::vector<Object*> children_;
     std::vector<ConnectionPtr> connected_sender_connections_;    // 连接到的发送者

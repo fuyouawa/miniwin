@@ -20,7 +20,7 @@ ComboBox::Impl::Impl(ComboBox* owner)
 {
 }
 
-void ComboBox::Impl::Init(std::u8string_view text)
+void ComboBox::Impl::Init(const String& text)
 {
 	view_ = new ComboBoxView(owner_, text);
 	auto model = new StandardItemModel(owner_);

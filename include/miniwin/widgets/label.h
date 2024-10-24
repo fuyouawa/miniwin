@@ -5,7 +5,7 @@ namespace miniwin {
 class Label : public AbstractControl
 {
 public:
-    Label(Widget* parent, std::u8string_view text);
+    Label(Widget* parent, const String& text);
 
 protected:
     void PaintBegin() override;

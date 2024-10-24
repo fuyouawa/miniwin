@@ -49,7 +49,7 @@ void TableView::PaintBegin()
         {
             for (size_t col = 0; col < col_count; ++col)
             {
-                auto text = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Display).ToUtf8String();
+                auto text = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Display).ToString();
                 auto flags = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Flags).ToInt32();
                 ImGuiHelper::TableSetupColumn(text, flags);
             }

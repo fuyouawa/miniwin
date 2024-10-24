@@ -1,7 +1,7 @@
 #include "window_impl.h"
 
 namespace miniwin {
-Window::Window(std::u8string_view title)
+Window::Window(const String& title)
 	: Widget(nullptr, title)
 {
     impl_ = std::make_unique<Impl>(this);
@@ -11,11 +11,11 @@ Window::~Window()
 {
 }
 
-std::u8string_view Window::Title() const {
+const String& Window::Title() const {
     return Name();
 }
 
-void Window::SetTitle(std::u8string_view title) {
+void Window::SetTitle(const String& title) {
     SetName(title);
 }
 

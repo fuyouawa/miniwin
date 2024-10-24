@@ -1,6 +1,6 @@
 #pragma once
-#include <string>
 #include <variant>
+#include <miniwin/tools/string.h>
 
 enum class VariantType
 {
@@ -14,8 +14,7 @@ enum class VariantType
     kUInt64,
     kFloat,
     kDouble,
-    kString,
-    kUtf8String
+    kString
 };
 
 namespace miniwin {
@@ -36,8 +35,7 @@ public:
     Variant(uint64_t u64);
     Variant(float f);
     Variant(double d);
-    Variant(std::string_view str);
-    Variant(std::u8string_view str);
+    Variant(const String& str);
 
     VariantType Type() const;
 
@@ -55,10 +53,9 @@ public:
     int64_t ToInt64(bool* ok = nullptr) const;
     uint32_t ToUInt32(bool* ok = nullptr) const;
     uint64_t ToUInt64(bool* ok = nullptr) const;
-    std::string ToString(bool* ok = nullptr) const;
-    std::u8string ToUtf8String(bool* ok = nullptr) const;
+    String ToString(bool* ok = nullptr) const;
 
 private:
-    std::variant<std::monostate, std::nullptr_t, char, bool, int32_t, uint32_t, int64_t, uint64_t, float, double, char*, char8_t*> var_;
+    std::variant<std::monostate, std::nullptr_t, char, bool, int32_t, uint32_t, int64_t, uint64_t, float, double, char8_t*> var_;
 };
 }

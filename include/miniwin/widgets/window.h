@@ -5,11 +5,11 @@ namespace miniwin {
 class Window : public Widget
 {
 public:
-	Window(std::u8string_view title);
+	Window(const String& title);
 	~Window() override;
 
-    std::u8string_view Title() const;
-    void SetTitle(std::u8string_view title);
+    const String& Title() const;
+    void SetTitle(const String& title);
 
 	void EnableTop(bool b);
 	void SetClosable(bool b);

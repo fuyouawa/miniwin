@@ -3,7 +3,7 @@
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
-Button::Button(Widget* const parent, std::u8string_view text)
+Button::Button(Widget* const parent, const String& text)
 	: AbstractControl(parent, text)
 {
 	impl_ = std::make_unique<Impl>(this);

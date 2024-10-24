@@ -22,20 +22,20 @@ public:
     Variant HeaderData(size_t section, HeaderOrientation orientation, ItemRole role) const override;
     void SetHeaderData(size_t section, HeaderOrientation orientation, const Variant& data, ItemRole role) override;
 
-    std::u8string_view Text(const ModelIndex& index) const;
-    void SetText(const ModelIndex& index, std::u8string_view text);
+    String Text(const ModelIndex& index) const;
+    void SetText(const ModelIndex& index, const String& text);
 
-    void SetRowTexts(size_t row, size_t begin_column, std::initializer_list<std::u8string_view> texts);
-    void SetColumnTexts(size_t begin_row, size_t column, std::initializer_list<std::u8string_view> texts);
+    void SetRowTexts(size_t row, size_t begin_column, const StringList& texts);
+    void SetColumnTexts(size_t begin_row, size_t column, const StringList& texts);
 
     int Flags(const ModelIndex& index) const;
     void SetFlags(const ModelIndex& index, int flags);
 
-    std::u8string_view HeaderText(int section, HeaderOrientation orientation) const;
-    void SetHeaderText(int section, HeaderOrientation orientation, std::u8string_view text);
+    String HeaderText(int section, HeaderOrientation orientation) const;
+    void SetHeaderText(int section, HeaderOrientation orientation, const String& text);
 
-    void SetHorizontalHeaderTexts(std::initializer_list<std::u8string_view> texts);
-    void SetVerticalHeaderTexts(std::initializer_list<std::u8string_view> texts);
+    void SetHorizontalHeaderTexts(const StringList& texts);
+    void SetVerticalHeaderTexts(const StringList& texts);
 
     int HeaderFlags(int section, HeaderOrientation orientation) const;
     void SetHeaderFlags(int section, HeaderOrientation orientation, int flags);

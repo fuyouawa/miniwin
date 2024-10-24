@@ -9,7 +9,7 @@
 #include "widgets_driver.h"
 
 namespace miniwin {
-Widget::Widget(Widget* parent, std::u8string_view name, std::u8string_view id)
+Widget::Widget(Widget* parent, const String& name, const String& id)
     : Object(parent, name)
 {
     impl_ = std::make_unique<Impl>(this);
@@ -90,12 +90,12 @@ void Widget::SetSize(const Vector2& size) {
     impl_->size_sc_.SetControl(size);
 }
 
-std::u8string_view Widget::Id() const
+const String& Widget::Id() const
 {
     return impl_->id_;
 }
 
-void Widget::SetId(std::u8string_view id)
+void Widget::SetId(const String& id)
 {
     impl_->id_ = id;
 }

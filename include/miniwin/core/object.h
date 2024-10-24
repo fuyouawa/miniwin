@@ -1,9 +1,8 @@
 #pragma once
-#include <string_view>
-
 #include <miniwin/core/objectdefs.h>
 #include <miniwin/tools/function_traits.h>
 #include <miniwin/core/global.h>
+#include <miniwin/tools/string.h>
 
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 
@@ -24,15 +23,15 @@ public:
         std::function<bool()> func_;
     };
 
-    Object(Object* parent, std::u8string_view name);
+    Object(Object* parent, const String& name);
     virtual ~Object();
 
     const Object* Parent() const;
     void SetParent(Object* parent) const;
     const std::vector<Object*>& Children() const;
 
-    std::u8string_view Name() const;
-    void SetName(std::u8string_view name) const;
+    const String& Name() const;
+    void SetName(const String& name) const;
 
     FlagsType Flags() const;
     void SetFlags(FlagsType flags);

@@ -4,7 +4,7 @@
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
-AbstractControl::AbstractControl(Widget* parent, std::u8string_view text)
+AbstractControl::AbstractControl(Widget* parent, const String& text)
 	: Widget{ parent, text }
 {
     impl_ = std::make_unique<Impl>(this);
@@ -14,12 +14,12 @@ AbstractControl::~AbstractControl()
 {
 }
 
-std::u8string_view AbstractControl::Text() const
+const String& AbstractControl::Text() const
 {
     return Name();
 }
 
-void AbstractControl::SetText(std::u8string_view text)
+void AbstractControl::SetText(const String& text)
 {
     SetName(text);
 }

@@ -5,14 +5,14 @@ namespace miniwin {
 class TextEdit : public Widget
 {
 public:
-    TextEdit(Widget* parent, std::u8string_view initial_text, std::u8string_view right_label = u8"");
+    TextEdit(Widget* parent, const String& initial_text, const String& right_label = u8"");
     ~TextEdit() override;
 
-    std::u8string_view RightLabel() const;
-    void SetRightLabel(std::u8string_view label);
+    const String& RightLabel() const;
+    void SetRightLabel(const String& label);
 
-    void SetPlainText(std::u8string_view text);
-    std::u8string_view PlainText() const;
+    void SetPlainText(const String& text);
+    const String& PlainText() const;
 
 protected:
     void PaintBegin() override;

@@ -3,7 +3,7 @@
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
-ComboBoxView::ComboBoxView(Widget* parent, std::u8string_view text)
+ComboBoxView::ComboBoxView(Widget* parent, const String& text)
 	: AbstractItemView(parent)
 {
 	impl_ = std::make_unique<Impl>(this);
@@ -15,12 +15,12 @@ ComboBoxView::~ComboBoxView()
 {
 }
 
-std::u8string_view ComboBoxView::Text() const
+const String& ComboBoxView::Text() const
 {
 	return Name();
 }
 
-void ComboBoxView::SetText(std::u8string_view text)
+void ComboBoxView::SetText(const String& text)
 {
 	SetName(text);
 }
@@ -30,7 +30,7 @@ void ComboBoxView::PaintBegin()
 	AbstractItemView::PaintBegin();
 	auto cs = SelectionModel()->CurrentSelection();
 	auto m = Model();
-	auto text = m->Data(cs.top_left()).ToUtf8String();
+	auto text = m->Data(cs.top_left()).ToString();
 	if (ImGuiHelper::BeginCombo(Text(), text))
 	{
 		if (auto d = ItemDelegate())
@@ -44,7 +44,7 @@ void ComboBoxView::PaintBegin()
 	}
 }
 
-ComboBox::ComboBox(Widget* parent, std::u8string_view text)
+ComboBox::ComboBox(Widget* parent, const String& text)
 	: Widget(parent, u8"ComboBox")
 {
 	impl_ = std::make_unique<Impl>(this);
@@ -55,12 +55,12 @@ ComboBox::~ComboBox()
 {
 }
 
-std::u8string_view ComboBox::Text() const
+const String& ComboBox::Text() const
 {
 	return impl_->view_->Text();
 }
 
-void ComboBox::SetText(std::u8string_view text)
+void ComboBox::SetText(const String& text)
 {
 	impl_->view_->SetText(text);
 }
@@ -100,22 +100,22 @@ Variant ComboBox::CurrentData(ItemRole role) const
 	return Model()->Data(CurrentIndex(), role);
 }
 
-std::u8string ComboBox::CurrentText() const
+String ComboBox::CurrentText() const
 {
-	return CurrentData(ItemRole::Display).ToUtf8String();
+	return CurrentData(ItemRole::Display).ToString();
 }
 
-void ComboBox::AddItem(std::u8string_view text, const Variant& user_data)
+void ComboBox::AddItem(const String& text, const Variant& user_data)
 {
 	InsertItem(Model()->RowCount(), text, user_data);
 }
 
-void ComboBox::AddItems(std::initializer_list<std::u8string_view> texts)
+void ComboBox::AddItems(const StringList& texts)
 {
 	InsertItems(Model()->RowCount(), texts);
 }
 
-void ComboBox::InsertItem(size_t index, std::u8string_view text, const Variant& user_data)
+void ComboBox::InsertItem(size_t index, const String& text, const Variant& user_data)
 {
 	auto m = Model();
 	m->InsertRow(index);
@@ -123,7 +123,7 @@ void ComboBox::InsertItem(size_t index, std::u8string_view text, const Variant& 
 	m->SetData(index, user_data, ItemRole::UserData);
 }
 
-void ComboBox::InsertItems(size_t index, std::initializer_list<std::u8string_view> texts)
+void ComboBox::InsertItems(size_t index, const StringList& texts)
 {
 	auto m = Model();
 	m->InsertRows(index, texts.size());

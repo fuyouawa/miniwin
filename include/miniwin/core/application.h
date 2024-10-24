@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
-#include <string_view>
+
+#include <miniwin/tools/string.h>
 
 
 namespace miniwin {
@@ -20,11 +21,11 @@ public:
     bool IsHideMainWindow() const;
     void SetHideMainWindow(bool b);
 
-    std::u8string_view MainWindowClassName() const;
-    void MainWindowClassName(std::u8string_view class_name);
+    const String& MainWindowClassName() const;
+    void MainWindowClassName(const String& class_name);
 
-    std::u8string_view MainWindowTitle() const;
-    void SetMainWindowTitle(std::u8string_view title) const;
+    const String& MainWindowTitle() const;
+    void SetMainWindowTitle(const String& title) const;
 
     size_t Fps() const;
     void SetFps(size_t fps);

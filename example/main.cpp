@@ -9,25 +9,27 @@
 #include <miniwin/widgets/layout/boxlayout.h>
 #include <miniwin/widgets/view/listview.h>
 
-class ExampleWindow : public miniwin::Window
+using namespace miniwin;
+
+class ExampleWindow : public Window
 {
 public:
-	ExampleWindow(const std::u8string_view& title)
+	ExampleWindow(const String& title)
 		: Window(title)
 	{
-        label_ = new miniwin::Label(this, u8"j士大夫jbb");
+        label_ = new Label(this, u8"j士大夫jbb");
 
-        text_edit_label_ = new miniwin::Label(this, u8"TextEdit Label");
-        text_edit_ = new miniwin::TextEdit(this, u8"fffff");
+        text_edit_label_ = new Label(this, u8"TextEdit Label");
+        text_edit_ = new TextEdit(this, u8"fffff");
 
-        box_layout_ = new miniwin::HBoxLayout(this);
+        box_layout_ = new HBoxLayout(this);
         box_layout_->AddWidget(text_edit_label_);
         box_layout_->AddWidget(text_edit_);
 
-        table_view_ = new miniwin::TableView(this);
+        table_view_ = new TableView(this);
 
         // 实例化一个Model
-        auto model = new miniwin::StandardItemModel(table_view_);
+        auto model = new StandardItemModel(table_view_);
         // 设置列的数量
         model->SetColumnCount(4);
         // 设置水平头部(也就是列头)的文本
@@ -45,22 +47,22 @@ public:
         // 设置1行2列选中
         selection_model->Select(0, 1);
 
-        combobox_ = new miniwin::ComboBox(this, u8"ComboBox");
+        combobox_ = new ComboBox(this, u8"ComboBox");
         combobox_->AddItems({ u8"啥啥啥", u8"dff单独", u8"ff当我" });
 
 	}
 
-    miniwin::HBoxLayout* box_layout_;
-    miniwin::Label* label_;
-    miniwin::Label* text_edit_label_;
-    miniwin::TextEdit* text_edit_;
-    miniwin::TableView* table_view_;
-    miniwin::ComboBox* combobox_;
+    HBoxLayout* box_layout_;
+    Label* label_;
+    Label* text_edit_label_;
+    TextEdit* text_edit_;
+    TableView* table_view_;
+    ComboBox* combobox_;
 };
 
 
 int main() {
-	miniwin::Application app;
+	Application app;
     app.SetHideMainWindow(true);
 
 	auto window = new ExampleWindow{ u8"Example Window" };

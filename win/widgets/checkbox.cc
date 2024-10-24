@@ -3,7 +3,7 @@
 #include <miniwin/core/imgui_helper.h>
 
 namespace miniwin {
-CheckBox::CheckBox(Widget* const parent, std::u8string_view label)
+CheckBox::CheckBox(Widget* const parent, const String& label)
 	: AbstractControl(parent, label)
 {
 }

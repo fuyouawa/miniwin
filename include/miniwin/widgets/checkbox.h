@@ -5,7 +5,7 @@ namespace miniwin {
 class CheckBox : public AbstractControl
 {
 public:
-	CheckBox(Widget* parent, std::u8string_view label);
+	CheckBox(Widget* parent, const String& label);
 
     void SetChecked(bool b);
 

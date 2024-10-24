@@ -27,7 +27,7 @@ static void glfw_error_callback(int error, const char* description)
 }
 
 namespace miniwin {
-int Application::Execute(bool hide_main_window, std::u8string_view window_title)
+int Application::Execute(bool hide_main_window, const String& window_title)
 {
     impl_->OnAppStart();
 
