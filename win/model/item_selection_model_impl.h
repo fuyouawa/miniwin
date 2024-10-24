@@ -10,7 +10,7 @@ class ItemSelectionModel::Impl {
 public:
     static constexpr size_t kLengthOfOneBitsetSelections = sizeof(size_t) * 8;
     using BitsetSelections = std::bitset<kLengthOfOneBitsetSelections>;
-    using OneBitsetSelectionsTable = std::vector<BitsetSelections>;
+    using OneBitsetSelectionsTable = List<BitsetSelections>;
 
     explicit Impl(ItemSelectionModel* owner, AbstractItemModel* model);
 

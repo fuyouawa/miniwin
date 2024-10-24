@@ -13,15 +13,15 @@ String::String(std::u8string_view str)
 {
 }
 
-String& String::operator=(const char8_t* other)
+String& String::operator=(const char8_t* right)
 {
-    str_ = other;
+    str_ = right;
     return *this;
 }
 
-String& String::operator=(std::u8string_view other)
+String& String::operator=(std::u8string_view right)
 {
-    str_ = other;
+    str_ = right;
     return *this;
 }
 
@@ -36,10 +36,5 @@ std::wstring String::ToStdWString() const
     auto sz = std::mbstowcs(wstr.data(), reinterpret_cast<const char*>(str_.data()), str_.size());
     assert(sz == wstr.size());
     return wstr;
-}
-
-StringList::StringList(std::initializer_list<String> args)
-    : Inherit(args)
-{
 }
 }

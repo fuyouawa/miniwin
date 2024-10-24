@@ -41,19 +41,18 @@ void StandardItemModel::Impl::SetColumnCount(size_t c)
 void StandardItemModel::Impl::InsertRows(size_t row, size_t count)
 {
     assert(row <= RowCount());
-    items_.insert(items_.begin() + row, count, {});
+    items_.Insert(items_.begin() + row, count, {});
 
-    vertical_header_items_.insert(vertical_header_items_.begin() + row, count, {});
+    vertical_header_items_.Insert(vertical_header_items_.begin() + row, count, {});
 }
 
 void StandardItemModel::Impl::RemoveRows(size_t row, size_t count)
 {
     assert(row + count <= RowCount());
-    auto pos = items_.begin() + row;
-    items_.erase(pos, pos + count);
+    items_.Erase(items_.begin() + row, count);
 
-    auto pos2 = vertical_header_items_.begin() + row;
-    vertical_header_items_.erase(pos2, pos2 + count);
+    vertical_header_items_.Erase(
+        vertical_header_items_.begin() + row, count);
 }
 
 void StandardItemModel::Impl::InsertColumns(size_t column, size_t count)
@@ -67,11 +66,11 @@ void StandardItemModel::Impl::InsertColumns(size_t column, size_t count)
             // 如果是在当前行的列数中间插入的, 才需要真正插入
             if (r.size() > column)
             {
-                r.insert(r.begin() + column, count, {});
+                r.Insert(r.begin() + column, count, {});
             }
         }
     }
-    horizontal_header_items_.insert(horizontal_header_items_.begin() + column, count, {});
+    horizontal_header_items_.Insert(horizontal_header_items_.begin() + column, count, {});
     column_count_ += count;
 }
 
@@ -82,13 +81,11 @@ void StandardItemModel::Impl::RemoveColumns(size_t column, size_t count)
     {
         if (r.size() > column)
         {
-            auto c = r.size() - column;
-            auto pos = r.begin() + column;
-            r.erase(pos, pos + c);
+            r.Erase(r.begin() + column, r.size() - column);
         }
     }
-    auto pos = horizontal_header_items_.begin() + column;
-    horizontal_header_items_.erase(pos, pos + count);
+    horizontal_header_items_.Erase(
+        horizontal_header_items_.begin() + column, count);
 
     column_count_ -= count;
 }
@@ -120,6 +117,6 @@ StandardItem& StandardItemModel::Impl::GetOrCreateItem(const ModelIndex& idx)
 
 void StandardItemModel::Impl::Clear()
 {
-    items_.clear();
+    items_.Clear();
 }
 }

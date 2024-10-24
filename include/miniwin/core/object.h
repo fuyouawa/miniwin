@@ -3,6 +3,7 @@
 #include <miniwin/tools/function_traits.h>
 #include <miniwin/core/global.h>
 #include <miniwin/tools/string.h>
+#include <miniwin/tools/list.h>
 
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 
@@ -28,7 +29,7 @@ public:
 
     const Object* Parent() const;
     void SetParent(Object* parent) const;
-    const std::vector<Object*>& Children() const;
+    const List<Object*>& Children() const;
 
     const String& Name() const;
     void SetName(const String& name) const;

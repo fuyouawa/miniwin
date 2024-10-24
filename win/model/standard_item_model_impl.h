@@ -4,7 +4,7 @@
 namespace miniwin {
 using StandardItem = std::unordered_map<ItemRole, Variant>;
 
-using StandardLineItems = std::vector<StandardItem>;
+using StandardLineItems = List<StandardItem>;
 
 class StandardItemModel::Impl
 {
@@ -34,7 +34,7 @@ public:
     void Clear();
 
     StandardItemModel* owner_;
-    std::vector<StandardLineItems> items_;
+    List<StandardLineItems> items_;
     size_t column_count_;
     StandardLineItems horizontal_header_items_;
     StandardLineItems vertical_header_items_;

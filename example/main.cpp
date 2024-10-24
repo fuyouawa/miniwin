@@ -66,6 +66,5 @@ int main() {
     app.SetHideMainWindow(true);
 
 	auto window = new ExampleWindow{ u8"Example Window" };
-
 	app.Execute();
 }

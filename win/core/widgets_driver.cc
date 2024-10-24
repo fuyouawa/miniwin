@@ -8,6 +8,7 @@
 namespace miniwin {
 WidgetsDriver& WidgetsDriver::instance()
 {
+    std::locale::global(std::locale("zh_CN.UTF-8"));
     static WidgetsDriver inst;
     static bool initialized = false;
     if (!initialized)
@@ -26,7 +27,7 @@ WidgetsDriver::~WidgetsDriver()
 void WidgetsDriver::Update()
 {
     ClearDirty();
-    DoPendingOperations();
+    DoPending();
     CallUpdateEarly();
     for (auto& win : windows_)
     {
@@ -40,18 +41,18 @@ void WidgetsDriver::Update()
 void WidgetsDriver::ClearDirty()
 {
     {
-        std::vector<std::vector<Window*>::iterator> orphaned_win_iters;
+        List<List<Window*>::iterator> orphaned_win_iters;
         for (auto it = windows_.begin(); it != windows_.end(); ++it)
         {
             if ((*it)->Orphaned())
             {
-                orphaned_win_iters.push_back(it);
+                orphaned_win_iters.PushBack(it);
             }
         }
         for (auto it : orphaned_win_iters)
         {
             auto w = *it;
-            windows_.erase(it);
+            windows_.Erase(it);
             delete w;
         }
     }
@@ -62,7 +63,7 @@ void WidgetsDriver::ClearDirty()
     }
 }
 
-void WidgetsDriver::CallUpdateEarly()
+void WidgetsDriver::CallUpdateEarly() const
 {
     for (auto& win : windows_)
     {
@@ -70,52 +71,40 @@ void WidgetsDriver::CallUpdateEarly()
     }
 }
 
-void WidgetsDriver::DoPendingOperations()
+void WidgetsDriver::DoPending()
 {
-    PendingOperationsQueue queue;
+    List<std::function<void()>> functors;
     {
         std::lock_guard lk{ mutex_ };
-        queue.swap(pending_operations_);
+        functors.Swap(pending_functors_);
     }
-    while (!queue.empty())
+    for (auto& f : functors)
     {
-        auto& op = queue.front();
-        switch (op.first)
-        {
-        case Operation::kAdd:
-        {
-            windows_.push_back(op.second);
-            break;
-        }
-        case Operation::kCloseAll:
+        f();
+    }
+    functors.Clear();
+}
+
+bool WidgetsDriver::IsDone() const
+{
+    return windows_.empty() && pending_functors_.empty();
+}
+
+void WidgetsDriver::CloseAll()
+{
+    PushPendingFunctor([this]
         {
             for (auto& win : windows_)
             {
                 delete win;
             }
-            windows_.clear();
-            break;
-        }
-        }
-        queue.pop();
-    }
-}
-
-bool WidgetsDriver::IsDone() const
-{
-    return windows_.empty() && pending_operations_.empty();
-}
-
-void WidgetsDriver::CloseAll()
-{
-    std::lock_guard lk{ mutex_ };
-    pending_operations_.emplace(Operation::kCloseAll, nullptr);
+            windows_.Clear();
+        });
 }
 
 void WidgetsDriver::RegisterWindow(Window* window)
 {
-    std::lock_guard lk{ mutex_ };
-    pending_operations_.emplace(Operation::kAdd, window);
+    PushPendingFunctor([=, this] { windows_.PushBack(window); });
 }
 
 std::thread::id WidgetsDriver::UiThreadId() const
@@ -158,6 +147,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
 
 void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget)
 {
+    static Widget* win = widget;
     if (widget->Visible())
     {
         widget->PreparePaint();
@@ -177,12 +167,12 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
     if (widget->impl_->dirty_)
     {
         auto& wc = widget->WidgetChildren();
-        std::vector<std::vector<Widget*>::const_iterator> orphaned_children_iters;
+        List<List<Widget*>::const_iterator> orphaned_children_iters;
         for (auto it = wc.begin(); it != wc.end(); ++it)
         {
             if ((*it)->Orphaned())
             {
-                orphaned_children_iters.push_back(it);
+                orphaned_children_iters.PushBack(it);
             }
         }
         for (auto it : orphaned_children_iters)
@@ -196,5 +186,11 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
         assert(!c->Orphaned());
         ClearDirtyRecursion(c);
     }
+}
+
+void WidgetsDriver::PushPendingFunctor(std::function<void()>&& func)
+{
+    std::lock_guard lk{ mutex_ };
+    pending_functors_.PushBack(std::move(func));
 }
 }

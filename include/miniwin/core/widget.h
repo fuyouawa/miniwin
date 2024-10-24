@@ -26,9 +26,9 @@ public:
 
     const Widget* WidgetParent() const;
     void SetWidgetParent(Widget* parent);
-    const std::vector<Widget*>& WidgetChildren() const;
+    const List<Widget*>& WidgetChildren() const;
 
-    std::optional<size_t> IndexOfWidgetChild(const Widget* child) const;
+    size_t IndexOfWidgetChild(const Widget* child) const;
     bool SetWidgetChildIndex(const Widget* child, size_t index);
 
     virtual bool Visible() const;

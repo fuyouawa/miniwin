@@ -33,13 +33,12 @@ Object::Impl::~Impl() {
                 std::lock_guard lk2{ signal_mutex(c->receiver) };
                 if (c->receiver)
                 {
-                    auto& sender_conns = c->receiver->impl_->connected_sender_connections_;
-                    auto f = std::ranges::find_if(sender_conns, [&](auto& sc) { return sc == c; });
-                    assert(f != sender_conns.end());
-                    sender_conns.erase(f);
+                    size_t count = c->receiver->impl_->connected_sender_connections_
+                        .EraseIf([&](auto& sc) { return sc == c; });
+                    assert(count == 1);
                 }
             }
-            conns.second.clear();
+            conns.second.Clear();
         }
 
         for (auto& sender_conn : connected_sender_connections_)
@@ -68,18 +67,18 @@ void Object::Impl::ConnectionsManager::ClearDirty()
     {
         for (auto& conns : map_)
         {
-            std::vector<ConnectionList::iterator> iters_to_remove;
+            List<ConnectionList::iterator> iters_to_remove;
             for (auto iter = conns.second.begin(); iter != conns.second.end(); ++iter)
             {
                 auto& c = *iter;
                 if (!c->receiver)
                 {
-                    iters_to_remove.push_back(iter);
+                    iters_to_remove.PushBack(iter);
                 }
             }
             for (auto iter : iters_to_remove)
             {
-                conns.second.erase(iter);
+                conns.second.Erase(iter);
             }
         }
         dirty_ = false;
@@ -112,12 +111,11 @@ Object::Disconnecter Object::Impl::ConnectImpl(
                 auto errmsg = std::format("Hash conflict between signal '{}' and signal '{}', try to change the name or parameter of one of them", res->first.name(), signal_info.name());
                 throw std::exception(errmsg.c_str());
             }
-            const auto& conns = res->second;
-            auto res2 = std::ranges::find_if(conns, [&](const auto& c)
+            auto res2 = res->second.FindIf([&](auto& c)
                 {
                     return c->receiver == receiver && c->slot_obj->Compare(slot_obj.get());
                 });
-            if (res2 != conns.end())
+            if (!res2.IsEnd())
             {
                 if (has_unique_flag)
                 {
@@ -173,10 +171,7 @@ bool Object::Impl::DisconnectImpl(const std::type_info& signal_info, const Conne
     auto res = connections_manager_.map_.find(signal_info);
     if (res == connections_manager_.map_.end())
         return false;
-    auto& conns = res->second;
-    auto res2 = std::ranges::find(conns, connection);
-    assert(res2 != conns.end());
-    conns.erase(res2);
+    res->second.Erase(connection);
     return true;
 }
 
@@ -184,7 +179,7 @@ Object::Disconnecter Object::Impl::AddConnectionWithoutLock(const std::type_info
     ConnectionPtr conn)
 {
     auto [it, _] = connections_manager_.map_.try_emplace(signal_info);
-    it->second.push_back(std::move(conn));
+    it->second.PushBack(std::move(conn));
     connections_manager_.ClearDirty();
     return { [this, conn, &signal_info] { return DisconnectImpl(signal_info, conn); } };
 }
@@ -197,15 +192,14 @@ void Object::Impl::SetParent(Object* parent)
     //TODO 确保当parent遍历children的时候都不应该进行删除操作
     if (parent_ && !parent_->impl_->deleting_)
     {
-        auto f = std::ranges::find(parent_->impl_->children_, owner_);
-        assert(f != parent_->impl_->children_.end());
-        parent_->impl_->children_.erase(f);
+        size_t count = parent_->impl_->children_.Erase(owner_);
+        assert(count == 1);
     }
     parent_ = parent;
 
     if (parent_)
     {
-        parent_->impl_->children_.push_back(owner_);
+        parent_->impl_->children_.PushBack(owner_);
     }
 }
 
@@ -215,6 +209,6 @@ void Object::Impl::DeleteChildren()
     {
         delete c;
     }
-    children_.clear();
+    children_.Clear();
 }
 }

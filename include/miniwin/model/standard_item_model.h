@@ -1,5 +1,6 @@
 #pragma once
 #include <miniwin/model/base/abstract_item_model.h>
+#include <miniwin/tools/stringlist.h>
 
 namespace miniwin {
 class StandardItemModel : public AbstractItemModel

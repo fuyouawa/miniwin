@@ -1,7 +1,10 @@
 #pragma once
+#include <functional>
 #include <vector>
 #include <queue>
 #include <mutex>
+
+#include "miniwin/tools/list.h"
 
 namespace miniwin {
 class Window;
@@ -17,6 +20,8 @@ public:
     void CloseAll();
     void RegisterWindow(Window* window);
 
+    void PushPendingFunctor(std::function<void()>&& func);
+
     std::thread::id UiThreadId() const;
 
 private:
@@ -26,19 +31,19 @@ private:
         kAdd,
         kCloseAll
     };
-    using PendingOperationsQueue = std::queue<std::pair<Operation, Window*>>;
 
     static void UpdateRecursion(Widget* widget, bool force_ignore_children = false);
     static void CallUpdateEarlyRecursion(Widget* widget);
     static void ClearDirtyRecursion(Widget* widget);
     void Update();
     void ClearDirty();
-    void CallUpdateEarly();
-    void DoPendingOperations();
+    void CallUpdateEarly() const;
+    void DoPending();
 
     std::thread::id ui_thread_id_;
-    std::vector<Window*> windows_;
     mutable std::mutex mutex_;
-    PendingOperationsQueue pending_operations_;
+
+    List<Window*> windows_;
+    List<std::function<void()>> pending_functors_;
 };
 }

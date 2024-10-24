@@ -35,47 +35,24 @@ void Widget::SetWidgetParent(Widget* parent)
     impl_->SetWidgetParent(parent);
 }
 
-const std::vector<Widget*>& Widget::WidgetChildren() const
+const List<Widget*>& Widget::WidgetChildren() const
 {
     return impl_->widget_children_;
 }
 
-std::optional<size_t> Widget::IndexOfWidgetChild(const Widget* child) const
+size_t Widget::IndexOfWidgetChild(const Widget* child) const
 {
-    size_t i = 0;
-	for (auto& c : WidgetChildren())
-	{
-		if (c == child)
-		{
-            return i;
-		}
-        i++;
-	}
-    return std::nullopt;
+    return WidgetChildren().IndexOf(const_cast<Widget*>(child));
 }
 
 bool Widget::SetWidgetChildIndex(const Widget* child, size_t index)
 {
-    auto cs = const_cast<std::vector<Object*>&>(Children());
-    auto index_it = cs.end();
-    auto found_it = cs.end();
-    for (size_t i = 0; i < cs.size(); ++i)
-    {
-        auto it = cs.begin() + i;
-        if (i == index)
-        {
-            index_it = it;
-        }
-        if (*it == child)
-        {
-            found_it = it;
-        }
-    }
-    if (index_it == cs.end() || found_it == cs.end())
-        return false;
-    if (index_it == found_it)
-        return true;
-    std::swap(*index_it, *found_it);
+    auto cs = const_cast<List<Object*>&>(Children());
+    assert(index < cs.size());
+    auto i = cs.IndexOf(const_cast<Widget*>(child));
+    if (i == static_cast<size_t>(-1)) return false;
+
+    cs.SwapElem(i, index);
     return true;
 }
 

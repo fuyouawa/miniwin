@@ -5,6 +5,8 @@
 #include <miniwin/widgets/window.h>
 #include <miniwin/core/imgui_helper.h>
 
+#include "widgets_driver.h"
+
 namespace miniwin {
 Widget::Impl::Impl(Widget* owner)
 	:owner_(owner)
@@ -76,7 +78,7 @@ const Widget* Widget::Impl::WidgetParent() const
 
 void Widget::Impl::SetWidgetParent(Widget* parent)
 {
-    PushPendingFunctor([this, parent]
+    WidgetsDriver::instance().PushPendingFunctor([this, parent]
         {
             // 先通知老的parent
             WidgetParent()->impl_->OnChildrenChanged();
@@ -88,13 +90,13 @@ void Widget::Impl::SetWidgetParent(Widget* parent)
 
 void Widget::Impl::OnChildrenChanged()
 {
-    widget_children_.clear();
+    widget_children_.Clear();
     for (const auto c : owner_->Children())
     {
         auto w = dynamic_cast<Widget*>(c);
         if (w)
         {
-            widget_children_.push_back(w);
+            widget_children_.PushBack(w);
         }
     }
 }
@@ -102,23 +104,21 @@ void Widget::Impl::OnChildrenChanged()
 void Widget::Impl::PushPendingFunctor(std::function<void()>&& func)
 {
     std::lock_guard lk{ pending_functors_mutex_ };
-    pending_functors_.emplace(std::move(func));
+    pending_functors_.EmplaceBack(std::move(func));
 }
 
 void Widget::Impl::DoPendingFunctors()
 {
-    std::queue<std::function<void()>> queue;
+    List<std::function<void()>> functors;
     {
         std::lock_guard lk{ pending_functors_mutex_ };
-        queue.swap(pending_functors_);
+        functors.Swap(pending_functors_);
     }
-
-    while (!queue.empty())
+    for (auto& f : functors)
     {
-        auto& func = queue.front();
-        func();
-        queue.pop();
+        f();
     }
+    functors.Clear();
 }
 
 bool Widget::Impl::Visible() const

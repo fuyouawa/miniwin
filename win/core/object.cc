@@ -82,7 +82,7 @@ void Object::EnableFlags(FlagsType flags, bool enable)
 	}
 }
 
-const std::vector<Object*>& Object::Children() const
+const List<Object*>& Object::Children() const
 {
     return impl_->children_;
 }

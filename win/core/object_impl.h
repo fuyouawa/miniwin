@@ -23,7 +23,7 @@ public:
     };
     using ConnectionPtr = std::shared_ptr<Connection>;
 
-    using ConnectionList = std::vector<ConnectionPtr>;
+    using ConnectionList = List<ConnectionPtr>;
 
     class ConnectionsManager
     {
@@ -59,8 +59,8 @@ public:
     Object* parent_ = nullptr;
     String name_;
     FlagsType flags_;
-    std::vector<Object*> children_;
-    std::vector<ConnectionPtr> connected_sender_connections_;    // 连接到的发送者
+    List<Object*> children_;
+    List<ConnectionPtr> connected_sender_connections_;    // 连接到的发送者
     ConnectionsManager connections_manager_;
 };
 }
