@@ -27,17 +27,17 @@ public:
 	using size_type = size_t;
 
 	List() = default;
-	explicit List(size_t size) : vec_(size) { }
+	explicit List(size_type size) : vec_(size) { }
 	List(std::initializer_list<T> args) : vec_(args) {}
 
-	size_t size() const { return vec_.size(); }
-	size_t capacity() const { return vec_.capacity(); }
+	size_type size() const { return vec_.size(); }
+	size_type capacity() const { return vec_.capacity(); }
 
-	auto data() const { return vec_.data(); }
-	auto data() { return vec_.data(); }
+	const T* data() const { return vec_.data(); }
+	T* data() { return vec_.data(); }
 	bool empty() const { return vec_.empty(); }
 
-	void resize(size_t size) { vec_.resize(size); }
+	void resize(size_type size) { vec_.resize(size); }
 
 	iterator begin() { return { 0, this }; }
 	const_iterator begin() const { return { 0, this }; }
@@ -47,13 +47,13 @@ public:
 
 	void Clear() { vec_.clear(); }
 
-	size_t Erase(const T& val);
-	size_t EraseIf(std::invocable<const T&> auto&& func);
+	size_type Erase(const T& val);
+	size_type EraseIf(std::invocable<const T&> auto&& func);
 	iterator Erase(const_iterator where);
 	iterator Erase(const_iterator where, size_type count);
 	iterator Erase(const_iterator first, const_iterator last);
 
-	size_t IndexOf(const T& t) const;
+	size_type IndexOf(const T& t) const;
 	const_iterator Find(const T& t) const;
 	iterator Find(const T& t);
 
@@ -63,7 +63,7 @@ public:
 	void PushBack(std::convertible_to<T> auto&& val);
 	void EmplaceBack(auto&&... args);
 
-	void SwapElem(size_t index, size_t index2);
+	void SwapElem(size_type index, size_type index2);
 	void SwapElem(iterator iter, iterator iter2);
 	void Swap(List& other);
 
@@ -134,7 +134,7 @@ private:
 
 protected:
 	const List<T>* owner_;
-	size_t index_;
+	size_type index_;
 };
 
 template<class T>
@@ -174,13 +174,13 @@ private:
 };
 
 template <class T>
-size_t List<T>::Erase(const T& val)
+typename List<T>::size_type List<T>::Erase(const T& val)
 {
 	return std::erase(vec_, val);
 }
 
 template <class T>
-size_t List<T>::EraseIf(std::invocable<const T&> auto&& func)
+typename List<T>::size_type List<T>::EraseIf(std::invocable<const T&> auto&& func)
 {
 	return std::erase_if(vec_, std::forward<decltype(func)>(func));
 }
@@ -204,9 +204,9 @@ typename List<T>::iterator List<T>::Erase(const_iterator first, const_iterator l
 }
 
 template<class T>
-size_t List<T>::IndexOf(const T& t) const
+typename List<T>::size_type List<T>::IndexOf(const T& t) const
 {
-	for (size_t i = 0; i < vec_.size(); i++)
+	for (size_type i = 0; i < vec_.size(); i++)
 	{
 		if (vec_[i] == t)
 			return i;
@@ -309,7 +309,7 @@ typename List<T>::iterator List<T>::FromStdIter(const typename std::vector<T>::i
 }
 
 template<class T>
-void List<T>::SwapElem(size_t index, size_t index2)
+void List<T>::SwapElem(size_type index, size_type index2)
 {
 	assert(index < size() && index2 < size());
 	SwapElem(begin() + index, begin() + index2);
