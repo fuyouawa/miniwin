@@ -44,6 +44,8 @@ public:
 	static bool IsWindowCollapsed();
 	static void SetWindowCollapsed(bool collapsed, ImGuiFlags::Cond cond = ImGuiFlags::kCondNone);
 
+	static void Dummy(const Vector2D& size);
+
 	static bool CheckBox(
 		const String& label,
 		bool* checked

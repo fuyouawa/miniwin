@@ -13,12 +13,12 @@ BoxLayout::~BoxLayout()
 {
 }
 
-size_t BoxLayout::Spacing() const
+float BoxLayout::Spacing() const
 {
 	return impl_->spacing_;
 }
 
-void BoxLayout::SetSpacing(size_t size)
+void BoxLayout::SetSpacing(float size)
 {
 	impl_->spacing_ = size;
 }
@@ -34,6 +34,21 @@ void HBoxLayout::OnBeforePaintChild(size_t child_index)
 	if (child_index != 0)
 	{
 		ImGuiHelper::SameLine(0, Spacing());
+	}
+}
+
+VBoxLayout::VBoxLayout(Widget* parent)
+	: BoxLayout(parent)
+{
+}
+
+void VBoxLayout::OnBeforePaintChild(size_t child_index)
+{
+	BoxLayout::OnBeforePaintChild(child_index);
+
+	if (child_index != 0)
+	{
+		ImGuiHelper::Dummy({ 0, Spacing() });
 	}
 }
 }

@@ -148,6 +148,11 @@ void ImGuiHelper::SetWindowCollapsed(bool collapsed, ImGuiFlags::Cond cond)
     ImGui::SetWindowCollapsed(collapsed, cond);
 }
 
+void ImGuiHelper::Dummy(const Vector2D& size)
+{
+    ImGui::Dummy(CastToIm(size));
+}
+
 bool ImGuiHelper::CheckBox(const String& label, bool* checked) {
 	return ImGui::Checkbox(label.cdata(), checked);
 }

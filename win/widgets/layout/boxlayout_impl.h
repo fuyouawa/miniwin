@@ -7,6 +7,6 @@ public:
 	Impl(BoxLayout* owner);
 
 	BoxLayout* owner_;
-	size_t spacing_ = 0;
+	float spacing_ = 0;
 };
 }

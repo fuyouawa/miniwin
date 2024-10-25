@@ -8,7 +8,6 @@
 namespace miniwin {
 WidgetsDriver& WidgetsDriver::instance()
 {
-    std::locale::global(std::locale("zh_CN.UTF-8"));
     static WidgetsDriver inst;
     static bool initialized = false;
     if (!initialized)
