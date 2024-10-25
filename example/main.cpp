@@ -1,39 +1,70 @@
-#include <fugui/core/application.h>
-#include <fugui/widgets/widget/window.h>
+#include <miniwin/core/application.h>
+#include <miniwin/widgets/window.h>
 
-#include "fugui/model/standard_list_model.h"
-#include "fugui/widgets/view/list_view.h"
-#include "fugui/widgets/widget/input_text.h"
-#include "fugui/widgets/widget/text.h"
+#include <miniwin/model/standard_item_model.h>
+#include <miniwin/widgets/combobox.h>
+#include <miniwin/widgets/textedit.h>
+#include <miniwin/widgets/view/tableview.h>
+#include <miniwin/widgets/label.h>
+#include <miniwin/widgets/layout/boxlayout.h>
+#include <miniwin/widgets/view/listview.h>
 
-class ExampleWindow : public fugui::Window
+using namespace miniwin;
+
+class ExampleWindow : public Window
 {
 public:
-	ExampleWindow(const std::u8string_view& title, bool show)
-		: Window(nullptr, title, show),
-		text_(this, u8"Example Text"),
-		input_text_(this, u8"Example InputText"),
-		list_view_(this, u8"Example List")
+	ExampleWindow(const String& title)
+		: Window(title)
 	{
-		auto model = std::make_shared<fugui::StandardListModel>();
+        label_ = new Label(this, u8"j士大夫jbb");
 
-		model->InsertRows(0, 3);
-		model->set_text(0, u8"List Item 1");
-		model->set_text(1, u8"List Item 2");
-		model->set_text(2, u8"List Item 3");
+        text_edit_label_ = new Label(this, u8"TextEdit Label");
+        text_edit_ = new TextEdit(this, u8"fffff");
 
-		list_view_.set_model(model);
+        box_layout_ = new HBoxLayout(this);
+        box_layout_->AddWidget(text_edit_label_);
+        box_layout_->AddWidget(text_edit_);
+
+        table_view_ = new TableView(this);
+
+        // 实例化一个Model
+        auto model = new StandardItemModel(table_view_);
+        // 设置列的数量
+        model->SetColumnCount(4);
+        // 设置水平头部(也就是列头)的文本
+        model->SetHorizontalHeaderTexts({ u8"asd", u8"地方", u8"ooo", u8"世世代代" });
+        // 设置行的数量
+        model->SetRowCount(3);
+        // 设置行文本
+        model->SetRowTexts(0, 0, { u8"asdd", u8"大苏打·" });
+        model->SetColumnTexts(0, 3, { u8"肯德基", u8"sd限塑袋·", u8"a的肥肉" });
+        // 将model设置给TableView
+        table_view_->SetModel(model);
+
+        // 获取选择model
+        auto selection_model = table_view_->SelectionModel();
+        // 设置1行2列选中
+        selection_model->Select(0, 1);
+
+        combobox_ = new ComboBox(this, u8"ComboBox");
+        combobox_->AddItems({ u8"啥啥啥", u8"dff单独", u8"ff当我" });
+
 	}
 
-	fugui::Text text_;
-	fugui::InputText input_text_;
-	fugui::ListView list_view_;
+    HBoxLayout* box_layout_;
+    Label* label_;
+    Label* text_edit_label_;
+    TextEdit* text_edit_;
+    TableView* table_view_;
+    ComboBox* combobox_;
 };
 
+
 int main() {
-	fugui::Application app;
+	Application app;
+    app.SetHideMainWindow(true);
 
-	ExampleWindow window{ u8"Example Window", true };
-
-	app.Execute(u8"FuGui Example App");
+	auto window = new ExampleWindow{ u8"Example Window" };
+	app.Execute();
 }
