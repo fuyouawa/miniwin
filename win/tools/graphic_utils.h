@@ -1,5 +1,6 @@
 #pragma once
-#include <miniwin/tools/container.h>
+#include <miniwin/tools/vector2d.h>
+#include <miniwin/tools/rect.h>
 
 namespace miniwin {
 class GraphicUtils {
@@ -8,8 +9,8 @@ public:
 
 	static void EnableWindowTop(void* window, bool b);
 
-	static void SetWindowSize(void* window, const Vector2Int& size);
-    static void SetWindowPos(void* window, const Vector2Int& pos);
+	static void SetWindowSize(void* window, const Vector2DInt& size);
+    static void SetWindowPos(void* window, const Vector2DInt& pos);
 	static RectInt GetWindowRect(void* window);
 };
 }

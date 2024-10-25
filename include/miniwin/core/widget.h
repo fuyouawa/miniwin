@@ -2,7 +2,7 @@
 #include <optional>
 
 #include <miniwin/core/object.h>
-#include <miniwin/tools/container.h>
+#include <miniwin/tools/vector2d.h>
 #include <miniwin/tools/property.h>
 #include <miniwin/tools/variant.h>
 
@@ -39,8 +39,8 @@ public:
     const String& Id() const;
     void SetId(const String& id);
 
-    virtual Vector2 Size() const;
-    virtual void SetSize(const Vector2& size);
+    virtual Vector2D Size() const;
+    virtual void SetSize(const Vector2D& size);
 
     bool Orphaned() const;
     FlagsType DrawFlags() const;
@@ -50,7 +50,7 @@ public:
 
     MW_SIGNAL(OnEnableChanged, (bool) b)
     MW_SIGNAL(OnVisbleChanged, (bool) b)
-    MW_SIGNAL(OnSizeChanged, (Vector2) size, (Vector2) prev_size)
+    MW_SIGNAL(OnSizeChanged, (Vector2D) size, (Vector2D) prev_size)
 
 protected:
     // 是所有绘制之前的准备工作

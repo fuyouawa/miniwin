@@ -9,12 +9,12 @@ Button::Button(Widget* const parent, const String& text)
 	impl_ = std::make_unique<Impl>(this);
 }
 
-Vector2 Button::Size() const
+Vector2D Button::Size() const
 {
 	return impl_->size_to_set_ ? *impl_->size_to_set_ : AbstractControl::Size();
 }
 
-void Button::SetSize(const Vector2& size)
+void Button::SetSize(const Vector2D& size)
 {
 	AbstractControl::SetSize(size);
 	impl_->size_to_set_ = size;
@@ -23,7 +23,7 @@ void Button::SetSize(const Vector2& size)
 void Button::PaintBegin()
 {
 	AbstractControl::PaintBegin();
-	Vector2 size;
+	Vector2D size;
 	if (impl_->size_to_set_)
 	{
 		size = *impl_->size_to_set_;

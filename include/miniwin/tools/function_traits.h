@@ -92,7 +92,7 @@ consteval bool MatchFunctionArguments() {
     using ActualArgs = typename ActualSignature::Arguments;
 
     if constexpr (ExpectedSignature::kArgumentCount == ActualSignature::kArgumentCount) {
-        return MatchArguments(ExpectedArgs{}, ActualArgs{});
+        return MatchArguments(ExpectedArgs(), ActualArgs());
     }
     return false;
 }

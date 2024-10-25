@@ -75,7 +75,7 @@ void WidgetsDriver::DoPending()
 {
     List<std::function<void()>> functors;
     {
-        std::lock_guard lk{ mutex_ };
+        std::lock_guard lk(mutex_);
         functors.Swap(pending_functors_);
     }
     for (auto& f : functors)
@@ -190,7 +190,7 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
 
 void WidgetsDriver::PushPendingFunctor(std::function<void()>&& func)
 {
-    std::lock_guard lk{ mutex_ };
+    std::lock_guard lk(mutex_);
     pending_functors_.PushBack(std::move(func));
 }
 }

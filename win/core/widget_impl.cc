@@ -103,7 +103,7 @@ void Widget::Impl::OnChildrenChanged()
 
 void Widget::Impl::PushPendingFunctor(std::function<void()>&& func)
 {
-    std::lock_guard lk{ pending_functors_mutex_ };
+    std::lock_guard lk(pending_functors_mutex_);
     pending_functors_.EmplaceBack(std::move(func));
 }
 
@@ -111,7 +111,7 @@ void Widget::Impl::DoPendingFunctors()
 {
     List<std::function<void()>> functors;
     {
-        std::lock_guard lk{ pending_functors_mutex_ };
+        std::lock_guard lk(pending_functors_mutex_);
         functors.Swap(pending_functors_);
     }
     for (auto& f : functors)

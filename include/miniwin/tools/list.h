@@ -116,9 +116,9 @@ public:
 	ListConstIterator operator--(int) { auto tmp = *this; --*this; return tmp; }
 
 	ListConstIterator& operator+=(const difference_type off) { index_ += off; return *this; }
-	ListConstIterator& operator+(const difference_type off) const { auto tmp = *this; tmp += off; return tmp; }
+	ListConstIterator operator+(const difference_type off) const { auto tmp = *this; tmp += off; return tmp; }
 	ListConstIterator& operator-=(const difference_type off) { index_ -= off; return *this; }
-	ListConstIterator& operator-(const difference_type off) const { auto tmp = *this; tmp -= off; return tmp; }
+	ListConstIterator operator-(const difference_type off) const { auto tmp = *this; tmp -= off; return tmp; }
 	difference_type operator-(const ListConstIterator& right) const { return static_cast<difference_type>(index_ - right.index_); }
 
 	reference operator[](const difference_type off) const { return *(*this + off); }

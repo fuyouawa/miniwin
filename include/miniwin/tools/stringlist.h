@@ -6,8 +6,6 @@ namespace miniwin {
 class StringList : public List<String>
 {
 public:
-	using Inherit = List<String>;
-
 	StringList(std::initializer_list<String> args);
 };
 }

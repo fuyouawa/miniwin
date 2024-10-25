@@ -7,8 +7,8 @@ class Button : public AbstractControl
 public:
 	Button(Widget* parent, const String& text);
 
-	Vector2 Size() const override;
-	void SetSize(const Vector2& size) override;
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
 
 	MW_SIGNAL(OnClicked)
 

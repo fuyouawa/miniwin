@@ -3,7 +3,7 @@
 #include <format>
 
 #include <miniwin/core/widget.h>
-#include <miniwin/tools/container.h>
+#include <miniwin/tools/vector2d.h>
 #include <miniwin/tools/scope_variable.h>
 
 #include "widgets_driver.h"
@@ -59,11 +59,11 @@ bool Widget::SetWidgetChildIndex(const Widget* child, size_t index)
 void Widget::SetEnable(bool b) const { impl_->SetEnable(b); }
 
 
-Vector2 Widget::Size() const {
+Vector2D Widget::Size() const {
     return impl_->size_sc_.get();
 }
 
-void Widget::SetSize(const Vector2& size) {
+void Widget::SetSize(const Vector2D& size) {
     impl_->size_sc_.SetControl(size);
 }
 

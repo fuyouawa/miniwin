@@ -3,24 +3,6 @@
 namespace miniwin {
 namespace internal {
 template<class T>
-class Vector2Template
-{
-public:
-    Vector2Template(T x = 0, T y = 0) : x_(x), y_(y) {}
-
-    T x() const { return x_; }
-    void set_x(T x) { x_ = x; }
-
-    T y() const { return y_; }
-    void set_y(T y) { y_ = y; }
-
-private:
-    T x_;
-    T y_;
-};
-
-
-template<class T>
 class RectTemplate
 {
 public:
@@ -47,12 +29,6 @@ private:
     T height_;
 };
 }
-
-using Vector2 = internal::Vector2Template<float>;
-bool operator==(const Vector2& a, const Vector2& b);
-
-using Vector2Int = internal::Vector2Template<int>;
-bool operator==(const Vector2Int& a, const Vector2Int& b);
 
 using Rect = internal::RectTemplate<float>;
 using RectInt = internal::RectTemplate<int>;

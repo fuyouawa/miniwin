@@ -1,5 +1,5 @@
 #pragma once
-#include <miniwin/tools/container.h>
+#include <miniwin/tools/vector2d.h>
 #include <miniwin/core/imgui_flags.h>
 #include <miniwin/core/global.h>
 #include <miniwin/tools/string.h>
@@ -36,10 +36,10 @@ public:
 	static void BeginDisabled(bool disabled = true);
 	static void EndDisabled();
 
-	static Vector2 GetItemRectSize();
+	static Vector2D GetItemRectSize();
 	static void SetNextItemWidth(float item_width);
 	static void PushStyleVar(ImGuiFlags::StyleVar idx, float val);
-	static void PushStyleVar(ImGuiFlags::StyleVar idx, Vector2 val);
+	static void PushStyleVar(ImGuiFlags::StyleVar idx, Vector2D val);
 
 	static bool IsWindowCollapsed();
 	static void SetWindowCollapsed(bool collapsed, ImGuiFlags::Cond cond = ImGuiFlags::kCondNone);
@@ -55,14 +55,14 @@ public:
 
 	static bool Button(
 		const String& label,
-		const Vector2& size = {}
+		const Vector2D& size = {}
 	);
 
 	static bool Selectable(
 		const String& label,
 		bool* is_selected,
 		FlagsType flags = 0,
-		const Vector2& size = {}
+		const Vector2D& size = {}
 	);
 
 	static bool InputText(
@@ -82,7 +82,7 @@ public:
         const String& id,
         size_t column,
 		FlagsType flags = 0,
-        const Vector2& size = { 0, 0 },
+        const Vector2D& size = { 0, 0 },
         float inner_width = 0.0f
     );
 
@@ -111,14 +111,14 @@ public:
 
 	static void EndCombo();
 
-	static bool BeginListBox(const String& label, const Vector2& size);
+	static bool BeginListBox(const String& label, const Vector2D& size);
 	static void EndListBox();
 
 	static void SameLine(float offset_from_start_x = 0.0f, float spacing = -1.0f);
 
 	static bool BeginChildWindow(
 		const String& id,
-		const Vector2& size = { 0, 0 },
+		const Vector2D& size = { 0, 0 },
 		int child_window_flags = 0,
 		int window_flags = 0);
 

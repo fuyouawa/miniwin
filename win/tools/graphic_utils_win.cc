@@ -17,7 +17,7 @@ void GraphicUtils::EnableWindowTop(void* window, bool b) {
         SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 }
 
-void GraphicUtils::SetWindowSize(void* window, const Vector2Int& size) {
+void GraphicUtils::SetWindowSize(void* window, const Vector2DInt& size) {
     ::SetWindowPos(
         CastWin(window),
         HWND_TOP,
@@ -26,7 +26,7 @@ void GraphicUtils::SetWindowSize(void* window, const Vector2Int& size) {
         SWP_NOMOVE | SWP_NOZORDER);
 }
 
-void GraphicUtils::SetWindowPos(void* window, const Vector2Int& pos) {
+void GraphicUtils::SetWindowPos(void* window, const Vector2DInt& pos) {
     ::SetWindowPos(
         CastWin(window),
         HWND_TOP,

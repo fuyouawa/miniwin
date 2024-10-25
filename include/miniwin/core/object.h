@@ -83,7 +83,7 @@ public:
                     connection_flags,
                     invoke_type);
             }
-        }(typename Traits::Arguments{});
+        }(typename Traits::Arguments());
     }
 
 protected:

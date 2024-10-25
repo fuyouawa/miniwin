@@ -33,10 +33,10 @@ int InputTextCallback(ImGuiInputTextCallbackData* data)
     return 0;
 }
 
-ImVec2 CastToIm(const Vector2& vec) {
+ImVec2 CastToIm(const Vector2D& vec) {
     return { vec.x(), vec.y() };
 }
-Vector2 CastFromIm(const ImVec2& vec) {
+Vector2D CastFromIm(const ImVec2& vec) {
     return { vec.x, vec.y };
 }
 }
@@ -118,7 +118,7 @@ void ImGuiHelper::EndDisabled()
     ImGui::EndDisabled();
 }
 
-Vector2 ImGuiHelper::GetItemRectSize()
+Vector2D ImGuiHelper::GetItemRectSize()
 {
     return CastFromIm(ImGui::GetItemRectSize());
 }
@@ -133,7 +133,7 @@ void ImGuiHelper::PushStyleVar(ImGuiFlags::StyleVar idx, float val)
     ImGui::PushStyleVar(idx, val);
 }
 
-void ImGuiHelper::PushStyleVar(ImGuiFlags::StyleVar idx, Vector2 val)
+void ImGuiHelper::PushStyleVar(ImGuiFlags::StyleVar idx, Vector2D val)
 {
     ImGui::PushStyleVar(idx, CastToIm(val));
 }
@@ -156,11 +156,11 @@ void ImGuiHelper::Text(const String& label) {
 	return ImGui::Text(label.cdata());
 }
 
-bool ImGuiHelper::Button(const String& label, const Vector2& size) {
+bool ImGuiHelper::Button(const String& label, const Vector2D& size) {
 	return ImGui::Button(label.cdata(), CastToIm(size));
 }
 
-bool ImGuiHelper::Selectable(const String& label, bool* is_selected, FlagsType flags, const Vector2& size) {
+bool ImGuiHelper::Selectable(const String& label, bool* is_selected, FlagsType flags, const Vector2D& size) {
 	return ImGui::Selectable(
         label.cdata(),
         is_selected,
@@ -207,7 +207,7 @@ void ImGuiHelper::EndCombo()
     ImGui::EndCombo();
 }
 
-bool ImGuiHelper::BeginListBox(const String& label, const Vector2& size)
+bool ImGuiHelper::BeginListBox(const String& label, const Vector2D& size)
 {
     return ImGui::BeginListBox(label.cdata(), CastToIm(size));
 }
@@ -222,7 +222,7 @@ void ImGuiHelper::SameLine(float offset_from_start_x, float spacing)
     ImGui::SameLine(offset_from_start_x, spacing);
 }
 
-bool ImGuiHelper::BeginChildWindow(const String& id, const Vector2& size, int child_window_flags,
+bool ImGuiHelper::BeginChildWindow(const String& id, const Vector2D& size, int child_window_flags,
     int window_flags)
 {
     return ImGui::BeginChild(id.cdata(), CastToIm(size), child_window_flags, window_flags);
@@ -233,7 +233,7 @@ void ImGuiHelper::EndChildWindow()
     return ImGui::EndChild();
 }
 
-bool ImGuiHelper::BeginTable(const String& id, size_t column, FlagsType flags, const Vector2& size, float inner_width) {
+bool ImGuiHelper::BeginTable(const String& id, size_t column, FlagsType flags, const Vector2D& size, float inner_width) {
 	return ImGui::BeginTable(id.cdata(), static_cast<int>(column), flags, CastToIm(size), inner_width);
 }
 

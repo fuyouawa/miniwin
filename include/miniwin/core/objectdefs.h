@@ -32,7 +32,7 @@ class SlotArgsStore : public SlotArgsStoreBase
 public:
     explicit SlotArgsStore(Args&&... args)
     {
-        store_ = std::tuple{ std::forward<Args>(args)... };
+        store_ = std::tuple(std::forward<Args>(args)...);
     }
 
     std::tuple<Args...> store_;
@@ -42,12 +42,12 @@ template<class Func, class... Args>
 class MemberSlotObject : public SlotObjectBase
 {
 public:
-    explicit MemberSlotObject(Func func) : func_{ func } {}
+    explicit MemberSlotObject(Func func) : func_(func) {}
 
     void Call(const Object* receiver, const SlotArgsStoreBase* args_store) const override
     {
         const auto store = dynamic_cast<SlotArgsStore<Args...>*>(args_store);
-        std::apply(func_, std::tuple_cat(std::tuple{receiver}, store->store_));
+        std::apply(func_, std::tuple_cat(std::tuple(receiver), store->store_));
     }
 
     bool Compare(const SlotObjectBase* x) const override
