@@ -11,7 +11,7 @@ HWND CastWin(void* window) {
 void GraphicUtils::EnableWindowTop(void* window, bool b) {
     ::SetWindowPos(
         CastWin(window),
-        HWND_TOPMOST,
+        b ? HWND_TOPMOST : HWND_NOTOPMOST,
         0, 0,
         0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);

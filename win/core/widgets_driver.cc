@@ -40,19 +40,13 @@ void WidgetsDriver::Update()
 void WidgetsDriver::ClearDirty()
 {
     {
-        List<List<Window*>::iterator> orphaned_win_iters;
-        for (auto it = windows_.begin(); it != windows_.end(); ++it)
+        auto it = windows_.RemoveIf([](auto w) { return w->Orphaned(); });
+        if (it != windows_.end())
         {
-            if ((*it)->Orphaned())
-            {
-                orphaned_win_iters.PushBack(it);
-            }
-        }
-        for (auto it : orphaned_win_iters)
-        {
-            auto w = *it;
-            windows_.Erase(it);
-            delete w;
+            auto tmp = it;
+            for (; tmp != windows_.end(); ++tmp)
+                delete* tmp;
+            windows_.Erase(it, windows_.end());
         }
     }
     for (auto& win : windows_)
@@ -103,7 +97,7 @@ void WidgetsDriver::CloseAll()
 
 void WidgetsDriver::RegisterWindow(Window* window)
 {
-    PushPendingFunctor([=, this] { windows_.PushBack(window); });
+    PushPendingFunctor([window, this] { windows_.PushBack(window); });
 }
 
 std::thread::id WidgetsDriver::UiThreadId() const
@@ -146,14 +140,12 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
 
 void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget)
 {
-    static Widget* win = widget;
     if (widget->Visible())
     {
         widget->PreparePaint();
         for (auto& o : widget->Children())
         {
-            auto w = dynamic_cast<Widget*>(o);
-            if (w)
+	        if (auto w = dynamic_cast<Widget*>(o))
             {
                 CallUpdateEarlyRecursion(w);
             }
@@ -165,19 +157,14 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
 {
     if (widget->impl_->dirty_)
     {
-        auto& wc = widget->WidgetChildren();
-        List<List<Widget*>::const_iterator> orphaned_children_iters;
-        for (auto it = wc.begin(); it != wc.end(); ++it)
-        {
-            if ((*it)->Orphaned())
-            {
-                orphaned_children_iters.PushBack(it);
-            }
-        }
-        for (auto it : orphaned_children_iters)
-        {
-            delete *it;
-        }
+        auto& wc = widget->impl_->widget_children_;
+        auto it = wc.RemoveIf([](auto w) { return w->Orphaned(); });
+        assert(it != wc.end());
+        auto tmp = it;
+        for (; tmp != wc.end(); ++tmp)
+	        delete* tmp;
+        wc.Erase(it, wc.end());
+
         widget->impl_->dirty_ = false;
     }
     for (auto c : widget->WidgetChildren())

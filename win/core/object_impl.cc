@@ -66,21 +66,7 @@ void Object::Impl::ConnectionsManager::ClearDirty()
     if (dirty_)
     {
         for (auto& conns : map_)
-        {
-            List<ConnectionList::iterator> iters_to_remove;
-            for (auto iter = conns.second.begin(); iter != conns.second.end(); ++iter)
-            {
-                auto& c = *iter;
-                if (!c->receiver)
-                {
-                    iters_to_remove.PushBack(iter);
-                }
-            }
-            for (auto iter : iters_to_remove)
-            {
-                conns.second.Erase(iter);
-            }
-        }
+	        conns.second.EraseIf([](auto& c) { return !c->receiver; });
         dirty_ = false;
     }
 }

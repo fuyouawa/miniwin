@@ -52,6 +52,7 @@ public:
 	iterator Erase(const_iterator where);
 	iterator Erase(const_iterator where, size_type count);
 	iterator Erase(const_iterator first, const_iterator last);
+	iterator RemoveIf(std::invocable<const T&> auto&& func);
 
 	size_type IndexOf(const T& t) const;
 	const_iterator Find(const T& t) const;
@@ -98,7 +99,8 @@ public:
 	using pointer = typename List<T>::const_pointer;
 	using reference = const value_type&;
 
-	ListConstIterator(size_type index, const List<T>* owner) : index_(index), owner_(owner) {}
+	ListConstIterator() = default;
+	ListConstIterator(size_type index, const List<T>* owner) : owner_(owner), index_(index) {}
 
 	bool IsBegin() const { return index_ == 0; }
 	bool IsEnd() const { return index_ == owner_->size(); }
@@ -122,9 +124,11 @@ public:
 	difference_type operator-(const ListConstIterator& right) const { return static_cast<difference_type>(index_ - right.index_); }
 
 	reference operator[](const difference_type off) const { return *(*this + off); }
-	bool operator==(const ListConstIterator& right) const
-	{
+	bool operator==(const ListConstIterator& right) const {
 		return index_ == right.index_ && owner_ == right.owner_;
+	}
+	bool operator!=(const ListConstIterator& right) const {
+		return !operator==(right);
 	}
 
 	std::strong_ordering operator<=>(const ListConstIterator& right) const { return index_ <=> right.index_; }
@@ -133,8 +137,8 @@ private:
 	auto StdIter() const { return owner_->ToStdIter(*this); }
 
 protected:
-	const List<T>* owner_;
-	size_type index_;
+	const List<T>* owner_ = nullptr;
+	size_type index_ = 0;
 };
 
 template<class T>
@@ -151,6 +155,7 @@ public:
 	using pointer = typename List<T>::pointer;
 	using reference = value_type&;
 
+	ListIterator() = default;
 	ListIterator(size_type index, List<T>* owner) : ListConstIterator<T>(index, owner) {}
 
 	reference operator*() const { return const_cast<reference>(Base::operator*()); }
@@ -201,6 +206,12 @@ template <class T>
 typename List<T>::iterator List<T>::Erase(const_iterator first, const_iterator last)
 {
 	return FromStdIter(vec_.erase(ToStdIter(first), ToStdIter(last)));
+}
+
+template <class T>
+List<T>::iterator List<T>::RemoveIf(std::invocable<const T&> auto&& func)
+{
+	return FromStdIter(std::remove_if(vec_.begin(), vec_.end(), func));
 }
 
 template<class T>
