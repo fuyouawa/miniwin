@@ -167,9 +167,11 @@ Object::Disconnecter Object::Impl::AddConnectionWithoutLock(const std::type_info
 {
     auto [it, _] = connections_manager_.map_.try_emplace(signal_info);
     conn->receiver->impl_->connected_sender_connections_.PushBack(conn);
-    it->second.PushBack(std::move(conn));
+    it->second.PushBack(conn);
     connections_manager_.ClearDirty();
-    return { [this, conn, &signal_info] { return DisconnectImpl(signal_info, conn); } };
+    return { [this, conn, &signal_info] {
+	    return DisconnectImpl(signal_info, conn);
+    } };
 }
 
 void Object::Impl::SetParent(Object* parent)
