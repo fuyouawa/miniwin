@@ -51,14 +51,11 @@ public:
         ConnectionFlags connection_flags = ConnectionFlags::kUnique,
         InvokeType invoke_type = InvokeType::kAuto)
     {
-        static_assert(internal::kIsArgumentsMatchableFunctions<Signal, Slot>);
         using Traits = internal::FunctionTraits<Slot>;
 
         return [&] <class... Args> (std::tuple<Args...>) -> Disconnecter {
-            if constexpr (std::is_member_function_pointer_v<Slot>)
-            {
-                using Func = typename Traits::Return(Receiver::*)(Args...);
-                using SlotObject = internal::MemberSlotObject<Func, Args...>;
+            if constexpr (std::is_member_function_pointer_v<Slot>) {
+                using SlotObject = internal::MemberSlotObject<Slot, Receiver, Args...>;
 
                 return ConnectImpl(sender,
                     typeid(signal),
@@ -69,17 +66,12 @@ public:
             }
             else
             {
-                using Functor = std::function<void(Args...)>;
                 using SlotObject = internal::FunctorSlotObject<Args...>;
-
-                Functor func = [s = std::forward<Slot>(slot)](Args&&... args) {
-                    s(std::forward<Args>(args)...);
-                    };
-
+            
                 return ConnectImpl(sender,
                     typeid(signal),
                     receiver,
-                    std::make_unique<SlotObject>(std::move(func)),
+                    std::make_unique<SlotObject>(std::forward<Slot>(slot)),
                     connection_flags,
                     invoke_type);
             }

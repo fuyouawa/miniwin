@@ -82,7 +82,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
     bool has_unique_flag = (connection_flags & ConnectionFlags::kUnique) != ConnectionFlags::kNone;
     bool has_replace_flag = (connection_flags & ConnectionFlags::kReplace) != ConnectionFlags::kNone;
 
-    assert(has_unique_flag && has_replace_flag);
+    assert(!(has_unique_flag && has_replace_flag));
 
     std::scoped_lock lk{ signal_mutex(sender), signal_mutex(receiver) };
 
@@ -150,7 +150,7 @@ void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::Sl
     }
 }
 
-bool Object::Impl::DisconnectImpl(const std::type_info& signal_info, const ConnectionPtr& connection)
+bool Object::Impl::DisconnectImpl(const std::type_info& signal_info, const SharedConnection& connection)
 {
     if (connection->receiver == nullptr) return false;
     std::scoped_lock lk{ signal_mutex(owner_), signal_mutex(connection->receiver) };
@@ -158,13 +158,15 @@ bool Object::Impl::DisconnectImpl(const std::type_info& signal_info, const Conne
     if (res == connections_manager_.map_.end())
         return false;
     res->second.Erase(connection);
+    connection->receiver->impl_->connected_sender_connections_.Erase(connection);
     return true;
 }
 
 Object::Disconnecter Object::Impl::AddConnectionWithoutLock(const std::type_info& signal_info,
-    ConnectionPtr conn)
+    SharedConnection conn)
 {
     auto [it, _] = connections_manager_.map_.try_emplace(signal_info);
+    conn->receiver->impl_->connected_sender_connections_.PushBack(conn);
     it->second.PushBack(std::move(conn));
     connections_manager_.ClearDirty();
     return { [this, conn, &signal_info] { return DisconnectImpl(signal_info, conn); } };

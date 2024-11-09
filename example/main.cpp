@@ -9,7 +9,12 @@
 #include <miniwin/widgets/layout/boxlayout.h>
 #include <miniwin/widgets/view/listview.h>
 
+#include <miniwin/tools/debug.h>
+
+#include "miniwin/widgets/button.h"
+
 using namespace miniwin;
+
 
 class ExampleWindow : public Window
 {
@@ -50,6 +55,15 @@ public:
         combobox_ = new ComboBox(this, u8"ComboBox");
         combobox_->AddItems({ u8"…∂…∂…∂", u8"dffµ•∂¿", u8"ffµ±Œ“" });
 
+        btn_ = new Button(this, u8"Btn");
+
+        Connect(btn_, &Button::OnClicked, this, []() {
+            DebugOutput("1263");
+            });
+	}
+
+    void OnClicked() const {
+        DebugOutput("123");
 	}
 
     HBoxLayout* box_layout_;
@@ -58,8 +72,8 @@ public:
     TextEdit* text_edit_;
     TableView* table_view_;
     ComboBox* combobox_;
+    Button* btn_;
 };
-
 
 int main() {
 	Application app;

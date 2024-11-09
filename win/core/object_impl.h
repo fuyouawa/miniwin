@@ -21,9 +21,9 @@ public:
         ConnectionFlags connection_type;
         InvokeType invoke_type;
     };
-    using ConnectionPtr = std::shared_ptr<Connection>;
+    using SharedConnection = std::shared_ptr<Connection>;
 
-    using ConnectionList = List<ConnectionPtr>;
+    using ConnectionList = List<SharedConnection>;
 
     class ConnectionsManager
     {
@@ -46,9 +46,9 @@ public:
 
     bool DisconnectImpl(
         const std::type_info& signal_info,
-        const ConnectionPtr& connection);
+        const SharedConnection& connection);
 
-    Disconnecter AddConnectionWithoutLock(const std::type_info& signal_info, ConnectionPtr conn);
+    Disconnecter AddConnectionWithoutLock(const std::type_info& signal_info, SharedConnection conn);
 
     void SetParent(Object* parent);
 
@@ -60,7 +60,7 @@ public:
     String name_;
     FlagsType flags_;
     List<Object*> children_;
-    List<ConnectionPtr> connected_sender_connections_;    // 连接到的发送者
+    List<SharedConnection> connected_sender_connections_;    // 连接到的发送者
     ConnectionsManager connections_manager_;
 };
 }
