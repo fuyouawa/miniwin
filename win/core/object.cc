@@ -1,6 +1,6 @@
 #include "object_impl.h"
 
-#include <cassert>
+#include "win/tools/debug.h"
 
 
 namespace miniwin {
@@ -100,15 +100,15 @@ Object::Disconnecter Object::ConnectImpl(
     ConnectionFlags connection_flags,
     InvokeType invoke_type)
 {
-    assert(receiver);
-    assert(slot_obj);
+    MW_ASSERT_X(receiver);
+    MW_ASSERT_X(slot_obj);
     return Impl::ConnectImpl(sender, signal_info, receiver, std::move(slot_obj), connection_flags, invoke_type);
 }
 
 void Object::EmitSignalImpl(const std::type_info& signal_info,
     const internal::SlotArgsStoreSharedPtr& args_store) const
 {
-    assert(args_store);
+    MW_ASSERT_X(args_store);
     impl_->EmitSignalImpl(signal_info, args_store);
 }
 }

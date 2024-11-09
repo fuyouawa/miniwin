@@ -1,6 +1,6 @@
 #include <miniwin/tools/variant.h>
 
-#include <cassert>
+#include "debug.h"
 
 namespace miniwin {
 namespace {
@@ -37,7 +37,7 @@ Variant::Variant(const Variant& other)
 	case VariantType::kString:
 	{
 		auto s = Convert<char8_t*>(other.var_, VariantType::kString);
-		assert(s);
+		MW_ASSERT_X(s);
 		var_ = CopyU8Str(s, strlen(reinterpret_cast<char*>(s)) + 1);
 		break;
 	}

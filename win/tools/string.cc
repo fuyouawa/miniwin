@@ -1,6 +1,6 @@
 #include <miniwin/tools/string.h>
 
-#include <cassert>
+#include "debug.h"
 
 namespace miniwin {
 String::String(const char8_t* str)
@@ -34,7 +34,7 @@ std::wstring String::ToStdWString() const
 {
     std::wstring wstr(str_.size(), L'\0');
     auto sz = std::mbstowcs(wstr.data(), reinterpret_cast<const char*>(str_.data()), str_.size());
-    assert(sz == wstr.size());
+    MW_ASSERT_X(sz == wstr.size());
     return wstr;
 }
 }

@@ -1,11 +1,10 @@
 #include "application_impl.h"
 
-#include <cassert>
-
 #include <thread>
 
 #include <miniwin/tools/mathf.h>
 #include "widgets_driver.h"
+#include "win/tools/debug.h"
 
 namespace miniwin {
 Application::Impl::Impl(Application* owner)
@@ -23,7 +22,7 @@ void Application::Impl::OnProcess()
     WidgetsDriver::instance().Update();
     if (close_in_next_frame_)
     {
-        assert(IsDone());
+        MW_ASSERT_X(IsDone());
     }
 }
 

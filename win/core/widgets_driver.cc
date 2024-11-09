@@ -1,8 +1,7 @@
 #include "widgets_driver.h"
 
-#include <cassert>
-
 #include "win/core/widget_impl.h"
+#include "win/tools/debug.h"
 #include "win/widgets/window_impl.h"
 
 namespace miniwin {
@@ -51,7 +50,7 @@ void WidgetsDriver::ClearDirty()
     }
     for (auto& win : windows_)
     {
-        assert(!win->Orphaned());
+        MW_ASSERT_X(!win->Orphaned());
         ClearDirtyRecursion(win);
     }
 }
@@ -159,7 +158,7 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
     {
         auto& wc = widget->impl_->widget_children_;
         auto it = wc.RemoveIf([](auto w) { return w->Orphaned(); });
-        assert(it != wc.end());
+        MW_ASSERT_X(it != wc.end());
         auto tmp = it;
         for (; tmp != wc.end(); ++tmp)
 	        delete* tmp;
@@ -169,7 +168,7 @@ void WidgetsDriver::ClearDirtyRecursion(Widget* widget)
     }
     for (auto c : widget->WidgetChildren())
     {
-        assert(!c->Orphaned());
+        MW_ASSERT_X(!c->Orphaned());
         ClearDirtyRecursion(c);
     }
 }

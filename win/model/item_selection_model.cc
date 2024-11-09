@@ -1,5 +1,6 @@
 #include <win/model/item_selection_model_impl.h>
-#include <cassert>
+
+#include "win/tools/debug.h"
 
 namespace miniwin {
 bool ItemSelection::valid() const
@@ -37,7 +38,7 @@ void ItemSelectionModel::Select(size_t row, size_t column, ItemSelectionType sel
 
 void ItemSelectionModel::Select(const ItemSelection& selection, ItemSelectionType selection_type)
 {
-    assert(selection.valid());
+    MW_ASSERT_X(selection.valid());
     if (selection_type == ItemSelectionType::ClearSelect)
     {
         impl_->Clear();
@@ -55,7 +56,7 @@ void ItemSelectionModel::Clear()
 
 bool ItemSelectionModel::IsSelected(const ModelIndex& index) const
 {
-    assert(index.valid());
+    MW_ASSERT_X(index.valid());
     return impl_->Contains(index);
 }
 }

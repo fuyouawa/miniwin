@@ -1,9 +1,9 @@
 #include "win/core/object_impl.h"
 
-#include <cassert>
-
 #include <format>
 #include <mutex>
+
+#include "win/tools/debug.h"
 
 namespace miniwin {
 namespace {
@@ -35,7 +35,7 @@ Object::Impl::~Impl() {
                 {
                     size_t count = c->receiver->impl_->connected_sender_connections_
                         .EraseIf([&](auto& sc) { return sc == c; });
-                    assert(count == 1);
+                    MW_ASSERT_X(count == 1);
                 }
             }
             conns.second.Clear();
@@ -82,7 +82,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
     bool has_unique_flag = (connection_flags & ConnectionFlags::kUnique) != ConnectionFlags::kNone;
     bool has_replace_flag = (connection_flags & ConnectionFlags::kReplace) != ConnectionFlags::kNone;
 
-    assert(!(has_unique_flag && has_replace_flag));
+    MW_ASSERT_X(!(has_unique_flag && has_replace_flag));
 
     std::scoped_lock lk{ signal_mutex(sender), signal_mutex(receiver) };
 
@@ -131,7 +131,7 @@ void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::Sl
     const auto& conns = res->second;
     for (auto& c : conns)
     {
-        assert(c->sender == owner_ && c->signal_info == type_info);
+        MW_ASSERT_X(c->sender == owner_ && c->signal_info == type_info);
 
         auto receiver = c->receiver;
         std::lock_guard lk2{ signal_mutex(c->receiver) };
@@ -181,7 +181,7 @@ void Object::Impl::SetParent(Object* parent)
     if (parent_ && !parent_->impl_->deleting_)
     {
         size_t count = parent_->impl_->children_.Erase(owner_);
-        assert(count == 1);
+        MW_ASSERT_X(count == 1);
     }
     parent_ = parent;
 

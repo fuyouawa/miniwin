@@ -3,6 +3,8 @@
 #include <imgui/imgui.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
+#include "win/tools/debug.h"
+
 namespace miniwin {
 namespace {
 struct InputTextCallbackUserData
@@ -177,7 +179,7 @@ bool ImGuiHelper::InputText(const String& label,
     String* buffer,
     FlagsType flags)
 {
-    assert((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    MW_ASSERT_X((flags & ImGuiInputTextFlags_CallbackResize) == 0);
     flags = flags | ImGuiInputTextFlags_CallbackResize;
 
     InputTextCallbackUserData cb_user_data;

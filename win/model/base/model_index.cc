@@ -1,6 +1,6 @@
 #include <miniwin/model/base/model_index.h>
 
-#include <cassert>
+#include "win/tools/debug.h"
 
 namespace miniwin {
 bool ModelIndex::valid() const
@@ -17,8 +17,8 @@ ModelIndex& operator+=(ModelIndex& x, const ModelIndex& y) {
     return x;
 }
 ModelIndex& operator-=(ModelIndex& x, const ModelIndex& y) {
-    assert(x.row_ >= y.row_);
-    assert(x.column_ >= y.column_);
+    MW_ASSERT_X(x.row_ >= y.row_);
+    MW_ASSERT_X(x.column_ >= y.column_);
     x.row_ -= y.row_;
     x.column_ -= y.column_;
     return x;

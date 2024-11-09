@@ -1,6 +1,6 @@
 #include "standard_item_model_impl.h"
 
-#include <cassert>
+#include "win/tools/debug.h"
 
 namespace miniwin {
 StandardItemModel::Impl::Impl(StandardItemModel* owner) : owner_(owner), column_count_(0)
@@ -40,7 +40,7 @@ void StandardItemModel::Impl::SetColumnCount(size_t c)
 
 void StandardItemModel::Impl::InsertRows(size_t row, size_t count)
 {
-    assert(row <= RowCount());
+    MW_ASSERT_X(row <= RowCount());
     items_.Insert(items_.begin() + row, count, {});
 
     vertical_header_items_.Insert(vertical_header_items_.begin() + row, count, {});
@@ -48,7 +48,7 @@ void StandardItemModel::Impl::InsertRows(size_t row, size_t count)
 
 void StandardItemModel::Impl::RemoveRows(size_t row, size_t count)
 {
-    assert(row + count <= RowCount());
+    MW_ASSERT_X(row + count <= RowCount());
     items_.Erase(items_.begin() + row, count);
 
     vertical_header_items_.Erase(
@@ -57,7 +57,7 @@ void StandardItemModel::Impl::RemoveRows(size_t row, size_t count)
 
 void StandardItemModel::Impl::InsertColumns(size_t column, size_t count)
 {
-    assert(column <= ColumnCount());
+    MW_ASSERT_X(column <= ColumnCount());
     // 如果是在末尾插入的, 只需要修改column_count_
     if (column != ColumnCount())
     {
@@ -76,7 +76,7 @@ void StandardItemModel::Impl::InsertColumns(size_t column, size_t count)
 
 void StandardItemModel::Impl::RemoveColumns(size_t column, size_t count)
 {
-    assert(column + count <= ColumnCount());
+    MW_ASSERT_X(column + count <= ColumnCount());
     for (auto& r : items_)
     {
         if (r.size() > column)
@@ -93,8 +93,8 @@ void StandardItemModel::Impl::RemoveColumns(size_t column, size_t count)
 StandardItem& StandardItemModel::Impl::Item(const ModelIndex& idx)
 {
     static StandardItem empty_item;
-    assert(idx.valid());
-    assert(idx.row() < RowCount() && idx.column() < ColumnCount());
+    MW_ASSERT_X(idx.valid());
+    MW_ASSERT_X(idx.row() < RowCount() && idx.column() < ColumnCount());
     auto& r = items_[idx.row()];
     if (r.size() <= idx.column())
     {
@@ -105,8 +105,8 @@ StandardItem& StandardItemModel::Impl::Item(const ModelIndex& idx)
 
 StandardItem& StandardItemModel::Impl::GetOrCreateItem(const ModelIndex& idx)
 {
-    assert(idx.valid());
-    assert(idx.row() < RowCount() && idx.column() < ColumnCount());
+    MW_ASSERT_X(idx.valid());
+    MW_ASSERT_X(idx.row() < RowCount() && idx.column() < ColumnCount());
     auto& r = items_[idx.row()];
     if (r.size() <= idx.column())
     {

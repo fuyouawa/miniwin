@@ -7,6 +7,7 @@
 #include <miniwin/tools/scope_variable.h>
 
 #include "widgets_driver.h"
+#include "win/tools/debug.h"
 
 namespace miniwin {
 Widget::Widget(Widget* parent, const String& name, const String& id)
@@ -48,7 +49,7 @@ size_t Widget::IndexOfWidgetChild(const Widget* child) const
 bool Widget::SetWidgetChildIndex(const Widget* child, size_t index)
 {
     auto cs = const_cast<List<Object*>&>(Children());
-    assert(index < cs.size());
+    MW_ASSERT_X(index < cs.size());
     auto i = cs.IndexOf(const_cast<Widget*>(child));
     if (i == static_cast<size_t>(-1)) return false;
 
@@ -123,7 +124,7 @@ void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const
         impl_->PushPendingFunctor(std::move(func));
         break;
     default:
-        assert(invoke_type == InvokeType::kDirect || invoke_type == InvokeType::kQueued);
+        MW_ASSERT_X(invoke_type == InvokeType::kDirect || invoke_type == InvokeType::kQueued);
         break;
     }
 }

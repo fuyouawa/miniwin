@@ -1,8 +1,8 @@
 #include "abstract_item_view_impl.h"
 
-#include <cassert>
-
 #include <miniwin/delegate/base/abstract_item_delegate.h>
+
+#include "win/tools/debug.h"
 
 
 namespace miniwin {
@@ -45,7 +45,7 @@ void AbstractItemView::SetSelectionModel(ItemSelectionModel* selection_model)
 {
     if (impl_->selection_model_ == selection_model)
         return;
-    assert(selection_model);
+    MW_ASSERT_X(selection_model);
     if (selection_model->Model() != impl_->model_)
     {
         throw std::exception("AbstractItemView::SetSelectionModel() failed: "
@@ -65,7 +65,7 @@ void AbstractItemView::SetItemDelegate(AbstractItemDelegate* item_delegate)
 {
     if (impl_->item_delegate_ == item_delegate)
         return;
-    assert(item_delegate);
+    MW_ASSERT_X(item_delegate);
 
     impl_->item_delegate_ = item_delegate;
 

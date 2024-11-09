@@ -1,6 +1,6 @@
 #include "win/model/item_selection_model_impl.h"
 
-#include <cassert>
+#include "win/tools/debug.h"
 
 namespace miniwin {
 ItemSelectionModel::Impl::Impl(ItemSelectionModel* owner, AbstractItemModel* model)
@@ -33,7 +33,7 @@ void ItemSelectionModel::Impl::Select(const ItemSelection& selection, bool is_se
     {
         for (size_t col = selection.top_left().column(); col <= selection.bottom_right().column(); ++col)
         {
-            assert(model_ && model_->IsValidIndex({ row, col }));
+            MW_ASSERT_X(model_ && model_->IsValidIndex({ row, col }));
             auto c = GetSelectionsTableIndex(col);
             auto& r = selections_[c];
             auto& b = r[row];
@@ -52,7 +52,7 @@ void ItemSelectionModel::Impl::Clear()
 
 void ItemSelectionModel::Impl::EnsureIndex(const ModelIndex& index)
 {
-    assert(model_ && model_->IsValidIndex(index));
+    MW_ASSERT_X(model_ && model_->IsValidIndex(index));
 
     // 确保selection表的行数不小于index的行
     for (auto& s : selections_)

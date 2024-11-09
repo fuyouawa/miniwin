@@ -1,4 +1,4 @@
-#include <miniwin/tools/debug.h>
+#include "debug.h"
 
 #include <iostream>
 #if _WIN32

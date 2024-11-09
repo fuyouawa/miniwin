@@ -1,6 +1,6 @@
 #include "application_impl.h"
 
-#include <cassert>
+#include "win/tools/debug.h"
 
 
 namespace miniwin {
@@ -13,7 +13,7 @@ const Application* Application::instance()
 
 Application::Application()
 {
-    assert(instance_ == nullptr);
+    MW_ASSERT_X(instance_ == nullptr);
     instance_ = this;
     impl_ = std::make_unique<Impl>(this);
 }

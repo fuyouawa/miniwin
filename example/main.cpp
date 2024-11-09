@@ -9,8 +9,6 @@
 #include <miniwin/widgets/layout/boxlayout.h>
 #include <miniwin/widgets/view/listview.h>
 
-#include <miniwin/tools/debug.h>
-
 #include "miniwin/widgets/button.h"
 
 using namespace miniwin;
@@ -58,12 +56,12 @@ public:
         btn_ = new Button(this, u8"Btn");
 
         Connect(btn_, &Button::OnClicked, this, []() {
-            DebugOutput("1263");
+            
             });
 	}
 
     void OnClicked() const {
-        DebugOutput("123");
+        
 	}
 
     HBoxLayout* box_layout_;

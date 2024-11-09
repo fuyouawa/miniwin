@@ -1,8 +1,8 @@
 #include "standard_item_model_impl.h"
 
-#include <cassert>
-
 #include <string>
+
+#include "win/tools/debug.h"
 
 namespace miniwin {
 StandardItemModel::StandardItemModel(Object* parent)
@@ -79,7 +79,7 @@ void StandardItemModel::SetText(const ModelIndex& index, const String& text)
 
 void StandardItemModel::SetRowTexts(size_t row, size_t begin_column, const StringList& texts)
 {
-    assert(begin_column + texts.size() <= ColumnCount());
+    MW_ASSERT_X(begin_column + texts.size() <= ColumnCount());
     size_t i = 0;
     for (auto& t : texts)
     {
@@ -90,7 +90,7 @@ void StandardItemModel::SetRowTexts(size_t row, size_t begin_column, const Strin
 
 void StandardItemModel::SetColumnTexts(size_t begin_row, size_t column, const StringList& texts)
 {
-    assert(begin_row + texts.size() <= RowCount());
+    MW_ASSERT_X(begin_row + texts.size() <= RowCount());
     size_t i = 0;
     for (auto& t : texts)
     {
@@ -123,7 +123,7 @@ Variant StandardItemModel::HeaderData(size_t section, HeaderOrientation orientat
         items = &impl_->vertical_header_items_;
         break;
     default:
-        assert(false);
+        MW_ASSERT_X(false);
         break;
     }
 
@@ -148,7 +148,7 @@ void StandardItemModel::SetHeaderData(size_t section, HeaderOrientation orientat
         items = &impl_->vertical_header_items_;
         break;
     default:
-        assert(false);
+        MW_ASSERT_X(false);
         break;
     }
     (*items)[section][role] = data;
@@ -167,7 +167,7 @@ void StandardItemModel::SetHeaderText(int section, HeaderOrientation orientation
 
 void StandardItemModel::SetHorizontalHeaderTexts(const StringList& texts)
 {
-    assert(texts.size() <= ColumnCount());
+    MW_ASSERT_X(texts.size() <= ColumnCount());
     size_t i = 0;
     for (auto& t : texts)
     {
@@ -178,7 +178,7 @@ void StandardItemModel::SetHorizontalHeaderTexts(const StringList& texts)
 
 void StandardItemModel::SetVerticalHeaderTexts(const StringList& texts)
 {
-    assert(texts.size() <= RowCount());
+    MW_ASSERT_X(texts.size() <= RowCount());
     size_t i = 0;
     for (auto& t : texts)
     {
