@@ -6,6 +6,7 @@ namespace miniwin {
 CheckBox::CheckBox(Widget* const parent, const String& label)
 	: AbstractControl(parent, label)
 {
+	impl_ = std::make_unique<Impl>(this);
 }
 
 void CheckBox::SetChecked(bool b) {
@@ -15,5 +16,9 @@ void CheckBox::SetChecked(bool b) {
 void CheckBox::PaintBegin() {
 	AbstractControl::PaintBegin();
 	impl_->PaintBegin();
+}
+
+void CheckBox::PaintEnd() {
+	AbstractControl::PaintEnd();
 }
 }

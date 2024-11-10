@@ -13,6 +13,7 @@ public:
 
 protected:
 	void PaintBegin() override;
+	void PaintEnd() override;
 
 	_MW_IMPL
 };

@@ -114,7 +114,6 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
     auto ignore_children = (widget->DrawFlags() & Widget::kDrawIgnoreChildren) != 0;
 
     if (!ignore_self) {
-        DebugOutput("[{}]Begin:{}", widget->Name(), Application::instance()->FrameCount());
         widget->PaintBegin();
     }
 
@@ -135,22 +134,18 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
     }
 
     if (!ignore_self) {
-        DebugOutput("[{}]End:{}", widget->Name(), Application::instance()->FrameCount());
         widget->PaintEnd();
     }
 }
 
 void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget)
 {
-    if (widget->Visible())
+    widget->PreparePaint();
+    for (auto& o : widget->Children())
     {
-        widget->PreparePaint();
-        for (auto& o : widget->Children())
+        if (auto w = dynamic_cast<Widget*>(o))
         {
-	        if (auto w = dynamic_cast<Widget*>(o))
-            {
-                CallUpdateEarlyRecursion(w);
-            }
+            CallUpdateEarlyRecursion(w);
         }
     }
 }

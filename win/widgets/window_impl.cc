@@ -1,5 +1,4 @@
 #include "window_impl.h"
-
 #include <miniwin/core/imgui_helper.h>
 
 #include "win/core/widgets_driver.h"

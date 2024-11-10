@@ -38,6 +38,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace miniwin {
 int Application::Execute() {
+    SetConsoleOutputCP(CP_UTF8);
+
     // Create application window
     impl_->OnAppStart();
 
