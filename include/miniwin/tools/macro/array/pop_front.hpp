@@ -2,6 +2,7 @@
 #include <miniwin/tools/macro/basic.hpp>
 
 #define META_POP_FRONT_N(n, ...) META_CAT(_META_POP_FRONT_N_, n)(__VA_ARGS__)
+#define META_POP_FRONT(n, ...) __VA_ARGS__
 
 /*--------------------------------------------------
 *            Internal macros(Dont use!)             |

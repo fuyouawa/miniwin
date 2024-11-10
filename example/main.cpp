@@ -12,8 +12,6 @@
 #include "miniwin/widgets/button.h"
 
 using namespace miniwin;
-
-
 class ExampleWindow : public Window
 {
 public:

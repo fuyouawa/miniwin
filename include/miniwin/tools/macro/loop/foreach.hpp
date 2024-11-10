@@ -1,7 +1,7 @@
 #pragma once
 #include <miniwin/tools/macro/arithmetic.hpp>
 
-#define META_FOR_EACH(f, ...) META_EXPAND(META_CAT(_META_FOR_EACH_, META_COUNT(__VA_ARGS__))(f, __VA_ARGS__))
+#define META_FOR_EACH(f, ...) META_CAT(_META_FOR_EACH_EMPTY_, META_IS_EMPTY(__VA_ARGS__))(f, __VA_ARGS__)
 
 /*--------------------------------------------------
 *            Internal macros(Dont use!)             |
@@ -264,3 +264,6 @@
 #define _META_FOR_EACH_254(f, x, ...) META_EXPAND(f(x)) META_EXPAND(_META_FOR_EACH_253(f, __VA_ARGS__))
 #define _META_FOR_EACH_255(f, x, ...) META_EXPAND(f(x)) META_EXPAND(_META_FOR_EACH_254(f, __VA_ARGS__))
 #define _META_FOR_EACH_256(f, x, ...) META_EXPAND(f(x)) META_EXPAND(_META_FOR_EACH_255(f, __VA_ARGS__))
+
+#define _META_FOR_EACH_EMPTY_1(...)
+#define _META_FOR_EACH_EMPTY_0(f, ...) META_EXPAND(META_CAT(_META_FOR_EACH_, META_COUNT(__VA_ARGS__))(f, __VA_ARGS__))

@@ -1,7 +1,7 @@
 #pragma once
 #include <miniwin/tools/macro/arithmetic.hpp>
 
-// 遍历可变参数
+// 閬嶅巻鍙彉鍙傛暟
 #define META_FOR(f, beg, end, ...) _META_FOR(f, beg, META_SUB(end, beg), __VA_ARGS__)
 
 /*--------------------------------------------------
@@ -266,4 +266,7 @@
 #define _META_FOR_255(f, i, ...) META_EXPAND(f(i, __VA_ARGS__)) _META_FOR_254(f, META_INC(i), __VA_ARGS__)
 #define _META_FOR_256(f, i, ...) META_EXPAND(f(i, __VA_ARGS__)) _META_FOR_255(f, META_INC(i), __VA_ARGS__)
 
-#define _META_FOR(f, i, n, ...) META_CAT(_META_FOR_, n)(f, i, __VA_ARGS__)
+#define _META_FOR_EMPTY_1(...)
+#define _META_FOR_EMPTY_0(f, i, n, ...) META_CAT(_META_FOR_, n)(f, i, __VA_ARGS__)
+
+#define _META_FOR(f, i, n, ...) META_CAT(_META_FOR_EMPTY_, META_IS_EMPTY(__VA_ARGS__))(f, i, n, __VA_ARGS__)
