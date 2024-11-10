@@ -9,9 +9,9 @@ class ListConstIterator;
 template<class T>
 class ListIterator;
 
-// ÏßĞÔÊı×éµÄÊı¾İ½á¹¹
-// ËäÈ»ÔÚc++±ê×¼¿âÖĞlistÊÇÁ´±í, µ«ÊÇÓÉÓÚ¿¼ÂÇµ½¿ÉÄÜ»áºÍÏòÁ¿µÄVectorÃüÃû»ìÏı, ËùÒÔÕâÀï½Ğ×öList
-// ¶øÇÒ´ó¶àÊıÇé¿öÏÂÏßĞÔÊı×é(vector)È·Êµ¹»ÓÃÁË, Á´±íÖ»ÓĞ¿ªÏú¸ü´ó, Qt6ÖĞÒ²ÊÇ½«QListÒ²µÈÍ¬ÓÚQVector
+// çº¿æ€§æ•°ç»„çš„æ•°æ®ç»“æ„
+// è™½ç„¶åœ¨c++æ ‡å‡†åº“ä¸­listæ˜¯é“¾è¡¨, ä½†æ˜¯ç”±äºè€ƒè™‘åˆ°å¯èƒ½ä¼šå’Œå‘é‡çš„Vectorå‘½åæ··æ·†, æ‰€ä»¥è¿™é‡Œå«åšList
+// è€Œä¸”å¤§å¤šæ•°æƒ…å†µä¸‹çº¿æ€§æ•°ç»„(vector)ç¡®å®å¤Ÿç”¨äº†, é“¾è¡¨åªæœ‰å¼€é”€æ›´å¤§, Qt6ä¸­ä¹Ÿæ˜¯å°†QListä¹Ÿç­‰åŒäºQVector
 template<class T>
 class List
 {
@@ -111,7 +111,7 @@ public:
 	reference operator*() const { return StdIter().operator*(); }
 	pointer operator->() const { return StdIter().operator->(); }
 
-	//TODO ±ß½ç¼ì²é
+	//TODO è¾¹ç•Œæ£€æŸ¥
 	ListConstIterator& operator++() { ++index_; return *this; }
 	ListConstIterator operator++(int) { auto tmp = *this; ++*this; return tmp; }
 	ListConstIterator& operator--() { --index_; return *this; }

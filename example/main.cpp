@@ -20,40 +20,40 @@ public:
 	ExampleWindow(const String& title)
 		: Window(title)
 	{
-        label_ = new Label(this, u8"jÊ¿´ó·òjbb");
-
-        text_edit_label_ = new Label(this, u8"TextEdit Label");
-        text_edit_ = new TextEdit(this, u8"fffff");
-
-        box_layout_ = new HBoxLayout(this);
-        box_layout_->AddWidget(text_edit_label_);
-        box_layout_->AddWidget(text_edit_);
-
-        table_view_ = new TableView(this);
-
-        // ÊµÀı»¯Ò»¸öModel
-        auto model = new StandardItemModel(table_view_);
-        // ÉèÖÃÁĞµÄÊıÁ¿
-        model->SetColumnCount(4);
-        // ÉèÖÃË®Æ½Í·²¿(Ò²¾ÍÊÇÁĞÍ·)µÄÎÄ±¾
-        model->SetHorizontalHeaderTexts({ u8"asd", u8"µØ·½", u8"ooo", u8"ÊÀÊÀ´ú´ú" });
-        // ÉèÖÃĞĞµÄÊıÁ¿
-        model->SetRowCount(3);
-        // ÉèÖÃĞĞÎÄ±¾
-        model->SetRowTexts(0, 0, { u8"asdd", u8"´óËÕ´ò¡¤" });
-        model->SetColumnTexts(0, 3, { u8"¿ÏµÂ»ù", u8"sdÏŞËÜ´ü¡¤", u8"aµÄ·ÊÈâ" });
-        // ½«modelÉèÖÃ¸øTableView
-        table_view_->SetModel(model);
-
-        // »ñÈ¡Ñ¡Ôñmodel
-        auto selection_model = table_view_->SelectionModel();
-        // ÉèÖÃ1ĞĞ2ÁĞÑ¡ÖĞ
-        selection_model->Select(0, 1);
-
-        combobox_ = new ComboBox(this, u8"ComboBox");
-        combobox_->AddItems({ u8"É¶É¶É¶", u8"dffµ¥¶À", u8"ffµ±ÎÒ" });
-
-        btn_ = new Button(this, u8"Btn");
+        label_ = new Label(this, "jå£«å¤§å¤«jbb");
+        //
+        // text_edit_label_ = new Label(this, u8"TextEdit Label");
+        // text_edit_ = new TextEdit(this, u8"fffff");
+        //
+        // box_layout_ = new HBoxLayout(this);
+        // box_layout_->AddWidget(text_edit_label_);
+        // box_layout_->AddWidget(text_edit_);
+        //
+        // table_view_ = new TableView(this);
+        //
+        // // å®ä¾‹åŒ–ä¸€ä¸ªModel
+        // auto model = new StandardItemModel(table_view_);
+        // // è®¾ç½®åˆ—çš„æ•°é‡
+        // model->SetColumnCount(4);
+        // // è®¾ç½®æ°´å¹³å¤´éƒ¨(ä¹Ÿå°±æ˜¯åˆ—å¤´)çš„æ–‡æœ¬
+        // model->SetHorizontalHeaderTexts({ u8"asd", u8"åœ°æ–¹", u8"ooo", u8"ä¸–ä¸–ä»£ä»£" });
+        // // è®¾ç½®è¡Œçš„æ•°é‡
+        // model->SetRowCount(3);
+        // // è®¾ç½®è¡Œæ–‡æœ¬
+        // model->SetRowTexts(0, 0, { u8"asdd", u8"å¤§è‹æ‰“Â·" });
+        // model->SetColumnTexts(0, 3, { u8"è‚¯å¾·åŸº", u8"sdé™å¡‘è¢‹Â·", u8"açš„è‚¥è‚‰" });
+        // // å°†modelè®¾ç½®ç»™TableView
+        // table_view_->SetModel(model);
+        //
+        // // è·å–é€‰æ‹©model
+        // auto selection_model = table_view_->SelectionModel();
+        // // è®¾ç½®1è¡Œ2åˆ—é€‰ä¸­
+        // selection_model->Select(0, 1);
+        //
+        // combobox_ = new ComboBox(this, u8"ComboBox");
+        // combobox_->AddItems({ u8"å•¥å•¥å•¥", u8"dffå•ç‹¬", u8"ffå½“æˆ‘" });
+        //
+        // btn_ = new Button(this, u8"Btn");
 	}
 
     void OnClicked() const {
@@ -72,7 +72,6 @@ public:
 int main() {
 	Application app;
     app.SetHideMainWindow(true);
-
-	auto window = new ExampleWindow{ u8"Example Window" };
+	auto window = new ExampleWindow{"Example Window"};
 	app.Execute();
 }

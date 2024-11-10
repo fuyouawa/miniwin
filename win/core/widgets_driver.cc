@@ -1,5 +1,6 @@
 #include "widgets_driver.h"
 
+#include "miniwin/core/application.h"
 #include "win/core/widget_impl.h"
 #include "win/tools/debug.h"
 #include "win/widgets/window_impl.h"
@@ -113,6 +114,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
     auto ignore_children = (widget->DrawFlags() & Widget::kDrawIgnoreChildren) != 0;
 
     if (!ignore_self) {
+        DebugOutput("[{}]Begin:{}", widget->Name(), Application::instance()->FrameCount());
         widget->PaintBegin();
     }
 
@@ -133,6 +135,7 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children)
     }
 
     if (!ignore_self) {
+        DebugOutput("[{}]End:{}", widget->Name(), Application::instance()->FrameCount());
         widget->PaintEnd();
     }
 }

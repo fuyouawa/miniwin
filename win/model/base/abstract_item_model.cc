@@ -26,7 +26,7 @@ AbstractItemModel* AbstractItemModel::StaticEmptyModel()
 }
 
 AbstractItemModel::AbstractItemModel(Object* parent)
-    : Object(parent, u8"Model")
+    : Object(parent, "Model")
 {
 }
 

@@ -4,7 +4,7 @@
 
 namespace miniwin {
 Layout::Layout(Widget* parent)
-	: Widget(parent, u8"Layout")
+	: Widget(parent, "Layout")
 {
 }
 void Layout::AddWidget(Widget* widget)
@@ -73,7 +73,7 @@ void Layout::PaintBegin()
 	}
 	auto size = Size();
 	size.set_y(height);
-	ImGuiHelper::BeginChildWindow(u8"LayoutFrame", size);
+	ImGuiHelper::BeginChildWindow("LayoutFrame", size);
 }
 
 void Layout::PaintEnd()

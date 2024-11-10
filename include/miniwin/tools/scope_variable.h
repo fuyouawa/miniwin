@@ -11,21 +11,21 @@ public:
 	ScopeVariable(std::convertible_to<T> auto&& init = {});
 
 	/**
-	 * ½øÈë×÷ÓÃÓò
+	 * è¿›å…¥ä½œç”¨åŸŸ
 	 *
-	 * Èç¹ûÉÏÒ»´ÎÓĞset_control, »áÔÚ´ËÊ±Ó¦ÓÃ¸ü¸Ä
+	 * å¦‚æœä¸Šä¸€æ¬¡æœ‰set_control, ä¼šåœ¨æ­¤æ—¶åº”ç”¨æ›´æ”¹
 	 */
 	void Enter();
 	/**
-	 * ÍË³ö×÷ÓÃÓò
+	 * é€€å‡ºä½œç”¨åŸŸ
 	 */
 	void Exit() noexcept(std::is_nothrow_copy_assignable_v<T>);
 	/**
-	 * Ä£Äâ·¢ËÍÒ»´ÎÊıÖµ¸Ä±ä
+	 * æ¨¡æ‹Ÿå‘é€ä¸€æ¬¡æ•°å€¼æ”¹å˜
 	 */
 	void SimulateChange();
 	/**
-	 * ÉèÖÃ¿ØÖÆÊıÖµ, »áÔÚÏÂÒ»´ÎEnterµÄÊ±ºòÓ¦ÓÃ¸Ä¸Ä
+	 * è®¾ç½®æ§åˆ¶æ•°å€¼, ä¼šåœ¨ä¸‹ä¸€æ¬¡Enterçš„æ—¶å€™åº”ç”¨æ”¹æ”¹
 	 */
 	template <std::convertible_to<T> E>
 	void SetControl(E&& val)
@@ -33,20 +33,20 @@ public:
 			         ? true
 			         : std::is_nothrow_copy_assignable_v<T>);
 	/**
-	 * Ö±½ÓÉèÖÃÊıÖµ, ²»·¢ËÍ¸ü¸ÄÍ¨Öª
+	 * ç›´æ¥è®¾ç½®æ•°å€¼, ä¸å‘é€æ›´æ”¹é€šçŸ¥
 	 */
 	template <std::convertible_to<T> E>
 	void SetValueDirectly(E&& val);
 	/**
-	 * ÊıÖµÊÇ·ñÓĞ¸ü¸Ä
+	 * æ•°å€¼æ˜¯å¦æœ‰æ›´æ”¹
 	 */
 	bool HasChange() const { return val_ != end_val_ || simu_change_; }
 	/**
-	 * »ñÈ¡ÉÏÒ»´ÎÍË³öÊ±µÄÊıÖµ
+	 * è·å–ä¸Šä¸€æ¬¡é€€å‡ºæ—¶çš„æ•°å€¼
 	 */
 	decltype(auto) prev_value() const { return end_val_; }
 	/**
-	 * ÊÇ·ñ½øÈë×÷ÓÃÓò
+	 * æ˜¯å¦è¿›å…¥ä½œç”¨åŸŸ
 	 */
 	bool entry() const { return entry_; }
 
@@ -54,11 +54,11 @@ public:
 	constexpr const T& operator*() const { return get(); }
 
 private:
-	// ÉÏÒ»´Î¿ÉÄÜ¸Ä±äµÄÊıÖµ
+	// ä¸Šä¸€æ¬¡å¯èƒ½æ”¹å˜çš„æ•°å€¼
 	std::optional<T> control_val_;
-	// ÕâÒ»´Î½øÈëºóµÄÊıÖµ
+	// è¿™ä¸€æ¬¡è¿›å…¥åçš„æ•°å€¼
 	T val_;
-	// ÉÏÒ»´ÎÍË³öÊ±µÄÊıÖµ
+	// ä¸Šä¸€æ¬¡é€€å‡ºæ—¶çš„æ•°å€¼
 	T end_val_;
 	bool simu_change_;
 	bool clear_simu_change_;

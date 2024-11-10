@@ -5,7 +5,7 @@
 
 namespace miniwin {
 TextEdit::TextEdit(Widget* const parent, const String& initial_text, const String& right_label)
-	: Widget{ parent, u8"TextEdit" }
+	: Widget{ parent, "TextEdit" }
 {
     impl_ = std::make_unique<Impl>(this);
     SetPlainText(initial_text);

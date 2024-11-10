@@ -45,7 +45,7 @@ void ComboBoxView::PaintBegin()
 }
 
 ComboBox::ComboBox(Widget* parent, const String& text)
-	: Widget(parent, u8"ComboBox")
+	: Widget(parent, "ComboBox")
 {
 	impl_ = std::make_unique<Impl>(this);
 	impl_->Init(text);

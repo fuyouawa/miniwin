@@ -16,7 +16,7 @@ bool operator==(const ItemSelection& x, const ItemSelection& y)
 }
 
 ItemSelectionModel::ItemSelectionModel(Object* parent, AbstractItemModel* model)
-    : Object(parent, u8"SelectionModel")
+    : Object(parent, "SelectionModel")
 {
     impl_ = std::make_unique<Impl>(this, model);
 }

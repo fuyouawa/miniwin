@@ -24,7 +24,7 @@ void StandardItemModel::Impl::SetRowCount(size_t c)
 
 void StandardItemModel::Impl::SetColumnCount(size_t c)
 {
-    // Èç¹ûµ±Ç°Òª¼õÉÙÁĞÊı, ½«ÄÇĞ©³¬³öÁĞÊıµÄĞĞµ÷Õûµ½Ö¸¶¨ÁĞÊı
+    // å¦‚æœå½“å‰è¦å‡å°‘åˆ—æ•°, å°†é‚£äº›è¶…å‡ºåˆ—æ•°çš„è¡Œè°ƒæ•´åˆ°æŒ‡å®šåˆ—æ•°
     if (c < column_count_)
     {
         for (auto& r : items_)
@@ -58,12 +58,12 @@ void StandardItemModel::Impl::RemoveRows(size_t row, size_t count)
 void StandardItemModel::Impl::InsertColumns(size_t column, size_t count)
 {
     MW_ASSERT_X(column <= ColumnCount());
-    // Èç¹ûÊÇÔÚÄ©Î²²åÈëµÄ, Ö»ĞèÒªĞŞ¸Äcolumn_count_
+    // å¦‚æœæ˜¯åœ¨æœ«å°¾æ’å…¥çš„, åªéœ€è¦ä¿®æ”¹column_count_
     if (column != ColumnCount())
     {
         for (auto& r : items_)
         {
-            // Èç¹ûÊÇÔÚµ±Ç°ĞĞµÄÁĞÊıÖĞ¼ä²åÈëµÄ, ²ÅĞèÒªÕæÕı²åÈë
+            // å¦‚æœæ˜¯åœ¨å½“å‰è¡Œçš„åˆ—æ•°ä¸­é—´æ’å…¥çš„, æ‰éœ€è¦çœŸæ­£æ’å…¥
             if (r.size() > column)
             {
                 r.Insert(r.begin() + column, count, {});

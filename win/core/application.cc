@@ -4,23 +4,18 @@
 
 
 namespace miniwin {
-Application* Application::instance_ = nullptr;
-
 const Application* Application::instance()
 {
-    return instance_;
+    return Impl::instance_;
 }
 
 Application::Application()
 {
-    MW_ASSERT_X(instance_ == nullptr);
-    instance_ = this;
     impl_ = std::make_unique<Impl>(this);
 }
 
 Application::~Application()
 {
-    instance_ = nullptr;
 }
 
 bool Application::IsHideMainWindow() const
@@ -61,6 +56,10 @@ size_t Application::Fps() const
 void Application::SetFps(size_t fps)
 {
     impl_->fps_ = fps;
+}
+
+uint64_t Application::FrameCount() const {
+    return impl_->frame_count_;
 }
 
 bool Application::IsExecuting() const

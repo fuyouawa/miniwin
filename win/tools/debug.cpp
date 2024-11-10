@@ -6,20 +6,20 @@
 #endif // _WIN32
 
 namespace miniwin {
-void DebugOutput(std::string_view str) noexcept {
+namespace internal {
+void DebugOutput(const String& str) noexcept {
+	std::cout << str.ToStdString();
 #if _WIN32
 	::OutputDebugStringA(str.data());
 #endif // _WIN32
 }
-
-namespace internal {
-void AssertionFailed(std::string_view file, std::string_view func, int line, std::string_view msg) noexcept {
-	DebugOutput(std::format("[Geek] Assertion failed at {} (func {}) (line {}): {}", file, func, msg));
+void AssertionFailed(std::string_view file, std::string_view func, int line, const String& msg) noexcept {
+	DebugOutput(String::Format("[Geek] Assertion failed at{} (func{}) (line{}) : {}", file, func, msg));
 	::abort();
 }
 
-std::string MsgOfThrow(std::string_view file, std::string_view func, int line, std::string_view msg) noexcept {
-	return std::format("[Geek] Exception at {} (func {}) (line {}): {}", file, func, msg);
+String MsgOfThrow(std::string_view file, std::string_view func, int line, const String& msg) noexcept {
+	return String::Format("[Geek] Exception at {} (func {}) (line {}): {}", file, func, msg);
 }
 }
 }

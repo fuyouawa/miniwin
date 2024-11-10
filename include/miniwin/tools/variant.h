@@ -56,6 +56,6 @@ public:
     String ToString(bool* ok = nullptr) const;
 
 private:
-    std::variant<std::monostate, std::nullptr_t, char, bool, int32_t, uint32_t, int64_t, uint64_t, float, double, char8_t*> var_;
+    std::variant<std::monostate, std::nullptr_t, char, bool, int32_t, uint32_t, int64_t, uint64_t, float, double, char*> var_;
 };
 }

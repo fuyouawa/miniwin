@@ -30,13 +30,12 @@ public:
     size_t Fps() const;
     void SetFps(size_t fps);
 
+    uint64_t FrameCount() const;
     bool IsExecuting() const;
 
     int Execute();
 
 private:
-    static Application* instance_;
-
     class Impl;
     std::unique_ptr<Impl> impl_;
 };

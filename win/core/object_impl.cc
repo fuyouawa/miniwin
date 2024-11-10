@@ -47,7 +47,7 @@ Object::Impl::~Impl() {
             std::lock_guard lk2{ signal_mutex(sender) };
             if (!sender_conn || sender_conn->sender != sender)
             {
-                // Ò²Ðí¾ÍÔÚµü´úÊ±Ã»ÓÐËøµÄÄÇ¶Î¼ä¸ô, Õâ¸öÁ¬½Ó¾Í±»ÇÐ¶ÏÁË
+                // ä¹Ÿè®¸å°±åœ¨è¿­ä»£æ—¶æ²¡æœ‰é”çš„é‚£æ®µé—´éš”, è¿™ä¸ªè¿žæŽ¥å°±è¢«åˆ‡æ–­äº†
                 continue;
             }
             sender_conn->receiver = nullptr;
@@ -86,10 +86,10 @@ Object::Disconnecter Object::Impl::ConnectImpl(
 
     std::scoped_lock lk{ signal_mutex(sender), signal_mutex(receiver) };
 
-    // Èç¹ûconnection_typeÊÇUnique, ±íÊ¾²»ÖØ¸´Á¬½Ó
-    // ¼ì²âÄ¿±êSignalÖÐËùÓÐConnectionµÄSlotÊÇ·ñÓÐ¸úµ±Ç°ÏëÁ¬½ÓµÄSlotÖØ¸´µÄ
+    // å¦‚æžœconnection_typeæ˜¯Unique, è¡¨ç¤ºä¸é‡å¤è¿žæŽ¥
+    // æ£€æµ‹ç›®æ ‡Signalä¸­æ‰€æœ‰Connectionçš„Slotæ˜¯å¦æœ‰è·Ÿå½“å‰æƒ³è¿žæŽ¥çš„Sloté‡å¤çš„
     if (has_unique_flag || has_replace_flag) {
-        // »ñÈ¡µ±Ç°Á´½ÓµÄSignal Connection List
+        // èŽ·å–å½“å‰é“¾æŽ¥çš„Signal Connection List
         if (auto res = sender->impl_->connections_manager_.map_.find(signal_info); res != sender->impl_->connections_manager_.map_.end())
         {
             if (res->first != signal_info)
@@ -105,7 +105,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
             {
                 if (has_unique_flag)
                 {
-                    //TODO has_unique_flagÔÝÊ±É¶Ò²²»¸É
+                    //TODO has_unique_flagæš‚æ—¶å•¥ä¹Ÿä¸å¹²
                 }
                 else
                 {
@@ -138,7 +138,7 @@ void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::Sl
 
         if (!c || c->sender != owner_ || c->receiver != receiver)
         {
-            // Ò²Ðí¾ÍÔÚµü´úÊ±Ã»ÓÐËøµÄÄÇ¶Î¼ä¸ô, Õâ¸öÁ¬½Ó¾Í±»ÇÐ¶ÏÁË
+            // ä¹Ÿè®¸å°±åœ¨è¿­ä»£æ—¶æ²¡æœ‰é”çš„é‚£æ®µé—´éš”, è¿™ä¸ªè¿žæŽ¥å°±è¢«åˆ‡æ–­äº†
             continue;
         }
 
@@ -178,8 +178,8 @@ void Object::Impl::SetParent(Object* parent)
 {
     if (owner_ == parent)
         return;
-    // Èç¹ûparentÕýÔÚÉ¾³ýÖÐ, ¾Í²»´ÓparentÖÐÒÆ³ý×Ô¼º
-    //TODO È·±£µ±parent±éÀúchildrenµÄÊ±ºò¶¼²»Ó¦¸Ã½øÐÐÉ¾³ý²Ù×÷
+    // å¦‚æžœparentæ­£åœ¨åˆ é™¤ä¸­, å°±ä¸ä»Žparentä¸­ç§»é™¤è‡ªå·±
+    //TODO ç¡®ä¿å½“parentéåŽ†childrençš„æ—¶å€™éƒ½ä¸åº”è¯¥è¿›è¡Œåˆ é™¤æ“ä½œ
     if (parent_ && !parent_->impl_->deleting_)
     {
         size_t count = parent_->impl_->children_.Erase(owner_);

@@ -28,7 +28,7 @@ public:
     class ConnectionsManager
     {
     public:
-        bool dirty_; // Ò»Ğ©Á¬½ÓÒÑ¾­±»ÇĞ¶ÏÁË, µ«ÊÇ²¢Ã»ÓĞ´ÓÁĞ±íÖĞÒÆ³ı
+        bool dirty_; // ä¸€äº›è¿æ¥å·²ç»è¢«åˆ‡æ–­äº†, ä½†æ˜¯å¹¶æ²¡æœ‰ä»åˆ—è¡¨ä¸­ç§»é™¤
         std::unordered_map<std::type_index, ConnectionList> map_;
 
         void ClearDirty();
@@ -60,7 +60,7 @@ public:
     String name_;
     FlagsType flags_;
     List<Object*> children_;
-    List<SharedConnection> connected_sender_connections_;    // Á¬½Óµ½µÄ·¢ËÍÕß
+    List<SharedConnection> connected_sender_connections_;    // è¿æ¥åˆ°çš„å‘é€è€…
     ConnectionsManager connections_manager_;
 };
 }

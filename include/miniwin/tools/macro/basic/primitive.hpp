@@ -34,7 +34,7 @@
 // (x) another -> another
 #define META_EMPTY_PACK(x)			META_EMPTY x
 
-// »ñÈ¡¿É±ä²ÎÊýµÄÊýÁ¿
+// èŽ·å–å¯å˜å‚æ•°çš„æ•°é‡
 #define META_COUNT(...)             _META_COUNT(__VA_ARGS__)
 
 #define META_IS_EMPTY(...)		    META_IS_1(META_CHECK(META_CAT(META_PRIMITIVE_CAT(_META_IS_EMPTY_, __VA_ARGS__), 0)))

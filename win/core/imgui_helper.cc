@@ -22,9 +22,9 @@ int InputTextCallback(ImGuiInputTextCallbackData* data)
         // Resize string callback
         // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
         auto str = user_data->Str;
-        IM_ASSERT(data->Buf == str->cdata());
+        IM_ASSERT(data->Buf == str->data());
         str->resize(data->BufTextLen);
-        data->Buf = str->cdata();
+        data->Buf = str->data();
     }
     else if (user_data->ChainCallback)
     {
@@ -156,20 +156,20 @@ void ImGuiHelper::Dummy(const Vector2D& size)
 }
 
 bool ImGuiHelper::CheckBox(const String& label, bool* checked) {
-	return ImGui::Checkbox(label.cdata(), checked);
+	return ImGui::Checkbox(label.data(), checked);
 }
 
 void ImGuiHelper::Text(const String& label) {
-	return ImGui::Text(label.cdata());
+	return ImGui::Text(label.data());
 }
 
 bool ImGuiHelper::Button(const String& label, const Vector2D& size) {
-	return ImGui::Button(label.cdata(), CastToIm(size));
+	return ImGui::Button(label.data(), CastToIm(size));
 }
 
 bool ImGuiHelper::Selectable(const String& label, bool* is_selected, FlagsType flags, const Vector2D& size) {
 	return ImGui::Selectable(
-        label.cdata(),
+        label.data(),
         is_selected,
         flags,
         CastToIm(size));
@@ -188,8 +188,8 @@ bool ImGuiHelper::InputText(const String& label,
     cb_user_data.ChainCallbackUserData = nullptr;
 
     return ImGui::InputText(
-        label.cdata(),
-        buffer->cdata(),
+        label.data(),
+        buffer->data(),
         buffer->capacity() + 1,
         flags,
         InputTextCallback,
@@ -197,7 +197,7 @@ bool ImGuiHelper::InputText(const String& label,
 }
 
 bool ImGuiHelper::BeginWindow(const String& title, bool* open, FlagsType flags) {
-	return ImGui::Begin(title.cdata(), open, flags);
+	return ImGui::Begin(title.data(), open, flags);
 }
 
 void ImGuiHelper::EndWindow() {
@@ -206,7 +206,7 @@ void ImGuiHelper::EndWindow() {
 
 bool ImGuiHelper::BeginCombo(const String& label, const String& preview_value, FlagsType flags)
 {
-    return ImGui::BeginCombo(label.cdata(), preview_value.cdata(), flags);
+    return ImGui::BeginCombo(label.data(), preview_value.data(), flags);
 }
 
 void ImGuiHelper::EndCombo()
@@ -216,7 +216,7 @@ void ImGuiHelper::EndCombo()
 
 bool ImGuiHelper::BeginListBox(const String& label, const Vector2D& size)
 {
-    return ImGui::BeginListBox(label.cdata(), CastToIm(size));
+    return ImGui::BeginListBox(label.data(), CastToIm(size));
 }
 
 void ImGuiHelper::EndListBox()
@@ -232,7 +232,7 @@ void ImGuiHelper::SameLine(float offset_from_start_x, float spacing)
 bool ImGuiHelper::BeginChildWindow(const String& id, const Vector2D& size, int child_window_flags,
     int window_flags)
 {
-    return ImGui::BeginChild(id.cdata(), CastToIm(size), child_window_flags, window_flags);
+    return ImGui::BeginChild(id.data(), CastToIm(size), child_window_flags, window_flags);
 }
 
 void ImGuiHelper::EndChildWindow()
@@ -241,7 +241,7 @@ void ImGuiHelper::EndChildWindow()
 }
 
 bool ImGuiHelper::BeginTable(const String& id, size_t column, FlagsType flags, const Vector2D& size, float inner_width) {
-	return ImGui::BeginTable(id.cdata(), static_cast<int>(column), flags, CastToIm(size), inner_width);
+	return ImGui::BeginTable(id.data(), static_cast<int>(column), flags, CastToIm(size), inner_width);
 }
 
 void ImGuiHelper::EndTable() {
@@ -250,12 +250,12 @@ void ImGuiHelper::EndTable() {
 
 void ImGuiHelper::TableSetupColumn(const String& label, FlagsType flags, float init_width_or_weight, uint32_t user_id)
 {
-    return ImGui::TableSetupColumn(label.cdata(), flags, init_width_or_weight, user_id);
+    return ImGui::TableSetupColumn(label.data(), flags, init_width_or_weight, user_id);
 }
 
 void ImGuiHelper::TableHeader(const String& label)
 {
-    ImGui::TableHeader(label.cdata());
+    ImGui::TableHeader(label.data());
 }
 
 bool ImGuiHelper::TableSetColumnIndex(size_t column_n)

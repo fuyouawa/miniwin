@@ -17,7 +17,7 @@ public:
         kDrawIgnoreDraw = kDrawIgnoreChildren | kDrawIgnoreSelf
     };
 
-    Widget(Widget* parent, const String& name, const String& id = u8"Widget");
+    Widget(Widget* parent, const String& name, const String& id = "Widget");
     ~Widget() override;
 
     static bool IsInUIThread();
@@ -53,16 +53,16 @@ public:
     MW_SIGNAL(OnSizeChanged, (Vector2D) size, (Vector2D) prev_size)
 
 protected:
-    // ÊÇËùÓĞ»æÖÆÖ®Ç°µÄ×¼±¸¹¤×÷
-    // »áÏÈµ÷ÓÃÍêËùÓĞWidgetµÄPreparePaintºó²Å»á½øÈëPaintBegin
+    // æ˜¯æ‰€æœ‰ç»˜åˆ¶ä¹‹å‰çš„å‡†å¤‡å·¥ä½œ
+    // ä¼šå…ˆè°ƒç”¨å®Œæ‰€æœ‰Widgetçš„PreparePaintåæ‰ä¼šè¿›å…¥PaintBegin
     virtual void PreparePaint();
-    // ¿ªÊ¼»æÖÆ
-    // »áÏÈµ÷ÓÃ¸¸ÀàµÄPaintBegin, È»ºó»áµİ¹éµ÷ÓÃËùÓĞ×ÓÀàµÄPaintBegin
-    // Ïàµ±ÓÚ¶ş²æÊ÷±éÀúÖĞµÄ×óÒ¶×Ó
+    // å¼€å§‹ç»˜åˆ¶
+    // ä¼šå…ˆè°ƒç”¨çˆ¶ç±»çš„PaintBegin, ç„¶åä¼šé€’å½’è°ƒç”¨æ‰€æœ‰å­ç±»çš„PaintBegin
+    // ç›¸å½“äºäºŒå‰æ ‘éå†ä¸­çš„å·¦å¶å­
     virtual void PaintBegin();
-    // ½áÊø»æÖÆ
-    // ºÍPaintBeginÏà¶ÔÓ¦
-    // Ïàµ±ÓÚ¶ş²æÊ÷±éÀúÖĞµÄÓÒÒ¶×Ó
+    // ç»“æŸç»˜åˆ¶
+    // å’ŒPaintBeginç›¸å¯¹åº”
+    // ç›¸å½“äºäºŒå‰æ ‘éå†ä¸­çš„å³å¶å­
     virtual void PaintEnd();
 
     virtual void OnBeforePaintChild(size_t child_index);

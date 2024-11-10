@@ -10,10 +10,6 @@ char* CopyStr(const char* str, size_t size)
 	std::copy_n(str, size, t);
 	return t;
 }
-char8_t* CopyU8Str(const char8_t* str, size_t size)
-{
-	return reinterpret_cast<char8_t*>(CopyStr(reinterpret_cast<const char*>(str), size));
-}
 
 template<class T, class... Ts>
 T Convert(const std::variant<Ts...>& v, VariantType type, bool* ok = nullptr)
@@ -36,9 +32,9 @@ Variant::Variant(const Variant& other)
 	{
 	case VariantType::kString:
 	{
-		auto s = Convert<char8_t*>(other.var_, VariantType::kString);
+		auto s = Convert<char*>(other.var_, VariantType::kString);
 		MW_ASSERT_X(s);
-		var_ = CopyU8Str(s, strlen(reinterpret_cast<char*>(s)) + 1);
+		var_ = CopyStr(s, strlen(s) + 1);
 		break;
 	}
 	default:
@@ -61,7 +57,7 @@ Variant::Variant(std::nullptr_t)
 
 Variant::Variant(const String& str)
 {
-	var_ = CopyU8Str(str.data(), str.size() + 1);
+	var_ = CopyStr(str.data(), str.size() + 1);
 }
 
 Variant::Variant(int32_t i32)
@@ -109,7 +105,7 @@ Variant::~Variant()
 	switch (Type())
 	{
 	case VariantType::kString:
-		delete[] std::get<char8_t*>(var_);
+		delete[] std::get<char*>(var_);
 		break;
 	default:
 		break;
@@ -169,7 +165,7 @@ size_t Variant::ToInteger(bool* ok) const
 
 String Variant::ToString(bool* ok) const
 {
-	if (auto s = Convert<char8_t*>(var_, VariantType::kString, ok))
+	if (auto s = Convert<char*>(var_, VariantType::kString, ok))
 		return s;
 	return {};
 }

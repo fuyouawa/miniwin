@@ -1,12 +1,16 @@
 #pragma once
-#include <format>
+#include <miniwin/tools/string.h>
 
 namespace miniwin {
-void DebugOutput(std::string_view str) noexcept;
-
 namespace internal {
-void AssertionFailed(std::string_view file, std::string_view func, int line, std::string_view msg) noexcept;
-std::string MsgOfThrow(std::string_view file, std::string_view func, int line, std::string_view msg) noexcept;
+void DebugOutput(const String& str) noexcept;
+void AssertionFailed(std::string_view file, std::string_view func, int line, const String& msg) noexcept;
+String MsgOfThrow(std::string_view file, std::string_view func, int line, const String& msg) noexcept;
+}
+
+template<class... Args>
+void DebugOutput(const String& fmt, const Args&... args) {
+	internal::DebugOutput(String::Format(fmt, args...));
 }
 }
 
@@ -27,7 +31,7 @@ std::string MsgOfThrow(std::string_view file, std::string_view func, int line, s
 	} while (0)
 
 #define MW_ASSERT_X(cond)		_MW_ASSERT(cond, #cond)
-#define MW_ASSERT(cond, ...)	_MW_ASSERT(cond, std::format(__VA_ARGS__))
+#define MW_ASSERT(cond, ...)	_MW_ASSERT(cond, miniwin::String::Format(__VA_ARGS__))
 
 #else
 
@@ -36,4 +40,4 @@ std::string MsgOfThrow(std::string_view file, std::string_view func, int line, s
 
 #endif
 
-#define MW_THROW(...)			throw std::exception(miniwin::internal::MsgOfThrow(__FILE__, __FUNCTION__, __LINE__, std::format(__VA_ARGS__)).c_str())
+#define MW_THROW(...)			throw std::exception(miniwin::internal::MsgOfThrow(__FILE__, __FUNCTION__, __LINE__, miniwin::String::Format(__VA_ARGS__)).data())

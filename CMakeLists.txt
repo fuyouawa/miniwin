@@ -28,5 +28,12 @@ set(GLFW_LIB glfw)
 add_subdirectory(${THIRD_PARTY_DIR}/glfw)
 endif()
 
+# 针对不同的编译器设置 UTF-8 编译选项
+if (MSVC)
+    add_compile_options("/utf-8")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_compile_options("-finput-charset=UTF-8" "-fexec-charset=UTF-8")
+endif()
+
 add_subdirectory(win)
 add_subdirectory(example)

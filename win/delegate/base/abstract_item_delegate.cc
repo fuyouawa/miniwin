@@ -2,7 +2,7 @@
 
 namespace miniwin {
 AbstractItemDelegate::AbstractItemDelegate(Object* parent)
-	: Object{parent, u8"Delegate"}
+	: Object{parent, "Delegate"}
 {
 }
 }

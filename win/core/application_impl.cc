@@ -7,9 +7,17 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
+Application* Application::Impl::instance_ = nullptr;
+
 Application::Impl::Impl(Application* owner)
     : owner_(owner)
 {
+    MW_ASSERT_X(instance_ == nullptr);
+    instance_ = owner_;
+}
+
+Application::Impl::~Impl() {
+    instance_ = nullptr;
 }
 
 void Application::Impl::OnAppStart()
@@ -20,6 +28,7 @@ void Application::Impl::OnAppStart()
 void Application::Impl::OnProcess()
 {
     WidgetsDriver::instance().Update();
+    ++frame_count_;
     if (close_in_next_frame_)
     {
         MW_ASSERT_X(IsDone());
