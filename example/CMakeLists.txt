@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(${HEAD_PATH})
 
 set(EXECUTABLE_OUTPUT_PATH ${EXEC_PATH})
-add_executable(example main.cpp)
+add_executable(miniwin_example main.cpp)
 
 link_directories(${LIB_PATH})
-target_link_libraries(example ${MINIWIN_LIB})
+target_link_libraries(miniwin_example ${MINIWIN_LIB})

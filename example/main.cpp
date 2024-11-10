@@ -54,7 +54,6 @@ public:
         combobox_->AddItems({ u8"…∂…∂…∂", u8"dffµ•∂¿", u8"ffµ±Œ“" });
 
         btn_ = new Button(this, u8"Btn");
-
 	}
 
     void OnClicked() const {
