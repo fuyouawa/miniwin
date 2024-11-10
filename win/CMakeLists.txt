@@ -46,6 +46,9 @@ else()
 target_link_libraries(${MINIWIN_LIB} PRIVATE ${GLFW_LIB})
 endif ()
 
+add_library(miniwin::miniwin ALIAS ${MINIWIN_LIB})
+
+
 include(GNUInstallDirs)
 
 # 安装库
