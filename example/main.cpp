@@ -55,10 +55,6 @@ public:
 
         btn_ = new Button(this, u8"Btn");
 
-        auto dis = Connect(btn_, &Button::OnClicked, this, []() {
-            int jj = 10;
-            });
-        // dis.Disconnect();
 	}
 
     void OnClicked() const {
