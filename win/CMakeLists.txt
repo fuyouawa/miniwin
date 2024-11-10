@@ -45,3 +45,34 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 else()
 target_link_libraries(${MINIWIN_LIB} PRIVATE ${GLFW_LIB})
 endif ()
+
+include(GNUInstallDirs)
+
+# 安装库
+install(TARGETS ${MINIWIN_LIB}
+        EXPORT miniwinTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+
+# 安装导出文件
+install(EXPORT miniwinTargets
+        FILE miniwinTargets.cmake
+        NAMESPACE miniwin::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/miniwin)
+
+# 安装配置文件
+configure_file(miniwinConfig.cmake.in
+               "${CMAKE_CURRENT_BINARY_DIR}/miniwinConfig.cmake" @ONLY)
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/miniwinConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/miniwinConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/miniwin)
+
+# 版本文件
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/miniwinConfigVersion.cmake"
+"set(miniwin_VERSION 1.0.0)\n"
+"set(miniwin_VERSION_MAJOR 1)\n"
+"set(miniwin_VERSION_MINOR 0)\n"
+"set(miniwin_VERSION_PATCH 0)\n")

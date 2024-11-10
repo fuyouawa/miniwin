@@ -1,0 +1,11 @@
+# miniwinConfig.cmake.in
+include(CMakeFindDependencyMacro)
+
+# 设置库的目标
+set(miniwin_TARGETS miniwin)
+# 指定目标属性
+set(miniwin_INCLUDE_DIRS "@HEAD_PATH@")
+set(miniwin_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/../lib/${MINIWIN_LIB}.lib")
+
+# 让目标可用
+include(CMakePackageConfigHelpers)
