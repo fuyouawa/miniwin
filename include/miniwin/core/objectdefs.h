@@ -135,9 +135,4 @@ public:                                                            \
     }
 #define _MW_SIGNAL(name, ...) \
     META_IF_ELSE(META_IS_EMPTY(__VA_ARGS__), _MW_SIGNAL_NO_ARGS(name), _MW_SIGNAL_HAS_ARGS(name, __VA_ARGS__))
-
-#define _MW_IMPL                    \
-private:                            \
-    class Impl;                     \
-    std::unique_ptr<Impl> impl_;
 }

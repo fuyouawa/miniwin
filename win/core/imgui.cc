@@ -53,12 +53,11 @@ public:
 
 ListClipper::ListClipper()
 {
-    impl_ = new Impl();
+    impl_ = std::make_unique<Impl>();
 }
 
 ListClipper::~ListClipper()
 {
-    delete impl_;
 }
 
 void ListClipper::Begin(size_t items_count, float items_height)

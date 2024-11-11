@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 
+#include <miniwin/core/global.h>
 #include <miniwin/tools/string.h>
-
 
 namespace miniwin {
 class Application
@@ -41,8 +41,6 @@ public:
 
     int Execute();
 
-private:
-    class Impl;
-    std::unique_ptr<Impl> impl_;
+    _MW_IMPL
 };
 }

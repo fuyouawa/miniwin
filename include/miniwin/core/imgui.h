@@ -19,9 +19,7 @@ public:
 	size_t display_start() const;
 	size_t display_end() const;
 
-private:
-	class Impl;
-	Impl* impl_;
+	_MW_IMPL
 };
 
 bool IsWindowDocked();
