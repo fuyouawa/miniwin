@@ -1,6 +1,6 @@
 #include "boxlayout_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 BoxLayout::BoxLayout(Widget* parent)
@@ -33,7 +33,7 @@ void HBoxLayout::OnBeforePaintChild(size_t child_index)
 	BoxLayout::OnBeforePaintChild(child_index);
 	if (child_index != 0)
 	{
-		ImGuiHelper::SameLine(0, Spacing());
+		imgui::SameLine(0, Spacing());
 	}
 }
 
@@ -48,7 +48,7 @@ void VBoxLayout::OnBeforePaintChild(size_t child_index)
 
 	if (child_index != 0)
 	{
-		ImGuiHelper::Dummy({ 0, Spacing() });
+		imgui::Dummy({ 0, Spacing() });
 	}
 }
 }

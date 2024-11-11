@@ -1,6 +1,6 @@
 #include "textedit_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 
 namespace miniwin {
@@ -38,6 +38,6 @@ const String& TextEdit::PlainText() const
 
 void TextEdit::PaintBegin() {
     Widget::PaintBegin();
-	ImGuiHelper::InputText(RightLabel(), &impl_->text_buffer_);
+	imgui::InputText(RightLabel(), &impl_->text_buffer_);
 }
 }

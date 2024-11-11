@@ -1,6 +1,6 @@
 #include "tableview_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 #include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {
@@ -42,7 +42,7 @@ void TableView::PaintBegin()
     auto col_count = m->ColumnCount();
     auto row_count = m->RowCount();
 
-    if (ImGuiHelper::BeginTable(Name(), col_count, 0, Size()))
+    if (imgui::BeginTable(Name(), col_count, 0, Size()))
     {
         auto hori = HorizontalHeader();
         if (hori && hori->Visible())
@@ -51,16 +51,16 @@ void TableView::PaintBegin()
             {
                 auto text = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Display).ToString();
                 auto flags = m->HeaderData(col, HeaderOrientation::Horizontal, ItemRole::Flags).ToInt32();
-                ImGuiHelper::TableSetupColumn(text, flags);
+                imgui::TableSetupColumn(text, flags);
             }
-            ImGuiHelper::TableNextRow(ImGuiFlags::kTableRowHeaders);
+            imgui::TableNextRow(imgui::kTableRowHeaders);
 
             for (size_t col = 0; col < col_count; ++col)
             {
-                ImGuiHelper::TableSetColumnIndex(col);
-                ImGuiHelper::PushID(col);
+                imgui::TableSetColumnIndex(col);
+                imgui::PushID(col);
                 hori->PaintSection(col);
-                ImGuiHelper::PopID();
+                imgui::PopID();
             }
         }
 
@@ -72,26 +72,26 @@ void TableView::PaintBegin()
         auto d = ItemDelegate();
         for (size_t row = 0; row < row_count; ++row)
         {
-            ImGuiHelper::TableNextRow();
+            imgui::TableNextRow();
             if (show_vert)
             {
-                ImGuiHelper::PushID(row);
+                imgui::PushID(row);
                 vert->PaintSection(row);
-                ImGuiHelper::PopID();
+                imgui::PopID();
             }
             if (d)
             {
                 for (size_t col = 0; col < col_count; ++col)
                 {
-                    ImGuiHelper::TableSetColumnIndex(col);
-                    ImGuiHelper::PushID(row * 10 + col);
+                    imgui::TableSetColumnIndex(col);
+                    imgui::PushID(row * 10 + col);
                     d->Paint(this, { row, col });
-                    ImGuiHelper::PopID();
+                    imgui::PopID();
                 }
             }
         }
 
-        ImGuiHelper::EndTable();
+        imgui::EndTable();
     }
 }
 

@@ -34,6 +34,7 @@ public:
     ScopeCondition enable_sc_{ true };
     ScopeCondition visible_sc_{ true };
     ScopeVariable<Vector2D> size_sc_{};
+    ScopeVariable<Vector2D> pos_sc_{};
 
     bool is_painting_children_ = false;
     bool orphaned_ = false;

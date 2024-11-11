@@ -1,4 +1,4 @@
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 #include <imgui/imgui.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
@@ -6,6 +6,7 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
+namespace imgui {
 namespace {
 struct InputTextCallbackUserData
 {
@@ -44,138 +45,154 @@ Vector2D CastFromIm(const ImVec2& vec) {
 }
 
 
-class ImGuiHelper::ListClipper::Impl
+class ListClipper::Impl
 {
 public:
     ImGuiListClipper clipper_;
 };
 
-ImGuiHelper::ListClipper::ListClipper()
+ListClipper::ListClipper()
 {
     impl_ = new Impl();
 }
 
-ImGuiHelper::ListClipper::~ListClipper()
+ListClipper::~ListClipper()
 {
     delete impl_;
 }
 
-void ImGuiHelper::ListClipper::Begin(size_t items_count, float items_height)
+void ListClipper::Begin(size_t items_count, float items_height)
 {
     impl_->clipper_.Begin(static_cast<int>(items_count), items_height);
 }
 
-bool ImGuiHelper::ListClipper::Step()
+bool ListClipper::Step()
 {
     return impl_->clipper_.Step();
 }
 
-void ImGuiHelper::ListClipper::End()
+void ListClipper::End()
 {
     impl_->clipper_.End();
 }
 
-size_t ImGuiHelper::ListClipper::display_start() const
+size_t ListClipper::display_start() const
 {
     return impl_->clipper_.DisplayStart;
 }
 
-size_t ImGuiHelper::ListClipper::display_end() const
+size_t ListClipper::display_end() const
 {
     return impl_->clipper_.DisplayEnd;
 }
 
-bool ImGuiHelper::IsWindowDocked()
+bool IsWindowDocked()
 {
     return ImGui::IsWindowDocked();
 }
 
-void ImGuiHelper::PushID(int id)
+void PushID(int id)
 {
     ImGui::PushID(id);
 }
 
-void ImGuiHelper::PushID(const void* id)
+void PushID(const void* id)
 {
     ImGui::PushID(id);
 }
 
-void ImGuiHelper::PushID(const String& id)
+void PushID(const String& id)
 {
     ImGui::PushID(id.data());
 }
 
-void ImGuiHelper::PopID()
+void PopID()
 {
     ImGui::PopID();
 }
 
-void ImGuiHelper::BeginDisabled(bool disabled)
+void BeginDisabled(bool disabled)
 {
     ImGui::BeginDisabled(disabled);
 }
 
-void ImGuiHelper::EndDisabled()
+void EndDisabled()
 {
     ImGui::EndDisabled();
 }
 
-Vector2D ImGuiHelper::GetItemRectSize()
+Vector2D GetItemRectSize()
 {
     return CastFromIm(ImGui::GetItemRectSize());
 }
 
-void ImGuiHelper::SetNextItemWidth(float item_width)
+Vector2D GetWindowSize() {
+    return CastFromIm(ImGui::GetWindowSize());
+}
+
+Vector2D GetWindowPos() {
+    return CastFromIm(ImGui::GetWindowPos());
+}
+
+void SetNextItemWidth(float item_width)
 {
     ImGui::SetNextItemWidth(item_width);
 }
 
-void ImGuiHelper::PushStyleVar(ImGuiFlags::StyleVar idx, float val)
+void SetNextWindowPos(const Vector2D& pos, Cond cond, const Vector2D& pivot) {
+    ImGui::SetNextWindowPos(CastToIm(pos), cond, CastToIm(pivot));
+}
+
+void SetNextWindowSize(const Vector2D& size, Cond cond) {
+    ImGui::SetNextWindowSize(CastToIm(size), cond);
+}
+
+void PushStyleVar(StyleVar idx, float val)
 {
     ImGui::PushStyleVar(idx, val);
 }
 
-void ImGuiHelper::PushStyleVar(ImGuiFlags::StyleVar idx, Vector2D val)
+void PushStyleVar(StyleVar idx, Vector2D val)
 {
     ImGui::PushStyleVar(idx, CastToIm(val));
 }
 
-bool ImGuiHelper::IsWindowCollapsed()
+bool IsWindowCollapsed()
 {
     return ImGui::IsWindowCollapsed();
 }
 
-void ImGuiHelper::SetWindowCollapsed(bool collapsed, ImGuiFlags::Cond cond)
+void SetWindowCollapsed(bool collapsed, Cond cond)
 {
     ImGui::SetWindowCollapsed(collapsed, cond);
 }
 
-void ImGuiHelper::Dummy(const Vector2D& size)
+void Dummy(const Vector2D& size)
 {
     ImGui::Dummy(CastToIm(size));
 }
 
-bool ImGuiHelper::CheckBox(const String& label, bool* checked) {
-	return ImGui::Checkbox(label.data(), checked);
+bool CheckBox(const String& label, bool* checked) {
+    return ImGui::Checkbox(label.data(), checked);
 }
 
-void ImGuiHelper::Text(const String& label) {
-	return ImGui::Text(label.data());
+void Text(const String& label) {
+    return ImGui::Text(label.data());
 }
 
-bool ImGuiHelper::Button(const String& label, const Vector2D& size) {
-	return ImGui::Button(label.data(), CastToIm(size));
+bool Button(const String& label, const Vector2D& size) {
+    return ImGui::Button(label.data(), CastToIm(size));
 }
 
-bool ImGuiHelper::Selectable(const String& label, bool* is_selected, FlagsType flags, const Vector2D& size) {
-	return ImGui::Selectable(
+bool Selectable(const String& label, bool* is_selected, FlagsType flags, const Vector2D& size) {
+    return ImGui::Selectable(
         label.data(),
         is_selected,
         flags,
         CastToIm(size));
 }
 
-bool ImGuiHelper::InputText(const String& label,
+bool InputText(const String& label,
     String* buffer,
     FlagsType flags)
 {
@@ -196,75 +213,76 @@ bool ImGuiHelper::InputText(const String& label,
         &cb_user_data);
 }
 
-bool ImGuiHelper::BeginWindow(const String& title, bool* open, FlagsType flags) {
-	return ImGui::Begin(title.data(), open, flags);
+bool BeginWindow(const String& title, bool* open, FlagsType flags) {
+    return ImGui::Begin(title.data(), open, flags);
 }
 
-void ImGuiHelper::EndWindow() {
-	ImGui::End();
+void EndWindow() {
+    ImGui::End();
 }
 
-bool ImGuiHelper::BeginCombo(const String& label, const String& preview_value, FlagsType flags)
+bool BeginCombo(const String& label, const String& preview_value, FlagsType flags)
 {
     return ImGui::BeginCombo(label.data(), preview_value.data(), flags);
 }
 
-void ImGuiHelper::EndCombo()
+void EndCombo()
 {
     ImGui::EndCombo();
 }
 
-bool ImGuiHelper::BeginListBox(const String& label, const Vector2D& size)
+bool BeginListBox(const String& label, const Vector2D& size)
 {
     return ImGui::BeginListBox(label.data(), CastToIm(size));
 }
 
-void ImGuiHelper::EndListBox()
+void EndListBox()
 {
     ImGui::EndListBox();
 }
 
-void ImGuiHelper::SameLine(float offset_from_start_x, float spacing)
+void SameLine(float offset_from_start_x, float spacing)
 {
     ImGui::SameLine(offset_from_start_x, spacing);
 }
 
-bool ImGuiHelper::BeginChildWindow(const String& id, const Vector2D& size, int child_window_flags,
+bool BeginChildWindow(const String& id, const Vector2D& size, int child_window_flags,
     int window_flags)
 {
     return ImGui::BeginChild(id.data(), CastToIm(size), child_window_flags, window_flags);
 }
 
-void ImGuiHelper::EndChildWindow()
+void EndChildWindow()
 {
     return ImGui::EndChild();
 }
 
-bool ImGuiHelper::BeginTable(const String& id, size_t column, FlagsType flags, const Vector2D& size, float inner_width) {
-	return ImGui::BeginTable(id.data(), static_cast<int>(column), flags, CastToIm(size), inner_width);
+bool BeginTable(const String& id, size_t column, FlagsType flags, const Vector2D& size, float inner_width) {
+    return ImGui::BeginTable(id.data(), static_cast<int>(column), flags, CastToIm(size), inner_width);
 }
 
-void ImGuiHelper::EndTable() {
-	ImGui::EndTable();
+void EndTable() {
+    ImGui::EndTable();
 }
 
-void ImGuiHelper::TableSetupColumn(const String& label, FlagsType flags, float init_width_or_weight, uint32_t user_id)
+void TableSetupColumn(const String& label, FlagsType flags, float init_width_or_weight, uint32_t user_id)
 {
     return ImGui::TableSetupColumn(label.data(), flags, init_width_or_weight, user_id);
 }
 
-void ImGuiHelper::TableHeader(const String& label)
+void TableHeader(const String& label)
 {
     ImGui::TableHeader(label.data());
 }
 
-bool ImGuiHelper::TableSetColumnIndex(size_t column_n)
+bool TableSetColumnIndex(size_t column_n)
 {
     return ImGui::TableSetColumnIndex(static_cast<int>(column_n));
 }
 
-void ImGuiHelper::TableNextRow(FlagsType row_flags, float row_min_height)
+void TableNextRow(FlagsType row_flags, float row_min_height)
 {
     ImGui::TableNextRow(row_flags, row_min_height);
+}
 }
 }

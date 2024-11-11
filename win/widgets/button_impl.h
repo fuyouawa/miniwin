@@ -8,6 +8,5 @@ public:
 	Impl(Button* owner);
 
 	Button* owner_;
-	std::optional<Vector2D> size_to_set_;
 };
 }

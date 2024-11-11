@@ -1,19 +1,12 @@
 #pragma once
 
 namespace miniwin {
-enum class IoKeyCode
+enum class KeyCode
 {
 	kCtrl
 };
 
-enum class KeyCode
-{
-	//TODO KeyCode
-};
-
-class Input
-{
-public:
-	static bool IsIoKeyDown(IoKeyCode kc);
-};
+namespace io {
+bool IsKeyDown(KeyCode kc);
+}
 }

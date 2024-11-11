@@ -1,9 +1,11 @@
-#include <win/tools/graphic_utils.h>
+#include <miniwin/tools/graphic.h>
 
 #include <imgui/imgui.h>
 
 namespace miniwin {
-void* GraphicUtils::GetCurrentWindow() {
+namespace graphic {
+void* GetCurrentWindow() {
     return ImGui::GetWindowViewport()->PlatformHandle;
+}
 }
 }

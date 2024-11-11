@@ -44,7 +44,11 @@ public:
 	/**
 	 * 获取上一次退出时的数值
 	 */
-	decltype(auto) prev_value() const { return end_val_; }
+	const T& prev_value() const { return end_val_; }
+	/**
+	 * 获取当前数值（如果控制数值被设置了则返回控制数值）
+	 */
+	const T& cur_value() const { return control_val_ ? *control_val_ : val_; }
 	/**
 	 * 是否进入作用域
 	 */

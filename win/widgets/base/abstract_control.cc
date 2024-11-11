@@ -1,7 +1,7 @@
 #include "abstract_control_impl.h"
 
 #include <imgui/imgui_internal.h>
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 AbstractControl::AbstractControl(Widget* parent, const String& text)
@@ -38,7 +38,7 @@ void AbstractControl::PaintBegin()
 
 void AbstractControl::PaintEnd()
 {
-    Widget::SetSize(ImGuiHelper::GetItemRectSize());
+    Widget::SetSize(imgui::GetItemRectSize());
     impl_->PaintEnd();
 	Widget::PaintEnd();
 }

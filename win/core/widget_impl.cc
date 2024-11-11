@@ -3,7 +3,7 @@
 #include <ranges>
 
 #include <miniwin/widgets/window.h>
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 #include "widgets_driver.h"
 
@@ -32,6 +32,7 @@ void Widget::Impl::PaintBegin()
     enable_sc_.Enter();
     visible_sc_.Enter();
     size_sc_.Enter();
+    pos_sc_.Enter();
 
     if (enable_sc_.HasChange()) {
         owner_->OnEnableChanged(*enable_sc_);
@@ -53,17 +54,23 @@ void Widget::Impl::PaintBegin()
         owner_->OnSizeChanged(*size_sc_, size_sc_.prev_value());
     }
 
-    ImGuiHelper::BeginDisabled(!*enable_sc_);
-    ImGuiHelper::PushID(owner_->Id());
+    if (pos_sc_.HasChange())
+    {
+        owner_->OnPositionChanged(*pos_sc_, pos_sc_.prev_value());
+    }
+
+    imgui::BeginDisabled(!*enable_sc_);
+    imgui::PushID(owner_->Id());
 }
 
 void Widget::Impl::PaintEnd()
 {
-    ImGuiHelper::PopID();
-    ImGuiHelper::EndDisabled();
+    imgui::PopID();
+    imgui::EndDisabled();
     enable_sc_.Exit();
     visible_sc_.Exit();
     size_sc_.Exit();
+    pos_sc_.Exit();
 }
 
 const Widget* Widget::Impl::WidgetParent() const
@@ -143,7 +150,7 @@ void Widget::Impl::SetVisible(bool b)
 
 bool Widget::Impl::Enabled() const
 {
-    auto v = enable_sc_.get();
+    auto v = enable_sc_.cur_value();
     if (!v)
     {
         return false;

@@ -1,7 +1,7 @@
 #pragma once
 #include <miniwin/widgets/view/listview.h>
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 class ListView::Impl
@@ -12,6 +12,6 @@ public:
 	void Init();
 
 	ListView* owner_;
-	ImGuiHelper::ListClipper clipper_;
+	imgui::ListClipper clipper_;
 };
 }

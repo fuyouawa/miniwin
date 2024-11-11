@@ -14,6 +14,8 @@ public:
 
     ScopeCondition top_sc_{ false };
     ScopeCondition collapsed_sc_{ false };
+    std::optional<std::pair<Vector2D, Vector2D>> pos_and_pivot_to_set_;
+    std::optional<Vector2D> size_to_set_;
     bool is_closable_ = true;
     void* hwnd_ = nullptr;
     void* prev_hwnd_ = nullptr;

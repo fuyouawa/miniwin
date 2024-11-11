@@ -28,7 +28,7 @@ using SlotObjectPtr = std::unique_ptr<SlotObjectBase>;
 template <class... Args>
 class SlotArgsStore : public SlotArgsStoreBase {
 public:
-	explicit SlotArgsStore(Args&&... args) { args_ = std::tuple(std::forward<Args>(args)...); }
+	explicit SlotArgsStore(Args&&... args): args_(std::forward<Args>(args)...) {}
 
 	std::tuple<Args...> args_;
 };
@@ -85,13 +85,19 @@ public:
 } //namespace internal
 
 enum class InvokeType {
-	// 如果非UI对象，则直接调用
-	// 如果是UI对象，并且调用方也在UI线程，则直接调用；反之如果调用方不在UI线程，则加入UI调用队列
+	/**
+	 * 如果非UI对象，则直接调用。
+	 * 如果是UI对象，并且调用方也在UI线程，则直接调用；反之如果调用方不在UI线程，则加入UI调用队列。（如果程序还没初始化，则都加入队列）
+	 */
 	kAuto,
-	// 直接调用
+	/**
+	 * 直接调用。
+	 */
 	kDirect,
-	// 如果非UI对象，则直接调用
-	// 如果是UI对象，会加入UI调用队列
+	/**
+	 * 如果非UI对象，则直接调用。
+	 * 如果是UI对象，会加入UI调用队列。
+	 */
 	kQueued
 };
 

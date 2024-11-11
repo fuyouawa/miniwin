@@ -1,6 +1,6 @@
 #include <miniwin/widgets/label.h>
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 Label::Label(Widget* const parent, const String& text)
@@ -10,6 +10,6 @@ Label::Label(Widget* const parent, const String& text)
 
 void Label::PaintBegin() {
     AbstractControl::PaintBegin();
-	ImGuiHelper::Text(Text());
+	imgui::Text(Text());
 }
 }

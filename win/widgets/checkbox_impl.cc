@@ -1,6 +1,6 @@
 #include "checkbox_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 CheckBox::Impl::Impl(CheckBox* owner)
@@ -13,7 +13,7 @@ void CheckBox::Impl::PaintBegin()
 	checked_sc_.Enter();
 
 	bool c = *checked_sc_;
-	ImGuiHelper::CheckBox(owner_->Text(), &c);
+	imgui::CheckBox(owner_->Text(), &c);
 
 	if (c != *checked_sc_ || checked_sc_.HasChange())
 	{

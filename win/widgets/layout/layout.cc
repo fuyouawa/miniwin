@@ -1,6 +1,6 @@
 #include <miniwin/widgets/layout/layout.h>
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 Layout::Layout(Widget* parent)
@@ -73,12 +73,12 @@ void Layout::PaintBegin()
 	}
 	auto size = Size();
 	size.set_y(height);
-	ImGuiHelper::BeginChildWindow("LayoutFrame", size);
+	imgui::BeginChildWindow("LayoutFrame", size);
 }
 
 void Layout::PaintEnd()
 {
-	ImGuiHelper::EndChildWindow();
+	imgui::EndChildWindow();
 	Widget::PaintEnd();
 }
 }

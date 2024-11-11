@@ -1,6 +1,6 @@
 #include "combobox_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 ComboBoxView::ComboBoxView(Widget* parent, const String& text)
@@ -31,7 +31,7 @@ void ComboBoxView::PaintBegin()
 	auto cs = SelectionModel()->CurrentSelection();
 	auto m = Model();
 	auto text = m->Data(cs.top_left()).ToString();
-	if (ImGuiHelper::BeginCombo(Text(), text))
+	if (imgui::BeginCombo(Text(), text))
 	{
 		if (auto d = ItemDelegate())
 		{
@@ -40,7 +40,7 @@ void ComboBoxView::PaintBegin()
 				d->Paint(this, { i, 0 });
 			}
 		}
-		ImGuiHelper::EndCombo();
+		imgui::EndCombo();
 	}
 }
 

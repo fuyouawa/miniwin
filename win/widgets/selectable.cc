@@ -1,6 +1,6 @@
 #include "selectable_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 Selectable::Selectable(Widget* const parent, const String& text)
@@ -27,7 +27,7 @@ void Selectable::PaintBegin()
 {
     AbstractControl::PaintBegin();
 
-    ImGuiHelper::Selectable(Text(), &impl_->cur_selected_, 0, Size());
+    imgui::Selectable(Text(), &impl_->cur_selected_, 0, Size());
     if (impl_->cur_selected_ != impl_->prev_selected_) {
         OnSelectionChanged(impl_->cur_selected_);
     }

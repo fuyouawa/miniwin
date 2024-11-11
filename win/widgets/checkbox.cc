@@ -1,6 +1,6 @@
 #include "checkbox_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 CheckBox::CheckBox(Widget* const parent, const String& label)

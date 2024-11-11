@@ -41,6 +41,8 @@ public:
 
     virtual Vector2D Size() const;
     virtual void SetSize(const Vector2D& size);
+    virtual Vector2D Position() const;
+    virtual void SetPosition(const Vector2D& pos);
 
     bool Orphaned() const;
     FlagsType DrawFlags() const;
@@ -50,7 +52,8 @@ public:
 
     MW_SIGNAL(OnEnableChanged, (bool) b)
     MW_SIGNAL(OnVisbleChanged, (bool) b)
-    MW_SIGNAL(OnSizeChanged, (Vector2D) size, (Vector2D) prev_size)
+    MW_SIGNAL(OnSizeChanged, (const Vector2D&) size, (const Vector2D&) prev_size)
+    MW_SIGNAL(OnPositionChanged, (const Vector2D&) position, (const Vector2D&) prev_position)
 
 protected:
     // 是所有绘制之前的准备工作

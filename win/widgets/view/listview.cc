@@ -29,7 +29,7 @@ void ListView::PaintBegin()
 {
 	AbstractItemView::PaintBegin();
 	auto m = Model();
-	if (ImGuiHelper::BeginListBox(Text(), Size()))
+	if (imgui::BeginListBox(Text(), Size()))
 	{
 		if (auto d = ItemDelegate())
 		{
@@ -42,7 +42,7 @@ void ListView::PaintBegin()
 				}
 			}
 		}
-		ImGuiHelper::EndListBox();
+		imgui::EndListBox();
 	}
 }
 }

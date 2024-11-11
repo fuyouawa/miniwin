@@ -1,14 +1,16 @@
 #include <miniwin/tools/vector2d.h>
 
 #include <miniwin/tools/mathf.h>
+#include <type_traits>
 
 namespace miniwin {
-bool operator==(const Vector2D& a, const Vector2D& b) {
-	return Mathf::Approximately(a.x(), a.x()) && Mathf::Approximately(a.y(), a.y());
+namespace internal {
+bool EqualFloatingPoint(float x, float y) {
+	return Mathf::Approximately(x, y);
 }
 
-bool operator==(const Vector2DInt& a, const Vector2DInt& b)
-{
-    return a.x() == b.x() && a.y() == b.y();
+bool EqualFloatingPoint(double x, double y) {
+	return Mathf::Approximately(x, y);
+}
 }
 }

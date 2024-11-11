@@ -1,6 +1,6 @@
 #include "headerview_impl.h"
 
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 
 namespace miniwin {
 HeaderView::HeaderView(Widget* parent, HeaderOrientation orientation)
@@ -24,7 +24,7 @@ void HeaderView::PaintSection(size_t section)
     auto label = m->HeaderData(section, Orientation()).ToString();
     if (Orientation() == HeaderOrientation::Horizontal)
     {
-        ImGuiHelper::TableHeader(label);
+        imgui::TableHeader(label);
     }
     else
     {

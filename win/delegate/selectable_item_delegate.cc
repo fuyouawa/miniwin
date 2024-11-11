@@ -1,7 +1,7 @@
 #include "selectable_item_delegate_impl.h"
 
 #include <miniwin/io/input.h>
-#include <miniwin/core/imgui_helper.h>
+#include <miniwin/core/imgui.h>
 #include <miniwin/widgets/base/abstract_item_view.h>
 
 namespace miniwin {
@@ -27,8 +27,8 @@ void SelectableItemDelegate::Paint(AbstractItemView* view, const ModelIndex& ind
     auto selection_model = view->SelectionModel();
     auto text = model->Data(index).ToString();
     bool is_selected = selection_model->IsSelected(index);
-    if (ImGuiHelper::Selectable(text, &is_selected)) {
-        if (Input::IsIoKeyDown(IoKeyCode::kCtrl) && IsAllocMultiSelect()) {
+    if (imgui::Selectable(text, &is_selected)) {
+        if (io::IsKeyDown(KeyCode::kCtrl) && IsAllocMultiSelect()) {
             selection_model->Select(index, is_selected
                 ? ItemSelectionType::Select
                 : ItemSelectionType::Deselect);
