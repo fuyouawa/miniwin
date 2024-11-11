@@ -29,6 +29,8 @@ public:
 	bool IsDocking() const;
 	bool IsCollapsed() const;
 
+	void* PlatformHandle() const;
+
 	MW_SIGNAL(OnCollapseChanged, (bool) collapsed)
 	MW_SIGNAL(OnDockingChanged)
 

@@ -3,6 +3,8 @@
 
 #include <miniwin/tools/scope_variable.h>
 
+#include <imgui/imgui_internal.h>
+
 namespace miniwin {
 class Window::Impl
 {
@@ -11,6 +13,8 @@ public:
 
     void PaintBegin();
     void PaintEnd();
+
+    ImGuiWindow* GetImGuiWindow() const;
 
     ScopeCondition top_sc_{ false };
     ScopeCondition collapsed_sc_{ false };

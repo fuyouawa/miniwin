@@ -5,7 +5,7 @@ namespace miniwin {
 class TextEdit : public Widget
 {
 public:
-    TextEdit(Widget* parent, const String& initial_text, const String& right_label = {});
+    TextEdit(Widget* parent, const String& initial_text = {}, const String& right_label = {});
     ~TextEdit() override;
 
     const String& RightLabel() const;

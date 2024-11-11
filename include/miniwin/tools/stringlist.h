@@ -6,6 +6,7 @@ namespace miniwin {
 class StringList : public List<String>
 {
 public:
+	StringList() = default;
 	StringList(std::initializer_list<String> args);
 };
 }

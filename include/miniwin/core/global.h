@@ -1,10 +1,7 @@
 #pragma once
 #include <memory>
 
-#define _MW_IMPL                    \
-private:                            \
-    class Impl;                     \
-    std::unique_ptr<Impl> impl_;
+#include <miniwin/defs.h>
 
 namespace miniwin {
 using FlagsType = int;

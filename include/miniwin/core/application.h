@@ -21,13 +21,13 @@ public:
     bool IsHideMainWindow() const;
     void SetHideMainWindow(bool b);
 
-    const String& MainWindowClassName() const;
+    String MainWindowClassName() const;
     void MainWindowClassName(const String& class_name);
 
-    const String& MainWindowTitle() const;
+    String MainWindowTitle() const;
     void SetMainWindowTitle(const String& title) const;
 
-    const String& IniFileName() const;
+    String IniFileName() const;
     void SetIniFileName(const String& filename);
 
     bool IsIniFileEnabled() const;

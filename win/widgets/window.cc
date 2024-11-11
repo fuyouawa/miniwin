@@ -72,6 +72,11 @@ bool Window::IsCollapsed() const
     return *impl_->collapsed_sc_;
 }
 
+void* Window::PlatformHandle() const {
+    auto w = impl_->GetImGuiWindow();
+    return w == nullptr ? nullptr : w->Viewport->PlatformHandle;
+}
+
 void Window::PaintBegin()
 {
 	Widget::PaintBegin();

@@ -29,7 +29,7 @@ void Application::SetHideMainWindow(bool b)
     impl_->hide_main_window_ = b;
 }
 
-const String& Application::MainWindowClassName() const
+String Application::MainWindowClassName() const
 {
     return impl_->main_window_class_name_;
 }
@@ -39,7 +39,7 @@ void Application::MainWindowClassName(const String& class_name)
     impl_->main_window_class_name_ = class_name;
 }
 
-const String& Application::MainWindowTitle() const
+String Application::MainWindowTitle() const
 {
     return impl_->main_window_title_;
 }
@@ -49,7 +49,7 @@ void Application::SetMainWindowTitle(const String& title) const
     impl_->main_window_title_ = title;
 }
 
-const String& Application::IniFileName() const {
+String Application::IniFileName() const {
     return impl_->ini_filename_;
 }
 

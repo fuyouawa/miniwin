@@ -75,4 +75,8 @@ void Window::Impl::PaintEnd()
     top_sc_.Exit();
     collapsed_sc_.Exit();
 }
+
+ImGuiWindow* Window::Impl::GetImGuiWindow() const {
+    return ImGui::FindWindowByName(owner_->Title().data());
+}
 }

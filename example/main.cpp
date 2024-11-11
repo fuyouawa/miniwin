@@ -9,6 +9,7 @@
 #include <miniwin/widgets/layout/boxlayout.h>
 #include <miniwin/widgets/view/listview.h>
 
+#include "miniwin/tools/file.h"
 #include "miniwin/widgets/button.h"
 #include "miniwin/widgets/checkbox.h"
 
@@ -51,8 +52,12 @@ public:
 		// combobox_ = new ComboBox(this, "ComboBox");
 		// combobox_->AddItems({ "啥啥啥", "dff单独", "ff当我" });
 		//
-		// btn_ = new Button(this, "Btn");
+		open_file_btn_ = new Button(this, "打开文件");
 		// chkbox_ = new CheckBox(this, "234");
+
+		Connect(open_file_btn_, &Button::OnClicked, this, [this]() {
+			File::OpenFileDialog(this);
+			});
 	}
 
 	void OnClicked() const {}
@@ -64,7 +69,7 @@ public:
 	CheckBox* chkbox_;
 	TableView* table_view_;
 	ComboBox* combobox_;
-	Button* btn_;
+	Button* open_file_btn_;
 };
 
 int main() {
