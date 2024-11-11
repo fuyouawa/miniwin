@@ -1,7 +1,7 @@
 #include "application_impl.h"
 
 #include "win/tools/debug.h"
-
+#include <imgui/imgui.h>
 
 namespace miniwin {
 const Application* Application::instance()
@@ -12,6 +12,7 @@ const Application* Application::instance()
 Application::Application()
 {
     impl_ = std::make_unique<Impl>(this);
+    SetIniFileName("miniwin.ini");
 }
 
 Application::~Application()
@@ -46,6 +47,23 @@ const String& Application::MainWindowTitle() const
 void Application::SetMainWindowTitle(const String& title) const
 {
     impl_->main_window_title_ = title;
+}
+
+const String& Application::IniFileName() const {
+    return impl_->ini_filename_;
+}
+
+bool Application::IsIniFileEnabled() const {
+    return impl_->ini_filename_.data() == nullptr;
+}
+
+void Application::EnabledIniFile(bool b) {
+    ImGui::GetIO().IniFilename = b ? impl_->ini_filename_.data() : nullptr;
+}
+
+void Application::SetIniFileName(const String& filename) {
+    impl_->ini_filename_ = filename;
+    ImGui::GetIO().IniFilename = impl_->ini_filename_.data();
 }
 
 size_t Application::Fps() const

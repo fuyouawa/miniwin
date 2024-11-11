@@ -23,8 +23,9 @@ public:
     void DoFps() const;
 
     bool hide_main_window_ = false;
-    String main_window_class_name_ = "Miniwin";
-    String main_window_title_ = "Miniwin App";
+    String main_window_class_name_ = "MiniWin";
+    String main_window_title_ = "MiniWin App";
+    String ini_filename_;
     size_t fps_ = 60;
     float cur_dpi_scale_ = 0;
     float prev_dpi_scale_ = 0;

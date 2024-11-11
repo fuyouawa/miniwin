@@ -27,6 +27,12 @@ public:
     const String& MainWindowTitle() const;
     void SetMainWindowTitle(const String& title) const;
 
+    const String& IniFileName() const;
+    void SetIniFileName(const String& filename);
+
+    bool IsIniFileEnabled() const;
+    void EnabledIniFile(bool b);
+
     size_t Fps() const;
     void SetFps(size_t fps);
 
