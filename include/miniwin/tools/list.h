@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <optional>
-#include <cassert>
 
 namespace miniwin {
 template<class T>
@@ -48,20 +47,20 @@ public:
 	void Clear() { vec_.clear(); }
 
 	size_type Erase(const T& val);
-	size_type EraseIf(std::invocable<const T&> auto&& func);
+	size_type EraseIf(auto&& func);
 	iterator Erase(const_iterator where);
 	iterator Erase(const_iterator where, size_type count);
 	iterator Erase(const_iterator first, const_iterator last);
-	iterator RemoveIf(std::invocable<const T&> auto&& func);
+	iterator RemoveIf(auto&& func);
 
 	size_type IndexOf(const T& t) const;
 	const_iterator Find(const T& t) const;
 	iterator Find(const T& t);
 
-	const_iterator FindIf(std::invocable<const T&> auto&& func) const;
-	iterator FindIf(std::invocable<const T&> auto&& func);
+	const_iterator FindIf(auto&& func) const;
+	iterator FindIf(auto&& func);
 
-	void PushBack(std::convertible_to<T> auto&& val);
+	void PushBack(const T& val);
 	void EmplaceBack(auto&&... args);
 
 	void SwapElem(size_type index, size_type index2);
@@ -73,6 +72,10 @@ public:
 
 	const T& operator[](size_type off) const { return vec_[off]; }
 	T& operator[](size_type off) { return vec_[off]; }
+
+	List Filter(auto&& pr) const;
+	template<class E>
+	List<E> Transform(auto&& pr) const;
 
 private:
 	friend class ListConstIterator<T>;
@@ -159,7 +162,7 @@ public:
 	ListIterator(size_type index, List<T>* owner) : ListConstIterator<T>(index, owner) {}
 
 	reference operator*() const { return const_cast<reference>(Base::operator*()); }
-	pointer operator->() const { return const_cast<reference>(Base::operator->()); }
+	pointer operator->() const { return const_cast<pointer>(Base::operator->()); }
 
 	ListIterator& operator++() { Base::operator++(); return *this; }
 	ListIterator operator++(int) { auto tmp = *this; Base::operator++(); return tmp; }
@@ -178,6 +181,11 @@ private:
 	auto StdIter() { return const_cast<List<T>*>(this->owner_)->ToStdIter(*this); }
 };
 
+namespace internal {
+void VerifyIndex(size_t index, size_t size);
+void VerifyDiff(intptr_t diff);
+}
+
 template <class T>
 typename List<T>::size_type List<T>::Erase(const T& val)
 {
@@ -185,7 +193,7 @@ typename List<T>::size_type List<T>::Erase(const T& val)
 }
 
 template <class T>
-typename List<T>::size_type List<T>::EraseIf(std::invocable<const T&> auto&& func)
+typename List<T>::size_type List<T>::EraseIf(auto&& func)
 {
 	return std::erase_if(vec_, std::forward<decltype(func)>(func));
 }
@@ -209,7 +217,7 @@ typename List<T>::iterator List<T>::Erase(const_iterator first, const_iterator l
 }
 
 template <class T>
-List<T>::iterator List<T>::RemoveIf(std::invocable<const T&> auto&& func)
+typename List<T>::iterator List<T>::RemoveIf(auto&& func)
 {
 	return FromStdIter(std::remove_if(vec_.begin(), vec_.end(), func));
 }
@@ -238,19 +246,19 @@ typename List<T>::iterator List<T>::Find(const T& t)
 }
 
 template<class T>
-typename List<T>::const_iterator List<T>::FindIf(std::invocable<const T&> auto&& func) const
+typename List<T>::const_iterator List<T>::FindIf(auto&& func) const
 {
 	return FromStdIter(std::ranges::find_if(vec_, std::forward<decltype(func)>(func)));
 }
 
 template<class T>
-typename List<T>::iterator List<T>::FindIf(std::invocable<const T&> auto&& func)
+typename List<T>::iterator List<T>::FindIf(auto&& func)
 {
 	return FromStdIter(std::ranges::find_if(vec_, std::forward<decltype(func)>(func)));
 }
 
 template <class T>
-void List<T>::PushBack(std::convertible_to<T> auto&& val)
+void List<T>::PushBack(const T& val)
 {
 	vec_.push_back(std::forward<decltype(val)>(val));
 }
@@ -286,6 +294,27 @@ typename List<T>::iterator List<T>::Insert(const_iterator where, const T& val)
 }
 
 template <class T>
+List<T> List<T>::Filter(auto&& pr) const {
+	List ret;
+	for (auto& x : *this) {
+		if (pr(x)) {
+			ret.PushBack(x);
+		}
+	}
+	return ret;
+}
+
+template <class T>
+template <class E>
+List<E> List<T>::Transform(auto&& pr) const {
+	List<E> ret;
+	for (auto& x : *this) {
+		ret.PushBack(pr(x));
+	}
+	return ret;
+}
+
+template <class T>
 auto List<T>::ToStdIter(const ListConstIterator<T>& iter) const
 {
 	if (!iter.IsValid()) {
@@ -307,7 +336,7 @@ template <class T>
 typename List<T>::const_iterator List<T>::FromStdIter(const typename std::vector<T>::const_iterator& iter) const
 {
 	auto diff = iter - vec_.begin();
-	assert(diff >= 0);
+	internal::VerifyDiff(diff);
 	return { static_cast<size_type>(diff), this };
 }
 
@@ -315,14 +344,15 @@ template <class T>
 typename List<T>::iterator List<T>::FromStdIter(const typename std::vector<T>::iterator& iter)
 {
 	auto diff = iter - vec_.begin();
-	assert(diff >= 0);
+	internal::VerifyDiff(diff);
 	return { static_cast<size_type>(diff), this };
 }
 
 template<class T>
 void List<T>::SwapElem(size_type index, size_type index2)
 {
-	assert(index < size() && index2 < size());
+	internal::VerifyIndex(index, size());
+	internal::VerifyIndex(index2, size());
 	SwapElem(begin() + index, begin() + index2);
 }
 }

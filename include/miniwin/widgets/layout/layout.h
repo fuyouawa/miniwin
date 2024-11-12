@@ -9,10 +9,7 @@ public:
 
 	void AddWidget(Widget* widget);
 	void RemoveWidget(Widget* widget);
-
-	bool SetWidgetIndex(const Widget* widget, size_t index);
-	std::optional<size_t> IndexOfWidget(const Widget* widget) const;
-	std::optional<size_t> AdvanceWidget(const Widget* widget, size_t count);
+	void ClearWidget();
 
 	size_t Count() const;
 	bool IsEmpty() const;
@@ -20,9 +17,5 @@ public:
 protected:
 	void PaintBegin() override;
 	void PaintEnd() override;
-
-private:
-	using Widget::SetWidgetChildIndex;
-	using Widget::IndexOfWidgetChild;
 };
 }

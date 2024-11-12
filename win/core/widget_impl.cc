@@ -6,6 +6,7 @@
 #include <miniwin/core/imgui.h>
 
 #include "widgets_driver.h"
+#include "win/tools/debug.h"
 
 namespace miniwin {
 Widget::Impl::Impl(Widget* owner)
@@ -66,11 +67,11 @@ void Widget::Impl::PaintEnd()
     pos_sc_.Exit();
 }
 
-const Widget* Widget::Impl::WidgetParent() const
+Widget* Widget::Impl::WidgetParent() const
 {
     if (auto p = owner_->Parent())
     {
-        auto p2 = dynamic_cast<const Widget*>(p);
+        auto p2 = dynamic_cast<Widget*>(p);
         return p2;
     }
     return nullptr;
@@ -80,26 +81,10 @@ void Widget::Impl::SetWidgetParent(Widget* parent)
 {
     WidgetsDriver::instance().PushPendingFunctor([this, parent]
         {
-            // 先通知老的parent
-            WidgetParent()->impl_->OnChildrenChanged();
-            owner_->SetParent(parent);
-            // 通知新的parent
-            parent->impl_->OnChildrenChanged();
+            owner_->Object::SetParent(parent);
         });
 }
 
-void Widget::Impl::OnChildrenChanged()
-{
-    widget_children_.Clear();
-    for (const auto c : owner_->Children())
-    {
-        auto w = dynamic_cast<Widget*>(c);
-        if (w)
-        {
-            widget_children_.PushBack(w);
-        }
-    }
-}
 
 void Widget::Impl::PushPendingFunctor(std::function<void()>&& func)
 {

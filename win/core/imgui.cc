@@ -250,6 +250,10 @@ void EndTable() {
 	ImGui::EndTable();
 }
 
+void SetNextWindowBgAlpha(float alpha) {
+	ImGui::SetNextWindowBgAlpha(alpha);
+}
+
 void TableSetupColumn(const String& label, FlagsType flags, float init_width_or_weight, uint32_t user_id) {
 	return ImGui::TableSetupColumn(label.data(), flags, init_width_or_weight, user_id);
 }

@@ -17,11 +17,8 @@ public:
     void PaintBegin();
     void PaintEnd();
 
-    const Widget* WidgetParent() const;
+	Widget* WidgetParent() const;
     void SetWidgetParent(Widget* parent);
-
-    //TODO 未来改成事件系统
-    void OnChildrenChanged();
 
     void PushPendingFunctor(std::function<void()>&& func);
     void DoPendingFunctors();
@@ -46,6 +43,5 @@ public:
     String id_;
     std::mutex pending_functors_mutex_;
     List<std::function<void()>> pending_functors_;
-    List<Widget*> widget_children_;
 };
 }

@@ -6,6 +6,7 @@
 #include <miniwin/tools/vector2d.h>
 #include <miniwin/tools/scope_variable.h>
 
+#include "object_impl.h"
 #include "widgets_driver.h"
 #include "miniwin/core/application.h"
 #include "win/tools/debug.h"
@@ -15,15 +16,17 @@ Widget::Widget(Widget* parent, const String& name, const String& id)
 	: Object(parent, name) {
 	impl_ = std::make_unique<Impl>(this);
 	impl_->id_ = id;
+	Object::impl_->is_widget_ = true;
 }
 
-Widget::~Widget() {}
+Widget::~Widget() {
+}
 
 void Widget::Close() {
 	impl_->Close();
 }
 
-const Widget* Widget::WidgetParent() const {
+Widget* Widget::WidgetParent() const {
 	return impl_->WidgetParent();
 }
 
@@ -31,22 +34,16 @@ void Widget::SetWidgetParent(Widget* parent) {
 	impl_->SetWidgetParent(parent);
 }
 
-const List<Widget*>& Widget::WidgetChildren() const {
-	return impl_->widget_children_;
-}
-
-size_t Widget::IndexOfWidgetChild(const Widget* child) const {
-	return WidgetChildren().IndexOf(const_cast<Widget*>(child));
-}
-
-bool Widget::SetWidgetChildIndex(const Widget* child, size_t index) {
-	auto cs = const_cast<List<Object*>&>(Children());
-	MW_ASSERT_X(index < cs.size());
-	auto i = cs.IndexOf(const_cast<Widget*>(child));
-	if (i == static_cast<size_t>(-1)) return false;
-
-	cs.SwapElem(i, index);
-	return true;
+List<Widget*> Widget::WidgetChildren() const {
+	List<Widget*> total;
+	for (auto c : Children()) {
+		if (c->IsWidget()) {
+			auto w = dynamic_cast<Widget*>(c);
+			MW_ASSERT_X(w != nullptr);
+			total.PushBack(w);
+		}
+	}
+	return total;
 }
 
 void Widget::SetEnable(bool b) {
@@ -94,7 +91,7 @@ void Widget::SetVisible(bool b) {
 	impl_->SetVisible(b);
 }
 
-FlagsType Widget::DrawFlags() const {
+FlagsType Widget::GetDrawFlags() const {
 	return impl_->draw_flags_;
 }
 

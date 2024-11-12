@@ -14,12 +14,12 @@ void DebugOutput(const String& str) noexcept {
 #endif // _WIN32
 }
 void AssertionFailed(std::string_view file, std::string_view func, int line, const String& msg) noexcept {
-	DebugOutput(String::Format("[Geek] Assertion failed at{} (func{}) (line{}) : {}", file, func, msg));
+	DebugOutput(String::Format("[Geek] Assertion failed at{} (func{}) (line{}) : {}", file, func, line, msg));
 	::abort();
 }
 
 String MsgOfThrow(std::string_view file, std::string_view func, int line, const String& msg) noexcept {
-	return String::Format("[Geek] Exception at {} (func {}) (line {}): {}", file, func, msg);
+	return String::Format("[Geek] Exception at {} (func {}) (line {}): {}", file, func, line, msg);
 }
 }
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <miniwin/widgets/base/abstract_item_view.h>
-#include <miniwin/widgets/view/headerview.h>
+#include <miniwin/widgets/view/header_view.h>
 
 
 namespace miniwin {

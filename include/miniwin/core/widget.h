@@ -9,7 +9,7 @@
 namespace miniwin {
 class Widget : public Object, public NonCopyMoveable {
 public:
-    enum DrawFlags
+    enum GetDrawFlags
     {
         kDrawIgnoreNone = 0,
         kDrawIgnoreChildren = 1 << 0,
@@ -26,12 +26,9 @@ public:
     virtual void Hide();
     virtual void Close();
 
-    const Widget* WidgetParent() const;
+    Widget* WidgetParent() const;
     void SetWidgetParent(Widget* parent);
-    const List<Widget*>& WidgetChildren() const;
-
-    size_t IndexOfWidgetChild(const Widget* child) const;
-    bool SetWidgetChildIndex(const Widget* child, size_t index);
+    List<Widget*> WidgetChildren() const;
 
     virtual bool Visible() const;
     virtual void SetVisible(bool b);
@@ -47,7 +44,7 @@ public:
     virtual void SetPosition(const Vector2D& pos);
 
     bool Orphaned() const;
-    FlagsType DrawFlags() const;
+    FlagsType GetDrawFlags() const;
     void SetDrawFlags(FlagsType flags);
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;

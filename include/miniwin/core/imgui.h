@@ -100,6 +100,7 @@ void TableNextRow(
 
 void EndTable();
 
+void SetNextWindowBgAlpha(float alpha);
 
 bool BeginWindow(
 	const String& name,

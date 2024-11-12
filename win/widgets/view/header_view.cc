@@ -1,8 +1,16 @@
-#include "headerview_impl.h"
+#include <miniwin/widgets/view/header_view.h>
 
 #include <miniwin/core/imgui.h>
 
 namespace miniwin {
+class HeaderView::Impl {
+public:
+    Impl(HeaderView* owner, HeaderOrientation orientation) : owner_(owner), orientation_(orientation) {}
+
+    HeaderView* owner_;
+    HeaderOrientation orientation_;
+};
+
 HeaderView::HeaderView(Widget* parent, HeaderOrientation orientation)
     : AbstractItemView(parent)
 {

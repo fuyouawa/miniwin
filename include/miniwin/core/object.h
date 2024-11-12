@@ -8,7 +8,6 @@
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 
 namespace miniwin {
-
 class Object
 {
 public:
@@ -27,9 +26,11 @@ public:
     Object(Object* parent, const String& name);
     virtual ~Object();
 
-    const Object* Parent() const;
-    void SetParent(Object* parent) const;
-    const List<Object*>& Children() const;
+    Object* Parent() const;
+    virtual void SetParent(Object* parent) const;
+    List<Object*> Children() const;
+
+    bool IsWidget() const;
 
     const String& Name() const;
     void SetName(const String& name) const;
@@ -72,6 +73,9 @@ private:
 
     void EmitSignalImpl(const std::type_info& signal_info,
         const internal::SlotArgsStoreSharedPtr& args_store) const;
+
+    friend class Widget;
+    friend class WidgetsDriver;
 
     _MW_IMPL
 };
