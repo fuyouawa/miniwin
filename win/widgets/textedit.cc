@@ -1,9 +1,17 @@
-#include "textedit_impl.h"
+#include <miniwin/widgets/textedit.h>
 
 #include <miniwin/core/imgui.h>
 
-
 namespace miniwin {
+class TextEdit::Impl {
+public:
+    Impl(TextEdit* owner) : owner_(owner) {}
+
+    TextEdit* owner_;
+    String text_buffer_;
+    String right_label_;
+};
+
 TextEdit::TextEdit(Widget* const parent, const String& initial_text, const String& right_label)
 	: Widget{ parent, "TextEdit" }
 {

@@ -5,7 +5,7 @@ namespace miniwin {
 class Window : public Widget
 {
 public:
-	Window(const String& title);
+	Window(Widget* parent = nullptr);
 	~Window() override;
 
     const String& Title() const;
@@ -31,6 +31,7 @@ public:
 
 	void* PlatformHandle() const;
 
+	MW_SIGNAL(OnTitleChanged, (String) title, (String) prev_title)
 	MW_SIGNAL(OnCollapseChanged, (bool) collapsed)
 	MW_SIGNAL(OnDockingChanged)
 
@@ -38,9 +39,8 @@ protected:
 	void PaintBegin() override;
 	void PaintEnd() override;
 
-private:
-    using Widget::WidgetParent;
-    using Widget::SetWidgetParent;
+	virtual void OnPaintWindowBegin();
+	virtual void OnPaintWindowEnd();
 
     _MW_IMPL
 };

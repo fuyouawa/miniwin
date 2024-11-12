@@ -1,8 +1,17 @@
-#include "selectable_impl.h"
+#include <miniwin/widgets/selectable.h>
 
 #include <miniwin/core/imgui.h>
 
 namespace miniwin {
+class Selectable::Impl {
+public:
+    Impl(Selectable* owner) : owner_(owner) {}
+
+    Selectable* owner_;
+    bool cur_selected_ = false;
+    bool prev_selected_ = false;
+};
+
 Selectable::Selectable(Widget* const parent, const String& text)
 	: AbstractControl{ parent, text }
 {

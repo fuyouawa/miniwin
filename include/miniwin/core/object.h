@@ -41,6 +41,7 @@ public:
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 
     MW_SIGNAL(OnDestroy)
+    MW_SIGNAL(OnNameChanged, (String) name, (String) prev_name)
 
     template<std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
     static Disconnecter Connect(
@@ -49,34 +50,7 @@ public:
         const Receiver* receiver,
         Slot&& slot,
         ConnectionFlags connection_flags = ConnectionFlags::kUnique,
-        InvokeType invoke_type = InvokeType::kAuto)
-    {
-        using Traits = internal::FunctionTraits<Slot>;
-
-        return [&] <class... Args> (std::tuple<Args...>) -> Disconnecter {
-            if constexpr (std::is_member_function_pointer_v<Slot>) {
-                using SlotObject = internal::MemberSlotObject<Slot, Receiver, Args...>;
-
-                return ConnectImpl(sender,
-                    typeid(signal),
-                    receiver,
-                    std::make_unique<SlotObject>(slot),
-                    connection_flags,
-                    invoke_type);
-            }
-            else
-            {
-                using SlotObject = internal::FunctorSlotObject<Args...>;
-            
-                return ConnectImpl(sender,
-                    typeid(signal),
-                    receiver,
-                    std::make_unique<SlotObject>(std::forward<Slot>(slot)),
-                    connection_flags,
-                    invoke_type);
-            }
-        }(typename Traits::Arguments());
-    }
+        InvokeType invoke_type = InvokeType::kAuto);
 
 protected:
     template<class Signal, class... Args>
@@ -101,4 +75,34 @@ private:
 
     _MW_IMPL
 };
+
+template <std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
+Object::Disconnecter Object::Connect(const Sender* sender, Signal signal, const Receiver* receiver, Slot&& slot,
+	ConnectionFlags connection_flags, InvokeType invoke_type) {
+	using Traits = internal::FunctionTraits<Slot>;
+
+	return [&] <class... Args> (std::tuple<Args...>) -> Disconnecter {
+		if constexpr (std::is_member_function_pointer_v<Slot>) {
+			using SlotObject = internal::MemberSlotObject<Slot, Receiver, Args...>;
+
+			return ConnectImpl(sender,
+			                   typeid(signal),
+			                   receiver,
+			                   std::make_unique<SlotObject>(slot),
+			                   connection_flags,
+			                   invoke_type);
+		}
+		else
+		{
+			using SlotObject = internal::FunctorSlotObject<Args...>;
+            
+			return ConnectImpl(sender,
+			                   typeid(signal),
+			                   receiver,
+			                   std::make_unique<SlotObject>(std::forward<Slot>(slot)),
+			                   connection_flags,
+			                   invoke_type);
+		}
+	}(typename Traits::Arguments());
+}
 }

@@ -16,6 +16,11 @@ public:
 
     ImGuiWindow* GetImGuiWindow() const;
 
+    void OnPaintWindowBegin();
+    void OnPaintWindowEnd();
+
+    mutable ImGuiWindow* imgui_win_cache_ = nullptr;
+
     ScopeCondition top_sc_{ false };
     ScopeCondition collapsed_sc_{ false };
     std::optional<std::pair<Vector2D, Vector2D>> pos_and_pivot_to_set_;

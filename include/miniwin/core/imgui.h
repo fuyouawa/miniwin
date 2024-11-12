@@ -75,12 +75,6 @@ bool InputText(
 	FlagsType flags = 0
 );
 
-bool BeginWindow(
-	const String& title,
-	bool* open,
-	FlagsType flags = 0
-);
-
 
 bool BeginTable(
 	const String& id,
@@ -106,7 +100,22 @@ void TableNextRow(
 
 void EndTable();
 
+
+bool BeginWindow(
+	const String& title,
+	bool* open,
+	FlagsType flags = 0
+);
 void EndWindow();
+
+bool BeginPopupModal(
+	const String& title,
+	bool* open,
+	FlagsType flags = 0);
+
+void CloseCurrentPopup();
+
+void EndPopup();
 
 bool BeginCombo(
 	const String& label,

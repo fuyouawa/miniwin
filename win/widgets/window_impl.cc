@@ -9,7 +9,9 @@ namespace miniwin {
 Window::Impl::Impl(Window* owner)
     : owner_(owner)
 {
-    WidgetsDriver::instance().RegisterWindow(owner_);
+	if (!owner_->WidgetParent()) {
+        WidgetsDriver::instance().RegisterWindow(owner_);
+	}
 }
 
 void Window::Impl::PaintBegin()
@@ -27,8 +29,7 @@ void Window::Impl::PaintBegin()
         size_to_set_.reset();
     }
 
-    bool open = true;
-    imgui::BeginWindow(owner_->Title(), is_closable_ ? &open : nullptr);
+    owner_->OnPaintWindowBegin();
 
     owner_->Widget::SetSize(imgui::GetWindowSize());
     owner_->Widget::SetPosition(imgui::GetWindowPos());
@@ -51,7 +52,8 @@ void Window::Impl::PaintBegin()
     is_docking_ = imgui::IsWindowDocked();
     // 获取当前窗体句柄, 然后判断是否改变
     // 如果改变则说明当前窗体脱离或者停靠到了某个窗体
-    hwnd_ = graphic::GetCurrentWindow();
+    hwnd_ = GetImGuiWindow() ? GetImGuiWindow()->Viewport->PlatformHandle : nullptr;
+
     if (hwnd_ && hwnd_ != prev_hwnd_) {
         // 如果当前窗体非停靠窗, 说明是从默认窗体上剥离出来, 或者从停靠状态取消的窗体, 需要重设置顶状态
         // 如果当前窗体是停靠窗, 则不改变置顶状态
@@ -64,19 +66,32 @@ void Window::Impl::PaintBegin()
     if (top_sc_.HasChange() && hwnd_) {
         graphic::EnableWindowTop(hwnd_, *top_sc_);
     }
-    if (!open) {
-        owner_->Close();
-    }
 }
 
 void Window::Impl::PaintEnd()
 {
-    imgui::EndWindow();
+    owner_->OnPaintWindowEnd();
     top_sc_.Exit();
     collapsed_sc_.Exit();
 }
 
 ImGuiWindow* Window::Impl::GetImGuiWindow() const {
-    return ImGui::FindWindowByName(owner_->Title().data());
+    if (imgui_win_cache_ == nullptr) {
+        imgui_win_cache_ = ImGui::FindWindowByName(owner_->Title().data());
+    }
+    return imgui_win_cache_;
+}
+
+void Window::Impl::OnPaintWindowBegin() {
+    bool open = true;
+    imgui::BeginWindow(owner_->Title(), is_closable_ ? &open : nullptr);
+
+    if (!open) {
+        owner_->Close();
+    }
+}
+
+void Window::Impl::OnPaintWindowEnd() {
+    imgui::EndWindow();
 }
 }

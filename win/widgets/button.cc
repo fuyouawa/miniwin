@@ -1,8 +1,16 @@
-#include "button_impl.h"
+#include <miniwin/widgets/button.h>
 
 #include <miniwin/core/imgui.h>
 
 namespace miniwin {
+class Button::Impl
+{
+public:
+	Impl(Button* owner) : owner_(owner) {}
+
+	Button* owner_;
+};
+
 Button::Button(Widget* const parent, const String& text)
 	: AbstractControl(parent, text)
 {

@@ -5,58 +5,56 @@
 
 
 namespace miniwin {
-Window::Window(const String& title)
-	: Widget(nullptr, title)
+Window::Window(Widget* parent)
+	: Widget(parent, "Window")
 {
-    impl_ = std::make_unique<Impl>(this);
+	impl_ = std::make_unique<Impl>(this);
 }
 
-Window::~Window()
-{
-}
+Window::~Window() {}
 
 const String& Window::Title() const {
-    return Name();
+	return Name();
 }
 
 void Window::SetTitle(const String& title) {
-    SetName(title);
+	auto prev = Name();
+	SetName(title);
+	OnTitleChanged(title, prev);
+	impl_->imgui_win_cache_ = nullptr;
 }
 
 void Window::CenterWindow() {
-    Invoke([this]() {
-        auto size = graphic::GetSceneSize();
-        SetPosition(size * 0.5f, {0.5f, 0.5f});
-        });
+	Invoke([this]() {
+		auto size = graphic::GetSceneSize();
+		SetPosition(size * 0.5f, {0.5f, 0.5f});
+	});
 }
 
-void Window::EnableTop(bool b)
-{
-    impl_->top_sc_.SetControl(b);
+void Window::EnableTop(bool b) {
+	impl_->top_sc_.SetControl(b);
 }
 
-void Window::SetClosable(bool b)
-{
-    impl_->is_closable_ = b;
+void Window::SetClosable(bool b) {
+	impl_->is_closable_ = b;
 }
 
-void Window::SetCollapsed(bool b)
-{
-    impl_->collapsed_sc_.SetControl(b);
+void Window::SetCollapsed(bool b) {
+	impl_->collapsed_sc_.SetControl(b);
 }
 
 void Window::SetSize(const Vector2D& size) {
 	Widget::SetSize(size);
-    impl_->size_to_set_ = size;
+	impl_->size_to_set_ = size;
 }
 
 void Window::SetPosition(const Vector2D& pos) {
-    SetPosition(pos, {});
+	SetPosition(pos, {});
 }
 
 void Window::SetPosition(const Vector2D& pos, const Vector2D& pivot) {
-    Widget::SetPosition(pos);
-    impl_->pos_and_pivot_to_set_ = std::pair(pos, pivot);
+	Widget::SetPosition(pos);
+	impl_->pos_and_pivot_to_set_ = std::pair(pos, pivot);
 }
 
 bool Window::IsClosable() const {
@@ -67,25 +65,29 @@ bool Window::IsDocking() const {
 	return impl_->is_docking_;
 }
 
-bool Window::IsCollapsed() const
-{
-    return *impl_->collapsed_sc_;
+bool Window::IsCollapsed() const {
+	return *impl_->collapsed_sc_;
 }
 
 void* Window::PlatformHandle() const {
-    auto w = impl_->GetImGuiWindow();
-    return w == nullptr ? nullptr : w->Viewport->PlatformHandle;
+	return impl_->hwnd_;
 }
 
-void Window::PaintBegin()
-{
+void Window::PaintBegin() {
 	Widget::PaintBegin();
-    impl_->PaintBegin();
+	impl_->PaintBegin();
 }
 
-void Window::PaintEnd()
-{
-    impl_->PaintEnd();
+void Window::PaintEnd() {
+	impl_->PaintEnd();
 	Widget::PaintEnd();
+}
+
+void Window::OnPaintWindowBegin() {
+	impl_->OnPaintWindowBegin();
+}
+
+void Window::OnPaintWindowEnd() {
+	impl_->OnPaintWindowEnd();
 }
 }

@@ -17,8 +17,8 @@ using namespace miniwin;
 
 class ExampleWindow : public Window {
 public:
-	ExampleWindow(const String& title)
-		: Window(title) {
+	ExampleWindow(const String& title){
+		SetTitle(title);
 		// label_ = new Label(this, "j士大夫jbb");
 		//
 		// text_edit_label_ = new Label(this, "TextEdit Label");
