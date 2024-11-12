@@ -22,6 +22,8 @@ public:
 
     static bool IsInUIThread();
 
+    virtual void Show();
+    virtual void Hide();
     virtual void Close();
 
     const Widget* WidgetParent() const;
@@ -32,9 +34,9 @@ public:
     bool SetWidgetChildIndex(const Widget* child, size_t index);
 
     virtual bool Visible() const;
-    virtual void SetVisible(bool b) const;
+    virtual void SetVisible(bool b);
     virtual bool Enabled() const;
-    virtual void SetEnable(bool b) const;
+    virtual void SetEnable(bool b);
 
     const String& Id() const;
     void SetId(const String& id);
@@ -70,10 +72,6 @@ protected:
 
     virtual void OnBeforePaintChild(size_t child_index);
     virtual void OnAfterPaintChild(size_t child_index);
-
-    virtual void DoEnable(bool b) {}
-    virtual void DoShow() {}
-    virtual void DoHide() {}
 
 private:
     friend class WidgetsDriver;

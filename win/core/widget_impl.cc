@@ -35,31 +35,24 @@ void Widget::Impl::PaintBegin()
     pos_sc_.Enter();
 
     if (enable_sc_.HasChange()) {
-        owner_->OnEnableChanged(*enable_sc_);
-        owner_->DoEnable(*enable_sc_);
+        owner_->OnEnableChanged(enable_sc_.cur_value());
     }
 
     if (visible_sc_.HasChange()) {
-        if (*visible_sc_) {
-            owner_->DoShow();
-        }
-        else {
-            owner_->DoHide();
-        }
-        owner_->OnVisbleChanged(*visible_sc_);
+        owner_->OnVisbleChanged(visible_sc_.cur_value());
     }
 
     if (size_sc_.HasChange())
     {
-        owner_->OnSizeChanged(*size_sc_, size_sc_.prev_value());
+        owner_->OnSizeChanged(size_sc_.cur_value(), size_sc_.prev_value());
     }
 
     if (pos_sc_.HasChange())
     {
-        owner_->OnPositionChanged(*pos_sc_, pos_sc_.prev_value());
+        owner_->OnPositionChanged(pos_sc_.cur_value(), pos_sc_.prev_value());
     }
 
-    imgui::BeginDisabled(!*enable_sc_);
+    imgui::BeginDisabled(!enable_sc_.cur_value());
     imgui::PushID(owner_->Id());
 }
 
@@ -130,7 +123,7 @@ void Widget::Impl::DoPendingFunctors()
 
 bool Widget::Impl::Visible() const
 {
-    auto v = visible_sc_.get();
+    auto v = visible_sc_.cur_value();
     if (!v)
     {
         return false;

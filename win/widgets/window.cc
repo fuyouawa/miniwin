@@ -6,7 +6,7 @@
 
 namespace miniwin {
 Window::Window(Widget* parent)
-	: Widget(parent, "Window")
+	: Widget(parent, "Window", "Window")
 {
 	impl_ = std::make_unique<Impl>(this);
 }
@@ -31,12 +31,20 @@ void Window::CenterWindow() {
 	});
 }
 
-void Window::EnableTop(bool b) {
-	impl_->top_sc_.SetControl(b);
+bool Window::IsTopEnabled() const {
+	return impl_->top_sc_.cur_value();
 }
 
-void Window::SetClosable(bool b) {
-	impl_->is_closable_ = b;
+bool Window::IsCloseButtonEnabled() const {
+	return impl_->is_close_btn_enabled_;
+}
+
+void Window::EnableCloseButton(bool b) {
+	impl_->is_close_btn_enabled_ = b;
+}
+
+void Window::EnableTop(bool b) {
+	impl_->top_sc_.SetControl(b);
 }
 
 void Window::SetCollapsed(bool b) {
@@ -57,16 +65,12 @@ void Window::SetPosition(const Vector2D& pos, const Vector2D& pivot) {
 	impl_->pos_and_pivot_to_set_ = std::pair(pos, pivot);
 }
 
-bool Window::IsClosable() const {
-	return impl_->is_closable_;
-}
-
 bool Window::IsDocking() const {
 	return impl_->is_docking_;
 }
 
 bool Window::IsCollapsed() const {
-	return *impl_->collapsed_sc_;
+	return impl_->collapsed_sc_.cur_value();
 }
 
 void* Window::PlatformHandle() const {

@@ -19,13 +19,21 @@ Widget::Widget(Widget* parent, const String& name, const String& id)
 
 Widget::~Widget() {}
 
-void Widget::Close() { impl_->Close(); }
+void Widget::Close() {
+	impl_->Close();
+}
 
-const Widget* Widget::WidgetParent() const { return impl_->WidgetParent(); }
+const Widget* Widget::WidgetParent() const {
+	return impl_->WidgetParent();
+}
 
-void Widget::SetWidgetParent(Widget* parent) { impl_->SetWidgetParent(parent); }
+void Widget::SetWidgetParent(Widget* parent) {
+	impl_->SetWidgetParent(parent);
+}
 
-const List<Widget*>& Widget::WidgetChildren() const { return impl_->widget_children_; }
+const List<Widget*>& Widget::WidgetChildren() const {
+	return impl_->widget_children_;
+}
 
 size_t Widget::IndexOfWidgetChild(const Widget* child) const {
 	return WidgetChildren().IndexOf(const_cast<Widget*>(child));
@@ -41,37 +49,63 @@ bool Widget::SetWidgetChildIndex(const Widget* child, size_t index) {
 	return true;
 }
 
-void Widget::SetEnable(bool b) const { impl_->SetEnable(b); }
+void Widget::SetEnable(bool b) {
+	impl_->SetEnable(b);
+}
 
 
-Vector2D Widget::Size() const { return impl_->size_sc_.cur_value(); }
+Vector2D Widget::Size() const {
+	return impl_->size_sc_.cur_value();
+}
 
-void Widget::SetSize(const Vector2D& size) { impl_->size_sc_.SetControl(size); }
+void Widget::SetSize(const Vector2D& size) {
+	impl_->size_sc_.SetControl(size);
+}
 
-Vector2D Widget::Position() const { return impl_->pos_sc_.cur_value(); }
-void Widget::SetPosition(const Vector2D& pos) { impl_->pos_sc_.SetControl(pos); }
+Vector2D Widget::Position() const {
+	return impl_->pos_sc_.cur_value();
+}
 
-const String& Widget::Id() const { return impl_->id_; }
+void Widget::SetPosition(const Vector2D& pos) {
+	impl_->pos_sc_.SetControl(pos);
+}
 
-void Widget::SetId(const String& id) { impl_->id_ = id; }
+const String& Widget::Id() const {
+	return impl_->id_;
+}
 
-bool Widget::Orphaned() const { return impl_->orphaned_; }
+void Widget::SetId(const String& id) {
+	impl_->id_ = id;
+}
 
-bool Widget::Enabled() const { return impl_->Enabled(); }
+bool Widget::Orphaned() const {
+	return impl_->orphaned_;
+}
 
-bool Widget::Visible() const { return impl_->Visible(); }
+bool Widget::Enabled() const {
+	return impl_->Enabled();
+}
 
-void Widget::SetVisible(bool b) const { impl_->SetVisible(b); }
+bool Widget::Visible() const {
+	return impl_->Visible();
+}
 
-FlagsType Widget::DrawFlags() const { return impl_->draw_flags_; }
+void Widget::SetVisible(bool b) {
+	impl_->SetVisible(b);
+}
 
-void Widget::SetDrawFlags(FlagsType flags) { impl_->draw_flags_ = flags; }
+FlagsType Widget::DrawFlags() const {
+	return impl_->draw_flags_;
+}
+
+void Widget::SetDrawFlags(FlagsType flags) {
+	impl_->draw_flags_ = flags;
+}
 
 void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const {
 	if (IsInUIThread()
 		&& invoke_type == InvokeType::kAuto
-		&& Application::instance()->IsExecuting())
-	{
+		&& Application::instance()->IsExecuting()) {
 		invoke_type = InvokeType::kDirect;
 	}
 	else {
@@ -91,13 +125,29 @@ void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const 
 	}
 }
 
-bool Widget::IsInUIThread() { return std::this_thread::get_id() == WidgetsDriver::instance().UiThreadId(); }
+bool Widget::IsInUIThread() {
+	return std::this_thread::get_id() == WidgetsDriver::instance().UiThreadId();
+}
 
-void Widget::PreparePaint() { impl_->DoPendingFunctors(); }
+void Widget::Show() {
+	SetVisible(true);
+}
 
-void Widget::PaintBegin() { impl_->PaintBegin(); }
+void Widget::Hide() {
+	SetVisible(false);
+}
 
-void Widget::PaintEnd() { impl_->PaintEnd(); }
+void Widget::PreparePaint() {
+	impl_->DoPendingFunctors();
+}
+
+void Widget::PaintBegin() {
+	impl_->PaintBegin();
+}
+
+void Widget::PaintEnd() {
+	impl_->PaintEnd();
+}
 
 void Widget::OnBeforePaintChild(size_t child_index) {}
 

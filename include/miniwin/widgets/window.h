@@ -17,15 +17,17 @@ public:
 	 */
 	void CenterWindow();
 
+	bool IsTopEnabled() const;
+	bool IsCloseButtonEnabled() const;
+
+	void EnableCloseButton(bool b);
 	void EnableTop(bool b);
-	void SetClosable(bool b);
 	void SetCollapsed(bool b);
 
 	void SetSize(const Vector2D& size) override;
 	void SetPosition(const Vector2D& pos) override;
 	void SetPosition(const Vector2D& pos, const Vector2D& pivot);
 
-	bool IsClosable() const;
 	bool IsDocking() const;
 	bool IsCollapsed() const;
 

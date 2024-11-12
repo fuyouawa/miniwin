@@ -102,18 +102,20 @@ void EndTable();
 
 
 bool BeginWindow(
-	const String& title,
+	const String& name,
 	bool* open,
 	FlagsType flags = 0
 );
 void EndWindow();
 
+bool IsPopupOpen(const String& name, FlagsType flags = 0);
+void OpenPopup(const String& name, FlagsType flags = 0);
+void CloseCurrentPopup();
+
 bool BeginPopupModal(
-	const String& title,
+	const String& name,
 	bool* open,
 	FlagsType flags = 0);
-
-void CloseCurrentPopup();
 
 void EndPopup();
 

@@ -8,6 +8,12 @@ public:
 	Dialog(Widget* parent);
 	~Dialog() override;
 
+	void Open();
+
+protected:
+	void OnPaintWindowBegin() override;
+	void OnPaintWindowEnd() override;
+
 	_MW_IMPL
 };
 }

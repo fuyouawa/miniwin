@@ -52,10 +52,9 @@ public:
 	/**
 	 * 是否进入作用域
 	 */
-	bool entry() const { return entry_; }
+	bool is_entered() const { return is_entered_; }
 
-	constexpr const T& get() const { return val_; }
-	constexpr const T& operator*() const { return get(); }
+	constexpr const T& entered_value() const { return val_; }
 
 private:
 	// 上一次可能改变的数值
@@ -66,7 +65,7 @@ private:
 	T end_val_;
 	bool simu_change_;
 	bool clear_simu_change_;
-	bool entry_;
+	bool is_entered_;
 };
 
 using ScopeCondition = ScopeVariable<bool>;
@@ -78,15 +77,15 @@ ScopeVariable<T>::ScopeVariable(std::convertible_to<T> auto&& init)
 	end_val_(std::forward<decltype(init)>(init)),
 	simu_change_(false),
 	clear_simu_change_(false),
-	entry_(false)
+	is_entered_(false)
 {
 }
 
 template <class T>
 void ScopeVariable<T>::Enter()
 {
-	assert(!entry_);
-	entry_ = true;
+	assert(!is_entered_);
+	is_entered_ = true;
 	if (control_val_.has_value())
 	{
 		val_ = std::move(control_val_.value());
@@ -105,7 +104,7 @@ template <class T>
 void ScopeVariable<T>::Exit() noexcept(std::is_nothrow_copy_assignable_v<T>)
 {
 	end_val_ = val_;
-	entry_ = false;
+	is_entered_ = false;
 }
 
 template <class T>

@@ -185,16 +185,24 @@ bool InputText(const String& label,
 		&cb_user_data);
 }
 
-bool BeginWindow(const String& title, bool* open, FlagsType flags) {
-	return ImGui::Begin(title.data(), open, flags);
+bool BeginWindow(const String& name, bool* open, FlagsType flags) {
+	return ImGui::Begin(name.data(), open, flags);
 }
 
 void EndWindow() {
 	ImGui::End();
 }
 
-bool BeginPopupModal(const String& title, bool* open, FlagsType flags) {
-	return ImGui::BeginPopupModal(title.data(), open, flags);
+bool IsPopupOpen(const String& name, FlagsType flags) {
+	return  ImGui::IsPopupOpen(name.data(), flags);
+}
+
+void OpenPopup(const String& name, FlagsType flags) {
+	ImGui::OpenPopup(name.data(), flags);
+}
+
+bool BeginPopupModal(const String& name, bool* open, FlagsType flags) {
+	return ImGui::BeginPopupModal(name.data(), open, flags);
 }
 
 void CloseCurrentPopup() {
