@@ -2,17 +2,25 @@
 
 #include <format>
 #include <mutex>
+#include <shared_mutex>
 
 #include "win/tools/debug.h"
 
 namespace miniwin {
 namespace {
-std::mutex signal_mutex_pool[131];
+// std::mutex signal_mutex_pool[131];
+//
+// auto& signal_mutex(const Object* obj) {
+// 	return signal_mutex_pool[
+// 		reinterpret_cast<uintptr_t>(obj) %
+// 		(sizeof(signal_mutex_pool) / sizeof(std::mutex))];
+// }
+std::shared_mutex signal_shared_mutex_pool[131];
 
-auto& signal_mutex(const Object* obj) {
-	return signal_mutex_pool[
+auto& signal_shared_mutex(const Object* obj) {
+	return signal_shared_mutex_pool[
 		reinterpret_cast<uintptr_t>(obj) %
-		(sizeof(signal_mutex_pool) / sizeof(std::mutex))];
+			(sizeof(signal_shared_mutex_pool) / sizeof(std::shared_mutex))];
 }
 } // namespace
 
@@ -20,13 +28,13 @@ Object::Impl::Impl(Object* owner)
 	: owner_(owner), connections_manager_() {}
 
 Object::Impl::~Impl() {
-	std::unique_lock lk{signal_mutex(owner_)};
+	std::unique_lock lk{ signal_shared_mutex(owner_)};
 
 	deleting_ = true;
 	if (!connections_manager_.map_.empty() || !connected_sender_connections_.empty()) {
 		for (auto& conns : connections_manager_.map_) {
 			for (auto& c : conns.second) {
-				std::lock_guard lk2{signal_mutex(c->receiver)};
+				std::lock_guard lk2{ signal_shared_mutex(c->receiver)};
 				if (c->receiver) {
 					size_t count = c->receiver->impl_->connected_sender_connections_
 					                .EraseIf([&](auto& sc) {
@@ -40,7 +48,7 @@ Object::Impl::~Impl() {
 
 		for (auto& sender_conn : connected_sender_connections_) {
 			auto sender = sender_conn->sender;
-			std::lock_guard lk2{signal_mutex(sender)};
+			std::lock_guard lk2{ signal_shared_mutex(sender)};
 			if (!sender_conn || sender_conn->sender != sender) {
 				// 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
 				continue;
@@ -70,7 +78,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
 	const Object* sender,
 	const std::type_info& signal_info,
 	const Object* receiver,
-	internal::SlotObjectPtr&& slot_obj,
+	internal::UniqueSlotObject&& slot_obj,
 	ConnectionFlags connection_flags,
 	InvokeType invoke_type) {
 	bool has_unique_flag = (connection_flags & ConnectionFlags::kUnique) != ConnectionFlags::kNone;
@@ -78,7 +86,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
 
 	MW_ASSERT_X(!(has_unique_flag && has_replace_flag));
 
-	std::scoped_lock lk{signal_mutex(sender), signal_mutex(receiver)};
+	std::scoped_lock lk{ signal_shared_mutex(sender), signal_shared_mutex(receiver)};
 
 	// 如果connection_type是Unique, 表示不重复连接
 	// 检测目标Signal中所有Connection的Slot是否有跟当前想连接的Slot重复的
@@ -121,24 +129,29 @@ void Object::Impl::Init(Object* parent) {
 	SetParent(parent);
 }
 
-void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::SlotArgsStoreSharedPtr& args_store) {
-	std::lock_guard lk{signal_mutex(owner_)};
+void Object::Impl::EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store) {
+	// 给自身上锁
+	std::shared_lock lk{ signal_shared_mutex(owner_)};
 
-	auto res = connections_manager_.map_.find(type_info);
+	// 找到信号对应的槽连接列表
+	auto res = connections_manager_.map_.find(signal_info);
 	if (res == connections_manager_.map_.end())
 		return;
 	const auto& conns = res->second;
+	// 遍历连接，触发槽函数
 	for (auto& c : conns) {
-		MW_ASSERT_X(c->sender == owner_ && c->signal_info == type_info);
+		MW_ASSERT_X(c->sender == owner_ && c->signal_info == signal_info);
 
+		// 给发送者上锁
 		auto receiver = c->receiver;
-		std::lock_guard lk2{signal_mutex(c->receiver)};
+		std::shared_lock lk2{ signal_shared_mutex(c->receiver)};
 
 		if (!c || c->sender != owner_ || c->receiver != receiver) {
 			// 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
 			continue;
 		}
 
+		// 触发槽函数
 		c->receiver->Invoke([receiver = c->receiver, slot_obj = &c->slot_obj, args_store] {
 			if (!receiver || !*slot_obj) return;
 			(*slot_obj)->Call(receiver, args_store.get());
@@ -148,7 +161,7 @@ void Object::Impl::EmitSignalImpl(const type_info& type_info, const internal::Sl
 
 bool Object::Impl::DisconnectImpl(const std::type_info& signal_info, const SharedConnection& connection) {
 	if (connection->receiver == nullptr) return false;
-	std::scoped_lock lk{signal_mutex(owner_), signal_mutex(connection->receiver)};
+	std::scoped_lock lk{ signal_shared_mutex(owner_), signal_shared_mutex(connection->receiver)};
 	auto res = connections_manager_.map_.find(signal_info);
 	if (res == connections_manager_.map_.end())
 		return false;

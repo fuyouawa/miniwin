@@ -68,12 +68,12 @@ private:
         const Object* sender,
         const std::type_info& signal_info,
         const Object* receiver,
-        internal::SlotObjectPtr&& slot_obj,
+        internal::UniqueSlotObject&& slot_obj,
         ConnectionFlags connection_flags,
         InvokeType invoke_type);
 
     void EmitSignalImpl(const std::type_info& signal_info,
-        const internal::SlotArgsStoreSharedPtr& args_store) const;
+        const internal::SharedSlotArgsStore& args_store) const;
 
     friend class Widget;
     friend class WidgetsDriver;

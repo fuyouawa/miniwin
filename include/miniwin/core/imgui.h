@@ -103,15 +103,28 @@ void EndTable();
 void SetNextWindowBgAlpha(float alpha);
 
 bool BeginWindow(
+	const String& title,
+	const String& id,
+	bool* open,
+	FlagsType flags = 0
+);
+bool BeginWindow(
 	const String& name,
 	bool* open,
 	FlagsType flags = 0
 );
+
 void EndWindow();
 
 bool IsPopupOpen(const String& name, FlagsType flags = 0);
 void OpenPopup(const String& name, FlagsType flags = 0);
 void CloseCurrentPopup();
+
+bool BeginPopupModal(
+	const String& title,
+	const String& id,
+	bool* open,
+	FlagsType flags = 0);
 
 bool BeginPopupModal(
 	const String& name,

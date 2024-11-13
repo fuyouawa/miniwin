@@ -16,7 +16,7 @@ public:
     {
         const Object* sender;
         const Object* receiver;
-        internal::SlotObjectPtr slot_obj;
+        internal::UniqueSlotObject slot_obj;
         std::type_index signal_info;
         ConnectionFlags connection_type;
         InvokeType invoke_type;
@@ -38,13 +38,13 @@ public:
         const Object* sender,
         const std::type_info& signal_info,
         const Object* receiver,
-        internal::SlotObjectPtr&& slot_obj,
+        internal::UniqueSlotObject&& slot_obj,
         ConnectionFlags connection_flags,
         InvokeType invoke_type);
 
     void Init(Object* parent);
 
-    void EmitSignalImpl(const type_info& type_info, const internal::SlotArgsStoreSharedPtr& args_store);
+    void EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store);
 
     bool DisconnectImpl(
         const std::type_info& signal_info,

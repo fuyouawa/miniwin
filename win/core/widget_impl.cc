@@ -54,12 +54,18 @@ void Widget::Impl::PaintBegin()
     }
 
     imgui::BeginDisabled(!enable_sc_.cur_value());
-    imgui::PushID(owner_->Id());
+
+    // 如果是window，需要自己管理id
+    if (!is_window_) {
+        imgui::PushID(owner_->Id());
+    }
 }
 
 void Widget::Impl::PaintEnd()
 {
-    imgui::PopID();
+	if (!is_window_) {
+        imgui::PopID();
+	}
     imgui::EndDisabled();
     enable_sc_.Exit();
     visible_sc_.Exit();

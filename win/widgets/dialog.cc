@@ -35,7 +35,7 @@ void Dialog::OnPaintWindowBegin() {
 	}
 
 	bool open = true;
-	impl_->is_opened_ = imgui::BeginPopupModal(Title(), IsCloseButtonEnabled() ? &open : nullptr, Flags());
+	impl_->is_opened_ = imgui::BeginPopupModal(Title(), Id(), IsCloseButtonEnabled() ? &open : nullptr, Flags());
 
 	if (!open) {
 		imgui::CloseCurrentPopup();

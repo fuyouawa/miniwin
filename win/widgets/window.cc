@@ -23,6 +23,10 @@ void Window::SetTitle(const String& title) {
 	auto prev = Name();
 	SetName(title);
 	OnTitleChanged(title, prev);
+}
+
+void Window::SetId(const String& id) {
+	Widget::SetId(id);
 	impl_->imgui_win_cache_ = nullptr;
 }
 

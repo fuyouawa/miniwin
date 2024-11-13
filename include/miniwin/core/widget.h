@@ -43,7 +43,7 @@ public:
     virtual void SetEnable(bool b);
 
     const String& Id() const;
-    void SetId(const String& id);
+    virtual void SetId(const String& id);
 
     virtual Vector2D Size() const;
     virtual void SetSize(const Vector2D& size);

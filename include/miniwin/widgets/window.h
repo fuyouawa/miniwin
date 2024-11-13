@@ -10,6 +10,7 @@ public:
 
     const String& Title() const;
     void SetTitle(const String& title);
+	void SetId(const String& id) override;
 
 	/**
 	 * 将窗体居中

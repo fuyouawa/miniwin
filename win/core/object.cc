@@ -87,7 +87,7 @@ Object::Disconnecter Object::ConnectImpl(
 	const Object* sender,
 	const std::type_info& signal_info,
 	const Object* receiver,
-	internal::SlotObjectPtr&& slot_obj,
+	internal::UniqueSlotObject&& slot_obj,
 	ConnectionFlags connection_flags,
 	InvokeType invoke_type) {
 	MW_ASSERT_X(receiver);
@@ -96,7 +96,7 @@ Object::Disconnecter Object::ConnectImpl(
 }
 
 void Object::EmitSignalImpl(const std::type_info& signal_info,
-                            const internal::SlotArgsStoreSharedPtr& args_store) const {
+                            const internal::SharedSlotArgsStore& args_store) const {
 	MW_ASSERT_X(args_store);
 	impl_->EmitSignalImpl(signal_info, args_store);
 }

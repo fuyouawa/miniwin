@@ -77,14 +77,14 @@ void Window::Impl::PaintEnd()
 
 ImGuiWindow* Window::Impl::GetImGuiWindow() const {
     if (imgui_win_cache_ == nullptr) {
-        imgui_win_cache_ = ImGui::FindWindowByName(owner_->Title().data());
+        imgui_win_cache_ = ImGui::FindWindowByName(owner_->Id().data());
     }
     return imgui_win_cache_;
 }
 
 void Window::Impl::OnPaintWindowBegin() {
     bool open = true;
-    imgui::BeginWindow(owner_->Title(), is_close_btn_enabled_ ? &open : nullptr);
+    imgui::BeginWindow(owner_->Title(), owner_->Id(), is_close_btn_enabled_ ? &open : nullptr);
 
     if (!open) {
         owner_->Close();

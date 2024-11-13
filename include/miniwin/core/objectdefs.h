@@ -13,7 +13,7 @@ public:
 	virtual ~SlotArgsStoreBase() = default;
 };
 
-using SlotArgsStoreSharedPtr = std::shared_ptr<SlotArgsStoreBase>;
+using SharedSlotArgsStore = std::shared_ptr<SlotArgsStoreBase>;
 
 class SlotObjectBase {
 public:
@@ -23,7 +23,7 @@ public:
 	virtual bool Compare(const SlotObjectBase* x) const = 0;
 };
 
-using SlotObjectPtr = std::unique_ptr<SlotObjectBase>;
+using UniqueSlotObject = std::unique_ptr<SlotObjectBase>;
 
 template <class... Args>
 class SlotArgsStore : public SlotArgsStoreBase {
