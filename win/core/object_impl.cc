@@ -173,25 +173,35 @@ Object::Disconnecter Object::Impl::AddConnectionWithoutLock(const std::type_info
 void Object::Impl::SetParent(Object* parent) {
 	if (owner_ == parent)
 		return;
-	// 如果parent正在删除中, 就不从parent中移除自己
-	if (parent_ && !parent_->impl_->deleting_) {
-		parent_->impl_->dirty_ = true;
-		auto item = parent_->impl_->child_items_.FindIf([owner = owner_](const ChildItem& i) {
+	auto prev_parent = parent_;
+
+	// 如果parent正在删除中, 就不处理
+	if (prev_parent && !prev_parent->impl_->deleting_) {
+		auto item = prev_parent->impl_->child_items_.FindIf([owner = owner_](const ChildItem& i) {
 			return i.obj == owner;
 		});
-		item->orphaned = true;
+		// 如果没在原父级的子列表中找到自己，说明只是加入了父级的pending_addition_children_，但是父级还没处理
+		if (item.IsEnd()) {
+			// 从原父级的添加队列中删除自己
+			auto s = prev_parent->impl_->pending_addition_children_.Erase(owner_);
+			MW_ASSERT_X(s > 0);
+		}
+		else {
+			prev_parent->impl_->dirty_ = true;
+			item->orphaned = true;
+		}
+	}
+
+	if (parent) {
+		parent->impl_->pending_addition_children_.PushBack(owner_);
 	}
 	parent_ = parent;
-
-	if (parent_) {
-		parent_->impl_->child_items_.EmplaceBack(false, owner_);
-		parent_->impl_->children_cache_.EmplaceBack(owner_);
-	}
 }
 
-List<Object*> Object::Impl::GetChildrenWithClear() {
+List<Object*> Object::Impl::GetChildrenWithProcess() {
 	MW_ASSERT_X(children_cache_.size() == child_items_.size());
 
+	// 处理移除的子物体
 	if (dirty_) {
 		children_cache_.Clear();
 
@@ -206,6 +216,14 @@ List<Object*> Object::Impl::GetChildrenWithClear() {
 		});
 		dirty_ = false;
 	}
+
+	// 处理添加的子物体
+	for (auto c : pending_addition_children_) {
+		child_items_.EmplaceBack(false, c);
+		children_cache_.EmplaceBack(c);
+	}
+	pending_addition_children_.Clear();
+
 	return children_cache_;
 }
 

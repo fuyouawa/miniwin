@@ -17,7 +17,8 @@ public:
     void PaintBegin();
     void PaintEnd();
 
-	Widget* WidgetParent() const;
+    Window* OwnerWindow();
+ 	Widget* WidgetParent();
     void SetWidgetParent(Widget* parent);
 
     void PushPendingFunctor(std::function<void()>&& func);
@@ -36,7 +37,7 @@ public:
     bool is_painting_children_ = false;
     bool orphaned_ = false;
     bool dirty_ = false;
-
+    bool is_window_ = false;
     FlagsType draw_flags_ = 0;
 
     Widget* owner_;

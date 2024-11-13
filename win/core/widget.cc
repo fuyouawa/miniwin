@@ -6,9 +6,10 @@
 #include <miniwin/tools/vector2d.h>
 #include <miniwin/tools/scope_variable.h>
 
+#include <miniwin/widgets/window.h>
+#include <miniwin/core/application.h>
 #include "object_impl.h"
 #include "widgets_driver.h"
-#include "miniwin/core/application.h"
 #include "win/tools/debug.h"
 
 namespace miniwin {
@@ -26,7 +27,23 @@ void Widget::Close() {
 	impl_->Close();
 }
 
-Widget* Widget::WidgetParent() const {
+bool Widget::IsWindow() const {
+	return impl_->is_window_;
+}
+
+const Window* Widget::OwnerWindow() const {
+	return impl_->OwnerWindow();
+}
+
+const Widget* Widget::WidgetParent() const {
+	return impl_->WidgetParent();
+}
+
+Window* Widget::OwnerWindow() {
+	return impl_->OwnerWindow();
+}
+
+Widget* Widget::WidgetParent() {
 	return impl_->WidgetParent();
 }
 

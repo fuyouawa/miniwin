@@ -1,14 +1,16 @@
 #include "window_impl.h"
 
+#include "win/core/widget_impl.h"
 #include <miniwin/io/scene.h>
 #include <miniwin/tools/graphic.h>
 
 
 namespace miniwin {
-Window::Window(Widget* parent)
-	: Widget(parent, "Window", "Window")
+Window::Window(Widget* parent, const String& title, const String& id)
+	: Widget(parent, title, id)
 {
 	impl_ = std::make_unique<Impl>(this);
+	Widget::impl_->is_window_ = true;
 }
 
 Window::~Window() {}

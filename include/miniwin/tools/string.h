@@ -3,28 +3,21 @@
 #include <format>
 
 namespace miniwin {
-enum class Encode
-{
-	kUtf8
-};
-
 class StringList;
 
 class String {
 public:
 	static constexpr auto kNPos{ static_cast<size_t>(-1) };
 
-	template<class... Args>
-	static String Format(const String& fmt, const Args&... args) {
-		return std::vformat(fmt.ToStdString(), std::make_format_args(args...)).data();
-	}
+	static String Format(const String& fmt, const auto&... args);
 
-	static String FromStdString(const std::string& str);
-	static String FromStdString(std::string&& str);
+	static String FromUtf16(std::wstring_view wstr);
 
 	String() = default;
 	String(const char* str);
-	String(const char* str, size_t size);
+	explicit String(const char* str, size_t size);
+	explicit String(std::string_view str);
+	explicit String(size_t size, char ch);
 
 	String(const String& right) = default;
 	String(String&& right) = default;
@@ -59,6 +52,9 @@ private:
 	std::string str_;
 };
 
+String String::Format(const String& fmt, const auto&... args) {
+	return std::vformat(fmt.ToStdString(), std::make_format_args(args...)).data();
+}
 String operator+(const String& x, const String& y);
 String operator+(const String& x, char y);
 }

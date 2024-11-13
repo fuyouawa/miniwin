@@ -10,15 +10,15 @@ public:
 
 	void Init() {
 		owner_->SetVisible(false);
-		owner_->SetTitle("Dialog");
-		owner_->SetId("Dialog");
 	}
 
 	Dialog* owner_;
 	bool is_opened_ = true;
 };
 
-Dialog::Dialog(Widget* parent) : Window(parent) {
+Dialog::Dialog(Widget* parent, const String& title, const String& id)
+	: Window(parent, title, id)
+{
 	impl_ = std::make_unique<Impl>(this);
 	impl_->Init();
 }

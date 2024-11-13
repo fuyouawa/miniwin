@@ -46,7 +46,7 @@ RegexMatch::RegexMatch(Regex* regex, const String& str) {
 
 	if (std::regex_match(str.data(), str.data() + str.size(), m, re)) {
 		for (size_t i = 0; i < m.size(); ++i) {
-			impl_->captures.PushBack(String::FromStdString(m.str(i)));
+			impl_->captures.EmplaceBack(m.str(i));
 		}
 	}
 }

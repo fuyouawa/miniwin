@@ -54,7 +54,7 @@ public:
 
     void SetParent(Object* parent);
 
-    List<Object*> GetChildrenWithClear();
+    List<Object*> GetChildrenWithProcess();
     void DeleteChildren();
 
     bool is_widget_ = false;
@@ -67,6 +67,7 @@ public:
     List<SharedConnection> connected_sender_connections_;    // 连接到的发送者
     ConnectionsManager connections_manager_;
 
+private:
     struct ChildItem {
         bool orphaned;
         Object* obj;
@@ -74,5 +75,6 @@ public:
     bool dirty_ = false;
     List<ChildItem> child_items_;
     List<Object*> children_cache_;
+    List<Object*> pending_addition_children_;
 };
 }

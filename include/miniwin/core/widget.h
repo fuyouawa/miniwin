@@ -7,6 +7,8 @@
 #include <miniwin/tools/variant.h>
 
 namespace miniwin {
+class Window;
+
 class Widget : public Object, public NonCopyMoveable {
 public:
     enum GetDrawFlags
@@ -26,7 +28,12 @@ public:
     virtual void Hide();
     virtual void Close();
 
-    Widget* WidgetParent() const;
+    bool IsWindow() const;
+    const Window* OwnerWindow() const;
+    const Widget* WidgetParent() const;
+    Window* OwnerWindow();
+    Widget* WidgetParent();
+
     void SetWidgetParent(Widget* parent);
     List<Widget*> WidgetChildren() const;
 
@@ -72,6 +79,7 @@ protected:
 
 private:
     friend class WidgetsDriver;
+    friend class Window;
     using Object::Parent;
     using Object::SetParent;
 

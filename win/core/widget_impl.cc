@@ -67,7 +67,20 @@ void Widget::Impl::PaintEnd()
     pos_sc_.Exit();
 }
 
-Widget* Widget::Impl::WidgetParent() const
+Window* Widget::Impl::OwnerWindow() {
+    if (is_window_) {
+        auto w = dynamic_cast<Window*>(owner_);
+        MW_ASSERT_X(w != nullptr);
+        return w;
+    }
+    auto p = WidgetParent();
+    if (p != nullptr) {
+        return p->impl_->OwnerWindow();
+    }
+    return nullptr;
+}
+
+Widget* Widget::Impl::WidgetParent()
 {
     if (auto p = owner_->Parent())
     {

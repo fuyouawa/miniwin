@@ -5,7 +5,7 @@ namespace miniwin {
 class Window : public Widget
 {
 public:
-	Window(Widget* parent = nullptr);
+	Window(Widget* parent = nullptr, const String& title = "Window", const String& id = "Window");
 	~Window() override;
 
     const String& Title() const;

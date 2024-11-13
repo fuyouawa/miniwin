@@ -26,7 +26,8 @@ public:
     Object(Object* parent, const String& name);
     virtual ~Object();
 
-    Object* Parent() const;
+    const Object* Parent() const;
+    Object* Parent();
     virtual void SetParent(Object* parent) const;
     List<Object*> Children() const;
 

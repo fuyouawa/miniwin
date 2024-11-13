@@ -32,7 +32,11 @@ Object::~Object() {
 	OnDestroy();
 }
 
-Object* Object::Parent() const {
+const Object* Object::Parent() const {
+	return impl_->parent_;
+}
+
+Object* Object::Parent() {
 	return impl_->parent_;
 }
 
@@ -68,7 +72,7 @@ void Object::EnableFlags(FlagsType flags, bool enable) {
 }
 
 List<Object*> Object::Children() const {
-	return impl_->GetChildrenWithClear();
+	return impl_->GetChildrenWithProcess();
 }
 
 bool Object::IsWidget() const {

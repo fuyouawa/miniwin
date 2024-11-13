@@ -11,7 +11,7 @@
 
 namespace miniwin {
 namespace {
-String OpenFileDialog(Window* parent, const String& capacity, const String& dir, const String& filter,
+String OpenFileDialog(Window* parent, const String& title, const String& dir, const String& filter,
                       String* selected_filter) {
 	String windows_filter;
 
@@ -27,25 +27,27 @@ String OpenFileDialog(Window* parent, const String& capacity, const String& dir,
 		}
 	}
 
-	OPENFILENAMEA ofn;
+	OPENFILENAMEW ofn;
 
-	char file[MAX_PATH]{0};
+	wchar_t file[MAX_PATH]{0};
 	ZeroMemory(&ofn, sizeof(ofn));
 	if (parent) {
 		ofn.hwndOwner = reinterpret_cast<HWND>(parent->PlatformHandle());
 	}
+	auto wfilter = windows_filter.ToStdWString();
+	auto wtitle = title.ToStdWString();
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = nullptr;
 	ofn.lpstrFile = file;
 	ofn.nMaxFile = sizeof(file);
-	ofn.lpstrFilter = windows_filter.data();
-	ofn.lpstrTitle = capacity.data();
+	ofn.lpstrFilter = wfilter.data();
+	ofn.lpstrTitle = wtitle.data();
 	ofn.nFilterIndex = 1;
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-	if (GetOpenFileNameA(&ofn)) {
+	if (GetOpenFileNameW(&ofn)) {
 		*selected_filter = filters[ofn.nFilterIndex == 0 ? 0 : ofn.nFilterIndex - 1];
-		return ofn.lpstrFile;
+		return String::FromUtf16(ofn.lpstrFile);
 	}
 	return {};
 }
@@ -56,8 +58,6 @@ public:
 	Impl(FileDialog* owner, const Config& cfg) : owner_(owner), cfg_(cfg) {}
 
 	void Init() {
-		owner_->SetTitle("Select File...");
-		owner_->SetId("FileDialog");
 		owner_->EnableFlags(imgui::kWindowNoInputs
 		                  | imgui::kWindowNoBackground
 		                  | imgui::kWindowNoTitleBar, true);
@@ -95,20 +95,21 @@ public:
 	Config cfg_;
 };
 
-void FileDialog::GetOpenFileNameAsync(Window* parent, const String& capacity, GetOpenFileNameCallback callback,
+void FileDialog::GetOpenFileNameAsync(Window* parent, const String& title, GetOpenFileNameCallback callback,
                                       const String& dir, const String& filter) {
+
 	Config cfg(parent, dir, filter, [cb = std::move(callback)](FileDialog* dlg) {
 		cb(std::move(dlg->impl_->file_), std::move(dlg->impl_->selected_filter));
 		dlg->Close();
 	});
 
-	auto dlg = new FileDialog(cfg);
-	dlg->SetTitle(capacity);
+	auto dlg = new FileDialog(cfg, title);
 	dlg->Open();
 }
 
-FileDialog::FileDialog(const Config& cfg)
-	: Dialog(cfg.parent) {
+FileDialog::FileDialog(const Config& cfg, const String& title, const String& id)
+	: Dialog(cfg.parent, title, id)
+{
 	impl_ = std::make_unique<Impl>(this, cfg);
 	impl_->Init();
 }
