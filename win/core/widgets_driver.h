@@ -44,7 +44,7 @@ private:
     void CallUpdateEarly() const;
     void DoPending();
 
-    WidgetId cur_max_id_;
+    WidgetId cur_max_id_ = 1;
     uint8_t id_pool_seek_;
     WidgetId id_pool_[128];
 

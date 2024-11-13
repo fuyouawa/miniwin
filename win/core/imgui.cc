@@ -1,6 +1,7 @@
 #include <miniwin/core/imgui.h>
 
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
 #include "win/tools/debug.h"
@@ -38,6 +39,10 @@ ImVec2 CastToIm(const Vector2D& vec) {
 
 Vector2D CastFromIm(const ImVec2& vec) {
 	return {vec.x, vec.y};
+}
+
+String CombineId(const String& text, WidgetId id) {
+	return text + "###" + String::FromNumber(id);
 }
 }
 
@@ -186,7 +191,7 @@ bool InputText(const String& label,
 }
 
 bool BeginWindow(const String& title, WidgetId id, bool* open, FlagsType flags) {
-	return BeginWindow(title + "###" + id, open, flags);
+	return BeginWindow(CombineId(title, id), open, flags);
 }
 
 bool BeginWindow(const String& name, bool* open, FlagsType flags) {
@@ -195,6 +200,14 @@ bool BeginWindow(const String& name, bool* open, FlagsType flags) {
 
 void EndWindow() {
 	ImGui::End();
+}
+
+bool IsPopupOpen(const String& title, WidgetId id, FlagsType flags) {
+	return IsPopupOpen(CombineId(title, id), flags);
+}
+
+void OpenPopup(const String& title, WidgetId id, FlagsType flags) {
+	OpenPopup(CombineId(title, id), flags);
 }
 
 bool IsPopupOpen(const String& name, FlagsType flags) {
@@ -214,7 +227,7 @@ void CloseCurrentPopup() {
 }
 
 bool BeginPopupModal(const String& title, WidgetId id, bool* open, FlagsType flags) {
-	return BeginPopupModal(title + "###" + id, open, flags);
+	return BeginPopupModal(CombineId(title, id), open, flags);
 }
 
 void EndPopup() {

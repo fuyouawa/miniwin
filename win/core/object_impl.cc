@@ -34,7 +34,11 @@ Object::Impl::~Impl() {
 	if (!connections_manager_.map_.empty() || !connected_sender_connections_.empty()) {
 		for (auto& conns : connections_manager_.map_) {
 			for (auto& c : conns.second) {
-				std::lock_guard lk2{ signal_shared_mutex(c->receiver)};
+
+				std::unique_lock<std::shared_mutex> lk2;
+				if (owner_ != c->receiver)
+					lk2 = std::unique_lock(signal_shared_mutex(c->receiver));
+
 				if (c->receiver) {
 					size_t count = c->receiver->impl_->connected_sender_connections_
 					                .EraseIf([&](auto& sc) {
@@ -48,7 +52,10 @@ Object::Impl::~Impl() {
 
 		for (auto& sender_conn : connected_sender_connections_) {
 			auto sender = sender_conn->sender;
-			std::lock_guard lk2{ signal_shared_mutex(sender)};
+			std::unique_lock<std::shared_mutex> lk2;
+			if (owner_ != sender)
+				lk2 = std::unique_lock(signal_shared_mutex(sender));
+
 			if (!sender_conn || sender_conn->sender != sender) {
 				// 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
 				continue;
@@ -74,19 +81,21 @@ void Object::Impl::ConnectionsManager::ClearDirty() {
 	}
 }
 
-Object::Disconnecter Object::Impl::ConnectImpl(
-	const Object* sender,
-	const std::type_info& signal_info,
-	const Object* receiver,
-	internal::UniqueSlotObject&& slot_obj,
-	ConnectionFlags connection_flags,
-	InvokeType invoke_type) {
+Object::Disconnecter Object::Impl::ConnectImpl(const Object* sender, const std::type_info& signal_info,
+	const Object* receiver, internal::UniqueSlotObject&& slot_obj, ConnectionFlags connection_flags,
+	InvokeType invoke_type)
+{
 	bool has_unique_flag = (connection_flags & ConnectionFlags::kUnique) != ConnectionFlags::kNone;
 	bool has_replace_flag = (connection_flags & ConnectionFlags::kReplace) != ConnectionFlags::kNone;
 
 	MW_ASSERT_X(!(has_unique_flag && has_replace_flag));
 
-	std::scoped_lock lk{ signal_shared_mutex(sender), signal_shared_mutex(receiver)};
+	std::unique_lock sender_lk(signal_shared_mutex(sender));
+	std::unique_lock<std::shared_mutex> receiver_lk;
+
+	if (sender != receiver) {
+		receiver_lk = std::unique_lock(signal_shared_mutex(receiver));
+	}
 
 	// 如果connection_type是Unique, 表示不重复连接
 	// 检测目标Signal中所有Connection的Slot是否有跟当前想连接的Slot重复的
@@ -102,7 +111,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
 			}
 			auto res2 = res->second.FindIf([&](auto& c) {
 				return c->receiver == receiver && c->slot_obj->Compare(slot_obj.get());
-			});
+				});
 			if (!res2.IsEnd()) {
 				if (has_unique_flag) {
 					//TODO has_unique_flag暂时啥也不干
@@ -120,7 +129,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
 	}
 
 	auto conn = std::make_shared<Connection>(sender, receiver, std::move(slot_obj), signal_info, connection_flags,
-	                                         invoke_type);
+		invoke_type);
 
 	return sender->impl_->AddConnectionWithoutLock(signal_info, std::move(conn));
 }
@@ -144,7 +153,9 @@ void Object::Impl::EmitSignalImpl(const type_info& signal_info, const internal::
 
 		// 给发送者上锁
 		auto receiver = c->receiver;
-		std::shared_lock lk2{ signal_shared_mutex(c->receiver)};
+		std::shared_lock<std::shared_mutex> lk2;
+		if (receiver != owner_)
+			lk2 = std::shared_lock(signal_shared_mutex(c->receiver));
 
 		if (!c || c->sender != owner_ || c->receiver != receiver) {
 			// 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
@@ -184,7 +195,7 @@ Object::Disconnecter Object::Impl::AddConnectionWithoutLock(const std::type_info
 }
 
 void Object::Impl::SetParent(Object* parent) {
-	if (owner_ == parent)
+	if (owner_ == parent || parent_ == parent)
 		return;
 	auto prev_parent = parent_;
 

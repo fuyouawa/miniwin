@@ -1,5 +1,5 @@
 #pragma once
-#include <miniwin/widgets/layout/boxlayout.h>
+#include <miniwin/widgets/layout/box_layout.h>
 
 namespace miniwin {
 class BoxLayout::Impl {

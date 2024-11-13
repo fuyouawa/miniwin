@@ -7,7 +7,7 @@
 #include <miniwin/widgets/textedit.h>
 #include <miniwin/widgets/view/table_view.h>
 #include <miniwin/widgets/label.h>
-#include <miniwin/widgets/layout/boxlayout.h>
+#include <miniwin/widgets/layout/box_layout.h>
 #include <miniwin/widgets/view/list_view.h>
 
 #include "miniwin/core/imgui.h"
@@ -16,6 +16,7 @@
 #include "miniwin/widgets/checkbox.h"
 #include "miniwin/widgets/dialog.h"
 #include "miniwin/widgets/file_dialog.h"
+#include "miniwin/widgets/message_box.h"
 
 using namespace miniwin;
 
@@ -31,10 +32,26 @@ public:
 			});
 
 		btn_open_dialog_ = new Button(this, "打开对话框");
-		dialog_ = new Dialog(this);
+		dialog_ = new Dialog(this, "对话框");
 
 		Connect(btn_open_dialog_, &Button::OnClicked, this, [this]() {
 			dialog_->Open();
+			});
+
+		btn_open_msgbox_ = new Button(this, "打开消息框");
+
+		Connect(btn_open_msgbox_, &Button::OnClicked, this, [this]() {
+			MessageBox::InformationAsync(this, "提示", "这是一个消息框！", "确认", []() {
+				std::cout << "消息框被确认了" << std::endl;
+				});
+			});
+
+		btn_open_msgbox2_ = new Button(this, "打开询问框");
+
+		Connect(btn_open_msgbox2_, &Button::OnClicked, this, [this]() {
+			MessageBox::QuestionAsync(this, "询问", "这是一个询问框？", "是的", "不是", [](bool yes) {
+				std::cout << "询问框被确认了:" << yes << std::endl;
+				});
 			});
 
 		edit_title_to_set_ = new TextEdit(this, "示例窗体");
@@ -51,6 +68,8 @@ public:
 
 	Button* btn_open_file_;
 	Button* btn_open_dialog_;
+	Button* btn_open_msgbox_;
+	Button* btn_open_msgbox2_;
 	Dialog* dialog_;
 	Button* btn_set_title_;
 	TextEdit* edit_title_to_set_;

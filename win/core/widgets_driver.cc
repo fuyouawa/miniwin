@@ -100,6 +100,7 @@ WidgetId WidgetsDriver::AllocId() {
 }
 
 bool WidgetsDriver::RecycleId(WidgetId id) {
+	MW_ASSERT_X(id != 0);
 	if (id_pool_seek_ < sizeof(id_pool_) / sizeof(WidgetId)) {
 		id_pool_[id_pool_seek_++] = id;
 		return true;

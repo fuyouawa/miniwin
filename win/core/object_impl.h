@@ -42,6 +42,7 @@ public:
         ConnectionFlags connection_flags,
         InvokeType invoke_type);
 
+
     void Init(Object* parent);
 
     void EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store);

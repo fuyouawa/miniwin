@@ -11,7 +11,7 @@
 
 namespace miniwin {
 namespace {
-String OpenFileDialog(Window* parent, const String& title, const String& dir, const String& filter,
+String OpenFileDialog(Widget* parent, const String& title, const String& dir, const String& filter,
                       String* selected_filter) {
 	String windows_filter;
 
@@ -32,7 +32,7 @@ String OpenFileDialog(Window* parent, const String& title, const String& dir, co
 	wchar_t file[MAX_PATH]{0};
 	ZeroMemory(&ofn, sizeof(ofn));
 	if (parent) {
-		ofn.hwndOwner = reinterpret_cast<HWND>(parent->PlatformHandle());
+		ofn.hwndOwner = reinterpret_cast<HWND>(parent->OwnerWindow()->PlatformHandle());
 	}
 	auto wfilter = windows_filter.ToStdWString();
 	auto wtitle = title.ToStdWString();
@@ -95,7 +95,7 @@ public:
 	Config cfg_;
 };
 
-void FileDialog::GetOpenFileNameAsync(Window* parent, const String& title, GetOpenFileNameCallback callback,
+void FileDialog::GetOpenFileNameAsync(Widget* parent, const String& title, GetOpenFileNameCallback callback,
                                       const String& dir, const String& filter) {
 
 	Config cfg(parent, dir, filter, [cb = std::move(callback)](FileDialog* dlg) {

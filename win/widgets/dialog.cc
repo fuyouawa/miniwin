@@ -30,8 +30,8 @@ void Dialog::Open() {
 }
 
 void Dialog::OnPaintWindowBegin() {
-	if (!imgui::IsPopupOpen(Title(), Flags())) {
-		imgui::OpenPopup(Title(), Flags());
+	if (!imgui::IsPopupOpen(Title(), Id(), Flags())) {
+		imgui::OpenPopup(Title(), Id(), Flags());
 	}
 
 	bool open = true;

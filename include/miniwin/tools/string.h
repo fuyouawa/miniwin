@@ -36,9 +36,6 @@ public:
 	String& operator+=(char right);
 
 	String operator+(char right) const;
-	template<class T>
-		requires std::is_integral_v<T> || std::is_floating_point_v<T>
-	String operator+(T right);
 
 	size_t length() const { return str_.length(); }
 	size_t size() const { return str_.size(); }
@@ -71,19 +68,8 @@ String String::FromNumber(T num) {
 	return String(std::to_string(num));
 }
 
-template <class T> requires std::is_integral_v<T> || std::is_floating_point_v<T>
-String String::operator+(T right) {
-	String x1(*this);
-	return x1 += FromNumber(right);
-}
-
 String operator+(const String& x, const String& y);
 String operator+(char x, const String& y);
-template<class T>
-	requires std::is_integral_v<T> || std::is_floating_point_v<T>
-String operator+(T x, const String& y) {
-	return String::FromNumber(x) + y;
-}
 }
 
 template<> struct std::formatter<miniwin::String> {

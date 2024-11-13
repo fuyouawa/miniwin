@@ -55,6 +55,7 @@ public:
 
     void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const override;
 
+    MW_SIGNAL(OnClosed)
     MW_SIGNAL(OnEnableChanged, (bool) b)
     MW_SIGNAL(OnVisbleChanged, (bool) b)
     MW_SIGNAL(OnSizeChanged, (const Vector2D&) size, (const Vector2D&) prev_size)

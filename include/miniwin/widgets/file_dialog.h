@@ -14,20 +14,20 @@ public:
 	using GetOpenFileNameCallback = std::function<void(String filename, String selected_filter)>;
 
 	static void GetOpenFileNameAsync(
-		Window* parent,
-		const String& title = "Select a file...",
+		Widget* parent,
+		const String& title,
 		GetOpenFileNameCallback callback = {},
 		const String& dir = {},
 		const String& filter = "All Files (*.*)");
 
 	struct Config {
-		Window* parent;
+		Widget* parent;
 		String directory;
 		String filter;
 		std::function<void(FileDialog* dlg)> selected_callback;
 	};
 
-	FileDialog(const Config& cfg, const String& title = "Select a file...");
+	FileDialog(const Config& cfg, const String& title);
 	~FileDialog() override;
 
 	using Dialog::WidgetParent;

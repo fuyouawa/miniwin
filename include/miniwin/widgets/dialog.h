@@ -5,7 +5,7 @@ namespace miniwin {
 class Dialog : public Window
 {
 public:
-	Dialog(Widget* parent = nullptr, const String& title = "Dialog");
+	Dialog(Widget* parent, const String& title);
 	~Dialog() override;
 
 	void Open();

@@ -116,8 +116,12 @@ bool BeginWindow(
 
 void EndWindow();
 
+bool IsPopupOpen(const String& title, WidgetId id, FlagsType flags = 0);
+void OpenPopup(const String& title, WidgetId id, FlagsType flags = 0);
+
 bool IsPopupOpen(const String& name, FlagsType flags = 0);
 void OpenPopup(const String& name, FlagsType flags = 0);
+
 void CloseCurrentPopup();
 
 bool BeginPopupModal(

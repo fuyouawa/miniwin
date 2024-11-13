@@ -28,6 +28,7 @@ void Widget::Impl::Close()
     {
         p->impl_->dirty_ = true;
     }
+    owner_->OnClosed();
 }
 
 void Widget::Impl::PaintBegin()
@@ -100,6 +101,8 @@ Widget* Widget::Impl::WidgetParent()
 
 void Widget::Impl::SetWidgetParent(Widget* parent)
 {
+    if (parent == WidgetParent())
+        return;
     WidgetsDriver::instance().PushPendingFunctor([this, parent]
         {
             owner_->Object::SetParent(parent);

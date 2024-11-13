@@ -80,6 +80,7 @@ private:
     _MW_IMPL
 };
 
+
 template <std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
 Object::Disconnecter Object::Connect(const Sender* sender, Signal signal, const Receiver* receiver, Slot&& slot,
 	ConnectionFlags connection_flags, InvokeType invoke_type) {
