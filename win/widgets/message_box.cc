@@ -34,39 +34,45 @@ public:
 };
 
 void MessageBox::InformationAsync(Widget* parent, const String& title, const String& text, const String& ok,
-	std::function<void()> clicked_callback)
+	std::function<void()> callback)
 {
 	auto msg = new MessageBox(parent, title, text);
-	msg->EnableCloseButton(false);
 	msg->AddButton(new Button(msg, ok));
-	msg->SetButtonClickedCallback([cb = std::move(clicked_callback), msg](Button* btn) {
+	msg->SetButtonClickedCallback([cb = callback, msg](Button* btn) {
 		cb();
 		msg->Close();
+		});
+
+	Connect(msg, &MessageBox::OnVisbleChanged, msg, [cb = std::move(callback)](bool visible) {
+		if (!visible) {
+			cb();
+		}
 		});
 
 	msg->Open();
 }
 
 void MessageBox::QuestionAsync(Widget* parent, const String& title, const String& text, const String& yes,
-	const String& no, std::function<void(bool yes)> clicked_callback)
+	const String& no, std::function<void(bool yes)> callback)
 {
 	auto msg = new MessageBox(parent, title, text);
-	msg->EnableCloseButton(false);
 	auto yes_btn = new Button(msg, yes);
 	auto no_btn = new Button(msg, no);
 
 	msg->AddButton(yes_btn);
 	msg->AddButton(no_btn);
 
-	msg->SetButtonClickedCallback([cb = clicked_callback, msg, yes_btn, no_btn](Button* btn) {
+	msg->SetButtonClickedCallback([cb = callback, msg, yes_btn, no_btn](Button* btn) {
 		cb(btn == yes_btn);
 		if (btn != yes_btn)
 			MW_ASSERT_X(btn == no_btn);
 		msg->Close();
 		});
 
-	Connect(msg, &MessageBox::OnClosed, msg, [cb = std::move(clicked_callback)]() {
-		cb(false);
+	Connect(msg, &MessageBox::OnVisbleChanged, msg, [cb = std::move(callback)](bool visible) {
+		if (!visible) {
+			cb(false);
+		}
 		});
 
 	msg->Open();

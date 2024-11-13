@@ -10,14 +10,14 @@ public:
 		const String& title,
 		const String& text,
 		const String& ok,
-		std::function<void()> clicked_callback);
+		std::function<void()> callback);
 	static void QuestionAsync(
 		Widget* parent,
 		const String& title,
 		const String& text,
 		const String& yes,
 		const String& no,
-		std::function<void(bool yes)> clicked_callback);
+		std::function<void(bool yes)> callback);
 
 	MessageBox(Widget* parent, const String& title, const String& text);
 

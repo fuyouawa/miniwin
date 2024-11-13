@@ -102,7 +102,8 @@ Object::Disconnecter Object::Impl::ConnectImpl(const Object* sender, const std::
 	if (has_unique_flag || has_replace_flag) {
 		// 获取当前链接的Signal Connection List
 		if (auto res = sender->impl_->connections_manager_.map_.find(signal_info); res != sender->impl_->
-			connections_manager_.map_.end()) {
+			connections_manager_.map_.end())
+		{
 			if (res->first != signal_info) {
 				auto errmsg = std::format(
 					"Hash conflict between signal '{}' and signal '{}', try to change the name or parameter of one of them",

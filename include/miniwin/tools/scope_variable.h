@@ -21,10 +21,6 @@ public:
 	 */
 	void Exit() noexcept(std::is_nothrow_copy_assignable_v<T>);
 	/**
-	 * 模拟发送一次数值改变
-	 */
-	void SimulateChange();
-	/**
 	 * 设置控制数值, 会在下一次Enter的时候应用改改
 	 */
 	template <std::convertible_to<T> E>
@@ -40,11 +36,11 @@ public:
 	/**
 	 * 数值是否有更改
 	 */
-	bool HasChange() const { return val_ != end_val_ || simu_change_; }
+	bool HasChange() const { return val_ != prev_val_; }
 	/**
 	 * 获取上一次退出时的数值
 	 */
-	const T& prev_value() const { return end_val_; }
+	const T& prev_value() const { return prev_val_; }
 	/**
 	 * 获取当前数值（如果控制数值被设置了则返回控制数值）
 	 */
@@ -62,9 +58,7 @@ private:
 	// 这一次进入后的数值
 	T val_;
 	// 上一次退出时的数值
-	T end_val_;
-	bool simu_change_;
-	bool clear_simu_change_;
+	T prev_val_;
 	bool is_entered_;
 };
 
@@ -74,9 +68,7 @@ using ScopeCondition = ScopeVariable<bool>;
 template <class T>
 ScopeVariable<T>::ScopeVariable(std::convertible_to<T> auto&& init)
 	: val_(std::forward<decltype(init)>(init)),
-	end_val_(std::forward<decltype(init)>(init)),
-	simu_change_(false),
-	clear_simu_change_(false),
+	prev_val_(std::forward<decltype(init)>(init)),
 	is_entered_(false)
 {
 }
@@ -91,27 +83,13 @@ void ScopeVariable<T>::Enter()
 		val_ = std::move(control_val_.value());
 		control_val_ = std::nullopt;
 	}
-	if (simu_change_)
-	{
-		if (clear_simu_change_)
-			simu_change_ = false;
-		else
-			clear_simu_change_ = true;
-	}
 }
 
 template <class T>
 void ScopeVariable<T>::Exit() noexcept(std::is_nothrow_copy_assignable_v<T>)
 {
-	end_val_ = val_;
+	prev_val_ = val_;
 	is_entered_ = false;
-}
-
-template <class T>
-void ScopeVariable<T>::SimulateChange()
-{
-	simu_change_ = true;
-	clear_simu_change_ = false;
 }
 
 template <class T>
