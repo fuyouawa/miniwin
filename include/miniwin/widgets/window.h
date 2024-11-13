@@ -5,12 +5,11 @@ namespace miniwin {
 class Window : public Widget
 {
 public:
-	Window(Widget* parent = nullptr, const String& title = "Window", const String& id = "Window");
+	Window(Widget* parent = nullptr, const String& title = "Window");
 	~Window() override;
 
     const String& Title() const;
     void SetTitle(const String& title);
-	void SetId(const String& id) override;
 
 	/**
 	 * 将窗体居中

@@ -41,7 +41,7 @@ public:
     FlagsType draw_flags_ = 0;
 
     Widget* owner_;
-    String id_;
+    WidgetId id_;
     std::mutex pending_functors_mutex_;
     List<std::function<void()>> pending_functors_;
 };

@@ -49,9 +49,7 @@ const String& Object::Name() const {
 }
 
 void Object::SetName(const String& name) const {
-	auto prev = std::move(impl_->name_);
 	impl_->name_ = name;
-	OnNameChanged(name, prev);
 }
 
 FlagsType Object::Flags() const {

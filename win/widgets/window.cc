@@ -6,8 +6,8 @@
 
 
 namespace miniwin {
-Window::Window(Widget* parent, const String& title, const String& id)
-	: Widget(parent, title, id)
+Window::Window(Widget* parent, const String& title)
+	: Widget(parent, title)
 {
 	impl_ = std::make_unique<Impl>(this);
 	Widget::impl_->is_window_ = true;
@@ -23,11 +23,6 @@ void Window::SetTitle(const String& title) {
 	auto prev = Name();
 	SetName(title);
 	OnTitleChanged(title, prev);
-}
-
-void Window::SetId(const String& id) {
-	Widget::SetId(id);
-	impl_->imgui_win_cache_ = nullptr;
 }
 
 void Window::CenterWindow() {

@@ -4,7 +4,8 @@
 #include <queue>
 #include <mutex>
 
-#include "miniwin/tools/list.h"
+#include <miniwin/tools/list.h>
+#include <miniwin/core/global.h>
 
 namespace miniwin {
 class Window;
@@ -24,6 +25,9 @@ public:
 
     std::thread::id UiThreadId() const;
 
+    WidgetId AllocId();
+    bool RecycleId(WidgetId id);
+
 private:
     friend class Application;
     enum class Operation
@@ -39,6 +43,10 @@ private:
     void ClearDirty();
     void CallUpdateEarly() const;
     void DoPending();
+
+    WidgetId cur_max_id_;
+    uint8_t id_pool_seek_;
+    WidgetId id_pool_[128];
 
     std::thread::id ui_thread_id_;
     mutable std::mutex mutex_;

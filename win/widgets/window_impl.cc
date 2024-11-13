@@ -77,7 +77,7 @@ void Window::Impl::PaintEnd()
 
 ImGuiWindow* Window::Impl::GetImGuiWindow() const {
     if (imgui_win_cache_ == nullptr) {
-        imgui_win_cache_ = ImGui::FindWindowByName(owner_->Id().data());
+        imgui_win_cache_ = ImGui::FindWindowByID(owner_->Id());
     }
     return imgui_win_cache_;
 }

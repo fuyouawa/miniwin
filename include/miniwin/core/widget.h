@@ -19,10 +19,10 @@ public:
         kDrawIgnoreDraw = kDrawIgnoreChildren | kDrawIgnoreSelf
     };
 
-    Widget(Widget* parent, const String& name, const String& id = "Widget");
+    Widget(Widget* parent, const String& name);
     ~Widget() override;
 
-    static bool IsInUIThread();
+    static bool IsInUiThread();
 
     virtual void Show();
     virtual void Hide();
@@ -42,8 +42,7 @@ public:
     virtual bool Enabled() const;
     virtual void SetEnable(bool b);
 
-    const String& Id() const;
-    virtual void SetId(const String& id);
+    WidgetId Id() const;
 
     virtual Vector2D Size() const;
     virtual void SetSize(const Vector2D& size);

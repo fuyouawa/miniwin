@@ -91,6 +91,22 @@ std::thread::id WidgetsDriver::UiThreadId() const {
 	return ui_thread_id_;
 }
 
+WidgetId WidgetsDriver::AllocId() {
+	MW_ASSERT_X(cur_max_id_ < std::numeric_limits<WidgetId>::max());
+	if (id_pool_seek_ > 0) {
+		return id_pool_[--id_pool_seek_];
+	}
+	return cur_max_id_++;
+}
+
+bool WidgetsDriver::RecycleId(WidgetId id) {
+	if (id_pool_seek_ < sizeof(id_pool_) / sizeof(WidgetId)) {
+		id_pool_[id_pool_seek_++] = id;
+		return true;
+	}
+	return false;
+}
+
 void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children) {
 	if (!widget->Visible())
 		return;
@@ -123,7 +139,9 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children) 
 void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget) {
 	widget->PreparePaint();
 	for (auto o : widget->Children()) {
-		if (auto w = dynamic_cast<Widget*>(o)) {
+		if (o->IsWidget()) {
+			auto w = dynamic_cast<Widget*>(o);
+			MW_ASSERT_X(w != nullptr);
 			CallUpdateEarlyRecursion(w);
 		}
 	}
@@ -132,7 +150,9 @@ void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget) {
 void WidgetsDriver::ClearDirtyRecursion(Widget* widget) {
 	if (widget->impl_->dirty_) {
 		auto orphaned_children = widget->Children().Filter([](Object* o) {
-			if (auto w = dynamic_cast<Widget*>(o)) {
+			if (o->IsWidget()) {
+				auto w = dynamic_cast<Widget*>(o);
+				MW_ASSERT_X(w != nullptr);
 				return w->Orphaned();
 			}
 			return false;

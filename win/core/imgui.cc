@@ -185,7 +185,7 @@ bool InputText(const String& label,
 		&cb_user_data);
 }
 
-bool BeginWindow(const String& title, const String& id, bool* open, FlagsType flags) {
+bool BeginWindow(const String& title, WidgetId id, bool* open, FlagsType flags) {
 	return BeginWindow(title + "###" + id, open, flags);
 }
 
@@ -213,7 +213,7 @@ void CloseCurrentPopup() {
 	ImGui::CloseCurrentPopup();
 }
 
-bool BeginPopupModal(const String& title, const String& id, bool* open, FlagsType flags) {
+bool BeginPopupModal(const String& title, WidgetId id, bool* open, FlagsType flags) {
 	return BeginPopupModal(title + "###" + id, open, flags);
 }
 

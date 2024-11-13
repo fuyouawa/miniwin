@@ -13,6 +13,8 @@ String String::FromUtf16(std::wstring_view wstr) {
 	return str;
 }
 
+String::String(char ch) : str_(1, ch) {}
+
 String::String(const char* str)
 	: str_(str) {}
 
@@ -36,6 +38,11 @@ String& String::operator+=(const String& right) {
 String& String::operator+=(char right) {
 	str_ += right;
 	return *this;
+}
+
+String String::operator+(char right) const {
+	String x1(*this);
+	return x1 += right;
 }
 
 std::string String::ToStdString() const {
@@ -84,7 +91,7 @@ String operator+(const String& x, const String& y) {
 	return x1 += y;
 }
 
-String operator+(const String& x, char y) {
+String operator+(char x, const String& y) {
 	String x1(x);
 	return x1 += y;
 }

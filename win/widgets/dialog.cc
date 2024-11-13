@@ -16,8 +16,8 @@ public:
 	bool is_opened_ = true;
 };
 
-Dialog::Dialog(Widget* parent, const String& title, const String& id)
-	: Window(parent, title, id)
+Dialog::Dialog(Widget* parent, const String& title)
+	: Window(parent, title)
 {
 	impl_ = std::make_unique<Impl>(this);
 	impl_->Init();

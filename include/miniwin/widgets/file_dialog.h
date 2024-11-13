@@ -27,7 +27,7 @@ public:
 		std::function<void(FileDialog* dlg)> selected_callback;
 	};
 
-	FileDialog(const Config& cfg, const String& title = "Select a file...", const String& id = "FileDialog");
+	FileDialog(const Config& cfg, const String& title = "Select a file...");
 	~FileDialog() override;
 
 	using Dialog::WidgetParent;

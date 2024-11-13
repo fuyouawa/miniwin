@@ -13,10 +13,9 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
-Widget::Widget(Widget* parent, const String& name, const String& id)
+Widget::Widget(Widget* parent, const String& name)
 	: Object(parent, name) {
 	impl_ = std::make_unique<Impl>(this);
-	impl_->id_ = id;
 	Object::impl_->is_widget_ = true;
 }
 
@@ -84,12 +83,8 @@ void Widget::SetPosition(const Vector2D& pos) {
 	impl_->pos_sc_.SetControl(pos);
 }
 
-const String& Widget::Id() const {
+WidgetId Widget::Id() const {
 	return impl_->id_;
-}
-
-void Widget::SetId(const String& id) {
-	impl_->id_ = id;
 }
 
 bool Widget::Orphaned() const {
@@ -117,7 +112,7 @@ void Widget::SetDrawFlags(FlagsType flags) {
 }
 
 void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const {
-	if (IsInUIThread()
+	if (IsInUiThread()
 		&& invoke_type == InvokeType::kAuto
 		&& Application::instance()->IsExecuting()) {
 		invoke_type = InvokeType::kDirect;
@@ -139,7 +134,7 @@ void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const 
 	}
 }
 
-bool Widget::IsInUIThread() {
+bool Widget::IsInUiThread() {
 	return std::this_thread::get_id() == WidgetsDriver::instance().UiThreadId();
 }
 

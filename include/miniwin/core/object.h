@@ -43,7 +43,6 @@ public:
     virtual void Invoke(std::function<void()>&& func, InvokeType invoke_type = InvokeType::kAuto) const;
 
     MW_SIGNAL(OnDestroy)
-    MW_SIGNAL(OnNameChanged, (String) name, (String) prev_name)
 
     template<std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
     static Disconnecter Connect(

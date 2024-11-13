@@ -21,7 +21,7 @@ using namespace miniwin;
 
 class ExampleWindow : public Window {
 public:
-	ExampleWindow(const String& title) : Window(nullptr, title, "Example Window") {
+	ExampleWindow(const String& title) : Window(nullptr, title) {
 		btn_open_file_ = new Button(this, "打开文件");
 
 		Connect(btn_open_file_, &Button::OnClicked, this, [this]() {

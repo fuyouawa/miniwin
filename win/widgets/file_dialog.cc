@@ -107,8 +107,8 @@ void FileDialog::GetOpenFileNameAsync(Window* parent, const String& title, GetOp
 	dlg->Open();
 }
 
-FileDialog::FileDialog(const Config& cfg, const String& title, const String& id)
-	: Dialog(cfg.parent, title, id)
+FileDialog::FileDialog(const Config& cfg, const String& title)
+	: Dialog(cfg.parent, title)
 {
 	impl_ = std::make_unique<Impl>(this, cfg);
 	impl_->Init();

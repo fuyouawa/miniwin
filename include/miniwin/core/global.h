@@ -4,5 +4,6 @@
 #include <miniwin/defs.h>
 
 namespace miniwin {
-using FlagsType = int;
+using FlagsType = int32_t;
+using WidgetId = uint16_t;
 }

@@ -12,10 +12,12 @@ namespace miniwin {
 Widget::Impl::Impl(Widget* owner)
 	:owner_(owner)
 {
+    id_ = WidgetsDriver::instance().AllocId();
 }
 
 Widget::Impl::~Impl()
 {
+    WidgetsDriver::instance().RecycleId(id_);
 }
 
 void Widget::Impl::Close()

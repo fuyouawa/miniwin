@@ -104,7 +104,7 @@ void SetNextWindowBgAlpha(float alpha);
 
 bool BeginWindow(
 	const String& title,
-	const String& id,
+	WidgetId id,
 	bool* open,
 	FlagsType flags = 0
 );
@@ -122,7 +122,7 @@ void CloseCurrentPopup();
 
 bool BeginPopupModal(
 	const String& title,
-	const String& id,
+	WidgetId id,
 	bool* open,
 	FlagsType flags = 0);
 
