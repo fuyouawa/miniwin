@@ -1,8 +1,8 @@
 #pragma once
-#include <miniwin/core/widget.h>
+#include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class TextEdit : public Widget
+class TextEdit : public AbstractControl
 {
 public:
     TextEdit(Widget* parent, const String& initial_text = {}, const String& right_label = {});

@@ -5,18 +5,25 @@ namespace miniwin {
 class AbstractControl : public Widget
 {
 public:
-	AbstractControl(Widget* parent, const String& text);
+	AbstractControl(Widget* parent, const String& name);
     ~AbstractControl() override;
-
-    const String& Text() const;
-    void SetText(const String& text);
 
     bool Visible() const override;
 
 protected:
     void PaintBegin() override;
     void PaintEnd() override;
+};
 
-    _MW_IMPL
+
+class AbstractTextualControl : public AbstractControl
+{
+public:
+    AbstractTextualControl(Widget* parent, const String& text);
+
+    const String& Text() const;
+    void SetText(const String& text);
+
+    MW_SIGNAL(OnTextChanged, (String) text, (String) prev_text)
 };
 }

@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class CheckBox : public AbstractControl
+class CheckBox : public AbstractTextualControl
 {
 public:
 	CheckBox(Widget* parent, const String& label);
@@ -14,6 +14,9 @@ public:
 protected:
 	void PaintBegin() override;
 	void PaintEnd() override;
+
+private:
+	void SetSize(const Vector2D& size) override;
 
 	_MW_IMPL
 };

@@ -36,6 +36,12 @@ Vector2D GetItemRectSize();
 Vector2D GetWindowSize();
 Vector2D GetWindowPos();
 
+void SetCursorPos(const Vector2D& pos);
+Vector2D GetCursorPos();
+
+void PushItemWidth(float item_width);
+void PopItemWidth();
+
 void SetNextItemWidth(float item_width);
 void SetNextWindowPos(const Vector2D& pos, Cond cond = kCondNone, const Vector2D& pivot = {});
 void SetNextWindowSize(const Vector2D& size, Cond cond = kCondNone);
@@ -53,9 +59,7 @@ bool CheckBox(
 	bool* checked
 );
 
-void Text(
-	const String& label
-);
+void Text(const String& label);
 
 bool Button(
 	const String& label,
@@ -72,7 +76,8 @@ bool Selectable(
 bool InputText(
 	const String& label,
 	String* buffer,
-	FlagsType flags = 0
+	FlagsType flags = 0,
+	const Vector2D& size = {}
 );
 
 
@@ -140,7 +145,8 @@ void EndPopup();
 bool BeginCombo(
 	const String& label,
 	const String& preview_value,
-	FlagsType flags = 0);
+	FlagsType flags = 0,
+	const Vector2D& size = {});
 
 void EndCombo();
 
@@ -150,7 +156,7 @@ void EndListBox();
 void SameLine(float offset_from_start_x = 0.0f, float spacing = -1.0f);
 
 bool BeginChildWindow(
-	const String& id,
+	WidgetId id,
 	const Vector2D& size = { 0, 0 },
 	int child_window_flags = 0,
 	int window_flags = 0);

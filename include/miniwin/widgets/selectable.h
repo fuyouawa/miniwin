@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class Selectable : public AbstractControl
+class Selectable : public AbstractTextualControl
 {
 public:
     Selectable(Widget* parent, const String& text);

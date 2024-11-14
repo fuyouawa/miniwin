@@ -64,6 +64,18 @@ public:
 		Connect(btn_set_title_, &Button::OnClicked, this, [this]() {
 			SetTitle(edit_title_to_set_->PlainText());
 			});
+
+		btn_open_file_->SetSize({ 150, 0 });
+		btn_open_dialog_->SetSize({ 120, 0 });
+
+		chkbox_ = new CheckBox(this, "复选框");
+
+		label_ = new Label(this, "标签");
+		layout2_ = new HBoxLayout(this);
+		layout2_->AddWidget(chkbox_);
+		layout2_->AddWidget(label_);
+
+		edit_title_to_set_->SetSize({ 100, 0 });
 	}
 
 	Button* btn_open_file_;
@@ -74,6 +86,10 @@ public:
 	Button* btn_set_title_;
 	TextEdit* edit_title_to_set_;
 	HBoxLayout* layout_set_title_;
+	CheckBox* chkbox_;
+	Label* label_;
+	HBoxLayout* layout2_;
+	ComboBox* combo_box_;
 };
 
 int main() {

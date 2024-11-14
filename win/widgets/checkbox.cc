@@ -3,6 +3,8 @@
 #include <miniwin/core/imgui.h>
 #include <miniwin/tools/scope_variable.h>
 
+#include "win/tools/debug.h"
+
 namespace miniwin {
 class CheckBox::Impl {
 public:
@@ -28,7 +30,7 @@ public:
 };
 
 CheckBox::CheckBox(Widget* const parent, const String& label)
-	: AbstractControl(parent, label)
+	: AbstractTextualControl(parent, label)
 {
 	impl_ = std::make_unique<Impl>(this);
 }
@@ -38,11 +40,15 @@ void CheckBox::SetChecked(bool b) {
 }
 
 void CheckBox::PaintBegin() {
-	AbstractControl::PaintBegin();
+	AbstractTextualControl::PaintBegin();
 	impl_->PaintBegin();
 }
 
 void CheckBox::PaintEnd() {
-	AbstractControl::PaintEnd();
+	AbstractTextualControl::PaintEnd();
+}
+
+void CheckBox::SetSize(const Vector2D& size) {
+	MW_ASSERT(false, "You cant set check box size!");
 }
 }

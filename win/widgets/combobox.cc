@@ -31,7 +31,7 @@ void ComboBoxView::PaintBegin()
 	auto cs = SelectionModel()->CurrentSelection();
 	auto m = Model();
 	auto text = m->Data(cs.top_left()).ToString();
-	if (imgui::BeginCombo(Text(), text))
+	if (imgui::BeginCombo(Text(), text, Flags(), Size()))
 	{
 		if (auto d = ItemDelegate())
 		{

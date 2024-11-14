@@ -13,7 +13,7 @@ public:
 };
 
 TextEdit::TextEdit(Widget* const parent, const String& initial_text, const String& right_label)
-	: Widget{ parent, "TextEdit" }
+	: AbstractControl{ parent, "TextEdit" }
 {
     impl_ = std::make_unique<Impl>(this);
     SetPlainText(initial_text);
@@ -45,7 +45,7 @@ const String& TextEdit::PlainText() const
 }
 
 void TextEdit::PaintBegin() {
-    Widget::PaintBegin();
-	imgui::InputText(RightLabel(), &impl_->text_buffer_);
+    AbstractControl::PaintBegin();
+	imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size());
 }
 }

@@ -13,7 +13,7 @@ public:
 };
 
 Selectable::Selectable(Widget* const parent, const String& text)
-	: AbstractControl{ parent, text }
+	: AbstractTextualControl(parent, text)
 {
     impl_ = std::make_unique<Impl>(this);
 }
@@ -34,7 +34,7 @@ void Selectable::SetSelection(bool b)
 
 void Selectable::PaintBegin()
 {
-    AbstractControl::PaintBegin();
+    AbstractTextualControl::PaintBegin();
 
     imgui::Selectable(Text(), &impl_->cur_selected_, 0, Size());
     if (impl_->cur_selected_ != impl_->prev_selected_) {

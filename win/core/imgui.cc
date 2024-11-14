@@ -118,6 +118,22 @@ Vector2D GetWindowPos() {
 	return CastFromIm(ImGui::GetWindowPos());
 }
 
+void SetCursorPos(const Vector2D& pos) {
+	ImGui::SetCursorPos(CastToIm(pos));
+}
+
+Vector2D GetCursorPos() {
+	return CastFromIm(ImGui::GetCursorPos());
+}
+
+void PushItemWidth(float item_width) {
+	ImGui::PushItemWidth(item_width);
+}
+
+void PopItemWidth() {
+	ImGui::PopItemWidth();
+}
+
 void SetNextItemWidth(float item_width) {
 	ImGui::SetNextItemWidth(item_width);
 }
@@ -170,9 +186,7 @@ bool Selectable(const String& label, bool* is_selected, FlagsType flags, const V
 		CastToIm(size));
 }
 
-bool InputText(const String& label,
-               String* buffer,
-               FlagsType flags) {
+bool InputText(const String& label, String* buffer, FlagsType flags, const Vector2D& size) {
 	MW_ASSERT_X((flags & ImGuiInputTextFlags_CallbackResize) == 0);
 	flags = flags | ImGuiInputTextFlags_CallbackResize;
 
@@ -181,6 +195,7 @@ bool InputText(const String& label,
 	cb_user_data.ChainCallback = nullptr;
 	cb_user_data.ChainCallbackUserData = nullptr;
 
+	PushItemWidth(size.x());
 	return ImGui::InputText(
 		label.data(),
 		buffer->data(),
@@ -211,7 +226,7 @@ void OpenPopup(const String& title, WidgetId id, FlagsType flags) {
 }
 
 bool IsPopupOpen(const String& name, FlagsType flags) {
-	return  ImGui::IsPopupOpen(name.data(), flags);
+	return ImGui::IsPopupOpen(name.data(), flags);
 }
 
 void OpenPopup(const String& name, FlagsType flags) {
@@ -234,7 +249,8 @@ void EndPopup() {
 	ImGui::EndPopup();
 }
 
-bool BeginCombo(const String& label, const String& preview_value, FlagsType flags) {
+bool BeginCombo(const String& label, const String& preview_value, FlagsType flags, const Vector2D& size) {
+	//TODO BeginCombo size
 	return ImGui::BeginCombo(label.data(), preview_value.data(), flags);
 }
 
@@ -254,9 +270,9 @@ void SameLine(float offset_from_start_x, float spacing) {
 	ImGui::SameLine(offset_from_start_x, spacing);
 }
 
-bool BeginChildWindow(const String& id, const Vector2D& size, int child_window_flags,
+bool BeginChildWindow(WidgetId id, const Vector2D& size, int child_window_flags,
                       int window_flags) {
-	return ImGui::BeginChild(id.data(), CastToIm(size), child_window_flags, window_flags);
+	return ImGui::BeginChild(id, CastToIm(size), child_window_flags, window_flags);
 }
 
 void EndChildWindow() {
