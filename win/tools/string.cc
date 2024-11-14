@@ -45,6 +45,22 @@ String String::operator+(char right) const {
 	return x1 += right;
 }
 
+String::const_iterator String::begin() const {
+	return FromStdIter(str_.begin());
+}
+
+String::iterator String::begin() {
+	return FromStdIter(str_.begin());
+}
+
+String::const_iterator String::end() const {
+	return FromStdIter(str_.end());
+}
+
+String::iterator String::end() {
+	return FromStdIter(str_.end());
+}
+
 std::string String::ToStdString() const {
 	return str_;
 }
@@ -84,6 +100,34 @@ size_t String::IndexOf(const String& str, size_t start) const {
 
 String String::Substr(size_t begin, size_t end) const {
 	return String(str_.substr(begin, end - begin));
+}
+
+std::string::const_iterator String::ToStdIter(const StringConstIterator& iter) const {
+	return str_.begin() + iter.index();
+}
+
+std::string::iterator String::ToStdIter(const StringIterator& iter) {
+	return str_.begin() + iter.index();
+}
+
+String::const_iterator String::FromStdIter(const std::string::const_iterator& iter) const {
+	auto diff = iter - str_.begin();
+	MW_ASSERT_X(diff >= 0);
+	return { static_cast<size_type>(diff), this };
+}
+
+String::iterator String::FromStdIter(const std::string::iterator& iter) {
+	auto diff = iter - str_.begin();
+	MW_ASSERT_X(diff >= 0);
+	return { static_cast<size_type>(diff), this };
+}
+
+std::string::const_iterator StringConstIterator::StdIter() const {
+	return owner_->ToStdIter(*this);
+}
+
+std::string::iterator StringIterator::StdIter() {
+	return const_cast<String*>(this->owner_)->ToStdIter(*this);
 }
 
 String operator+(const String& x, const String& y) {
