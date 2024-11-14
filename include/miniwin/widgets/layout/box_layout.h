@@ -19,7 +19,7 @@ public:
 	HBoxLayout(Widget* parent);
 
 protected:
-	void OnBeforePaintChild(size_t child_index) override;
+	void OnLayoutWidgetBegin(Widget* widget) override;
 };
 
 class VBoxLayout : public BoxLayout
@@ -28,6 +28,6 @@ public:
 	VBoxLayout(Widget* parent);
 
 protected:
-	void OnBeforePaintChild(size_t child_index) override;
+	void OnLayoutWidgetBegin(Widget* widget) override;
 };
 }

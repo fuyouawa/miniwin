@@ -2,6 +2,7 @@
 
 #include "object_impl.h"
 #include "miniwin/core/application.h"
+#include "miniwin/widgets/layout/layout.h"
 #include "win/core/widget_impl.h"
 #include "win/tools/debug.h"
 #include "win/widgets/window_impl.h"
@@ -116,14 +117,15 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children) 
 	auto ignore_children = (widget->GetDrawFlags() & Widget::kDrawIgnoreChildren) != 0;
 
 	if (!ignore_self) {
+		if (widget->impl_->layout_)
+			widget->impl_->layout_->OnLayoutWidgetBegin(widget);
 		widget->PaintBegin();
 	}
 
 	if (!ignore_children || force_ignore_children) {
 		size_t i = 0;
-		for (auto o : widget->Children()) {
-			auto w = dynamic_cast<Widget*>(o);
-			if (w && !w->Orphaned()) {
+		for (auto w : widget->WidgetChildren()) {
+			if (!w->Orphaned()) {
 				widget->OnBeforePaintChild(i);
 				UpdateRecursion(w);
 				widget->OnAfterPaintChild(i);
@@ -134,6 +136,8 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children) 
 
 	if (!ignore_self) {
 		widget->PaintEnd();
+		if (widget->impl_->layout_)
+			widget->impl_->layout_->OnLayoutWidgetEnd(widget);
 	}
 }
 

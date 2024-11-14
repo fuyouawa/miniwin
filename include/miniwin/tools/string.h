@@ -101,7 +101,6 @@ public:
 
 	bool IsBegin() const { return index_ == 0; }
 	bool IsEnd() const { return index_ == owner_->size(); }
-	bool IsValid() const { return index_ < owner_->size(); }
 
 	size_type index() const { return index_; }
 

@@ -8,6 +8,10 @@
 #define MW_SIGNAL(name, ...)  _MW_SIGNAL(name, __VA_ARGS__)
 
 namespace miniwin {
+class Widget;
+class WidgetsDriver;
+class Layout;
+
 class Object
 {
 public:
@@ -32,6 +36,7 @@ public:
     List<Object*> Children() const;
 
     bool IsWidget() const;
+    bool IsLayout() const;
 
     const String& Name() const;
     void SetName(const String& name) const;
@@ -76,6 +81,7 @@ private:
 
     friend class Widget;
     friend class WidgetsDriver;
+    friend class Layout;
 
     _MW_IMPL
 };

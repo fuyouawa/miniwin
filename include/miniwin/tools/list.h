@@ -89,6 +89,14 @@ private:
 	std::vector<T> vec_;
 };
 
+namespace internal {
+void VerifyIndex(size_t index, size_t size);
+void VerifyIndex(size_t index, intptr_t off, size_t size);
+void VerifyDiff(intptr_t diff);
+void VerifyAddIndex(size_t index, intptr_t off, size_t size);
+void VerifySubIndex(size_t index, intptr_t off, size_t size);
+}
+
 
 template<class T>
 class ListConstIterator
@@ -107,7 +115,6 @@ public:
 
 	bool IsBegin() const { return index_ == 0; }
 	bool IsEnd() const { return index_ == owner_->size(); }
-	bool IsValid() const { return index_ < owner_->size(); }
 
 	size_type index() const { return index_; }
 
@@ -115,18 +122,19 @@ public:
 	pointer operator->() const { return StdIter().operator->(); }
 
 	//TODO 边界检查
-	ListConstIterator& operator++() { ++index_; return *this; }
+	ListConstIterator& operator++();
 	ListConstIterator operator++(int) { auto tmp = *this; ++*this; return tmp; }
-	ListConstIterator& operator--() { --index_; return *this; }
+	ListConstIterator& operator--();
 	ListConstIterator operator--(int) { auto tmp = *this; --*this; return tmp; }
 
-	ListConstIterator& operator+=(const difference_type off) { index_ += off; return *this; }
+	ListConstIterator& operator+=(const difference_type off);
 	ListConstIterator operator+(const difference_type off) const { auto tmp = *this; tmp += off; return tmp; }
-	ListConstIterator& operator-=(const difference_type off) { index_ -= off; return *this; }
+	ListConstIterator& operator-=(const difference_type off);
 	ListConstIterator operator-(const difference_type off) const { auto tmp = *this; tmp -= off; return tmp; }
-	difference_type operator-(const ListConstIterator& right) const { return static_cast<difference_type>(index_ - right.index_); }
+	difference_type operator-(const ListConstIterator& right) const { return static_cast<difference_type>(index_) - right.index_; }
 
-	reference operator[](const difference_type off) const { return *(*this + off); }
+	reference operator[](const difference_type off) const;
+
 	bool operator==(const ListConstIterator& right) const {
 		return index_ == right.index_ && owner_ == right.owner_;
 	}
@@ -180,11 +188,6 @@ public:
 private:
 	auto StdIter() { return const_cast<List<T>*>(this->owner_)->ToStdIter(*this); }
 };
-
-namespace internal {
-void VerifyIndex(size_t index, size_t size);
-void VerifyDiff(intptr_t diff);
-}
 
 template <class T>
 typename List<T>::size_type List<T>::Erase(const T& val)
@@ -317,7 +320,7 @@ List<E> List<T>::Transform(auto&& pr) const {
 template <class T>
 auto List<T>::ToStdIter(const ListConstIterator<T>& iter) const
 {
-	if (!iter.IsValid()) {
+	if (iter.IsEnd()) {
 		return vec_.end();
 	}
 	return vec_.begin() + iter.index();
@@ -346,6 +349,40 @@ typename List<T>::iterator List<T>::FromStdIter(const typename std::vector<T>::i
 	auto diff = iter - vec_.begin();
 	internal::VerifyDiff(diff);
 	return { static_cast<size_type>(diff), this };
+}
+
+template <class T>
+ListConstIterator<T>& ListConstIterator<T>::operator++() {
+	internal::VerifyAddIndex(index_, 1, owner_->size());
+	++index_;
+	return *this;
+}
+
+template <class T>
+ListConstIterator<T>& ListConstIterator<T>::operator--() {
+	internal::VerifySubIndex(index_, 1, owner_->size());
+	--index_;
+	return *this;
+}
+
+template <class T>
+ListConstIterator<T>& ListConstIterator<T>::operator+=(const difference_type off) {
+	internal::VerifyAddIndex(index_, off, owner_->size());
+	index_ += off;
+	return *this;
+}
+
+template <class T>
+ListConstIterator<T>& ListConstIterator<T>::operator-=(const difference_type off) {
+	internal::VerifySubIndex(index_, off, owner_->size());
+	index_ -= off;
+	return *this;
+}
+
+template <class T>
+typename ListConstIterator<T>::reference ListConstIterator<T>::operator[](const difference_type off) const {
+	internal::VerifyIndex(index_, off, owner_->size());
+	return *(*this + off);
 }
 
 template<class T>

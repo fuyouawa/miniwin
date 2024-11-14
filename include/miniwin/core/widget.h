@@ -7,7 +7,9 @@
 #include <miniwin/tools/variant.h>
 
 namespace miniwin {
+class WidgetsDriver;
 class Window;
+class Layout;
 
 class Widget : public Object, public NonCopyMoveable {
 public:
@@ -29,6 +31,7 @@ public:
     virtual void Close();
 
     bool IsWindow() const;
+
     const Window* OwnerWindow() const;
     const Widget* WidgetParent() const;
     Window* OwnerWindow();
@@ -80,6 +83,8 @@ protected:
 private:
     friend class WidgetsDriver;
     friend class Window;
+    friend class Layout;
+
     using Object::Parent;
     using Object::SetParent;
 

@@ -33,7 +33,7 @@ public:
     ScopeVariable<Vector2D> size_sc_{};
     ScopeVariable<Vector2D> pos_sc_{};
 
-    bool visible_;
+    bool visible_ = true;
 
     bool is_painting_children_ = false;
     bool orphaned_ = false;
@@ -42,7 +42,8 @@ public:
     FlagsType draw_flags_ = 0;
 
     Widget* owner_;
-    WidgetId id_;
+    Layout* layout_ = nullptr;
+    WidgetId id_ = 0;
     std::mutex pending_functors_mutex_;
     List<std::function<void()>> pending_functors_;
 };

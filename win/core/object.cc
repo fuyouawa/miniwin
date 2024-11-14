@@ -77,6 +77,10 @@ bool Object::IsWidget() const {
 	return impl_->is_widget_;
 }
 
+bool Object::IsLayout() const {
+	return impl_->is_layout_;
+}
+
 void Object::Invoke(std::function<void()>&& func, InvokeType invoke_type) const {
 	func();
 }

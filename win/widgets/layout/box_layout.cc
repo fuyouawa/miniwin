@@ -2,53 +2,49 @@
 
 #include <miniwin/core/imgui.h>
 
+#include "win/tools/debug.h"
+
 namespace miniwin {
 BoxLayout::BoxLayout(Widget* parent)
-	: Layout(parent)
-{
+	: Layout(parent) {
 	impl_ = std::make_unique<Impl>(this);
 }
 
-BoxLayout::~BoxLayout()
-{
-}
+BoxLayout::~BoxLayout() {}
 
-float BoxLayout::Spacing() const
-{
+float BoxLayout::Spacing() const {
 	return impl_->spacing_;
 }
 
-void BoxLayout::SetSpacing(float size)
-{
+void BoxLayout::SetSpacing(float size) {
 	impl_->spacing_ = size;
 }
 
 HBoxLayout::HBoxLayout(Widget* parent)
-	: BoxLayout(parent)
-{
-}
+	: BoxLayout(parent) {}
 
-void HBoxLayout::OnBeforePaintChild(size_t child_index)
-{
-	BoxLayout::OnBeforePaintChild(child_index);
-	if (child_index != 0)
-	{
+void HBoxLayout::OnLayoutWidgetBegin(Widget* widget) {
+	BoxLayout::OnLayoutWidgetBegin(widget);
+
+	auto idx = IndexOfWidget(widget);
+	MW_ASSERT_X(idx != static_cast<size_t>(-1));
+
+	if (idx != 0) {
 		imgui::SameLine(0, Spacing());
 	}
 }
 
 VBoxLayout::VBoxLayout(Widget* parent)
-	: BoxLayout(parent)
-{
-}
+	: BoxLayout(parent) {}
 
-void VBoxLayout::OnBeforePaintChild(size_t child_index)
-{
-	BoxLayout::OnBeforePaintChild(child_index);
+void VBoxLayout::OnLayoutWidgetBegin(Widget* widget) {
+	BoxLayout::OnLayoutWidgetBegin(widget);
 
-	if (child_index != 0)
-	{
-		imgui::Dummy({ 0, Spacing() });
+	auto idx = IndexOfWidget(widget);
+	MW_ASSERT_X(idx != static_cast<size_t>(-1));
+
+	if (idx != 0) {
+		imgui::Dummy({0, Spacing()});
 	}
 }
 }

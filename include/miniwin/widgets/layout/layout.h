@@ -2,20 +2,30 @@
 #include <miniwin/core/widget.h>
 
 namespace miniwin {
-class Layout : public Widget
+class Layout : public Object
 {
 public:
-	Layout(Widget* parent);
+	Layout(Object* parent);
+	~Layout() override;
 
-	void AddWidget(Widget* widget);
-	void RemoveWidget(Widget* widget);
+	bool AddWidget(Widget* widget);
+	bool RemoveWidget(Widget* widget);
 	void ClearWidget();
+
+	List<Widget*> Widgets() const;
+	size_t IndexOfWidget(Widget* widget) const;
+	bool SetWidgetIndex(Widget* widget, size_t index);
+	size_t AdvanceWidget(Widget* widget, size_t count);
 
 	size_t Count() const;
 	bool IsEmpty() const;
 
 protected:
-	void PaintBegin() override;
-	void PaintEnd() override;
+	friend class WidgetsDriver;
+
+	virtual void OnLayoutWidgetBegin(Widget* widget);
+	virtual void OnLayoutWidgetEnd(Widget* widget);
+
+	_MW_IMPL
 };
 }

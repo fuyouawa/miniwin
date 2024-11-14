@@ -61,6 +61,7 @@ public:
     void DeleteChildren();
 
     bool is_widget_ = false;
+    bool is_layout_ = false;
     bool deleting_ = false;
 
     Object* owner_ = nullptr;
