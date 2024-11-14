@@ -49,6 +49,9 @@ public:
 
     virtual Vector2D Size() const;
     virtual void SetSize(const Vector2D& size);
+    void SetWidth(float width);
+    void SetHeight(float height);
+
     virtual Vector2D Position() const;
     virtual void SetPosition(const Vector2D& pos);
 

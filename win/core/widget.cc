@@ -75,6 +75,18 @@ void Widget::SetSize(const Vector2D& size) {
 	impl_->size_sc_.SetControl(size);
 }
 
+void Widget::SetWidth(float width) {
+	auto tmp = Size();
+	tmp.set_x(width);
+	SetSize(tmp);
+}
+
+void Widget::SetHeight(float height) {
+	auto tmp = Size();
+	tmp.set_y(height);
+	SetSize(tmp);
+}
+
 Vector2D Widget::Position() const {
 	return impl_->pos_sc_.cur_value();
 }

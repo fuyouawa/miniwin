@@ -25,6 +25,7 @@ public:
 	void SetCollapsed(bool b);
 
 	void SetSize(const Vector2D& size) override;
+
 	void SetPosition(const Vector2D& pos) override;
 	void SetPosition(const Vector2D& pos, const Vector2D& pivot);
 

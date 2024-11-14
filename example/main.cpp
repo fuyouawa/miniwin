@@ -57,6 +57,7 @@ public:
 		edit_title_to_set_ = new TextEdit(this, "示例窗体");
 		btn_set_title_ = new Button(this, "修改窗体标题");
 		layout_set_title_ = new HBoxLayout(this);
+		layout_set_title_->SetSpacing(5);
 
 		layout_set_title_->AddWidget(edit_title_to_set_);
 		layout_set_title_->AddWidget(btn_set_title_);
@@ -65,8 +66,8 @@ public:
 			SetTitle(edit_title_to_set_->PlainText());
 			});
 
-		btn_open_file_->SetSize({ 150, 0 });
-		btn_open_dialog_->SetSize({ 120, 0 });
+		btn_open_file_->SetWidth(150);
+		btn_open_dialog_->SetWidth(120);
 
 		chkbox_ = new CheckBox(this, "复选框");
 
@@ -75,7 +76,7 @@ public:
 		layout2_->AddWidget(chkbox_);
 		layout2_->AddWidget(label_);
 
-		edit_title_to_set_->SetSize({ 100, 0 });
+		edit_title_to_set_->SetWidth(100);
 	}
 
 	Button* btn_open_file_;
