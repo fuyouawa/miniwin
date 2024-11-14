@@ -14,7 +14,7 @@ public:
 		lab_msg_ = new Label(owner_, text);
 		layout_btns_ = new HBoxLayout(owner_);
 		layout_btns_->SetSpacing(10);
-		owner_->SetSize({ 200, 110 });
+		owner_->SetSize({200, 110});
 	}
 
 	void AddButton(Button* btn) {
@@ -34,27 +34,25 @@ public:
 };
 
 void MessageBox::InformationAsync(Widget* parent, const String& title, const String& text, const String& ok,
-	std::function<void()> callback)
-{
+                                  std::function<void()> callback) {
 	auto msg = new MessageBox(parent, title, text);
 	msg->AddButton(new Button(msg, ok));
 	msg->SetButtonClickedCallback([cb = callback, msg](Button* btn) {
 		cb();
 		msg->Close();
-		});
+	});
 
 	Connect(msg, &MessageBox::OnVisbleChanged, msg, [cb = std::move(callback)](bool visible) {
 		if (!visible) {
 			cb();
 		}
-		});
+	});
 
 	msg->Open();
 }
 
 void MessageBox::QuestionAsync(Widget* parent, const String& title, const String& text, const String& yes,
-	const String& no, std::function<void(bool yes)> callback)
-{
+                               const String& no, std::function<void(bool yes)> callback) {
 	auto msg = new MessageBox(parent, title, text);
 	auto yes_btn = new Button(msg, yes);
 	auto no_btn = new Button(msg, no);
@@ -67,13 +65,13 @@ void MessageBox::QuestionAsync(Widget* parent, const String& title, const String
 		if (btn != yes_btn)
 			MW_ASSERT_X(btn == no_btn);
 		msg->Close();
-		});
+	});
 
 	Connect(msg, &MessageBox::OnVisbleChanged, msg, [cb = std::move(callback)](bool visible) {
 		if (!visible) {
 			cb(false);
 		}
-		});
+	});
 
 	msg->Open();
 }

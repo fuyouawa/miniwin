@@ -4,6 +4,7 @@
 #include <vector>
 #include <typeindex>
 #include <string>
+#include <mutex>
 
 namespace miniwin {
 class Object::Impl {
@@ -23,7 +24,10 @@ public:
     };
     using SharedConnection = std::shared_ptr<Connection>;
 
-    using ConnectionList = List<SharedConnection>;
+    class ConnectionList : public List<SharedConnection> {
+    public:
+        std::mutex mutex_;
+    };
 
     class ConnectionsManager
     {
@@ -47,11 +51,9 @@ public:
 
     void EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store);
 
-    bool DisconnectImpl(
-        const std::type_info& signal_info,
-        const SharedConnection& connection);
+    bool DisconnectImpl(const SharedConnection& connection);
 
-    Disconnecter AddConnectionWithoutLock(const std::type_info& signal_info, SharedConnection conn);
+    Disconnecter AddConnection(SharedConnection&& conn);
 
     void SetParent(Object* parent);
 
