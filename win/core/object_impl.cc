@@ -7,22 +7,23 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
-namespace {
-std::mutex signal_mutex_pool[131];
-
-auto& signal_mutex(const Object* obj) {
-	return signal_mutex_pool[
-		reinterpret_cast<uintptr_t>(obj) %
-		(sizeof(signal_mutex_pool) / sizeof(std::mutex))];
-}
-} // namespace
+// namespace {
+// std::mutex signal_mutex_pool[131];
+//
+// auto& signal_mutex(const Object* obj) {
+// 	return signal_mutex_pool[
+// 		reinterpret_cast<uintptr_t>(obj) %
+// 		(sizeof(signal_mutex_pool) / sizeof(std::mutex))];
+// }
+//
+// } // namespace
 
 Object::Impl::Impl(Object* owner)
 	: owner_(owner), connections_manager_() {}
 
 Object::Impl::~Impl() {
 	{
-		std::lock_guard lk{ signal_mutex(owner_) };
+		std::lock_guard lk{ signal_mutex_ };
 
 		deleting_ = true;
 
@@ -34,7 +35,7 @@ Object::Impl::~Impl() {
 			auto sender = sender_conn->sender;
 			std::unique_lock<std::mutex> lk2;
 			if (owner_ != sender)
-				lk2 = std::unique_lock(signal_mutex(sender));
+				lk2 = std::unique_lock(sender->impl_->signal_mutex_);
 
 			if (!sender_conn || sender_conn->sender != sender) {
 				// 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
@@ -73,7 +74,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(const Object* sender, const std::
 	// 如果connection_type是Unique, 表示不重复连接
 	// 检测目标Signal中所有Connection的Slot是否有跟当前想连接的Slot重复的
 	if (has_unique_flag || has_replace_flag) {
-		std::unique_lock lk(signal_mutex(sender));
+		std::unique_lock lk(sender->impl_->signal_mutex_);
 		// 获取当前链接的ConnectionList
 		auto sender_conns = sender->impl_->connections_manager_.map_.find(signal_info);
 		if (sender_conns != sender->impl_->connections_manager_.map_.end()) {
@@ -122,7 +123,7 @@ void Object::Impl::Init(Object* parent) {
 
 void Object::Impl::EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store) {
 	// 给自身上锁
-	std::unique_lock lk{ signal_mutex(owner_)};
+	std::unique_lock lk(signal_mutex_);
 
 	// 找到信号对应的槽连接列表
 	auto conns = connections_manager_.map_.find(signal_info);
@@ -146,7 +147,7 @@ void Object::Impl::EmitSignalImpl(const type_info& signal_info, const internal::
 bool Object::Impl::DisconnectImpl(const SharedConnection& connection) {
 	if (connection->receiver == nullptr) return false;
 	{
-		std::unique_lock lk{ signal_mutex(owner_) };
+		std::unique_lock lk(signal_mutex_);
 		auto conns = connections_manager_.map_.find(connection->signal_info);
 		if (conns == connections_manager_.map_.end())
 			return false;
@@ -156,7 +157,7 @@ bool Object::Impl::DisconnectImpl(const SharedConnection& connection) {
 		conns->second.Erase(connection);
 	}
 	{
-		std::lock_guard lk{ signal_mutex(connection->receiver) };
+		std::lock_guard lk{ connection->receiver->impl_->signal_mutex_ };
 		connection->receiver->impl_->connected_sender_connections_.Erase(connection);
 	}
 	return true;
@@ -164,12 +165,12 @@ bool Object::Impl::DisconnectImpl(const SharedConnection& connection) {
 
 Object::Disconnecter Object::Impl::AddConnection(SharedConnection&& conn) {
 	{
-		std::lock_guard lk(signal_mutex(conn->receiver));
+		std::lock_guard lk(conn->receiver->impl_->signal_mutex_);
 		conn->receiver->impl_->connected_sender_connections_.EmplaceBack(conn);
 	}
 
 	{
-		std::unique_lock lk(signal_mutex(owner_));
+		std::unique_lock lk(signal_mutex_);
 		MW_ASSERT_X(owner_ == conn->sender);
 		auto [conns, _] = connections_manager_.map_.try_emplace(conn->signal_info);
 
