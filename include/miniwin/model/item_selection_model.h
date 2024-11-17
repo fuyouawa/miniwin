@@ -6,54 +6,67 @@
 namespace miniwin {
 class ItemSelection {
 public:
-    ItemSelection() = default;
-    ItemSelection(const ModelIndex& index)
-		: top_left_(index), bottom_right_(index)
-	{}
-    ItemSelection(const ModelIndex & top_left, const ModelIndex& bottom_right)
-        : top_left_(top_left), bottom_right_(bottom_right)
-    {}
+	ItemSelection() = default;
 
-    bool valid() const;
+	ItemSelection(const ModelIndex& index)
+		: top_left_(index), bottom_right_(index) {}
 
-    auto& top_left() const { return top_left_; }
-    auto& bottom_right() const { return bottom_right_; }
+	ItemSelection(const ModelIndex& top_left, const ModelIndex& bottom_right)
+		: top_left_(top_left), bottom_right_(bottom_right) {}
 
-    void set_top_left(const ModelIndex& index) { top_left_ = index; }
-    void set_bottom_right(const ModelIndex& index) { bottom_right_ = index; }
+	bool valid() const;
+
+	auto& top_left() const {
+		return top_left_;
+	}
+
+	auto& bottom_right() const {
+		return bottom_right_;
+	}
+
+	void set_top_left(const ModelIndex& index) {
+		top_left_ = index;
+	}
+
+	void set_bottom_right(const ModelIndex& index) {
+		bottom_right_ = index;
+	}
 
 private:
-    ModelIndex top_left_;
-    ModelIndex bottom_right_;
+	ModelIndex top_left_;
+	ModelIndex bottom_right_;
 };
 
 bool operator==(const ItemSelection& x, const ItemSelection& y);
 
-enum class ItemSelectionType
-{
-    Select,
-    Deselect,
-    ClearSelect
+enum class ItemSelectionType {
+	Select,
+	Deselect,
+	ClearSelect
 };
 
-class ItemSelectionModel : public Object
-{
+class ItemSelectionModel : public Object {
+	MW_OBJECT
 public:
-    ItemSelectionModel(Object* parent, AbstractItemModel* model);
+	ItemSelectionModel();
+	~ItemSelectionModel() override;
 
-    const ItemSelection& CurrentSelection() const;
+	const ItemSelection& CurrentSelection() const;
 
-    AbstractItemModel* Model() const;
+	const SharedItemModel& Model() const;
+	void SetModel(const SharedItemModel& model);
 
-    void Select(size_t row, size_t column, ItemSelectionType selection_type = ItemSelectionType::Select);
-    void Select(const ItemSelection& selection, ItemSelectionType selection_type = ItemSelectionType::Select);
-    void Clear();
+	void Select(size_t row, size_t column, ItemSelectionType selection_type = ItemSelectionType::Select);
+	void Select(const ItemSelection& selection, ItemSelectionType selection_type = ItemSelectionType::Select);
+	void Clear();
 
-    bool IsSelected(const ModelIndex& index) const;
+	bool IsSelected(const ModelIndex& index) const;
 
-    MW_SIGNAL(OnSelectionChanged, (ItemSelection) selection, (ItemSelectionType) selection_type)
-    MW_SIGNAL(OnClearedSelection)
+	void Initialize(const SharedObject& parent) override;
 
-    _MW_IMPL
+	MW_SIGNAL(OnSelectionChanged, (ItemSelection) selection, (ItemSelectionType) selection_type)
+	MW_SIGNAL(OnClearedSelection)
+
+	_MW_IMPL
 };
 }

@@ -3,8 +3,9 @@
 
 namespace miniwin {
 class Frame : public AbstractControl {
+	MW_OBJECT
 public:
-	Frame(Widget* parent);
+	Frame();
 
 protected:
 	void PaintBegin() override;

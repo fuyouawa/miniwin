@@ -19,9 +19,9 @@ public:
 
     bool IsDone() const;
     void CloseAll();
-    void RegisterWindow(Window* window);
+    void RegisterWindow(const SharedWindow& window);
 
-    void PushPendingFunctor(std::function<void()>&& func);
+    void PushPendingFunctor(std::function<void()> func);
 
     std::thread::id UiThreadId() const;
 
@@ -36,11 +36,11 @@ private:
         kCloseAll
     };
 
-    static void UpdateRecursion(Widget* widget, bool force_ignore_children = false);
-    static void CallUpdateEarlyRecursion(Widget* widget);
-    static void ClearDirtyRecursion(Widget* widget);
+    static void UpdateRecursion(const SharedWidget& widget, bool force_ignore_children = false);
+    static void CallUpdateEarlyRecursion(const SharedWidget& widget);
+    static void PrepareRecursion(const SharedWidget& widget);
     void Update();
-    void ClearDirty();
+    void Prepare();
     void CallUpdateEarly() const;
     void DoPending();
 
@@ -51,7 +51,7 @@ private:
     std::thread::id ui_thread_id_;
     mutable std::mutex mutex_;
 
-    List<Window*> windows_;
+    List<SharedWindow> windows_;
     List<std::function<void()>> pending_functors_;
 };
 }

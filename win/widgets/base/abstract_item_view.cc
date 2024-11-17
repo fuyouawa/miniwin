@@ -1,13 +1,25 @@
-#include "abstract_item_view_impl.h"
+#include <miniwin/widgets/base/abstract_item_view.h>
 
 #include <miniwin/delegate/base/abstract_item_delegate.h>
+#include <miniwin/model/base/abstract_item_model.h>
+#include <miniwin/model/item_selection_model.h>
 
 #include "win/tools/debug.h"
 
 
 namespace miniwin {
-AbstractItemView::AbstractItemView(Widget* parent)
-    : Widget(parent, "View")
+class AbstractItemView::Impl {
+public:
+    explicit Impl(AbstractItemView* owner) : owner_(owner) {}
+
+    AbstractItemView* owner_;
+
+    SharedItemModel model_;
+    SharedItemDelegate item_delegate_ ;
+    SharedItemSelectionModel selection_model_;
+};
+
+AbstractItemView::AbstractItemView()
 {
     impl_ = std::make_unique<Impl>(this);
 }
@@ -16,7 +28,7 @@ AbstractItemView::~AbstractItemView()
 {
 }
 
-void AbstractItemView::SetModel(AbstractItemModel* model)
+void AbstractItemView::SetModel(const SharedItemModel& model)
 {
     if (impl_->model_ == model)
         return;
@@ -29,19 +41,20 @@ void AbstractItemView::SetModel(AbstractItemModel* model)
 
     if (impl_->model_ != AbstractItemModel::StaticEmptyModel())
     {
-        impl_->model_->SetParent(this);
+        impl_->model_->SetParent(shared_from_this());
     }
 
-    auto m = new ItemSelectionModel(this, impl_->model_);
+    auto m = Instantiate<ItemSelectionModel>(shared_from_this());
+    m->SetModel(impl_->model_);
     SetSelectionModel(m);
 }
 
-AbstractItemModel* AbstractItemView::Model() const
+const SharedItemModel& AbstractItemView::Model() const
 {
     return impl_->model_;
 }
 
-void AbstractItemView::SetSelectionModel(ItemSelectionModel* selection_model)
+void AbstractItemView::SetSelectionModel(const SharedItemSelectionModel& selection_model)
 {
     if (impl_->selection_model_ == selection_model)
         return;
@@ -56,12 +69,12 @@ void AbstractItemView::SetSelectionModel(ItemSelectionModel* selection_model)
     impl_->selection_model_ = selection_model;
 }
 
-ItemSelectionModel* AbstractItemView::SelectionModel() const
+SharedItemSelectionModel AbstractItemView::SelectionModel() const
 {
     return impl_->selection_model_;
 }
 
-void AbstractItemView::SetItemDelegate(AbstractItemDelegate* item_delegate)
+void AbstractItemView::SetItemDelegate(const SharedItemDelegate& item_delegate)
 {
     if (impl_->item_delegate_ == item_delegate)
         return;
@@ -69,11 +82,16 @@ void AbstractItemView::SetItemDelegate(AbstractItemDelegate* item_delegate)
 
     impl_->item_delegate_ = item_delegate;
 
-    impl_->item_delegate_->SetParent(this);
+    impl_->item_delegate_->SetParent(shared_from_this());
 }
 
-AbstractItemDelegate* AbstractItemView::ItemDelegate() const
+const SharedItemDelegate& AbstractItemView::ItemDelegate() const
 {
     return impl_->item_delegate_;
+}
+
+void AbstractItemView::Initialize(const SharedObject& parent) {
+	Widget::Initialize(parent);
+    SetName("ItemView");
 }
 }

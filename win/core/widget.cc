@@ -13,8 +13,8 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
-Widget::Widget(Widget* parent, const String& name)
-	: Object(parent, name) {
+Widget::Widget()
+	: Object() {
 	impl_ = std::make_unique<Impl>(this);
 	Object::impl_->is_widget_ = true;
 }
@@ -30,33 +30,25 @@ bool Widget::IsWindow() const {
 	return impl_->is_window_;
 }
 
-const Window* Widget::OwnerWindow() const {
+SharedWindow Widget::OwnerWindow() const {
 	return impl_->OwnerWindow();
 }
 
-const Widget* Widget::WidgetParent() const {
+SharedWidget Widget::WidgetParent()const {
 	return impl_->WidgetParent();
 }
 
-Window* Widget::OwnerWindow() {
-	return impl_->OwnerWindow();
-}
-
-Widget* Widget::WidgetParent() {
-	return impl_->WidgetParent();
-}
-
-void Widget::SetWidgetParent(Widget* parent) {
+void Widget::SetWidgetParent(const SharedWidget& parent) {
 	impl_->SetWidgetParent(parent);
 }
 
-List<Widget*> Widget::WidgetChildren() const {
-	List<Widget*> total;
-	for (auto c : Children()) {
+List<SharedWidget> Widget::WidgetChildren() const {
+	List<SharedWidget> total;
+	for (auto& c : Children()) {
 		if (c->IsWidget()) {
-			auto w = dynamic_cast<Widget*>(c);
-			MW_ASSERT_X(w != nullptr);
-			total.PushBack(w);
+			auto w = std::dynamic_pointer_cast<Widget>(c);
+			MW_ASSERT_X(w);
+			total.PushBack(std::move(w));
 		}
 	}
 	return total;
@@ -99,10 +91,6 @@ WidgetId Widget::Id() const {
 	return impl_->id_;
 }
 
-bool Widget::Orphaned() const {
-	return impl_->orphaned_;
-}
-
 bool Widget::Enabled() const {
 	return impl_->Enabled();
 }
@@ -123,7 +111,7 @@ void Widget::SetDrawFlags(FlagsType flags) {
 	impl_->draw_flags_ = flags;
 }
 
-void Widget::Invoke(std::function<void()>&& func, InvokeType invoke_type) const {
+void Widget::Invoke(std::function<void()> func, InvokeType invoke_type) const {
 	if (IsInUiThread()
 		&& invoke_type == InvokeType::kAuto
 		&& Application::instance()->IsExecuting()) {
@@ -156,6 +144,10 @@ void Widget::Show() {
 
 void Widget::Hide() {
 	SetVisible(false);
+}
+
+void Widget::Awake() {
+	impl_->Awake();
 }
 
 void Widget::PreparePaint() {

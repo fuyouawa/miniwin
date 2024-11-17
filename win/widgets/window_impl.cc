@@ -5,13 +5,18 @@
 #include "win/core/widgets_driver.h"
 #include <miniwin/tools/graphic.h>
 
+#include "win/tools/debug.h"
+
 namespace miniwin {
 Window::Impl::Impl(Window* owner)
     : owner_(owner)
 {
-	if (!owner_->WidgetParent()) {
-        WidgetsDriver::instance().RegisterWindow(owner_);
-	}
+}
+
+void Window::Impl::Init() {
+    if (!owner_->WidgetParent()) {
+        WidgetsDriver::instance().RegisterWindow(owner_->shared_from_this());
+    }
 }
 
 void Window::Impl::PaintBegin()

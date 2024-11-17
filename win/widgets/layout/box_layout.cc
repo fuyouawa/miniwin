@@ -1,12 +1,19 @@
-#include "box_layout_impl.h"
+#include <miniwin/widgets/layout/box_layout.h>
 
 #include <miniwin/core/imgui.h>
 
 #include "win/tools/debug.h"
 
 namespace miniwin {
-BoxLayout::BoxLayout(Widget* parent)
-	: Layout(parent) {
+class BoxLayout::Impl {
+public:
+	Impl(BoxLayout* owner) : owner_(owner) {}
+
+	BoxLayout* owner_;
+	float spacing_ = 0;
+};
+
+BoxLayout::BoxLayout() {
 	impl_ = std::make_unique<Impl>(this);
 }
 
@@ -20,10 +27,9 @@ void BoxLayout::SetSpacing(float size) {
 	impl_->spacing_ = size;
 }
 
-HBoxLayout::HBoxLayout(Widget* parent)
-	: BoxLayout(parent) {}
+HBoxLayout::HBoxLayout() {}
 
-void HBoxLayout::OnLayoutWidgetBegin(Widget* widget) {
+void HBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget) {
 	BoxLayout::OnLayoutWidgetBegin(widget);
 
 	auto idx = IndexOfWidget(widget);
@@ -34,10 +40,9 @@ void HBoxLayout::OnLayoutWidgetBegin(Widget* widget) {
 	}
 }
 
-VBoxLayout::VBoxLayout(Widget* parent)
-	: BoxLayout(parent) {}
+VBoxLayout::VBoxLayout() {}
 
-void VBoxLayout::OnLayoutWidgetBegin(Widget* widget) {
+void VBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget) {
 	BoxLayout::OnLayoutWidgetBegin(widget);
 
 	auto idx = IndexOfWidget(widget);

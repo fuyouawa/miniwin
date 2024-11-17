@@ -2,7 +2,9 @@
 #include <functional>
 #include <memory>
 
+#include <miniwin/core/global.h>
 #include <miniwin/tools/macro.h>
+#include <miniwin/tools/list.h>
 
 namespace miniwin {
 class Object;
@@ -19,7 +21,7 @@ class SlotObjectBase {
 public:
 	virtual ~SlotObjectBase() = default;
 
-	virtual void Call(const Object* receiver, const SlotArgsStoreBase* args_store) const = 0;
+	virtual void Call(const SharedObject& receiver, const SharedSlotArgsStore& args_store) const = 0;
 	virtual bool Compare(const SlotObjectBase* x) const = 0;
 };
 
@@ -38,9 +40,9 @@ class MemberSlotObject : public SlotObjectBase {
 public:
 	explicit MemberSlotObject(Func func) : func_(func) {}
 
-	void Call(const Object* receiver, const SlotArgsStoreBase* args_store) const override {
-		auto store = dynamic_cast<const SlotArgsStore<Args...>*>(args_store);
-		auto r = dynamic_cast<const Receiver*>(receiver);
+	void Call(const SharedObject& receiver, const SharedSlotArgsStore& args_store) const override {
+		auto store = dynamic_cast<SlotArgsStore<Args...>*>(args_store.get());
+		auto r = dynamic_cast<Receiver*>(receiver.get());
 
 		std::apply([r, this](const Args&... args) { std::invoke(func_, r, args...); }, store->args_);
 	}
@@ -61,8 +63,8 @@ public:
 	FunctorSlotObject(const Func& func) : func_(func) {}
 	FunctorSlotObject(Func&& func) : func_(std::move(func)) {}
 
-	void Call(const Object* receiver, const SlotArgsStoreBase* args_store) const override {
-		auto store = dynamic_cast<const SlotArgsStore<Args...>*>(args_store);
+	void Call(const SharedObject& receiver, const SharedSlotArgsStore& args_store) const override {
+		auto store = dynamic_cast<SlotArgsStore<Args...>*>(args_store.get());
 		std::apply(func_, store->args_);
 	}
 
@@ -82,6 +84,7 @@ public:
 
 	Func func_;
 };
+
 } //namespace internal
 
 enum class InvokeType {
@@ -114,25 +117,59 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 template <class T>
 using PureType = std::remove_cvref_t<std::remove_pointer_t<T>>;
 
+template<std::derived_from<Object> T>
+std::shared_ptr<T> Instantiate(const SharedObject& parent) {
+	auto p = std::make_shared<T>();
+	p->Initialize(parent);
+	return p;
+}
+}
+
 #define _MW_COMMON_IF_TRUE ,
 
-#define _MW_SIGNAL_ARGS_DECL_IMPL(i, ...) \
-    META_UNPACK(META_INDEX(i, __VA_ARGS__)) \
+#define _MW_FIELD_TO_DECL(field) META_EXTRACT_PAREN_UNPACK(field) META_EMPTY field
+
+#define _MW_FIELDS_TO_ARGS_DECL_IMPL(i, ...) \
+    _MW_FIELD_TO_DECL(META_INDEX(i, __VA_ARGS__)) \
     META_NOT_IF(META_INDEX_IS_END(i, __VA_ARGS__), _MW_COMMON_IF_TRUE)
 
-#define _MW_SIGNAL_ARGS_DECL(...) \
-    META_FOR(_MW_SIGNAL_ARGS_DECL_IMPL, 0, META_COUNT(__VA_ARGS__), __VA_ARGS__)
+#define _MW_FIELDS_TO_ARGS_DECL(...) \
+    META_FOR(_MW_FIELDS_TO_ARGS_DECL_IMPL, 0, META_COUNT(__VA_ARGS__), __VA_ARGS__)
 
-#define _MW_SIGNAL_NO_ARGS(name)                       \
+#define _MW_SIGNAL_IS_EMPTY_1(name, ...)               \
 public:                                                \
     void name() const {                                \
         EmitSignal(&PureType<decltype(this)>::name);   \
     }
-#define _MW_SIGNAL_HAS_ARGS(name, ...)                             \
+
+#define _MW_SIGNAL_IS_EMPTY_0(name, ...)                           \
 public:                                                            \
-    void name(_MW_SIGNAL_ARGS_DECL(__VA_ARGS__)) const {           \
+    void name(_MW_FIELDS_TO_ARGS_DECL(__VA_ARGS__)) const {        \
         EmitSignal(&PureType<decltype(this)>::name, __VA_ARGS__);  \
     }
-#define _MW_SIGNAL(name, ...) \
-    META_IF_ELSE(META_IS_EMPTY(__VA_ARGS__), _MW_SIGNAL_NO_ARGS(name), _MW_SIGNAL_HAS_ARGS(name, __VA_ARGS__))
-}
+
+#define _MW_SIGNAL(name, ...) META_CAT(_MW_SIGNAL_IS_EMPTY_, META_IS_EMPTY(__VA_ARGS__))(name, __VA_ARGS__)
+
+#define MW_OBJECT																		\
+public:																					\
+	auto shared_from_this() {															\
+		using ThisType = PureType<decltype(this)>;										\
+		using RetType = std::shared_ptr<ThisType>;										\
+		return RetType(std::dynamic_pointer_cast<ThisType>(Object::shared_from_this()));\
+	}																					\
+	auto shared_from_this() const {														\
+		using ThisType = const PureType<decltype(this)>;								\
+		using RetType = std::shared_ptr<ThisType>;										\
+		return RetType(std::dynamic_pointer_cast<ThisType>(Object::shared_from_this()));\
+	}																					\
+	auto weak_from_this() {																\
+		using ThisType = PureType<decltype(this)>;										\
+		using RetType = std::weak_ptr<ThisType>;										\
+		return RetType(std::dynamic_pointer_cast<ThisType>(Object::shared_from_this()));\
+	}																					\
+	auto weak_from_this() const {														\
+		using ThisType = const PureType<decltype(this)>;								\
+		using RetType = std::weak_ptr<ThisType>;										\
+		return RetType(std::dynamic_pointer_cast<ThisType>(Object::shared_from_this()));\
+	}																					\
+private:																				\

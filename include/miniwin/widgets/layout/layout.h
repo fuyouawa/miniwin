@@ -2,29 +2,31 @@
 #include <miniwin/core/widget.h>
 
 namespace miniwin {
-class Layout : public Object
-{
+class Layout : public Object {
+	MW_OBJECT
 public:
-	Layout(Object* parent);
+	Layout();
 	~Layout() override;
 
-	bool AddWidget(Widget* widget);
-	bool RemoveWidget(Widget* widget);
+	bool AddWidget(const SharedWidget& widget);
+	bool RemoveWidget(const SharedWidget& widget);
 	void ClearWidget();
 
-	List<Widget*> Widgets() const;
-	size_t IndexOfWidget(Widget* widget) const;
-	bool SetWidgetIndex(Widget* widget, size_t index);
-	size_t AdvanceWidget(Widget* widget, size_t count);
+	List<WeakWidget> Widgets() const;
+	size_t IndexOfWidget(const SharedWidget& widget) const;
+	bool SetWidgetIndex(const SharedWidget& widget, size_t index);
+	size_t AdvanceWidget(const SharedWidget& widget, size_t count);
 
 	size_t Count() const;
 	bool IsEmpty() const;
 
+	void Initialize(const SharedObject& parent) override;
+
 protected:
 	friend class WidgetsDriver;
 
-	virtual void OnLayoutWidgetBegin(Widget* widget);
-	virtual void OnLayoutWidgetEnd(Widget* widget);
+	virtual void OnLayoutWidgetBegin(const SharedWidget& widget);
+	virtual void OnLayoutWidgetEnd(const SharedWidget& widget);
 
 	_MW_IMPL
 };

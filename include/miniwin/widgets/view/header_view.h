@@ -1,20 +1,25 @@
 #pragma once
 #include <miniwin/widgets/base/abstract_item_view.h>
+#include <miniwin/model/base/abstract_item_model.h>
 
 namespace miniwin {
-class HeaderView : public AbstractItemView
-{
+class HeaderView : public AbstractItemView {
+	MW_OBJECT
 public:
-    HeaderView(Widget* parent, HeaderOrientation orientation);
-    ~HeaderView() override;
+	HeaderView();
+	~HeaderView() override;
 
-    HeaderOrientation Orientation() const;
+	HeaderOrientation Orientation() const;
+	void SetOrientation(HeaderOrientation orientation);
 
-    virtual void PaintSection(size_t section);
+	virtual void PaintSection(size_t section);
 
 private:
-    using AbstractItemView::SetDrawFlags;
+	using AbstractItemView::SetDrawFlags;
 
-    _MW_IMPL
+	_MW_IMPL
 };
+
+using SharedHeaderView = std::shared_ptr<HeaderView>;
+using WeakHeaderView = std::shared_ptr<HeaderView>;
 }

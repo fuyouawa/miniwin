@@ -5,8 +5,7 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
-Label::Label(Widget* const parent, const String& text)
-	: AbstractTextualControl(parent, text)
+Label::Label()
 {
 }
 

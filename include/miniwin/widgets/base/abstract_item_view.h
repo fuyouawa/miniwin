@@ -1,26 +1,26 @@
 #pragma once
 #include <miniwin/core/widget.h>
-#include <miniwin/model/base/abstract_item_model.h>
-#include <miniwin/model/item_selection_model.h>
 
 namespace miniwin {
 class AbstractItemDelegate;
 
-class AbstractItemView : public Widget
-{
+class AbstractItemView : public Widget {
+	MW_OBJECT
 public:
-    AbstractItemView(Widget* parent);
-    ~AbstractItemView() override;
+	AbstractItemView();
+	~AbstractItemView() override;
 
-    virtual void SetModel(AbstractItemModel* model);
-    AbstractItemModel* Model() const;
+	virtual void SetModel(const SharedItemModel& model);
+	const SharedItemModel& Model() const;
 
-    virtual void SetSelectionModel(ItemSelectionModel* selection_model);
-    ItemSelectionModel* SelectionModel() const;
+	virtual void SetSelectionModel(const SharedItemSelectionModel& selection_model);
+	SharedItemSelectionModel SelectionModel() const;
 
-    virtual void SetItemDelegate(AbstractItemDelegate* item_delegate);
-    AbstractItemDelegate* ItemDelegate() const;
+	virtual void SetItemDelegate(const SharedItemDelegate& item_delegate);
+	const SharedItemDelegate& ItemDelegate() const;
 
-    _MW_IMPL
+	void Initialize(const SharedObject& parent) override;
+
+	_MW_IMPL
 };
 }

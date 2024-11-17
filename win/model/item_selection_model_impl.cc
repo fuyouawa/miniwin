@@ -3,8 +3,8 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
-ItemSelectionModel::Impl::Impl(ItemSelectionModel* owner, AbstractItemModel* model)
-    : owner_(owner), model_(model)
+ItemSelectionModel::Impl::Impl(ItemSelectionModel* owner)
+    : owner_(owner)
 {
 }
 

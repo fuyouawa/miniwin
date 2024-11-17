@@ -9,9 +9,9 @@ ComboBoxView::Impl::Impl(ComboBoxView* owner)
 {
 }
 
-void ComboBoxView::Impl::Init()
+void ComboBoxView::Impl::Awake()
 {
-	auto d = new SelectableItemDelegate(owner_);
+	auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
 	owner_->SetItemDelegate(d);
 }
 
@@ -20,10 +20,10 @@ ComboBox::Impl::Impl(ComboBox* owner)
 {
 }
 
-void ComboBox::Impl::Init(const String& text)
+void ComboBox::Impl::Awake()
 {
-	view_ = new ComboBoxView(owner_, text);
-	auto model = new StandardItemModel(owner_);
+	view_ = Instantiate<ComboBoxView>(owner_->shared_from_this());
+	auto model = Instantiate<StandardItemModel>(owner_->shared_from_this());
 	model->SetColumnCount(1);
 	view_->SetModel(model);
 }

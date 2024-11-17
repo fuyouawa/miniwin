@@ -12,7 +12,7 @@ public:
     using BitsetSelections = std::bitset<kLengthOfOneBitsetSelections>;
     using OneBitsetSelectionsTable = List<BitsetSelections>;
 
-    explicit Impl(ItemSelectionModel* owner, AbstractItemModel* model);
+    explicit Impl(ItemSelectionModel* owner);
 
     bool Contains(const ModelIndex& index) const;
 
@@ -29,6 +29,6 @@ public:
     ItemSelectionModel* owner_;
     ItemSelection current_selection_;
     std::vector<OneBitsetSelectionsTable> selections_;
-    AbstractItemModel* model_;
+    SharedItemModel model_;
 };
 }

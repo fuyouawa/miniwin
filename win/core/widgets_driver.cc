@@ -23,7 +23,7 @@ WidgetsDriver::~WidgetsDriver() {
 }
 
 void WidgetsDriver::Update() {
-	ClearDirty();
+	Prepare();
 	DoPending();
 	CallUpdateEarly();
 	for (auto& win : windows_) {
@@ -33,21 +33,22 @@ void WidgetsDriver::Update() {
 	}
 }
 
-void WidgetsDriver::ClearDirty() {
+void WidgetsDriver::Prepare() {
 	{
-		auto it = windows_.RemoveIf([](auto w) {
+		windows_.EraseIf([](auto w) {
 			return w->Orphaned();
 		});
-		if (it != windows_.end()) {
-			auto tmp = it;
-			for (; tmp != windows_.end(); ++tmp)
-				delete*tmp;
-			windows_.Erase(it, windows_.end());
-		}
 	}
 	for (auto& win : windows_) {
 		MW_ASSERT_X(!win->Orphaned());
-		ClearDirtyRecursion(win);
+
+		// 因为只有Widget是有权限调用的，所以得转成Widget
+		auto w = dynamic_cast<Widget*>(win.get());
+		if (!w->impl_->awaked_) {
+			w->Awake();
+			w->impl_->awaked_ = true;
+		}
+		PrepareRecursion(win);
 	}
 }
 
@@ -75,14 +76,11 @@ bool WidgetsDriver::IsDone() const {
 
 void WidgetsDriver::CloseAll() {
 	PushPendingFunctor([this] {
-		for (auto& win : windows_) {
-			delete win;
-		}
 		windows_.Clear();
 	});
 }
 
-void WidgetsDriver::RegisterWindow(Window* window) {
+void WidgetsDriver::RegisterWindow(const SharedWindow& window) {
 	PushPendingFunctor([window, this] {
 		windows_.PushBack(window);
 	});
@@ -109,7 +107,7 @@ bool WidgetsDriver::RecycleId(WidgetId id) {
 	return false;
 }
 
-void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children) {
+void WidgetsDriver::UpdateRecursion(const SharedWidget& widget, bool force_ignore_children) {
 	if (!widget->Visible())
 		return;
 
@@ -141,43 +139,23 @@ void WidgetsDriver::UpdateRecursion(Widget* widget, bool force_ignore_children) 
 	}
 }
 
-void WidgetsDriver::CallUpdateEarlyRecursion(Widget* widget) {
+void WidgetsDriver::CallUpdateEarlyRecursion(const SharedWidget& widget) {
 	widget->PreparePaint();
-	for (auto o : widget->Children()) {
-		if (o->IsWidget()) {
-			auto w = dynamic_cast<Widget*>(o);
-			MW_ASSERT_X(w != nullptr);
-			CallUpdateEarlyRecursion(w);
+	for (auto& w : widget->WidgetChildren()) {
+		CallUpdateEarlyRecursion(w);
+	}
+}
+
+void WidgetsDriver::PrepareRecursion(const SharedWidget& widget) {
+	for (auto& w : widget->WidgetChildren()) {
+		if (!w->impl_->awaked_) {
+			w->Awake();
+			w->impl_->awaked_ = true;
 		}
 	}
 }
 
-void WidgetsDriver::ClearDirtyRecursion(Widget* widget) {
-	if (widget->impl_->dirty_) {
-		auto orphaned_children = widget->Children().Filter([](Object* o) {
-			if (o->IsWidget()) {
-				auto w = dynamic_cast<Widget*>(o);
-				MW_ASSERT_X(w != nullptr);
-				return w->Orphaned();
-			}
-			return false;
-		});
-
-		MW_ASSERT_X(!orphaned_children.empty());
-
-		for (auto c : orphaned_children) {
-			delete c;
-		}
-
-		widget->impl_->dirty_ = false;
-	}
-	for (auto c : widget->WidgetChildren()) {
-		MW_ASSERT_X(!c->Orphaned());
-		ClearDirtyRecursion(c);
-	}
-}
-
-void WidgetsDriver::PushPendingFunctor(std::function<void()>&& func) {
+void WidgetsDriver::PushPendingFunctor(std::function<void()> func) {
 	std::lock_guard lk(mutex_);
 	pending_functors_.PushBack(std::move(func));
 }

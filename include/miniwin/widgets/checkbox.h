@@ -2,12 +2,13 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class CheckBox : public AbstractTextualControl
-{
+class CheckBox : public AbstractTextualControl {
+	MW_OBJECT
 public:
-	CheckBox(Widget* parent, const String& label);
+	CheckBox();
+	~CheckBox() override;
 
-    void SetChecked(bool b);
+	void SetChecked(bool b);
 
 	MW_SIGNAL(OnToggled, (bool) checked)
 
@@ -20,4 +21,5 @@ private:
 
 	_MW_IMPL
 };
+
 }

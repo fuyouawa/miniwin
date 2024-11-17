@@ -2,28 +2,29 @@
 #include <miniwin/core/widget.h>
 
 namespace miniwin {
-class AbstractControl : public Widget
-{
+class AbstractControl : public Widget {
+	MW_OBJECT
 public:
-	AbstractControl(Widget* parent, const String& name);
-    ~AbstractControl() override;
+	AbstractControl();
+	~AbstractControl() override;
 
-    bool Visible() const override;
+	bool Visible() const override;
 
+	void Initialize(const SharedObject& parent) override;
 protected:
-    void PaintBegin() override;
-    void PaintEnd() override;
+	void PaintBegin() override;
+	void PaintEnd() override;
 };
 
 
-class AbstractTextualControl : public AbstractControl
-{
+class AbstractTextualControl : public AbstractControl {
+	MW_OBJECT
 public:
-    AbstractTextualControl(Widget* parent, const String& text);
+	AbstractTextualControl();
 
-    const String& Text() const;
-    void SetText(const String& text);
+	String Text() const;
+	void SetText(const String& text);
 
-    MW_SIGNAL(OnTextChanged, (String) text, (String) prev_text)
+	MW_SIGNAL(OnTextChanged, (String) text, (String) prev_text)
 };
 }

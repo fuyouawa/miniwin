@@ -7,12 +7,12 @@ class TableView::Impl
 public:
     explicit Impl(TableView* owner);
 
-    void Init();
+    void Awake();
 
-    HeaderView* Header(HeaderOrientation orientation);
-    void SetHeader(HeaderOrientation orientation, HeaderView* header);
+    SharedHeaderView Header(HeaderOrientation orientation);
+    void SetHeader(HeaderOrientation orientation, const SharedHeaderView& header);
 
     TableView* owner_;
-    std::unordered_map<HeaderOrientation, HeaderView*> headers_;
+    std::unordered_map<HeaderOrientation, SharedHeaderView> headers_;
 };
 }

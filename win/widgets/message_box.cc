@@ -10,34 +10,40 @@ class MessageBox::Impl {
 public:
 	Impl(MessageBox* owner) : owner_(owner) {}
 
-	void Init(const String& text) {
-		lab_msg_ = new Label(owner_, text);
-		layout_btns_ = new HBoxLayout(owner_);
+	void Awake() {
+		lab_msg_ = Instantiate<Label>(owner_->shared_from_this());
+		layout_btns_ = Instantiate<HBoxLayout>(owner_->shared_from_this());
 		layout_btns_->SetSpacing(10);
 		owner_->SetSize({200, 110});
 	}
 
-	void AddButton(Button* btn) {
-		btn->SetWidgetParent(owner_);
+	void AddButton(const std::shared_ptr<Button>& btn) {
+		btn->SetWidgetParent(owner_->shared_from_this());
 		btns_.PushBack(btn);
 		layout_btns_->AddWidget(btn);
-		Connect(btn, &Button::OnClicked, owner_, [btn, cb = &callback_]() {
+		Connect(btn, &Button::OnClicked, owner_->shared_from_this(), [btn, cb = &callback_]() {
 			(*cb)(btn);
 		});
 	}
 
 	MessageBox* owner_ = nullptr;
-	HBoxLayout* layout_btns_ = nullptr;
-	Label* lab_msg_ = nullptr;
-	List<Button*> btns_;
-	std::function<void(Button* btn)> callback_;
+	std::shared_ptr<HBoxLayout> layout_btns_;
+	std::shared_ptr<Label> lab_msg_ = nullptr;
+	List<std::shared_ptr<Button>> btns_;
+	Callback callback_;
 };
 
-void MessageBox::InformationAsync(Widget* parent, const String& title, const String& text, const String& ok,
+void MessageBox::InformationAsync(const SharedWidget& parent, const String& title, const String& text, const String& ok,
                                   std::function<void()> callback) {
-	auto msg = new MessageBox(parent, title, text);
-	msg->AddButton(new Button(msg, ok));
-	msg->SetButtonClickedCallback([cb = callback, msg](Button* btn) {
+	auto msg = Instantiate<MessageBox>(parent);
+	msg->SetTitle(title);
+	msg->SetText(text);
+
+	auto btn = Instantiate<Button>(msg);
+	btn->SetText(ok);
+	msg->AddButton(btn);
+
+	msg->SetButtonClickedCallback([cb = callback, msg](auto& btn) {
 		cb();
 		msg->Close();
 	});
@@ -51,16 +57,21 @@ void MessageBox::InformationAsync(Widget* parent, const String& title, const Str
 	msg->Open();
 }
 
-void MessageBox::QuestionAsync(Widget* parent, const String& title, const String& text, const String& yes,
+void MessageBox::QuestionAsync(const SharedWidget& parent, const String& title, const String& text, const String& yes,
                                const String& no, std::function<void(bool yes)> callback) {
-	auto msg = new MessageBox(parent, title, text);
-	auto yes_btn = new Button(msg, yes);
-	auto no_btn = new Button(msg, no);
+	auto msg = Instantiate<MessageBox>(parent);
+	msg->SetTitle(title);
+	msg->SetText(text);
+
+	auto yes_btn = Instantiate<Button>(msg);
+	yes_btn->SetText(yes);
+	auto no_btn = Instantiate<Button>(msg);
+	no_btn->SetText(no);
 
 	msg->AddButton(yes_btn);
 	msg->AddButton(no_btn);
 
-	msg->SetButtonClickedCallback([cb = callback, msg, yes_btn, no_btn](Button* btn) {
+	msg->SetButtonClickedCallback([cb = callback, msg, yes_btn, no_btn](auto& btn) {
 		cb(btn == yes_btn);
 		if (btn != yes_btn)
 			MW_ASSERT_X(btn == no_btn);
@@ -76,17 +87,30 @@ void MessageBox::QuestionAsync(Widget* parent, const String& title, const String
 	msg->Open();
 }
 
-MessageBox::MessageBox(Widget* parent, const String& title, const String& text)
-	: Dialog(parent, title) {
+MessageBox::MessageBox() {
 	impl_ = std::make_unique<Impl>(this);
-	impl_->Init(text);
 }
 
-void MessageBox::AddButton(Button* btn) {
+MessageBox::~MessageBox() {}
+
+void MessageBox::AddButton(const std::shared_ptr<Button>& btn) {
 	impl_->AddButton(btn);
 }
 
-void MessageBox::SetButtonClickedCallback(std::function<void(Button* btn)> callback) {
+void MessageBox::SetButtonClickedCallback(std::function<void(const std::shared_ptr<Button>& btn)> callback) {
 	impl_->callback_ = std::move(callback);
+}
+
+String MessageBox::Text() const {
+	return impl_->lab_msg_->Text();
+}
+
+void MessageBox::SetText(const String& text) {
+	impl_->lab_msg_->SetText(text);
+}
+
+void MessageBox::Awake() {
+	Dialog::Awake();
+	impl_->Awake();
 }
 }

@@ -22,34 +22,33 @@ bool Object::Disconnecter::Disconnect() const {
 	return false;
 }
 
-Object::Object(Object* parent, const String& name) {
+Object::Object() {
 	impl_ = std::make_unique<Impl>(this);
-	impl_->name_ = name;
-	impl_->Init(parent);
 }
 
 Object::~Object() {
 	OnDestroy();
 }
 
-const Object* Object::Parent() const {
+SharedObject Object::Parent() const {
 	return impl_->parent_;
 }
 
-Object* Object::Parent() {
-	return impl_->parent_;
-}
 
-void Object::SetParent(Object* parent) const {
+void Object::SetParent(const SharedObject& parent) const {
 	impl_->SetParent(parent);
 }
 
-const String& Object::Name() const {
+String Object::Name() const {
 	return impl_->name_;
 }
 
 void Object::SetName(const String& name) const {
 	impl_->name_ = name;
+}
+
+bool Object::Orphaned() const {
+	return impl_->orphaned_;
 }
 
 FlagsType Object::Flags() const {
@@ -69,7 +68,7 @@ void Object::EnableFlags(FlagsType flags, bool enable) {
 	}
 }
 
-List<Object*> Object::Children() const {
+List<SharedObject> Object::Children() const {
 	return impl_->GetChildrenWithProcess();
 }
 
@@ -81,17 +80,18 @@ bool Object::IsLayout() const {
 	return impl_->is_layout_;
 }
 
-void Object::Invoke(std::function<void()>&& func, InvokeType invoke_type) const {
+void Object::Invoke(std::function<void()> func, InvokeType invoke_type) const {
 	func();
 }
 
-Object::Disconnecter Object::ConnectImpl(
-	const Object* sender,
-	const std::type_info& signal_info,
-	const Object* receiver,
-	internal::UniqueSlotObject&& slot_obj,
-	ConnectionFlags connection_flags,
-	InvokeType invoke_type) {
+void Object::Initialize(const SharedObject& parent) {
+	impl_->Init(parent);
+}
+
+Object::Disconnecter Object::ConnectImpl(const SharedObject& sender, const std::type_info& signal_info,
+                                         const SharedObject& receiver, internal::UniqueSlotObject&& slot_obj, ConnectionFlags connection_flags,
+                                         InvokeType invoke_type)
+{
 	MW_ASSERT_X(receiver);
 	MW_ASSERT_X(slot_obj);
 	return Impl::ConnectImpl(sender, signal_info, receiver, std::move(slot_obj), connection_flags, invoke_type);

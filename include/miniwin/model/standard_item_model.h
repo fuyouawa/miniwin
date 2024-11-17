@@ -5,8 +5,9 @@
 namespace miniwin {
 class StandardItemModel : public AbstractItemModel
 {
+    MW_OBJECT
 public:
-    StandardItemModel(Object* parent);
+    StandardItemModel();
     ~StandardItemModel() override;
 
     void InsertRows(size_t row, size_t count) override;

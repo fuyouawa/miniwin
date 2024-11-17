@@ -10,19 +10,17 @@ public:
 	Impl(Layout* owner) : owner_(owner) {}
 
 	Layout* owner_;
-	List<Widget*> widgets_;
+	List<WeakWidget> widgets_;
 };
 
-Layout::Layout(Object* parent)
-	: Object(parent, "Layout")
-{
+Layout::Layout() {
 	impl_ = std::make_unique<Impl>(this);
 	Object::impl_->is_layout_ = true;
 }
 
 Layout::~Layout() {}
 
-bool Layout::AddWidget(Widget* widget) {
+bool Layout::AddWidget(const SharedWidget& widget) {
 	if (widget->impl_->layout_ == this)
 		return false;
 
@@ -30,7 +28,9 @@ bool Layout::AddWidget(Widget* widget) {
 		widget->impl_->layout_->RemoveWidget(widget);
 	}
 
-	if (!impl_->widgets_.Find(widget).IsEnd()) {
+	if (!impl_->widgets_.FindIf([&widget](const WeakWidget& w) {
+		return w.lock() == widget;
+	}).IsEnd()) {
 		return false;
 	}
 	impl_->widgets_.PushBack(widget);
@@ -38,8 +38,10 @@ bool Layout::AddWidget(Widget* widget) {
 	return true;
 }
 
-bool Layout::RemoveWidget(Widget* widget) {
-	if (impl_->widgets_.Erase(widget) > 0) {
+bool Layout::RemoveWidget(const SharedWidget& widget) {
+	if (impl_->widgets_.EraseIf([&widget](const WeakWidget& w) {
+		return w.lock() == widget;
+	}) > 0) {
 		widget->impl_->layout_ = nullptr;
 		return true;
 	}
@@ -50,14 +52,16 @@ void Layout::ClearWidget() {
 	impl_->widgets_.Clear();
 }
 
-List<Widget*> Layout::Widgets() const {
+List<WeakWidget> Layout::Widgets() const {
 	return impl_->widgets_;
 }
 
-bool Layout::SetWidgetIndex(Widget* widget, size_t index) {
+bool Layout::SetWidgetIndex(const SharedWidget& widget, size_t index) {
 	if (index > impl_->widgets_.size())
 		return false;
-	auto old = impl_->widgets_.Find(widget);
+	auto old = impl_->widgets_.FindIf([&widget](const WeakWidget& w) {
+		return w.lock() == widget;
+	});
 	if (old.IsEnd())
 		return false;
 	auto old_idx = old.index();
@@ -68,25 +72,26 @@ bool Layout::SetWidgetIndex(Widget* widget, size_t index) {
 	return true;
 }
 
-size_t Layout::IndexOfWidget(Widget* widget) const {
-	return impl_->widgets_.IndexOf(widget);
+size_t Layout::IndexOfWidget(const SharedWidget& widget) const {
+	for (size_t i = 0; i < impl_->widgets_.size(); ++i) {
+		if (impl_->widgets_[i].lock() == widget)
+			return i;
+	}
+	return static_cast<size_t>(-1);
 }
 
-size_t Layout::AdvanceWidget(Widget* widget, size_t count)
-{
+size_t Layout::AdvanceWidget(const SharedWidget& widget, size_t count) {
 	auto idx = IndexOfWidget(widget);
 	if (idx != static_cast<size_t>(-1))
 		return static_cast<size_t>(-1);
 
 	size_t c = Count();
 	size_t end_idx = idx + count;
-	if (end_idx >= c)
-	{
+	if (end_idx >= c) {
 		end_idx = c - 1;
 	}
 	count = end_idx - idx;
-	if (count > 0)
-	{
+	if (count > 0) {
 		if (SetWidgetIndex(widget, end_idx)) {
 			return count;
 		}
@@ -103,6 +108,11 @@ bool Layout::IsEmpty() const {
 	return Count() == 0;
 }
 
-void Layout::OnLayoutWidgetBegin(Widget* widget) {}
-void Layout::OnLayoutWidgetEnd(Widget* widget) {}
+void Layout::Initialize(const SharedObject& parent) {
+	Object::Initialize(parent);
+	SetName("Layout");
+}
+
+void Layout::OnLayoutWidgetBegin(const SharedWidget& widget) {}
+void Layout::OnLayoutWidgetEnd(const SharedWidget& widget) {}
 }

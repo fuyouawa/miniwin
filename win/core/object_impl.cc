@@ -22,28 +22,14 @@ Object::Impl::Impl(Object* owner)
 	: owner_(owner), connections_manager_() {}
 
 Object::Impl::~Impl() {
-	{
-		std::lock_guard lk{ signal_mutex_ };
+	deleting_ = true;
 
-		deleting_ = true;
-
-		for (auto& conns : connections_manager_.map_) {
-			conns.second.Clear();
-		}
-
-		for (auto& sender_conn : connected_sender_connections_) {
-			auto sender = sender_conn->sender;
-			std::unique_lock<std::mutex> lk2;
-			if (owner_ != sender)
-				lk2 = std::unique_lock(sender->impl_->signal_mutex_);
-
-			if (!sender_conn || sender_conn->sender != sender) {
-				// 也许就在迭代时没有锁的那段间隔, 这个连接就被切断了
-				continue;
-			}
-			sender_conn->receiver = nullptr;
-			sender->impl_->connections_manager_.dirty_ = true;
-		}
+	for (auto& sender_conn : connected_sender_connections_) {
+		auto sc = sender_conn.lock();
+		if (!sc) continue;
+		MW_ASSERT(sc->sender.lock(), "The connection has not failed, but the sender has been destructed?");
+		MW_ASSERT_X(sc->receiver.lock().get() == owner_);
+		sc->receiver.reset();
 	}
 
 	DeleteChildren();
@@ -54,18 +40,22 @@ void Object::Impl::ConnectionsManager::ClearDirty() {
 	if (dirty_) {
 		for (auto& conns : map_) {
 			std::lock_guard lk(conns.second.mutex_);
-			conns.second.EraseIf([](auto& c) {
-				return !c->receiver;
+			conns.second.EraseIf([](const SharedConnection& c) {
+				return !c->receiver.lock();
 				});
 		}
 		dirty_ = false;
 	}
 }
 
-Object::Disconnecter Object::Impl::ConnectImpl(const Object* sender, const std::type_info& signal_info,
-                                               const Object* receiver, internal::UniqueSlotObject&& slot_obj,
-                                               ConnectionFlags connection_flags,
-                                               InvokeType invoke_type) {
+Object::Disconnecter Object::Impl::ConnectImpl(
+	const SharedObject& sender,
+	const std::type_info& signal_info,
+	const SharedObject& receiver,
+	internal::UniqueSlotObject&& slot_obj,
+	ConnectionFlags connection_flags,
+	InvokeType invoke_type)
+{
 	bool has_unique_flag = (connection_flags & ConnectionFlags::kUnique) != ConnectionFlags::kNone;
 	bool has_replace_flag = (connection_flags & ConnectionFlags::kReplace) != ConnectionFlags::kNone;
 
@@ -90,8 +80,8 @@ Object::Disconnecter Object::Impl::ConnectImpl(const Object* sender, const std::
 				throw std::exception(errmsg.c_str());
 			}
 
-			auto conn = sender_conns->second.FindIf([receiver, &slot_obj](auto& c) {
-				return c->receiver == receiver && c->slot_obj->Compare(slot_obj.get());
+			auto conn = sender_conns->second.FindIf([receiver, &slot_obj](const SharedConnection& c) {
+				return c->receiver.lock() == receiver && c->slot_obj->Compare(slot_obj.get());
 			});
 			MW_ASSERT_X((*conn)->signal_info == signal_info);
 
@@ -117,139 +107,135 @@ Object::Disconnecter Object::Impl::ConnectImpl(const Object* sender, const std::
 	return sender->impl_->AddConnection(std::move(conn));
 }
 
-void Object::Impl::Init(Object* parent) {
+void Object::Impl::Init(const SharedObject& parent) {
 	SetParent(parent);
 }
 
 void Object::Impl::EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store) {
-	// 给自身上锁
-	std::unique_lock lk(signal_mutex_);
+	std::unique_lock lk(signal_mutex_);						// 给自身上锁
 
-	// 找到信号对应的槽连接列表
-	auto conns = connections_manager_.map_.find(signal_info);
+	auto conns = connections_manager_.map_.find(signal_info);	// 找到信号对应的槽连接列表
 	if (conns == connections_manager_.map_.end())
 		return;
-	std::lock_guard lk2(conns->second.mutex_);
-	lk.unlock();
+	std::lock_guard lk2(conns->second.mutex_);				// 给信号对应的连接列表上锁
+	lk.unlock();												// 解锁自身，因为接下来要遍历触发槽函数了，防止死锁
 
-	// 遍历连接，触发槽函数
-	for (auto& c : conns->second) {
-		MW_ASSERT_X(c->sender == owner_ && c->signal_info == signal_info);
+	for (auto& c : conns->second) {								// 遍历连接，触发槽函数
+		auto sender = c->sender.lock();
+		auto receiver = c->receiver.lock();
+		MW_ASSERT_X(sender && receiver && sender.get() == owner_ && c->signal_info == signal_info);
 
 		// 触发槽函数
-		c->receiver->Invoke([receiver = c->receiver, slot_obj = &c->slot_obj, as = args_store] {
-			if (!receiver || !*slot_obj) return;
-			(*slot_obj)->Call(receiver, as.get());
+		receiver->Invoke([conn = std::weak_ptr(c), args_store] {
+			auto c = conn.lock();
+			if (!c) return;
+			auto r = c->receiver.lock();
+			if (!r || !c->slot_obj) return;
+			c->slot_obj->Call(r, args_store);
 		}, c->invoke_type);
 	}
 }
 
 bool Object::Impl::DisconnectImpl(const SharedConnection& connection) {
-	if (connection->receiver == nullptr) return false;
-	{
-		std::unique_lock lk(signal_mutex_);
-		auto conns = connections_manager_.map_.find(connection->signal_info);
-		if (conns == connections_manager_.map_.end())
-			return false;
-		std::lock_guard lk2(conns->second.mutex_);
-		lk.unlock();
+	MW_ASSERT_X(connection->sender.lock().get() == owner_);
 
-		conns->second.Erase(connection);
+	auto r = connection->receiver.lock();
+	if (!r) return false;
+
+	std::lock_guard lk(signal_mutex_);			// 给自身上锁
+	std::unique_lock<std::mutex> lk2;				// 给接收者上锁，由于可能发送者和接收者是同一个对象，所以需要判断
+	if (r.get() != owner_) {
+		lk2 = std::unique_lock(r->impl_->signal_mutex_);
 	}
-	{
-		std::lock_guard lk{ connection->receiver->impl_->signal_mutex_ };
-		connection->receiver->impl_->connected_sender_connections_.Erase(connection);
-	}
+
+	auto conns = connections_manager_.map_.find(connection->signal_info);
+	if (conns == connections_manager_.map_.end())
+		return false;
+
+	r->impl_->connected_sender_connections_.EraseIf([&connection](const WeakConnection& c) { return c.lock() == connection; });
+
+	std::lock_guard lk3(conns->second.mutex_);	// 给信号对应的连接列表上锁
+	conns->second.Erase(connection);
+
 	return true;
 }
 
-Object::Disconnecter Object::Impl::AddConnection(SharedConnection&& conn) {
-	{
-		std::lock_guard lk(conn->receiver->impl_->signal_mutex_);
-		conn->receiver->impl_->connected_sender_connections_.EmplaceBack(conn);
+Object::Disconnecter Object::Impl::AddConnection(SharedConnection&& connection) {
+	MW_ASSERT_X(connection->sender.lock().get() == owner_);
+
+	auto r = connection->receiver.lock();
+	if (!r) return {};
+
+	std::lock_guard lk(signal_mutex_);			// 给自身上锁
+	std::unique_lock<std::mutex> lk2;				// 给接收者上锁，由于可能发送者和接收者是同一个对象，所以需要判断
+	if (r.get() != owner_) {
+		lk2 = std::unique_lock(r->impl_->signal_mutex_);
 	}
 
-	{
-		std::unique_lock lk(signal_mutex_);
-		MW_ASSERT_X(owner_ == conn->sender);
-		auto [conns, _] = connections_manager_.map_.try_emplace(conn->signal_info);
+	auto [conns, _] = connections_manager_.map_.try_emplace(connection->signal_info);
+	r->impl_->connected_sender_connections_.EmplaceBack(connection);		// 把连接加入接收者的发送者连接列表里面
 
-		std::unique_lock lk2(conns->second.mutex_);
-		conns->second.EmplaceBack(conn);
-		lk2.unlock();
+	std::unique_lock lk3(conns->second.mutex_);	// 给信号对应的连接列表上锁
+	conns->second.EmplaceBack(connection);		// 把连接对象加入连接列表
+	lk3.unlock();									// 解锁连接列表，因为接下来要调用ClearDirty了，里面也会有锁
 
-		connections_manager_.ClearDirty();
-	}
+	connections_manager_.ClearDirty();				// 清理断开的或者无效的连接
+
 	return {
-		[this, c = std::move(conn)] {
+		[this, c = std::move(connection)] {
 			return DisconnectImpl(c);
 		}
 	};
 }
 
-void Object::Impl::SetParent(Object* parent) {
-	if (owner_ == parent || parent_ == parent)
-		return;
+void Object::Impl::SetParent(const SharedObject& parent) {
 	auto prev_parent = parent_;
+	if (owner_ == parent.get() || prev_parent == parent)
+		return;
 
 	// 如果parent正在删除中, 就不处理
 	if (prev_parent && !prev_parent->impl_->deleting_) {
-		auto item = prev_parent->impl_->child_items_.FindIf([owner = owner_](const ChildItem& i) {
-			return i.obj == owner;
+		auto c = prev_parent->impl_->children_.FindIf([owner = owner_](const WeakObject& o) {
+			return o.lock().get() == owner;
 		});
 		// 如果没在原父级的子列表中找到自己，说明只是加入了父级的pending_addition_children_，但是父级还没处理
-		if (item.IsEnd()) {
+		if (c.IsEnd()) {
 			// 从原父级的添加队列中删除自己
-			auto s = prev_parent->impl_->pending_addition_children_.Erase(owner_);
+			auto s = prev_parent->impl_->pending_addition_children_.Erase(owner_->shared_from_this());
 			MW_ASSERT_X(s > 0);
 		}
 		else {
 			prev_parent->impl_->dirty_ = true;
-			item->orphaned = true;
+			c->reset();
 		}
 	}
 
 	if (parent) {
-		parent->impl_->pending_addition_children_.PushBack(owner_);
+		parent->impl_->pending_addition_children_.PushBack(owner_->shared_from_this());
 	}
 	parent_ = parent;
 }
 
-List<Object*> Object::Impl::GetChildrenWithProcess() {
-	MW_ASSERT_X(children_cache_.size() == child_items_.size());
+List<SharedObject> Object::Impl::GetChildrenWithProcess() {
 	// 处理移除的子物体
 	if (dirty_) {
-		children_cache_.Clear();
-
-		auto remove_count = child_items_.EraseIf([](const ChildItem& i) {
-			return i.orphaned;
+		auto remove_count = children_.EraseIf([](const SharedObject& o) {
+			return o->impl_->orphaned_;
 		});
-		if (dirty_)
-			MW_ASSERT_X(remove_count > 0);
-
-		children_cache_ = child_items_.Transform<Object*>([](const ChildItem& i) {
-			return i.obj;
-		});
+		MW_ASSERT_X(remove_count > 0);
 		dirty_ = false;
 	}
 
 	// 处理添加的子物体
-	for (auto c : pending_addition_children_) {
-		child_items_.EmplaceBack(false, c);
-		children_cache_.EmplaceBack(c);
+	for (auto& c : pending_addition_children_) {
+		children_.EmplaceBack(c);
 	}
 	pending_addition_children_.Clear();
 
-	return children_cache_;
+	return children_;
 }
 
 void Object::Impl::DeleteChildren() {
-	for (auto i : child_items_) {
-		if (!i.orphaned) {
-			delete i.obj;
-		}
-	}
-	child_items_.Clear();
-	children_cache_.Clear();
+	children_.Clear();
 }
 }

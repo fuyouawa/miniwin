@@ -7,31 +7,30 @@ TableView::Impl::Impl(TableView* owner): owner_(owner)
 {
 }
 
-void TableView::Impl::Init()
+void TableView::Impl::Awake()
 {
-    auto d = new SelectableItemDelegate(owner_);
+    auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
     owner_->SetItemDelegate(d);
 
-    auto hori = new HeaderView(owner_, HeaderOrientation::Horizontal);
+    auto hori = Instantiate<HeaderView>(owner_->shared_from_this());
+    hori->SetOrientation(HeaderOrientation::Horizontal);
     owner_->SetHorizontalHeader(hori);
     //TODO 垂直表头
 }
 
-HeaderView* TableView::Impl::Header(HeaderOrientation orientation)
+WeakHeaderView TableView::Impl::Header(HeaderOrientation orientation)
 {
     return headers_[orientation];
 }
 
-void TableView::Impl::SetHeader(HeaderOrientation orientation, HeaderView* header)
+void TableView::Impl::SetHeader(HeaderOrientation orientation, const SharedHeaderView& header)
 {
     auto h = Header(orientation);
     if (!header || header == h)
         return;
-    if (h && h->WidgetParent() == owner_)
-        delete h;
 
     headers_[orientation] = header;
-    header->SetWidgetParent(owner_);
+    header->SetWidgetParent(owner_->shared_from_this());
     if (!header->Model())
     {
         header->SetModel(owner_->Model());

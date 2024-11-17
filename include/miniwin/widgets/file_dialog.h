@@ -7,35 +7,43 @@ namespace miniwin {
  *
  * 在Windows下使用GetOpenFileNameA的系统api
  *
- * 这里包装一个Dialog更多是为了阻塞父级窗体，所以是私有继承Dialog，仅公开部分可用函数
+ * 这里包装一个Dialog更多是为了阻塞父级窗体，仅部分函数可用
+ *
+ * 可用函数:
+ *
+ * using Dialog::WidgetParent;
+ *
+ * using Dialog::SetWidgetParent;
+ *
+ * using Dialog::Title;
+ *
+ * using Dialog::SetTitle;
+ *
+ * using Dialog::Open;
+ *
+ * using Dialog::Invoke;
  */
-class FileDialog : private Dialog {
+class FileDialog : public Dialog {
+	MW_OBJECT
 public:
 	using GetOpenFileNameCallback = std::function<void(String filename, String selected_filter)>;
 
 	static void GetOpenFileNameAsync(
-		Widget* parent,
+		const SharedWidget& parent,
 		const String& title,
 		GetOpenFileNameCallback callback = {},
 		const String& dir = {},
 		const String& filter = "All Files (*.*)");
 
 	struct Config {
-		Widget* parent;
+		WeakWidget parent;
 		String directory;
 		String filter;
 		std::function<void(FileDialog* dlg)> selected_callback;
 	};
 
-	FileDialog(const Config& cfg, const String& title);
+	FileDialog();
 	~FileDialog() override;
-
-	using Dialog::WidgetParent;
-	using Dialog::SetWidgetParent;
-	using Dialog::Title;
-	using Dialog::SetTitle;
-	using Dialog::Open;
-	using Dialog::Invoke;
 
 	Config& GetConfig() const;
 
@@ -45,6 +53,7 @@ public:
 	String SelectedFileName() const;
 
 protected:
+	void Awake() override;
 	void OnPaintWindowBegin() override;
 
 	_MW_IMPL

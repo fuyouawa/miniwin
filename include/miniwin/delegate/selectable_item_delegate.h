@@ -2,15 +2,16 @@
 #include <miniwin/delegate/base/abstract_item_delegate.h>
 
 namespace miniwin {
-class SelectableItemDelegate : public AbstractItemDelegate
-{
+class SelectableItemDelegate : public AbstractItemDelegate {
+	MW_OBJECT
 public:
-	SelectableItemDelegate(Object* parent);
+	SelectableItemDelegate();
+	~SelectableItemDelegate() override;
 
 	bool IsAllocMultiSelect() const;
 	void SetAllocMultiSelect(bool b);
 
-	void Paint(AbstractItemView* view, const ModelIndex& index) override;
+	void Paint(const SharedItemView& view, const ModelIndex& index) override;
 
 	_MW_IMPL
 };

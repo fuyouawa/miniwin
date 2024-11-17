@@ -4,35 +4,34 @@
 #include <miniwin/core/imgui.h>
 
 namespace miniwin {
-AbstractControl::AbstractControl(Widget* parent, const String& text)
-	: Widget{ parent, text }
-{
+AbstractControl::AbstractControl() {}
+
+AbstractControl::~AbstractControl() {}
+
+bool AbstractControl::Visible() const {
+	//TODO ImGui::GetCurrentWindow
+	return Widget::Visible() && !ImGui::GetCurrentWindow()->SkipItems;
 }
 
-AbstractControl::~AbstractControl()
-{
+void AbstractControl::Initialize(const SharedObject& parent) {
+	Widget::Initialize(parent);
+	SetName("Control");
 }
 
-bool AbstractControl::Visible() const
-{
-    //TODO ImGui::GetCurrentWindow
-    return Widget::Visible() && !ImGui::GetCurrentWindow()->SkipItems;
-}
-
-void AbstractControl::PaintBegin()
-{
+void AbstractControl::PaintBegin() {
 	Widget::PaintBegin();
 }
 
-void AbstractControl::PaintEnd()
-{
-    Widget::SetSize(imgui::GetItemRectSize());
+void AbstractControl::PaintEnd() {
+	Widget::SetSize(imgui::GetItemRectSize());
 	Widget::PaintEnd();
 }
 
-AbstractTextualControl::AbstractTextualControl(Widget* parent, const String& text) : AbstractControl(parent, text) {}
+AbstractTextualControl::AbstractTextualControl() {
+	SetName({});
+}
 
-const String& AbstractTextualControl::Text() const {
+String AbstractTextualControl::Text() const {
 	return Name();
 }
 

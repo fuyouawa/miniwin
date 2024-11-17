@@ -2,20 +2,20 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class Selectable : public AbstractTextualControl
-{
+class Selectable : public AbstractTextualControl {
+	MW_OBJECT
 public:
-    Selectable(Widget* parent, const String& text);
-    ~Selectable() override;
+	Selectable();
+	~Selectable() override;
 
-    bool IsSelected() const;
-    void SetSelection(bool b);
+	bool IsSelected() const;
+	void SetSelection(bool b);
 
-    MW_SIGNAL(OnSelectionChanged, (bool) selected)
+	MW_SIGNAL(OnSelectionChanged, (bool) selected)
 
 protected:
-    void PaintBegin() override;
+	void PaintBegin() override;
 
-    _MW_IMPL
+	_MW_IMPL
 };
 }

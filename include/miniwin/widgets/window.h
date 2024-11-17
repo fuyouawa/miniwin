@@ -2,14 +2,14 @@
 #include <miniwin/core/widget.h>
 
 namespace miniwin {
-class Window : public Widget
-{
+class Window : public Widget {
+	MW_OBJECT
 public:
-	Window(Widget* parent = nullptr, const String& title = "Window");
+	Window();
 	~Window() override;
 
-    const String& Title() const;
-    void SetTitle(const String& title);
+	String Title() const;
+	void SetTitle(const String& title);
 
 	/**
 	 * 将窗体居中
@@ -34,17 +34,20 @@ public:
 
 	void* PlatformHandle() const;
 
+	void Initialize(const SharedObject& parent) override;
+
 	MW_SIGNAL(OnTitleChanged, (String) title, (String) prev_title)
 	MW_SIGNAL(OnCollapseChanged, (bool) collapsed)
 	MW_SIGNAL(OnDockingChanged)
 
 protected:
+	void Awake() override;
 	void PaintBegin() override;
 	void PaintEnd() override;
 
 	virtual void OnPaintWindowBegin();
 	virtual void OnPaintWindowEnd();
 
-    _MW_IMPL
+	_MW_IMPL
 };
 }

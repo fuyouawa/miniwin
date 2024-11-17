@@ -22,82 +22,44 @@ using namespace miniwin;
 
 class ExampleWindow : public Window {
 public:
-	ExampleWindow(const String& title) : Window(nullptr, title) {
-		btn_open_file_ = new Button(this, "打开文件");
+	ExampleWindow() {}
 
-		Connect(btn_open_file_, &Button::OnClicked, this, [this]() {
-			FileDialog::GetOpenFileNameAsync(this, "选择文件", [this](String filename, String _) {
-				std::cout << filename.ToStdString() << std::endl;
+	void Awake() override {
+		Window::Awake();
+
+		auto self = shared_from_this();
+
+		label_ = Instantiate<Label>(self);
+		label_->SetText("输入文本");
+		text_edit_ = Instantiate<TextEdit>(self);
+		text_edit_->SetPlainText("初始文本");
+
+		layout_ = Instantiate<HBoxLayout>(self);
+		
+		layout_->AddWidget(label_);
+		layout_->AddWidget(text_edit_);
+
+		btn_ = Instantiate<Button>(self);
+		btn_->SetText("将文本值应用窗体");
+		Connect(btn_, &Button::OnClicked, self, [this]() {
+			SetTitle(text_edit_->PlainText());
 			});
-			});
-
-		btn_open_dialog_ = new Button(this, "打开对话框");
-		dialog_ = new Dialog(this, "对话框");
-
-		Connect(btn_open_dialog_, &Button::OnClicked, this, [this]() {
-			dialog_->Open();
-			});
-
-		btn_open_msgbox_ = new Button(this, "打开消息框");
-
-		Connect(btn_open_msgbox_, &Button::OnClicked, this, [this]() {
-			MessageBox::InformationAsync(this, "提示", "这是一个消息框！", "确认", []() {
-				std::cout << "消息框被确认了" << std::endl;
-				});
-			});
-
-		btn_open_msgbox2_ = new Button(this, "打开询问框");
-
-		Connect(btn_open_msgbox2_, &Button::OnClicked, this, [this]() {
-			MessageBox::QuestionAsync(this, "询问", "这是一个询问框？", "是的", "不是", [](bool yes) {
-				std::cout << "询问框被确认了:" << yes << std::endl;
-				});
-			});
-
-		edit_title_to_set_ = new TextEdit(this, "示例窗体");
-		btn_set_title_ = new Button(this, "修改窗体标题");
-		layout_set_title_ = new HBoxLayout(this);
-		layout_set_title_->SetSpacing(5);
-
-		layout_set_title_->AddWidget(edit_title_to_set_);
-		layout_set_title_->AddWidget(btn_set_title_);
-
-		Connect(btn_set_title_, &Button::OnClicked, this, [this]() {
-			SetTitle(edit_title_to_set_->PlainText());
-			});
-
-		btn_open_file_->SetWidth(150);
-		btn_open_dialog_->SetWidth(120);
-
-		chkbox_ = new CheckBox(this, "复选框");
-
-		label_ = new Label(this, "标签");
-		layout2_ = new HBoxLayout(this);
-		layout2_->AddWidget(chkbox_);
-		layout2_->AddWidget(label_);
-
-		edit_title_to_set_->SetWidth(100);
 	}
 
-	Button* btn_open_file_;
-	Button* btn_open_dialog_;
-	Button* btn_open_msgbox_;
-	Button* btn_open_msgbox2_;
-	Dialog* dialog_;
-	Button* btn_set_title_;
-	TextEdit* edit_title_to_set_;
-	HBoxLayout* layout_set_title_;
-	CheckBox* chkbox_;
-	Label* label_;
-	HBoxLayout* layout2_;
-	ComboBox* combo_box_;
+	std::shared_ptr<Label> label_;
+	std::shared_ptr<TextEdit> text_edit_;
+	std::shared_ptr<HBoxLayout> layout_;
+	std::shared_ptr<Button> btn_;
 };
 
 int main() {
 	Application app;
 	app.SetHideMainWindow(true);
-	auto window = new ExampleWindow{"示例窗体"};
+	auto window = Instantiate<ExampleWindow>(nullptr);
+	window->SetTitle("示例窗体");
 	window->SetSize({ 600, 400 });
 	window->CenterWindow();
+	window->Show();
+
 	app.Execute();
 }

@@ -8,7 +8,7 @@ class Dialog::Impl {
 public:
 	Impl(Dialog* owner) : owner_(owner) {}
 
-	void Init() {
+	void Awake() {
 		owner_->SetVisible(false);
 	}
 
@@ -16,17 +16,19 @@ public:
 	bool is_opened_ = true;
 };
 
-Dialog::Dialog(Widget* parent, const String& title)
-	: Window(parent, title)
-{
+Dialog::Dialog() {
 	impl_ = std::make_unique<Impl>(this);
-	impl_->Init();
 }
 
 Dialog::~Dialog() = default;
 
 void Dialog::Open() {
 	Show();
+}
+
+void Dialog::Awake() {
+	Window::Awake();
+	impl_->Awake();
 }
 
 void Dialog::OnPaintWindowBegin() {

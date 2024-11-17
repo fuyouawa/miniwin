@@ -4,25 +4,35 @@
 
 namespace miniwin {
 class MessageBox : public Dialog {
+	MW_OBJECT
 public:
+	using Callback = std::function<void(const std::shared_ptr<Button>& btn)>;
+
 	static void InformationAsync(
-		Widget* parent,
+		const SharedWidget& parent,
 		const String& title,
 		const String& text,
 		const String& ok,
 		std::function<void()> callback);
 	static void QuestionAsync(
-		Widget* parent,
+		const SharedWidget& parent,
 		const String& title,
 		const String& text,
 		const String& yes,
 		const String& no,
 		std::function<void(bool yes)> callback);
 
-	MessageBox(Widget* parent, const String& title, const String& text);
+	MessageBox();
+	~MessageBox() override;
 
-	void AddButton(Button* btn);
-	void SetButtonClickedCallback(std::function<void(Button* btn)> callback);
+	void AddButton(const std::shared_ptr<Button>& btn);
+	void SetButtonClickedCallback(Callback callback);
+
+	String Text() const;
+	void SetText(const String& text);
+
+protected:
+	void Awake() override;
 
 	_MW_IMPL
 };

@@ -11,6 +11,8 @@ class Window::Impl
 public:
     Impl(Window* owner);
 
+    void Init();
+
     void PaintBegin();
     void PaintEnd();
 
@@ -25,10 +27,12 @@ public:
     ScopeCondition collapsed_sc_{ false };
     std::optional<std::pair<Vector2D, Vector2D>> pos_and_pivot_to_set_;
     std::optional<Vector2D> size_to_set_;
+
+    bool is_docking_ = false;
     bool is_close_btn_enabled_ = true;
+
     void* hwnd_ = nullptr;
     void* prev_hwnd_ = nullptr;
-    bool is_docking_ = false;
     Window* owner_;
 };
 }

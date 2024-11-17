@@ -10,11 +10,11 @@ public:
 	Button* owner_;
 };
 
-Button::Button(Widget* const parent, const String& text)
-	: AbstractTextualControl(parent, text)
-{
+Button::Button() {
 	impl_ = std::make_unique<Impl>(this);
 }
+
+Button::~Button() {}
 
 void Button::PaintBegin() {
 	AbstractTextualControl::PaintBegin();

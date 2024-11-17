@@ -4,23 +4,24 @@
 
 
 namespace miniwin {
-class TableView : public AbstractItemView
-{
+class TableView : public AbstractItemView {
+	MW_OBJECT
 public:
-    TableView(Widget* parent);
-    ~TableView() override;
+	TableView();
+	~TableView() override;
 
-    HeaderView* HorizontalHeader() const;
-    void SetHorizontalHeader(HeaderView* header);
+	SharedHeaderView HorizontalHeader() const;
+	void SetHorizontalHeader(const SharedHeaderView& header);
 
-    HeaderView* VerticalHeader() const;
-    void SetVerticalHeader(HeaderView* header);
+	SharedHeaderView VerticalHeader() const;
+	void SetVerticalHeader(const SharedHeaderView& header);
 
-    void SetModel(AbstractItemModel* model) override;
+	void SetModel(const SharedItemModel& model) override;
 
 protected:
-    void PaintBegin() override;
+	void Awake() override;
+	void PaintBegin() override;
 
-    _MW_IMPL
+	_MW_IMPL
 };
 }

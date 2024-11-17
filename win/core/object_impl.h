@@ -15,14 +15,15 @@ public:
 
     struct Connection
     {
-        const Object* sender;
-        const Object* receiver;
+        WeakObject sender;
+        WeakObject receiver;
         internal::UniqueSlotObject slot_obj;
         std::type_index signal_info;
         ConnectionFlags connection_type;
         InvokeType invoke_type;
     };
     using SharedConnection = std::shared_ptr<Connection>;
+    using WeakConnection = std::weak_ptr<Connection>;
 
     class ConnectionList : public List<SharedConnection> {
     public:
@@ -39,47 +40,43 @@ public:
     };
 
     static Disconnecter ConnectImpl(
-        const Object* sender,
+        const SharedObject& sender,
         const std::type_info& signal_info,
-        const Object* receiver,
+        const SharedObject& receiver,
         internal::UniqueSlotObject&& slot_obj,
         ConnectionFlags connection_flags,
         InvokeType invoke_type);
 
 
-    void Init(Object* parent);
+    void Init(const SharedObject& parent);
 
     void EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store);
 
     bool DisconnectImpl(const SharedConnection& connection);
 
-    Disconnecter AddConnection(SharedConnection&& conn);
+    Disconnecter AddConnection(SharedConnection&& connection);
 
-    void SetParent(Object* parent);
+    void SetParent(const SharedObject& parent);
 
-    List<Object*> GetChildrenWithProcess();
+    List<SharedObject> GetChildrenWithProcess();
     void DeleteChildren();
 
     bool is_widget_ = false;
     bool is_layout_ = false;
     bool deleting_ = false;
+    bool orphaned_ = false;
+    bool dirty_ = false;
 
     Object* owner_ = nullptr;
-    Object* parent_ = nullptr;
+    SharedObject parent_;
     FlagsType flags_ = 0;
     String name_;
     std::mutex signal_mutex_;
-    List<SharedConnection> connected_sender_connections_;    // 连接到的发送者
+    List<WeakConnection> connected_sender_connections_;    // 连接到的发送者
     ConnectionsManager connections_manager_;
 
 private:
-    struct ChildItem {
-        bool orphaned;
-        Object* obj;
-    };
-    bool dirty_ = false;
-    List<ChildItem> child_items_;
-    List<Object*> children_cache_;
-    List<Object*> pending_addition_children_;
+    List<SharedObject> children_;
+    List<SharedObject> pending_addition_children_;
 };
 }

@@ -2,15 +2,16 @@
 #include <miniwin/widgets/window.h>
 
 namespace miniwin {
-class Dialog : public Window
-{
+class Dialog : public Window {
+	MW_OBJECT
 public:
-	Dialog(Widget* parent, const String& title);
+	Dialog();
 	~Dialog() override;
 
 	void Open();
 
 protected:
+	void Awake() override;
 	void OnPaintWindowBegin() override;
 	void OnPaintWindowEnd() override;
 

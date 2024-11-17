@@ -10,7 +10,7 @@ public:
 	Frame* owner_;
 };
 
-Frame::Frame(Widget* parent) : AbstractControl(parent, "Frame") {}
+Frame::Frame() {}
 
 void Frame::PaintBegin() {
 	AbstractControl::PaintBegin();

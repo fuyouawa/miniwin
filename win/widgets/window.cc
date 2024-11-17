@@ -6,8 +6,7 @@
 
 
 namespace miniwin {
-Window::Window(Widget* parent, const String& title)
-	: Widget(parent, title)
+Window::Window()
 {
 	impl_ = std::make_unique<Impl>(this);
 	Widget::impl_->is_window_ = true;
@@ -15,7 +14,7 @@ Window::Window(Widget* parent, const String& title)
 
 Window::~Window() {}
 
-const String& Window::Title() const {
+String Window::Title() const {
 	return Name();
 }
 
@@ -76,6 +75,15 @@ bool Window::IsCollapsed() const {
 
 void* Window::PlatformHandle() const {
 	return impl_->hwnd_;
+}
+
+void Window::Initialize(const SharedObject& parent) {
+	Widget::Initialize(parent);
+	impl_->Init();
+}
+
+void Window::Awake() {
+	Widget::Awake();
 }
 
 void Window::PaintBegin() {

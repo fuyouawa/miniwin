@@ -11,7 +11,7 @@
 
 namespace miniwin {
 namespace {
-String OpenFileDialog(Widget* parent, const String& title, const String& dir, const String& filter,
+String OpenFileDialog(const SharedWidget& parent, const String& title, const String& dir, const String& filter,
                       String* selected_filter) {
 	String windows_filter;
 
@@ -32,16 +32,20 @@ String OpenFileDialog(Widget* parent, const String& title, const String& dir, co
 	wchar_t file[MAX_PATH]{0};
 	ZeroMemory(&ofn, sizeof(ofn));
 	if (parent) {
-		ofn.hwndOwner = reinterpret_cast<HWND>(parent->OwnerWindow()->PlatformHandle());
+		auto w = parent->OwnerWindow();
+		if (w)
+			ofn.hwndOwner = reinterpret_cast<HWND>(w->PlatformHandle());
 	}
 	auto wfilter = windows_filter.ToStdWString();
 	auto wtitle = title.ToStdWString();
+	auto wdir = dir.ToStdWString();
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = nullptr;
 	ofn.lpstrFile = file;
 	ofn.nMaxFile = sizeof(file);
 	ofn.lpstrFilter = wfilter.data();
 	ofn.lpstrTitle = wtitle.data();
+	ofn.lpstrInitialDir = wdir.data();
 	ofn.nFilterIndex = 1;
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
@@ -55,9 +59,9 @@ String OpenFileDialog(Widget* parent, const String& title, const String& dir, co
 
 class FileDialog::Impl {
 public:
-	Impl(FileDialog* owner, const Config& cfg) : owner_(owner), cfg_(cfg) {}
+	Impl(FileDialog* owner) : owner_(owner) {}
 
-	void Init() {
+	void Awake() {
 		owner_->EnableFlags(imgui::kWindowNoInputs
 		                  | imgui::kWindowNoBackground
 		                  | imgui::kWindowNoTitleBar, true);
@@ -69,7 +73,7 @@ public:
 			open_file_dialog_thread_ = std::thread([cfg = cfg_,cap = owner_->Title(), this]() {
 				String sf;
 				auto f = OpenFileDialog(
-					cfg.parent,
+					cfg.parent.lock(),
 					cap,
 					cfg.directory,
 					cfg.filter,
@@ -92,26 +96,24 @@ public:
 	String selected_filter;
 	String file_;
 	std::mutex mutex_;
-	Config cfg_;
+	Config cfg_ = {};
 };
 
-void FileDialog::GetOpenFileNameAsync(Widget* parent, const String& title, GetOpenFileNameCallback callback,
+void FileDialog::GetOpenFileNameAsync(const SharedWidget& parent, const String& title, GetOpenFileNameCallback callback,
                                       const String& dir, const String& filter) {
-
-	Config cfg(parent, dir, filter, [cb = std::move(callback)](FileDialog* dlg) {
+	auto dlg = Instantiate<FileDialog>(parent);
+	dlg->SetTitle(title);
+	dlg->GetConfig() = Config(parent, dir, filter, [cb = std::move(callback)](FileDialog* dlg) {
 		cb(std::move(dlg->impl_->file_), std::move(dlg->impl_->selected_filter));
 		dlg->Close();
-	});
+		});
 
-	auto dlg = new FileDialog(cfg, title);
 	dlg->Open();
 }
 
-FileDialog::FileDialog(const Config& cfg, const String& title)
-	: Dialog(cfg.parent, title)
+FileDialog::FileDialog()
 {
-	impl_ = std::make_unique<Impl>(this, cfg);
-	impl_->Init();
+	impl_ = std::make_unique<Impl>(this);
 }
 
 FileDialog::~FileDialog() {
@@ -144,6 +146,11 @@ String FileDialog::SelectedFileName() const {
 
 	std::lock_guard lk(impl_->mutex_);
 	return impl_->file_;
+}
+
+void FileDialog::Awake() {
+	Dialog::Awake();
+	impl_->Awake();
 }
 
 void FileDialog::OnPaintWindowBegin() {

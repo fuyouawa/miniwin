@@ -3,8 +3,9 @@
 
 namespace miniwin {
 class BoxLayout : public Layout {
+	MW_OBJECT
 public:
-	BoxLayout(Widget* parent);
+	BoxLayout();
 	~BoxLayout() override;
 
 	float Spacing() const;
@@ -13,21 +14,21 @@ public:
 	_MW_IMPL
 };
 
-class HBoxLayout : public BoxLayout
-{
+class HBoxLayout : public BoxLayout {
+	MW_OBJECT
 public:
-	HBoxLayout(Widget* parent);
+	HBoxLayout();
 
 protected:
-	void OnLayoutWidgetBegin(Widget* widget) override;
+	void OnLayoutWidgetBegin(const SharedWidget& widget) override;
 };
 
-class VBoxLayout : public BoxLayout
-{
+class VBoxLayout : public BoxLayout {
+	MW_OBJECT
 public:
-	VBoxLayout(Widget* parent);
+	VBoxLayout();
 
 protected:
-	void OnLayoutWidgetBegin(Widget* widget) override;
+	void OnLayoutWidgetBegin(const SharedWidget& widget) override;
 };
 }

@@ -17,9 +17,11 @@ public:
     void PaintBegin();
     void PaintEnd();
 
-    Window* OwnerWindow();
- 	Widget* WidgetParent();
-    void SetWidgetParent(Widget* parent);
+    void Awake();
+
+    SharedWindow OwnerWindow() const;
+	SharedWidget WidgetParent() const;
+    void SetWidgetParent(const SharedWidget& parent);
 
     void PushPendingFunctor(std::function<void()>&& func);
     void DoPendingFunctors();
@@ -34,10 +36,8 @@ public:
     ScopeVariable<Vector2D> pos_sc_{};
 
     bool visible_ = true;
-
+    bool awaked_ = false;
     bool is_painting_children_ = false;
-    bool orphaned_ = false;
-    bool dirty_ = false;
     bool is_window_ = false;
     FlagsType draw_flags_ = 0;
 

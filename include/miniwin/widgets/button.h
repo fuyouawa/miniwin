@@ -2,10 +2,11 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class Button : public AbstractTextualControl
-{
+class Button : public AbstractTextualControl {
+	MW_OBJECT
 public:
-	Button(Widget* parent, const String& text);
+	Button();
+	~Button() override;
 
 	MW_SIGNAL(OnClicked)
 

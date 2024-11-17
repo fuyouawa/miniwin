@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <optional>
 
 namespace miniwin {
 template<class T>
@@ -61,6 +60,7 @@ public:
 	iterator FindIf(auto&& func);
 
 	void PushBack(const T& val);
+	void PushBack(T&& val);
 	void EmplaceBack(auto&&... args);
 
 	void SwapElem(size_type index, size_type index2);
@@ -69,6 +69,9 @@ public:
 
 	iterator Insert(const_iterator where, const size_type count, const T& val);
 	iterator Insert(const_iterator where, const T& val);
+
+	iterator Insert(const_iterator where, const size_type count, T&& val);
+	iterator Insert(const_iterator where, T&& val);
 
 	const T& operator[](size_type off) const { return vec_[off]; }
 	T& operator[](size_type off) { return vec_[off]; }
@@ -261,9 +264,14 @@ typename List<T>::iterator List<T>::FindIf(auto&& func)
 }
 
 template <class T>
-void List<T>::PushBack(const T& val)
+void List<T>::PushBack(const T& val) {
+	vec_.push_back(val);
+}
+
+template <class T>
+void List<T>::PushBack(T&& val)
 {
-	vec_.push_back(std::forward<decltype(val)>(val));
+	vec_.push_back(std::move(val));
 }
 
 template <class T>
@@ -285,8 +293,7 @@ void List<T>::Swap(List& other)
 }
 
 template <class T>
-typename List<T>::iterator List<T>::Insert(const_iterator where, const size_type count, const T& val)
-{
+typename List<T>::iterator List<T>::Insert(const_iterator where, const size_type count, const T& val) {
 	return FromStdIter(vec_.insert(ToStdIter(where), count, val));
 }
 
@@ -294,6 +301,18 @@ template <class T>
 typename List<T>::iterator List<T>::Insert(const_iterator where, const T& val)
 {
 	return Insert(where, 1, val);
+}
+
+template <class T>
+typename List<T>::iterator List<T>::Insert(const_iterator where, const size_type count, T&& val)
+{
+	return FromStdIter(vec_.insert(ToStdIter(where), count, std::move(val)));
+}
+
+template <class T>
+typename List<T>::iterator List<T>::Insert(const_iterator where, T&& val)
+{
+	return Insert(where, 1, std::move(val));
 }
 
 template <class T>

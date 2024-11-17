@@ -3,13 +3,13 @@
 #include <miniwin/model/base/model_index.h>
 
 namespace miniwin {
-class AbstractItemView;
-
-class AbstractItemDelegate : public Object
-{
+class AbstractItemDelegate : public Object {
+	MW_OBJECT
 public:
-	AbstractItemDelegate(Object* parent);
+	AbstractItemDelegate();
 
-	virtual void Paint(AbstractItemView* view, const ModelIndex& index) = 0;
+	void Initialize(const SharedObject& parent) override;
+
+	virtual void Paint(const SharedItemView& view, const ModelIndex& index) = 0;
 };
 }
