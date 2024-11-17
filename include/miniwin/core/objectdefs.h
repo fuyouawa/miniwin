@@ -85,6 +85,17 @@ public:
 	Func func_;
 };
 
+template<class T>
+concept IsUseObjectParent = std::is_base_of_v<Object, T> && !std::is_base_of_v<Widget, T>;
+template<class T>
+concept IsUseWidgetParent = std::is_base_of_v<Widget, T>;
+
+template<class T, class E>
+std::shared_ptr<T> Instantiate(const std::shared_ptr<E>& parent) {
+	auto p = std::make_shared<T>();
+	p->Initialize(parent);
+	return p;
+}
 } //namespace internal
 
 enum class InvokeType {
@@ -117,11 +128,14 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 template <class T>
 using PureType = std::remove_cvref_t<std::remove_pointer_t<T>>;
 
-template<std::derived_from<Object> T>
+template<internal::IsUseObjectParent T>
 std::shared_ptr<T> Instantiate(const SharedObject& parent) {
-	auto p = std::make_shared<T>();
-	p->Initialize(parent);
-	return p;
+	return internal::Instantiate<T>(parent);
+}
+
+template<internal::IsUseWidgetParent T>
+std::shared_ptr<T> Instantiate(const SharedWidget& parent) {
+	return internal::Instantiate<T>(parent);
 }
 }
 

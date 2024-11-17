@@ -9,8 +9,8 @@ public:
     ListView();
     ~ListView() override;
 
-	const String& Text() const;
-	void SetText(const String& text);
+	String Title() const;
+	void SetTitle(const String& title);
 
 protected:
 	void Awake() override;
