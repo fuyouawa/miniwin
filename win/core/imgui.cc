@@ -179,6 +179,10 @@ void PushStyleVar(StyleVar idx, Vector2D val) {
 	ImGui::PushStyleVar(idx, CastToIm(val));
 }
 
+void PopStyleVar(size_t count) {
+	ImGui::PopStyleVar(count);
+}
+
 bool IsWindowCollapsed() {
 	return ImGui::IsWindowCollapsed();
 }

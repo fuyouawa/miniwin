@@ -47,6 +47,7 @@ void Widget::Impl::PaintBegin() {
 		owner_->OnPositionChanged(pos_sc_.cur_value(), pos_sc_.prev_value());
 	}
 
+	imgui::PushStyleVar(imgui::kStyleVarAlpha, alpha_);
 	imgui::BeginDisabled(!enable_sc_.cur_value());
 
 	// 如果是window，需要自己管理id
@@ -60,6 +61,8 @@ void Widget::Impl::PaintEnd() {
 		imgui::PopID();
 	}
 	imgui::EndDisabled();
+	imgui::PopStyleVar();
+
 	enable_sc_.Exit();
 	size_sc_.Exit();
 	pos_sc_.Exit();

@@ -66,11 +66,12 @@ public:
 		                  | imgui::kWindowNoBackground
 		                  | imgui::kWindowNoTitleBar, true);
 		owner_->SetSize({});
+		owner_->SetPosition({}, {});
 	}
 
 	void DoOpenFileDialog() {
 		if (!open_file_dialog_thread_.joinable()) {
-			open_file_dialog_thread_ = std::thread([cfg = cfg_,cap = owner_->Title(), this]() {
+			open_file_dialog_thread_ = std::thread([cfg = cfg_,cap = owner_->Title(), self = owner_->shared_from_this()]() {
 				String sf;
 				auto f = OpenFileDialog(
 					cfg.parent.lock(),
@@ -80,12 +81,12 @@ public:
 					&sf);
 
 				{
-					std::lock_guard lk(mutex_);
-					file_ = std::move(f);
-					selected_filter = std::move(sf);
+					std::lock_guard lk(self->impl_->mutex_);
+					self->impl_->file_ = std::move(f);
+					self->impl_->selected_filter = std::move(sf);
 				}
-				selected_ = true;
-				cfg.selected_callback(owner_);
+				self->impl_->selected_ = true;
+				cfg.selected_callback(self);
 			});
 		}
 	}
@@ -99,11 +100,11 @@ public:
 	Config cfg_ = {};
 };
 
-void FileDialog::GetOpenFileNameAsync(const SharedWidget& parent, const String& title, GetOpenFileNameCallback callback,
+void FileDialog::GetOpenFileNameAsync(const SharedWidget& parent, const String& title, CallbackOfGetOpenFileName callback,
                                       const String& dir, const String& filter) {
 	auto dlg = Instantiate<FileDialog>(parent);
 	dlg->SetTitle(title);
-	dlg->GetConfig() = Config(parent, dir, filter, [cb = std::move(callback)](FileDialog* dlg) {
+	dlg->GetConfig() = Config(parent, dir, filter, [cb = std::move(callback)](const std::shared_ptr<FileDialog>& dlg) {
 		cb(std::move(dlg->impl_->file_), std::move(dlg->impl_->selected_filter));
 		dlg->Close();
 		});

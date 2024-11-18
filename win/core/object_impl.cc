@@ -195,8 +195,8 @@ void Object::Impl::SetParent(const SharedObject& parent) {
 
 	// 如果parent正在删除中, 就不处理
 	if (prev_parent && !prev_parent->impl_->deleting_) {
-		auto c = prev_parent->impl_->children_.FindIf([owner = owner_](const WeakObject& o) {
-			return o.lock().get() == owner;
+		auto c = prev_parent->impl_->children_.FindIf([owner = owner_](const SharedObject& o) {
+			return o.get() == owner;
 		});
 		// 如果没在原父级的子列表中找到自己，说明只是加入了父级的pending_addition_children_，但是父级还没处理
 		if (c.IsEnd()) {

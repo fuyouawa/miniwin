@@ -26,12 +26,13 @@ namespace miniwin {
 class FileDialog : public Dialog {
 	MW_OBJECT
 public:
-	using GetOpenFileNameCallback = std::function<void(String filename, String selected_filter)>;
+	using CallbackOfGetOpenFileName = std::function<void(String filename, String selected_filter)>;
+	using SelectedFileCallback = std::function<void(const std::shared_ptr<FileDialog>& dlg)>;
 
 	static void GetOpenFileNameAsync(
 		const SharedWidget& parent,
 		const String& title,
-		GetOpenFileNameCallback callback = {},
+		CallbackOfGetOpenFileName callback = {},
 		const String& dir = {},
 		const String& filter = "All Files (*.*)");
 
@@ -39,7 +40,7 @@ public:
 		WeakWidget parent;
 		String directory;
 		String filter;
-		std::function<void(FileDialog* dlg)> selected_callback;
+		SelectedFileCallback selected_callback;
 	};
 
 	FileDialog();

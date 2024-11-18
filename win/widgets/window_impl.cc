@@ -33,7 +33,7 @@ void Window::Impl::PaintBegin()
         imgui::SetNextWindowSize(*size_to_set_, imgui::kCondAlways);
         size_to_set_.reset();
     }
-
+    imgui::SetNextWindowBgAlpha(owner_->BgAlpha());
     owner_->OnPaintWindowBegin();
 
     owner_->Widget::SetSize(imgui::GetWindowSize());

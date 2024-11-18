@@ -20,7 +20,7 @@ public:
 		const String& text,
 		const String& yes,
 		const String& no,
-		std::function<void(bool yes)> callback);
+		std::function<void(bool is_yes)> callback);
 
 	MessageBox();
 	~MessageBox() override;

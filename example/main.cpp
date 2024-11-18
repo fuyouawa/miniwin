@@ -33,6 +33,8 @@ public:
 		text_edit_ = Instantiate<TextEdit>(self);
 		layout_ = Instantiate<HBoxLayout>(self);
 		btn_ = Instantiate<Button>(self);
+		btn2_ = Instantiate<Button>(self);
+		btn3_ = Instantiate<Button>(self);
 		combo_box_ = Instantiate<ComboBox>(self);
 		list_ = Instantiate<ListWidget>(self);
 		table_ = Instantiate<TableView>(self);
@@ -61,20 +63,37 @@ public:
 		// 设置表格模型的数据
 		table_model_->SetColumnCount(4);
 		table_model_->SetRowCount(5);
-		table_model_->SetHorizontalHeaderTexts({"头0", "头1", "头2", "头3"}); // 设置表头
-		table_model_->SetRowTexts(0, 0, {"行0-0", "行0-1", "行0-2"}); // 设置第一行中三列文本
-		table_model_->SetRowTexts(3, 0, {"行3-0", "行3-1", "行3-2"}); // 设置第四行中三列文本
-		table_model_->SetColumnTexts(0, 3, {"列3-0", "列3-1", "列3-2", "列3-3", "列3-4",}); // 设置第四列的五行文本
-		// 连接按钮的点击信号，槽函数里面修改窗体
-		Connect(btn_, &Button::OnClicked, shared_from_this(), [this]() {
+		table_model_->SetHorizontalHeaderTexts({"头0", "头1", "头2", "头3"});					// 设置表头
+		table_model_->SetRowTexts(0, 0, {"行0-0", "行0-1", "行0-2"});							// 设置第一行中三列文本
+		table_model_->SetRowTexts(3, 0, {"行3-0", "行3-1", "行3-2"});							// 设置第四行中三列文本
+		table_model_->SetColumnTexts(0, 3, {"列3-0", "列3-1", "列3-2", "列3-3", "列3-4",});// 设置第四列的五行文本
+		// 连接按钮的点击信号，槽函数里面修改窗体标题
+		auto self = shared_from_this();
+		Connect(btn_, &Button::OnClicked, self, [this]() {
 			SetTitle(text_edit_->PlainText());
 		});
+
+		btn2_->SetText("打开资源管理器选择文件");
+		Connect(btn2_, &Button::OnClicked, self, [this]() {
+			FileDialog::GetOpenFileNameAsync(shared_from_this(), "选择文件", [](String filename, String _) {
+				std::cout << "选择的文件是：" << filename.ToStdString() << std::endl;
+				});
+			});
+
+		btn3_->SetText("打开询问框");
+		Connect(btn3_, &Button::OnClicked, self, [this]() {
+			MessageBox::QuestionAsync(shared_from_this(), "询问", "我是一个询问框？", "是的", "确实", [](bool is_yes) {
+				std::cout << "询问框的选择是：" << is_yes << std::endl;
+				});
+			});
 	}
 
 	std::shared_ptr<Label> label_;
 	std::shared_ptr<TextEdit> text_edit_;
 	std::shared_ptr<HBoxLayout> layout_;
 	std::shared_ptr<Button> btn_;
+	std::shared_ptr<Button> btn2_;
+	std::shared_ptr<Button> btn3_;
 	std::shared_ptr<ComboBox> combo_box_;
 	std::shared_ptr<ListWidget> list_;
 	std::shared_ptr<TableView> table_;
@@ -82,13 +101,15 @@ public:
 };
 
 int main() {
-	Application app;
-	app.SetHideMainWindow(true);
+	Application app;				// 实例化一个app对象，用于配置窗体等
+	app.SetHideMainWindow(true);	// 隐藏主窗体
+	app.EnabledIniFile(false);		// 关闭缓存文件
+	// 实例化示例窗体
 	auto window = Instantiate<ExampleWindow>(nullptr);
-	window->SetTitle("示例窗体");
-	window->SetSize({600, 400});
-	window->CenterWindow();
-	window->Show();
-
-	app.Execute();
+	window->SetTitle("示例窗体");	// 设置标题
+	window->SetSize({600, 400});	// 设置大小
+	window->CenterInScene();		// 设置窗体在屏幕居中
+	window->Show();					// 显示窗体
+	
+	app.Execute();					// 开始运行
 }

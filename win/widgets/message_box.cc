@@ -58,7 +58,7 @@ void MessageBox::InformationAsync(const SharedWidget& parent, const String& titl
 }
 
 void MessageBox::QuestionAsync(const SharedWidget& parent, const String& title, const String& text, const String& yes,
-                               const String& no, std::function<void(bool yes)> callback) {
+                               const String& no, std::function<void(bool is_yes)> callback) {
 	auto msg = Instantiate<MessageBox>(parent);
 	msg->SetTitle(title);
 	msg->SetText(text);

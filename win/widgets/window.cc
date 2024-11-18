@@ -24,7 +24,7 @@ void Window::SetTitle(const String& title) {
 	OnTitleChanged(title, prev);
 }
 
-void Window::CenterWindow() {
+void Window::CenterInScene() {
 	Invoke([this]() {
 		auto size = graphic::GetSceneSize();
 		SetPosition(size * 0.5f, {0.5f, 0.5f});

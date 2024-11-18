@@ -46,8 +46,8 @@ public:
 	String ClassName() const;
 	virtual const std::type_info& Type() const;
 	bool Orphaned() const;
-	FlagsType Flags() const;
-	void SetFlags(FlagsType flags);
+	virtual FlagsType Flags() const;
+	virtual void SetFlags(FlagsType flags);
 	void EnableFlags(FlagsType flags, bool enable);
 
 	virtual void Invoke(std::function<void()> func, InvokeType invoke_type = InvokeType::kAuto) const;

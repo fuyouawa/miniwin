@@ -77,6 +77,7 @@ void SetNextWindowSize(const Vector2D& size, Cond cond = kCondNone);
 
 void PushStyleVar(StyleVar idx, float val);
 void PushStyleVar(StyleVar idx, Vector2D val);
+void PopStyleVar(size_t count = 1);
 
 bool IsWindowCollapsed();
 void SetWindowCollapsed(bool collapsed, Cond cond = kCondNone);

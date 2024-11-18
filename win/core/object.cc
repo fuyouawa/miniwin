@@ -66,10 +66,10 @@ void Object::SetFlags(FlagsType flags) {
 
 void Object::EnableFlags(FlagsType flags, bool enable) {
 	if (enable) {
-		impl_->flags_ |= flags;
+		SetFlags(Flags() | flags);
 	}
 	else {
-		impl_->flags_ &= ~flags;
+		SetFlags(Flags() & ~Flags());
 	}
 }
 

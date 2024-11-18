@@ -15,7 +15,7 @@ public:
 	 * 将窗体居中
 	 * 注意：居中是相对于主窗体的，不是屏幕
 	 */
-	void CenterWindow();
+	void CenterInScene();
 
 	bool IsTopEnabled() const;
 	bool IsCloseButtonEnabled() const;

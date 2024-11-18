@@ -47,6 +47,11 @@ public:
 	void SetWidth(float width);
 	void SetHeight(float height);
 
+	float Alpha() const;
+	float BgAlpha() const;
+	void SetAlpha(float alpha);
+	void SetBgAlpha(float alpha);
+
 	virtual Vector2D Position() const;
 	virtual void SetPosition(const Vector2D& pos);
 

@@ -35,6 +35,8 @@ public:
     ScopeVariable<Vector2D> size_sc_{};
     ScopeVariable<Vector2D> pos_sc_{};
 
+    float alpha_ = 1;
+    float bg_alpha_ = 1;
     bool started_ = false;
     bool visible_ = true;
     bool is_painting_children_ = false;

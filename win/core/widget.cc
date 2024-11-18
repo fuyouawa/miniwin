@@ -77,6 +77,22 @@ void Widget::SetHeight(float height) {
 	SetSize(tmp);
 }
 
+float Widget::Alpha() const {
+	return impl_->alpha_;
+}
+
+float Widget::BgAlpha() const {
+	return impl_->bg_alpha_;
+}
+
+void Widget::SetAlpha(float alpha) {
+	impl_->alpha_ = alpha;
+}
+
+void Widget::SetBgAlpha(float alpha) {
+	impl_->bg_alpha_ = alpha;
+}
+
 Vector2D Widget::Position() const {
 	return impl_->pos_sc_.cur_value();
 }
