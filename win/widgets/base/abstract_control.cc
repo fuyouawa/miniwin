@@ -13,10 +13,6 @@ bool AbstractMinimumControl::Visible() const {
 	return Widget::Visible() && !ImGui::GetCurrentWindow()->SkipItems;
 }
 
-void AbstractMinimumControl::Initialize(const SharedObject& parent) {
-	Widget::Initialize(parent);
-}
-
 void AbstractMinimumControl::PaintBegin() {
 	Widget::PaintBegin();
 }

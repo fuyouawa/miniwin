@@ -9,8 +9,6 @@ public:
 	AbstractItemDelegate();
 	~AbstractItemDelegate() override;
 
-	void Initialize(const SharedObject& parent) override;
-
 	void Paint(const SharedItemView& view, const ModelIndex& index);
 
 protected:

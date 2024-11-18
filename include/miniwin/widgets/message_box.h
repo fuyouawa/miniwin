@@ -31,7 +31,8 @@ public:
 	String Text() const;
 	void SetText(const String& text);
 
-	void Initialize(const SharedObject& parent) override;
+protected:
+	void Awake() override;
 
 	_MW_IMPL
 };

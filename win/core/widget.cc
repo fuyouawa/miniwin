@@ -136,6 +136,15 @@ void Widget::Initialize(const SharedObject& parent) {
 	Object::Initialize(parent);
 	if (parent)
 		MW_ASSERT(parent->IsWidget(), "The parent of a widget must also be a widget");
+	Awake();
+}
+
+void Widget::Awake() {
+}
+
+void Widget::Start() {
+	MW_ASSERT_X(!impl_->started_);
+	impl_->started_ = true;
 }
 
 bool Widget::IsInUiThread() {
@@ -148,10 +157,6 @@ void Widget::Show() {
 
 void Widget::Hide() {
 	SetVisible(false);
-}
-
-void Widget::Awake() {
-	impl_->Awake();
 }
 
 void Widget::PreparePaint() {

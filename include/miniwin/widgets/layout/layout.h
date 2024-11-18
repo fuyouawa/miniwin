@@ -20,8 +20,6 @@ public:
 	size_t Count() const;
 	bool IsEmpty() const;
 
-	void Initialize(const SharedObject& parent) override;
-
 protected:
 	friend class WidgetsDriver;
 

@@ -62,8 +62,6 @@ public:
 
 	bool IsSelected(const ModelIndex& index) const;
 
-	void Initialize(const SharedObject& parent) override;
-
 	MW_SIGNAL(OnSelectionChanged, (ItemSelection) selection, (ItemSelectionType) selection_type)
 	MW_SIGNAL(OnClearedSelection)
 

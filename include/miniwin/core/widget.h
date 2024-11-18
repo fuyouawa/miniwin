@@ -65,6 +65,8 @@ public:
 
 protected:
 	virtual void Awake();
+	virtual void Start();
+
 	// 是所有绘制之前的准备工作
 	// 会先调用完所有Widget的PreparePaint后才会进入PaintBegin
 	virtual void PreparePaint();

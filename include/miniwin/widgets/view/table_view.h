@@ -18,9 +18,8 @@ public:
 
 	void SetModel(const SharedItemModel& model) override;
 
-	void Initialize(const SharedObject& parent) override;
-
 protected:
+	void Awake() override;
 	void PaintBegin() override;
 
 	_MW_IMPL

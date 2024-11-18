@@ -24,10 +24,6 @@ AbstractItemDelegate::AbstractItemDelegate() {
 
 AbstractItemDelegate::~AbstractItemDelegate() {}
 
-void AbstractItemDelegate::Initialize(const SharedObject& parent) {
-	Object::Initialize(parent);
-}
-
 void AbstractItemDelegate::Paint(const SharedItemView& view, const ModelIndex& index) {
 	PaintBegin(view, index);
 	PaintEnd(view, index);

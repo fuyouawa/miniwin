@@ -11,7 +11,7 @@ class Window::Impl
 public:
     Impl(Window* owner);
 
-    void Init();
+    void Awake();
 
     void PaintBegin();
     void PaintEnd();

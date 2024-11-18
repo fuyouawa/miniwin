@@ -7,7 +7,7 @@ class TableView::Impl
 public:
     explicit Impl(TableView* owner);
 
-    void Init();
+    void Awake();
 
     SharedHeaderView Header(HeaderOrientation orientation);
     void SetHeader(HeaderOrientation orientation, const SharedHeaderView& header);

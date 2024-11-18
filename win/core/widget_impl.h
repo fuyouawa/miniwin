@@ -35,8 +35,8 @@ public:
     ScopeVariable<Vector2D> size_sc_{};
     ScopeVariable<Vector2D> pos_sc_{};
 
+    bool started_ = false;
     bool visible_ = true;
-    bool awaked_ = false;
     bool is_painting_children_ = false;
     bool is_window_ = false;
     FlagsType draw_flags_ = 0;

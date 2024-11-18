@@ -65,11 +65,6 @@ void Widget::Impl::PaintEnd() {
 	pos_sc_.Exit();
 }
 
-void Widget::Impl::Awake() {
-	MW_ASSERT_X(!awaked_);
-	awaked_ = true;
-}
-
 SharedWindow Widget::Impl::OwnerWindow() const {
 	if (is_window_) {
 		auto w = std::dynamic_pointer_cast<Window>(owner_->shared_from_this());

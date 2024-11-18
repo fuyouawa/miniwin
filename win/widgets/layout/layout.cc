@@ -108,10 +108,6 @@ bool Layout::IsEmpty() const {
 	return Count() == 0;
 }
 
-void Layout::Initialize(const SharedObject& parent) {
-	Object::Initialize(parent);
-}
-
 void Layout::OnLayoutWidgetBegin(const SharedWidget& widget) {}
 void Layout::OnLayoutWidgetEnd(const SharedWidget& widget) {}
 }

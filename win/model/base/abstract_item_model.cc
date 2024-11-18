@@ -84,8 +84,4 @@ void AbstractItemModel::SetColumnCount(size_t count) {
 bool AbstractItemModel::IsValidIndex(const ModelIndex& index) const {
 	return index.valid() && index.row() < RowCount() && index.column() < ColumnCount();
 }
-
-void AbstractItemModel::Initialize(const SharedObject& parent) {
-	Object::Initialize(parent);
-}
 }

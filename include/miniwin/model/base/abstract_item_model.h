@@ -50,8 +50,6 @@ public:
 
 	virtual bool IsValidIndex(const ModelIndex& index) const;
 
-	void Initialize(const SharedObject& parent) override;
-
 	MW_SIGNAL(OnRowsInserted, (size_t) row, (size_t) count)
 	MW_SIGNAL(OnRowsRemoved, (size_t) row, (size_t) count)
 	MW_SIGNAL(OnColumnsInserted, (size_t) column, (size_t) count)

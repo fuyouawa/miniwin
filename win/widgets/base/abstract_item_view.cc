@@ -89,8 +89,4 @@ const SharedItemDelegate& AbstractItemView::ItemDelegate() const
 {
     return impl_->item_delegate_;
 }
-
-void AbstractItemView::Initialize(const SharedObject& parent) {
-	Widget::Initialize(parent);
-}
 }

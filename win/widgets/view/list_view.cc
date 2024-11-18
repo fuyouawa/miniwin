@@ -17,9 +17,9 @@ void ListView::SetTitle(const String& title) {
 	SetName(title);
 }
 
-void ListView::Initialize(const SharedObject& parent) {
-	AbstractItemView::Initialize(parent);
-	impl_->Init();
+void ListView::Awake() {
+	AbstractItemView::Awake();
+	impl_->Awake();
 }
 
 void ListView::PaintBegin() {

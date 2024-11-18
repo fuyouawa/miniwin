@@ -77,9 +77,9 @@ void* Window::PlatformHandle() const {
 	return impl_->hwnd_;
 }
 
-void Window::Initialize(const SharedObject& parent) {
-	Widget::Initialize(parent);
-	impl_->Init();
+void Window::Awake() {
+	Widget::Awake();
+	impl_->Awake();
 }
 
 void Window::PaintBegin() {

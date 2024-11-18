@@ -12,9 +12,8 @@ public:
 	String Title() const;
 	void SetTitle(const String& title);
 
-	void Initialize(const SharedObject& parent) override;
-
 protected:
+	void Awake() override;
     void PaintBegin() override;
 
 	_MW_IMPL

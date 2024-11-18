@@ -1,8 +1,39 @@
-#include "combobox_impl.h"
+#include <miniwin/widgets/combobox.h>
 
 #include <miniwin/core/imgui.h>
 
+#include "miniwin/delegate/selectable_item_delegate.h"
+#include "miniwin/model/standard_item_model.h"
+
 namespace miniwin {
+class ComboBoxView::Impl {
+public:
+	Impl(ComboBoxView* owner) : owner_(owner) {}
+
+	void Awake() {
+		auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
+		owner_->SetItemDelegate(d);
+	}
+
+	ComboBoxView* owner_;
+};
+
+class ComboBox::Impl
+{
+public:
+	Impl(ComboBox* owner) : owner_(owner) {}
+
+	void Awake() {
+		view_ = Instantiate<ComboBoxView>(owner_->shared_from_this());
+		auto model = Instantiate<StandardItemModel>(owner_->shared_from_this());
+		model->SetColumnCount(1);
+		view_->SetModel(model);
+	}
+
+	ComboBox* owner_;
+	std::shared_ptr<ComboBoxView> view_ = nullptr;
+};
+
 ComboBoxView::ComboBoxView() {
 	impl_ = std::make_unique<Impl>(this);
 }
@@ -17,9 +48,9 @@ void ComboBoxView::SetText(const String& text) {
 	SetName(text);
 }
 
-void ComboBoxView::Initialize(const SharedObject& parent) {
-	AbstractItemView::Initialize(parent);
-	impl_->Init();
+void ComboBoxView::Awake() {
+	AbstractItemView::Awake();
+	impl_->Awake();
 }
 
 void ComboBoxView::PaintBegin() {
@@ -109,8 +140,8 @@ void ComboBox::InsertItems(size_t index, const StringList& texts) {
 	}
 }
 
-void ComboBox::Initialize(const SharedObject& parent) {
-	Widget::Initialize(parent);
-	impl_->Init();
+void ComboBox::Awake() {
+	Widget::Awake();
+	impl_->Awake();
 }
 }

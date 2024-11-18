@@ -10,7 +10,6 @@ public:
 
 	bool Visible() const override;
 
-	void Initialize(const SharedObject& parent) override;
 protected:
 	void PaintBegin() override;
 	void PaintEnd() override;

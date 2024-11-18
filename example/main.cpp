@@ -24,8 +24,8 @@ class ExampleWindow : public Window {
 public:
 	ExampleWindow() {}
 
-	void Initialize(const SharedObject& parent) override {
-		Window::Initialize(parent);
+	void Awake() override {
+		Window::Awake();
 
 		auto self = shared_from_this();
 
@@ -36,31 +36,29 @@ public:
 		combo_box_ = Instantiate<ComboBox>(self);
 		list_ = Instantiate<ListView>(self);
 		list_model_ = Instantiate<StandardItemModel>(list_);
+		list_->SetModel(list_model_);
 
 		Connect(btn_, &Button::OnClicked, self, [this]() {
 			SetTitle(text_edit_->PlainText());
-			});
+		});
 	}
 
-	void Awake() override {
-		Window::Awake();
+	void Start() override {
+		Window::Start();
 
 		label_->SetText("输入文本");
 		text_edit_->SetPlainText("初始文本");
 
-		
 		layout_->AddWidget(label_);
 		layout_->AddWidget(text_edit_);
 
 		btn_->SetText("将文本值应用窗体");
-
 		combo_box_->SetText("组合框");
 		combo_box_->AddItems({ "abc", "123", "[];" });
 
 		list_model_->SetColumnCount(1);
 		list_model_->SetRowCount(4);
 		list_model_->SetColumnTexts(0, 0, { "hfg", "yui", "lkj", "4435" });
-		list_->SetModel(list_model_);
 	}
 
 	std::shared_ptr<Label> label_;

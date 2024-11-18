@@ -86,8 +86,8 @@ void TableView::SetModel(const SharedItemModel& model) {
 	}
 }
 
-void TableView::Initialize(const SharedObject& parent) {
-	AbstractItemView::Initialize(parent);
-	impl_->Init();
+void TableView::Awake() {
+	AbstractItemView::Awake();
+	impl_->Awake();
 }
 }

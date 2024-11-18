@@ -34,13 +34,12 @@ public:
 
 	void* PlatformHandle() const;
 
-	void Initialize(const SharedObject& parent) override;
-
 	MW_SIGNAL(OnTitleChanged, (String) title, (String) prev_title)
 	MW_SIGNAL(OnCollapseChanged, (bool) collapsed)
 	MW_SIGNAL(OnDockingChanged)
 
 protected:
+	void Awake() override;
 	void PaintBegin() override;
 	void PaintEnd() override;
 

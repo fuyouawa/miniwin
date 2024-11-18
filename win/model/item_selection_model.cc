@@ -58,8 +58,4 @@ bool ItemSelectionModel::IsSelected(const ModelIndex& index) const {
 	MW_ASSERT_X(index.valid());
 	return impl_->Contains(index);
 }
-
-void ItemSelectionModel::Initialize(const SharedObject& parent) {
-	Object::Initialize(parent);
-}
 }

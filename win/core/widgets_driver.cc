@@ -44,9 +44,8 @@ void WidgetsDriver::Prepare() {
 
 		// 因为只有Widget是有权限调用的，所以得转成Widget
 		auto w = dynamic_cast<Widget*>(win.get());
-		if (!w->impl_->awaked_) {
-			w->Awake();
-			w->impl_->awaked_ = true;
+		if (!w->impl_->started_) {
+			w->Start();
 		}
 		PrepareRecursion(win);
 	}
@@ -91,7 +90,7 @@ std::thread::id WidgetsDriver::UiThreadId() const {
 }
 
 void WidgetsDriver::UpdateRecursion(const SharedWidget& widget, bool force_ignore_children) {
-	MW_ASSERT_X(widget->impl_->awaked_);
+	MW_ASSERT_X(widget->impl_->started_);
 	if (!widget->Visible())
 		return;
 
@@ -132,9 +131,8 @@ void WidgetsDriver::CallUpdateEarlyRecursion(const SharedWidget& widget) {
 
 void WidgetsDriver::PrepareRecursion(const SharedWidget& widget) {
 	for (auto& w : widget->WidgetChildren()) {
-		if (!w->impl_->awaked_) {
-			w->Awake();
-			w->impl_->awaked_ = true;
+		if (!w->impl_->started_) {
+			w->Start();
 			PrepareRecursion(w);
 		}
 	}

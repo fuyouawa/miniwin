@@ -13,7 +13,7 @@ Window::Impl::Impl(Window* owner)
 {
 }
 
-void Window::Impl::Init() {
+void Window::Impl::Awake() {
     if (!owner_->WidgetParent()) {
         WidgetsDriver::Instance().RegisterWindow(owner_->shared_from_this());
     }

@@ -171,7 +171,9 @@ using PureType = std::remove_cvref_t<std::remove_pointer_t<T>>;
 
 template<internal::IsUseObjectParent T>
 std::shared_ptr<T> Instantiate(const SharedObject& parent) {
-	return internal::Instantiate<T>(parent);
+	auto p = std::make_shared<T>();
+	p->Initialize(parent);
+	return p;
 }
 
 template<internal::IsUseWidgetParent T>

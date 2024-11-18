@@ -11,6 +11,11 @@ class Widget;
 class WidgetsDriver;
 class Layout;
 
+class MetaData {
+public:
+
+};
+
 class Object : public std::enable_shared_from_this<Object> {
 public:
 	class Disconnecter {
