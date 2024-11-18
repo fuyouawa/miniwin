@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class Button : public AbstractTextualControl {
+class Button : public AbstractControl {
 	MW_OBJECT
 public:
 	Button();

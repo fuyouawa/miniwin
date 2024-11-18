@@ -227,4 +227,5 @@ public:																					\
 		using RetType = std::weak_ptr<ThisType>;										\
 		return RetType(std::dynamic_pointer_cast<ThisType>(Object::shared_from_this()));\
 	}																					\
+	const std::type_info& Type() const override { return typeid(this); }				\
 private:																				\

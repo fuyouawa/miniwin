@@ -17,7 +17,7 @@ Button::Button() {
 Button::~Button() {}
 
 void Button::PaintBegin() {
-	AbstractTextualControl::PaintBegin();
+	AbstractControl::PaintBegin();
 	if (imgui::Button(Text(), Size())) {
 		OnClicked();
 	}

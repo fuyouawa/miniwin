@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class Frame : public AbstractControl {
+class Frame : public AbstractMinimumControl {
 	MW_OBJECT
 public:
 	Frame();

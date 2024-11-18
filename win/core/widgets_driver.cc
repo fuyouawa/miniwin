@@ -23,8 +23,8 @@ WidgetsDriver::~WidgetsDriver() {
 }
 
 void WidgetsDriver::Update() {
-	Prepare();
 	DoPending();
+	Prepare();
 	CallUpdateEarly();
 	for (auto& win : windows_) {
 		if (!win->Orphaned() && win->Visible()) {
@@ -91,6 +91,7 @@ std::thread::id WidgetsDriver::UiThreadId() const {
 }
 
 void WidgetsDriver::UpdateRecursion(const SharedWidget& widget, bool force_ignore_children) {
+	MW_ASSERT_X(widget->impl_->awaked_);
 	if (!widget->Visible())
 		return;
 
@@ -134,6 +135,7 @@ void WidgetsDriver::PrepareRecursion(const SharedWidget& widget) {
 		if (!w->impl_->awaked_) {
 			w->Awake();
 			w->impl_->awaked_ = true;
+			PrepareRecursion(w);
 		}
 	}
 }

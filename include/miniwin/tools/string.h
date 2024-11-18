@@ -69,6 +69,8 @@ public:
 
 	String& Replace(const String& before, const String& after);
 	StringList Split(const String& sep) const;
+	StringList Split(char sep) const;
+	size_t IndexOf(char ch, size_t start = 0) const;
 	size_t IndexOf(const String& str, size_t start = 0) const;
 	String Substr(size_t begin, size_t end = kNPos) const;
 

@@ -87,11 +87,28 @@ StringList String::Split(const String& sep) const {
 	size_t end = IndexOf(sep);
 	while (end != kNPos) {
 		total.PushBack(Substr(start, end));
-		start += end + sep.size();
+		start = end + sep.size();
 		end = IndexOf(sep, start);
 	}
 	total.PushBack(Substr(start));
 	return total;
+}
+
+StringList String::Split(char sep) const {
+	StringList total;
+	size_t start = 0;
+	size_t end = IndexOf(sep);
+	while (end != kNPos) {
+		total.PushBack(Substr(start, end));
+		start = end + 1;
+		end = IndexOf(sep, start);
+	}
+	total.PushBack(Substr(start));
+	return total;
+}
+
+size_t String::IndexOf(char ch, size_t start) const {
+	return str_.find(ch, start);
 }
 
 size_t String::IndexOf(const String& str, size_t start) const {

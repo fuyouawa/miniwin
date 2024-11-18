@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class CheckBox : public AbstractTextualControl {
+class CheckBox : public AbstractControl {
 	MW_OBJECT
 public:
 	CheckBox();

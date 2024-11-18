@@ -27,7 +27,7 @@ void Selectable::SetSelection(bool b) {
 }
 
 void Selectable::PaintBegin() {
-	AbstractTextualControl::PaintBegin();
+	AbstractControl::PaintBegin();
 
 	imgui::Selectable(Text(), &impl_->cur_selected_, 0, Size());
 	if (impl_->cur_selected_ != impl_->prev_selected_) {

@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class TextEdit : public AbstractControl {
+class TextEdit : public AbstractMinimumControl {
 	MW_OBJECT
 public:
 	TextEdit();

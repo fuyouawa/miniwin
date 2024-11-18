@@ -1,6 +1,7 @@
 #include "object_impl.h"
 
 #include "win/tools/debug.h"
+#include <miniwin/tools/stringlist.h>
 
 
 namespace miniwin {
@@ -47,6 +48,10 @@ void Object::SetName(const String& name) const {
 	impl_->name_ = name;
 }
 
+const std::type_info& Object::Type() const {
+	return typeid(this);
+}
+
 bool Object::Orphaned() const {
 	return impl_->orphaned_;
 }
@@ -78,6 +83,14 @@ bool Object::IsWidget() const {
 
 bool Object::IsLayout() const {
 	return impl_->is_layout_;
+}
+
+String Object::DebugName() const {
+	return String::Format("[{}] {}", ClassName(), Name());
+}
+
+String Object::ClassName() const {
+	return String(Type().name()).Split(' ')[1];
 }
 
 void Object::Invoke(std::function<void()> func, InvokeType invoke_type) const {

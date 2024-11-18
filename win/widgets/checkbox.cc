@@ -39,12 +39,12 @@ void CheckBox::SetChecked(bool b) {
 }
 
 void CheckBox::PaintBegin() {
-	AbstractTextualControl::PaintBegin();
+	AbstractControl::PaintBegin();
 	impl_->PaintBegin();
 }
 
 void CheckBox::PaintEnd() {
-	AbstractTextualControl::PaintEnd();
+	AbstractControl::PaintEnd();
 }
 
 void CheckBox::SetSize(const Vector2D& size) {

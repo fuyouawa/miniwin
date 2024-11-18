@@ -37,6 +37,9 @@ public:
 	String Name() const;
 	void SetName(const String& name) const;
 
+	String DebugName() const;
+	String ClassName() const;
+	virtual const std::type_info& Type() const;
 	bool Orphaned() const;
 	FlagsType Flags() const;
 	void SetFlags(FlagsType flags);

@@ -2,11 +2,11 @@
 #include <miniwin/core/widget.h>
 
 namespace miniwin {
-class AbstractControl : public Widget {
+class AbstractMinimumControl : public Widget {
 	MW_OBJECT
 public:
-	AbstractControl();
-	~AbstractControl() override;
+	AbstractMinimumControl();
+	~AbstractMinimumControl() override;
 
 	bool Visible() const override;
 
@@ -17,10 +17,10 @@ protected:
 };
 
 
-class AbstractTextualControl : public AbstractControl {
+class AbstractControl : public AbstractMinimumControl {
 	MW_OBJECT
 public:
-	AbstractTextualControl();
+	AbstractControl();
 
 	String Text() const;
 	void SetText(const String& text);

@@ -10,7 +10,7 @@ Label::Label()
 }
 
 void Label::PaintBegin() {
-    AbstractControl::PaintBegin();
+    AbstractMinimumControl::PaintBegin();
 	imgui::Text(Text());
 }
 

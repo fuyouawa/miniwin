@@ -92,6 +92,5 @@ const SharedItemDelegate& AbstractItemView::ItemDelegate() const
 
 void AbstractItemView::Initialize(const SharedObject& parent) {
 	Widget::Initialize(parent);
-    SetName("ItemView");
 }
 }

@@ -87,6 +87,5 @@ bool AbstractItemModel::IsValidIndex(const ModelIndex& index) const {
 
 void AbstractItemModel::Initialize(const SharedObject& parent) {
 	Object::Initialize(parent);
-	SetName("Model");
 }
 }

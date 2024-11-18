@@ -110,7 +110,6 @@ bool Layout::IsEmpty() const {
 
 void Layout::Initialize(const SharedObject& parent) {
 	Object::Initialize(parent);
-	SetName("Layout");
 }
 
 void Layout::OnLayoutWidgetBegin(const SharedWidget& widget) {}

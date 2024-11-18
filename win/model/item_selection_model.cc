@@ -61,6 +61,5 @@ bool ItemSelectionModel::IsSelected(const ModelIndex& index) const {
 
 void ItemSelectionModel::Initialize(const SharedObject& parent) {
 	Object::Initialize(parent);
-	SetName("SelectionModel");
 }
 }

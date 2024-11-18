@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class Label : public AbstractTextualControl {
+class Label : public AbstractControl {
 	MW_OBJECT
 public:
 	Label();
