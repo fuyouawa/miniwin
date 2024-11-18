@@ -24,12 +24,11 @@ using namespace miniwin;
 class ExampleWindow : public Window {
 public:
 	ExampleWindow() {}
-
+	// Awake，在对象实例化时调用
 	void Awake() override {
 		Window::Awake();
-
 		auto self = shared_from_this();
-
+		// 实例化
 		label_ = Instantiate<Label>(self);
 		text_edit_ = Instantiate<TextEdit>(self);
 		layout_ = Instantiate<HBoxLayout>(self);
@@ -41,30 +40,32 @@ public:
 		table_->SetModel(table_model_);
 	}
 
+	// Start，在对象绘制前调用，只会调用一次
 	void Start() override {
 		Window::Start();
-
+		// 设置标签和文本输入框的初始文本
 		label_->SetText("输入文本");
 		text_edit_->SetPlainText("初始文本");
-
+		// 将标签和文本输入框水平布局
 		layout_->AddWidget(label_);
 		layout_->AddWidget(text_edit_);
-
+		// 设置按钮文本
 		btn_->SetText("将文本值应用窗体");
+		// 设置组合框文本和数据
 		combo_box_->SetText("组合框");
 		combo_box_->AddItems({"abc", "123", "[];"});
-		
+		// 设置列表数据
 		list_->SetRightLabel("列表");
 		list_->AddItems({"qwe", "ert", "yui", "tii"});
 		list_->SetHeight(100);
-
+		// 设置表格模型的数据
 		table_model_->SetColumnCount(4);
 		table_model_->SetRowCount(5);
-		table_model_->SetHorizontalHeaderTexts({ "头0", "头1", "头2" , "头3" });
-		table_model_->SetRowTexts(0, 0, { "行0-0", "行0-1", "行0-2" });
-		table_model_->SetRowTexts(3, 0, { "行3-0", "行3-1", "行3-2" });
-		table_model_->SetColumnTexts(0, 3, { "列3-0", "列3-1","列3-2","列3-3","列3-4", });
-
+		table_model_->SetHorizontalHeaderTexts({"头0", "头1", "头2", "头3"}); // 设置表头
+		table_model_->SetRowTexts(0, 0, {"行0-0", "行0-1", "行0-2"}); // 设置第一行中三列文本
+		table_model_->SetRowTexts(3, 0, {"行3-0", "行3-1", "行3-2"}); // 设置第四行中三列文本
+		table_model_->SetColumnTexts(0, 3, {"列3-0", "列3-1", "列3-2", "列3-3", "列3-4",}); // 设置第四列的五行文本
+		// 连接按钮的点击信号，槽函数里面修改窗体
 		Connect(btn_, &Button::OnClicked, shared_from_this(), [this]() {
 			SetTitle(text_edit_->PlainText());
 		});
