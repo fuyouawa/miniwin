@@ -41,7 +41,6 @@ public:
 	MW_SIGNAL(OnDockingChanged)
 
 protected:
-	void Awake() override;
 	void PaintBegin() override;
 	void PaintEnd() override;
 

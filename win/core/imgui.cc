@@ -4,6 +4,7 @@
 #include <imgui/imgui_internal.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
+#include <miniwin/core/widgetid_pool.h>
 #include "win/tools/debug.h"
 
 namespace miniwin {
@@ -76,6 +77,30 @@ size_t ListClipper::display_start() const {
 
 size_t ListClipper::display_end() const {
 	return impl_->clipper_.DisplayEnd;
+}
+
+WidgetIdScope::WidgetIdScope(Mode mode, WidgetId id) : mode_(mode) {
+	switch (mode_) {
+	case kAutoAlloc:
+		id_ = WidgetIdPool::Instance().AllocId();
+		break;
+	default:
+		id_ = id;
+		break;
+	}
+	PushID(id_);
+}
+
+WidgetIdScope::~WidgetIdScope() {
+	PopID();
+	switch (mode_) {
+	case kAutoAlloc:
+		WidgetIdPool::Instance().RecycleId(id_);
+		break;
+	default:
+		id_ = 0;
+		break;
+	}
 }
 
 bool IsWindowDocked() {

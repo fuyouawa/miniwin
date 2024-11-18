@@ -8,7 +8,7 @@ ListView::Impl::Impl(ListView* owner)
 {
 }
 
-void ListView::Impl::Awake()
+void ListView::Impl::Init()
 {
     auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
     owner_->SetItemDelegate(d);

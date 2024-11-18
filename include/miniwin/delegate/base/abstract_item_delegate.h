@@ -7,9 +7,16 @@ class AbstractItemDelegate : public Object {
 	MW_OBJECT
 public:
 	AbstractItemDelegate();
+	~AbstractItemDelegate() override;
 
 	void Initialize(const SharedObject& parent) override;
 
-	virtual void Paint(const SharedItemView& view, const ModelIndex& index) = 0;
+	void Paint(const SharedItemView& view, const ModelIndex& index);
+
+protected:
+	virtual void PaintBegin(const SharedItemView& view, const ModelIndex& index);
+	virtual void PaintEnd(const SharedItemView& view, const ModelIndex& index);
+
+	_MW_IMPL
 };
 }

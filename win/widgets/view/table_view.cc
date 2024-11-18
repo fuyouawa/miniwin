@@ -44,9 +44,7 @@ void TableView::PaintBegin() {
 
 			for (size_t col = 0; col < col_count; ++col) {
 				imgui::TableSetColumnIndex(col);
-				imgui::PushID(col);
 				hori->PaintSection(col);
-				imgui::PopID();
 			}
 		}
 
@@ -61,16 +59,12 @@ void TableView::PaintBegin() {
 		for (size_t row = 0; row < row_count; ++row) {
 			imgui::TableNextRow();
 			if (show_vert) {
-				imgui::PushID(row);
 				vert->PaintSection(row);
-				imgui::PopID();
 			}
 			if (d) {
 				for (size_t col = 0; col < col_count; ++col) {
 					imgui::TableSetColumnIndex(col);
-					imgui::PushID(row * 10 + col);
 					d->Paint(self, {row, col});
-					imgui::PopID();
 				}
 			}
 		}
@@ -92,8 +86,8 @@ void TableView::SetModel(const SharedItemModel& model) {
 	}
 }
 
-void TableView::Awake() {
-	AbstractItemView::Awake();
-	impl_->Awake();
+void TableView::Initialize(const SharedObject& parent) {
+	AbstractItemView::Initialize(parent);
+	impl_->Init();
 }
 }

@@ -8,7 +8,7 @@ class Dialog::Impl {
 public:
 	Impl(Dialog* owner) : owner_(owner) {}
 
-	void Awake() {
+	void Init() {
 		owner_->SetVisible(false);
 	}
 
@@ -26,9 +26,9 @@ void Dialog::Open() {
 	Show();
 }
 
-void Dialog::Awake() {
-	Window::Awake();
-	impl_->Awake();
+void Dialog::Initialize(const SharedObject& parent) {
+	Window::Initialize(parent);
+	impl_->Init();
 }
 
 void Dialog::OnPaintWindowBegin() {

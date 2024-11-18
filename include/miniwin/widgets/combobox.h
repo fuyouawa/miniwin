@@ -13,11 +13,12 @@ public:
 	ComboBoxView();
 	~ComboBoxView() override;
 
-	const String& Text() const;
+	String Text() const;
 	void SetText(const String& text);
 
+	void Initialize(const SharedObject& parent) override;
+
 protected:
-	void Awake() override;
 	void PaintBegin() override;
 
 	_MW_IMPL
@@ -48,8 +49,7 @@ public:
 	void InsertItem(size_t index, const String& text, const Variant& user_data = {});
 	void InsertItems(size_t index, const StringList& texts);
 
-protected:
-	void Awake() override;
+	void Initialize(const SharedObject& parent) override;
 
 	_MW_IMPL
 };

@@ -29,16 +29,19 @@ void SelectableItemDelegate::SetAllocMultiSelect(bool b) {
 	impl_->alloc_multi_select = b;
 }
 
-void SelectableItemDelegate::Paint(const SharedItemView& view, const ModelIndex& index) {
+void SelectableItemDelegate::PaintBegin(const SharedItemView& view, const ModelIndex& index) {
+	AbstractItemDelegate::PaintBegin(view, index);
+
 	auto model = view->Model();
 	auto selection_model = view->SelectionModel();
 	auto text = model->Data(index).ToString();
 	bool is_selected = selection_model->IsSelected(index);
+
 	if (imgui::Selectable(text, &is_selected)) {
 		if (io::IsKeyDown(KeyCode::kCtrl) && IsAllocMultiSelect()) {
 			selection_model->Select(index, is_selected
-				                               ? ItemSelectionType::Select
-				                               : ItemSelectionType::Deselect);
+				? ItemSelectionType::Select
+				: ItemSelectionType::Deselect);
 		}
 		else {
 			if (is_selected) {

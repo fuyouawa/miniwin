@@ -61,7 +61,7 @@ class FileDialog::Impl {
 public:
 	Impl(FileDialog* owner) : owner_(owner) {}
 
-	void Awake() {
+	void Init() {
 		owner_->EnableFlags(imgui::kWindowNoInputs
 		                  | imgui::kWindowNoBackground
 		                  | imgui::kWindowNoTitleBar, true);
@@ -148,9 +148,9 @@ String FileDialog::SelectedFileName() const {
 	return impl_->file_;
 }
 
-void FileDialog::Awake() {
-	Dialog::Awake();
-	impl_->Awake();
+void FileDialog::Initialize(const SharedObject& parent) {
+	Dialog::Initialize(parent);
+	impl_->Init();
 }
 
 void FileDialog::OnPaintWindowBegin() {

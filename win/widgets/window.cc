@@ -82,10 +82,6 @@ void Window::Initialize(const SharedObject& parent) {
 	impl_->Init();
 }
 
-void Window::Awake() {
-	Widget::Awake();
-}
-
 void Window::PaintBegin() {
 	Widget::PaintBegin();
 	impl_->PaintBegin();

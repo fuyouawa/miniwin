@@ -9,7 +9,7 @@ class ListView::Impl
 public:
 	Impl(ListView* owner);
 
-	void Awake();
+	void Init();
 
 	ListView* owner_;
 	imgui::ListClipper clipper_;

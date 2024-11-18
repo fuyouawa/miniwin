@@ -44,7 +44,7 @@ void Application::Impl::OnAppStart()
 
 void Application::Impl::OnProcess()
 {
-    WidgetsDriver::instance().Update();
+    WidgetsDriver::Instance().Update();
     ++frame_count_;
     if (close_in_next_frame_)
     {
@@ -54,7 +54,7 @@ void Application::Impl::OnProcess()
 
 bool Application::Impl::IsDone()
 {
-    return WidgetsDriver::instance().IsDone();
+    return WidgetsDriver::Instance().IsDone();
 }
 
 void Application::Impl::OnAppExit()
@@ -72,7 +72,7 @@ bool Application::Impl::SetDpiScale(float scale)
 
 void Application::Impl::WindowWannaClose()
 {
-    WidgetsDriver::instance().CloseAll();
+    WidgetsDriver::Instance().CloseAll();
     close_in_next_frame_ = true;
 }
 

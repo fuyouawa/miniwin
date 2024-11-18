@@ -10,7 +10,7 @@ class MessageBox::Impl {
 public:
 	Impl(MessageBox* owner) : owner_(owner) {}
 
-	void Awake() {
+	void Init() {
 		lab_msg_ = Instantiate<Label>(owner_->shared_from_this());
 		layout_btns_ = Instantiate<HBoxLayout>(owner_->shared_from_this());
 		layout_btns_->SetSpacing(10);
@@ -109,8 +109,8 @@ void MessageBox::SetText(const String& text) {
 	impl_->lab_msg_->SetText(text);
 }
 
-void MessageBox::Awake() {
-	Dialog::Awake();
-	impl_->Awake();
+void MessageBox::Initialize(const SharedObject& parent) {
+	Dialog::Initialize(parent);
+	impl_->Init();
 }
 }

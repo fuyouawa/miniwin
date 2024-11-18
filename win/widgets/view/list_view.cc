@@ -17,9 +17,9 @@ void ListView::SetTitle(const String& title) {
 	SetName(title);
 }
 
-void ListView::Awake() {
-	AbstractItemView::Awake();
-	impl_->Awake();
+void ListView::Initialize(const SharedObject& parent) {
+	AbstractItemView::Initialize(parent);
+	impl_->Init();
 }
 
 void ListView::PaintBegin() {
@@ -29,6 +29,7 @@ void ListView::PaintBegin() {
 		if (auto d = ItemDelegate()) {
 			impl_->clipper_.Begin(m->RowCount());
 			auto self = shared_from_this();
+
 			while (impl_->clipper_.Step()) {
 				for (size_t i = impl_->clipper_.display_start(); i < impl_->clipper_.display_end(); ++i) {
 					d->Paint(self, i);

@@ -15,7 +15,7 @@ Window::Impl::Impl(Window* owner)
 
 void Window::Impl::Init() {
     if (!owner_->WidgetParent()) {
-        WidgetsDriver::instance().RegisterWindow(owner_->shared_from_this());
+        WidgetsDriver::Instance().RegisterWindow(owner_->shared_from_this());
     }
 }
 

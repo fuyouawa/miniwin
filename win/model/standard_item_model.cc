@@ -50,6 +50,7 @@ Variant StandardItemModel::Data(const ModelIndex& index, ItemRole role) const {
 
 void StandardItemModel::SetData(const ModelIndex& index, const Variant& data, ItemRole role) {
 	auto& i = impl_->GetOrCreateItem(index);
+	//TODO 数据检查
 	i[role] = data;
 }
 

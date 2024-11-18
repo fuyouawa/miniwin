@@ -60,6 +60,10 @@ Variant::Variant(const String& str)
 	var_ = CopyStr(str.data(), str.size() + 1);
 }
 
+Variant::Variant(std::string_view str) {
+	var_ = CopyStr(str.data(), str.size() + 1);
+}
+
 Variant::Variant(int32_t i32)
 {
 	var_ = i32;

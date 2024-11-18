@@ -13,14 +13,12 @@
 #include "win/tools/debug.h"
 
 namespace miniwin {
-Widget::Widget()
-	: Object() {
+Widget::Widget() {
 	impl_ = std::make_unique<Impl>(this);
 	Object::impl_->is_widget_ = true;
 }
 
-Widget::~Widget() {
-}
+Widget::~Widget() {}
 
 void Widget::Close() {
 	impl_->Close();
@@ -34,7 +32,7 @@ SharedWindow Widget::OwnerWindow() const {
 	return impl_->OwnerWindow();
 }
 
-SharedWidget Widget::WidgetParent()const {
+SharedWidget Widget::WidgetParent() const {
 	return impl_->WidgetParent();
 }
 
@@ -134,8 +132,14 @@ void Widget::Invoke(std::function<void()> func, InvokeType invoke_type) const {
 	}
 }
 
+void Widget::Initialize(const SharedObject& parent) {
+	Object::Initialize(parent);
+	if (parent)
+		MW_ASSERT(parent->IsWidget(), "The parent of a widget must also be a widget");
+}
+
 bool Widget::IsInUiThread() {
-	return std::this_thread::get_id() == WidgetsDriver::instance().UiThreadId();
+	return std::this_thread::get_id() == WidgetsDriver::Instance().UiThreadId();
 }
 
 void Widget::Show() {

@@ -9,7 +9,7 @@ ComboBoxView::ComboBoxView() {
 
 ComboBoxView::~ComboBoxView() {}
 
-const String& ComboBoxView::Text() const {
+String ComboBoxView::Text() const {
 	return Name();
 }
 
@@ -17,9 +17,9 @@ void ComboBoxView::SetText(const String& text) {
 	SetName(text);
 }
 
-void ComboBoxView::Awake() {
-	AbstractItemView::Awake();
-	impl_->Awake();
+void ComboBoxView::Initialize(const SharedObject& parent) {
+	AbstractItemView::Initialize(parent);
+	impl_->Init();
 }
 
 void ComboBoxView::PaintBegin() {
@@ -109,8 +109,8 @@ void ComboBox::InsertItems(size_t index, const StringList& texts) {
 	}
 }
 
-void ComboBox::Awake() {
-	Widget::Awake();
-	impl_->Awake();
+void ComboBox::Initialize(const SharedObject& parent) {
+	Widget::Initialize(parent);
+	impl_->Init();
 }
 }

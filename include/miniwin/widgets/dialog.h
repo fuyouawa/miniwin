@@ -10,8 +10,9 @@ public:
 
 	void Open();
 
+	void Initialize(const SharedObject& parent) override;
+
 protected:
-	void Awake() override;
 	void OnPaintWindowBegin() override;
 	void OnPaintWindowEnd() override;
 

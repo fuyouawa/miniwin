@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-#include <miniwin/core/global.h>
+#include <miniwin/defs.h>
 #include <miniwin/tools/string.h>
 
 namespace miniwin {

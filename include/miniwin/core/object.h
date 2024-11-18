@@ -1,7 +1,6 @@
 #pragma once
 #include <miniwin/core/objectdefs.h>
 #include <miniwin/tools/function_traits.h>
-#include <miniwin/core/global.h>
 #include <miniwin/tools/string.h>
 #include <miniwin/tools/list.h>
 

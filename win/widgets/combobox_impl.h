@@ -6,7 +6,7 @@ class ComboBoxView::Impl {
 public:
 	Impl(ComboBoxView* owner);
 
-	void Awake();
+	void Init();
 
 	ComboBoxView* owner_;
 };
@@ -16,7 +16,7 @@ class ComboBox::Impl
 public:
 	Impl(ComboBox* owner);
 
-	void Awake();
+	void Init();
 
 	ComboBox* owner_;
 	std::shared_ptr<ComboBoxView> view_ = nullptr;

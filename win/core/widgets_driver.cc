@@ -8,7 +8,7 @@
 #include "win/widgets/window_impl.h"
 
 namespace miniwin {
-WidgetsDriver& WidgetsDriver::instance() {
+WidgetsDriver& WidgetsDriver::Instance() {
 	static WidgetsDriver inst;
 	static bool initialized = false;
 	if (!initialized) {
@@ -88,23 +88,6 @@ void WidgetsDriver::RegisterWindow(const SharedWindow& window) {
 
 std::thread::id WidgetsDriver::UiThreadId() const {
 	return ui_thread_id_;
-}
-
-WidgetId WidgetsDriver::AllocId() {
-	MW_ASSERT_X(cur_max_id_ < std::numeric_limits<WidgetId>::max());
-	if (id_pool_seek_ > 0) {
-		return id_pool_[--id_pool_seek_];
-	}
-	return cur_max_id_++;
-}
-
-bool WidgetsDriver::RecycleId(WidgetId id) {
-	MW_ASSERT_X(id != 0);
-	if (id_pool_seek_ < sizeof(id_pool_) / sizeof(WidgetId)) {
-		id_pool_[id_pool_seek_++] = id;
-		return true;
-	}
-	return false;
 }
 
 void WidgetsDriver::UpdateRecursion(const SharedWidget& widget, bool force_ignore_children) {

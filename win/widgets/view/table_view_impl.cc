@@ -7,7 +7,7 @@ TableView::Impl::Impl(TableView* owner): owner_(owner)
 {
 }
 
-void TableView::Impl::Awake()
+void TableView::Impl::Init()
 {
     auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
     owner_->SetItemDelegate(d);

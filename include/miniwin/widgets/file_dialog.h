@@ -52,8 +52,9 @@ public:
 	String SelectedFilter() const;
 	String SelectedFileName() const;
 
+	void Initialize(const SharedObject& parent) override;
+
 protected:
-	void Awake() override;
 	void OnPaintWindowBegin() override;
 
 	_MW_IMPL

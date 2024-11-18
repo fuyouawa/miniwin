@@ -1,7 +1,7 @@
 #pragma once
 #include <miniwin/tools/vector2d.h>
 #include <miniwin/core/imgui_flags.h>
-#include <miniwin/core/global.h>
+#include <miniwin/defs.h>
 #include <miniwin/tools/string.h>
 
 namespace miniwin {
@@ -20,6 +20,35 @@ public:
 	size_t display_end() const;
 
 	_MW_IMPL
+};
+
+class WidgetIdScope {
+public:
+	enum Mode {
+		/**
+		 * 使用WidgetIdPool自动分配id
+		 */
+		kAutoAlloc,
+		/**
+		 * 手动指定id
+		 */
+		kManual
+	};
+
+	/**
+	 * id作用域，在构造的时候PushID，析构的时候PopID
+	 * @param mode 模式
+	 * @param id 如果model是kAutoAlloc，则忽略
+	 */
+	WidgetIdScope(Mode mode = kAutoAlloc, WidgetId id = 0);
+	~WidgetIdScope();
+
+	WidgetId id() const { return id_; }
+	Mode mode() const { return mode_; }
+
+private:
+	WidgetId id_;
+	Mode mode_;
 };
 
 bool IsWindowDocked();

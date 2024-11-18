@@ -29,13 +29,17 @@ public:
     Variant(std::nullptr_t);
     Variant(char c);
     Variant(bool b);
-    Variant(int32_t i32);
+	Variant(int32_t i32);
     Variant(uint32_t u32);
     Variant(int64_t i64);
     Variant(uint64_t u64);
     Variant(float f);
     Variant(double d);
     Variant(const String& str);
+    Variant(std::string_view str);
+
+    template<size_t kSize>
+    Variant(const char (&str)[kSize]) : Variant(std::string_view(str, kSize)) {}
 
     VariantType Type() const;
 

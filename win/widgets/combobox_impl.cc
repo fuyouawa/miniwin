@@ -9,7 +9,7 @@ ComboBoxView::Impl::Impl(ComboBoxView* owner)
 {
 }
 
-void ComboBoxView::Impl::Awake()
+void ComboBoxView::Impl::Init()
 {
 	auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
 	owner_->SetItemDelegate(d);
@@ -20,7 +20,7 @@ ComboBox::Impl::Impl(ComboBox* owner)
 {
 }
 
-void ComboBox::Impl::Awake()
+void ComboBox::Impl::Init()
 {
 	view_ = Instantiate<ComboBoxView>(owner_->shared_from_this());
 	auto model = Instantiate<StandardItemModel>(owner_->shared_from_this());

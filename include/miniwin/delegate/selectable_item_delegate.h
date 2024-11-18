@@ -11,7 +11,8 @@ public:
 	bool IsAllocMultiSelect() const;
 	void SetAllocMultiSelect(bool b);
 
-	void Paint(const SharedItemView& view, const ModelIndex& index) override;
+protected:
+	void PaintBegin(const SharedItemView& view, const ModelIndex& index) override;
 
 	_MW_IMPL
 };

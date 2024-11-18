@@ -5,6 +5,7 @@
 #include <miniwin/widgets/window.h>
 #include <miniwin/core/imgui.h>
 
+#include <miniwin/core/widgetid_pool.h>
 #include "object_impl.h"
 #include "widgets_driver.h"
 #include "win/tools/debug.h"
@@ -12,11 +13,12 @@
 namespace miniwin {
 Widget::Impl::Impl(Widget* owner)
 	: owner_(owner) {
-	id_ = WidgetsDriver::instance().AllocId();
+	id_ = WidgetIdPool::Instance().AllocId();
 }
 
 Widget::Impl::~Impl() {
-	WidgetsDriver::instance().RecycleId(id_);
+	WidgetIdPool::Instance().RecycleId(id_);
+	id_ = 0;
 }
 
 void Widget::Impl::Close() {
@@ -91,7 +93,7 @@ SharedWidget Widget::Impl::WidgetParent() const {
 void Widget::Impl::SetWidgetParent(const SharedWidget& parent) {
 	if (parent == WidgetParent())
 		return;
-	WidgetsDriver::instance().PushPendingFunctor([this, parent] {
+	WidgetsDriver::Instance().PushPendingFunctor([this, parent] {
 		owner_->Object::SetParent(parent);
 	});
 }

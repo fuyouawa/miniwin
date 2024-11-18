@@ -44,12 +44,18 @@ public:
 		Connect(btn_, &Button::OnClicked, self, [this]() {
 			SetTitle(text_edit_->PlainText());
 			});
+
+		combo_box_ = Instantiate<ComboBox>(self);
+		combo_box_->SetText("组合框");
+		combo_box_->AddItems({ "abc", "123", "[];" });
 	}
 
 	std::shared_ptr<Label> label_;
 	std::shared_ptr<TextEdit> text_edit_;
 	std::shared_ptr<HBoxLayout> layout_;
 	std::shared_ptr<Button> btn_;
+	std::shared_ptr<ComboBox> combo_box_;
+	std::shared_ptr<ListView> list_;
 };
 
 int main() {

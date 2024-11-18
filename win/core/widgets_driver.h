@@ -5,7 +5,7 @@
 #include <mutex>
 
 #include <miniwin/tools/list.h>
-#include <miniwin/core/global.h>
+#include <miniwin/core/objectdefs.h>
 
 namespace miniwin {
 class Window;
@@ -14,7 +14,7 @@ class Widget;
 class WidgetsDriver
 {
 public:
-    static WidgetsDriver& instance();
+    static WidgetsDriver& Instance();
     ~WidgetsDriver();
 
     bool IsDone() const;
@@ -24,9 +24,6 @@ public:
     void PushPendingFunctor(std::function<void()> func);
 
     std::thread::id UiThreadId() const;
-
-    WidgetId AllocId();
-    bool RecycleId(WidgetId id);
 
 private:
     friend class Application;
@@ -43,10 +40,6 @@ private:
     void Prepare();
     void CallUpdateEarly() const;
     void DoPending();
-
-    WidgetId cur_max_id_ = 1;
-    uint8_t id_pool_seek_;
-    WidgetId id_pool_[128];
 
     std::thread::id ui_thread_id_;
     mutable std::mutex mutex_;
