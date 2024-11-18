@@ -16,6 +16,7 @@
 #include "miniwin/widgets/checkbox.h"
 #include "miniwin/widgets/dialog.h"
 #include "miniwin/widgets/file_dialog.h"
+#include "miniwin/widgets/list_widget.h"
 #include "miniwin/widgets/message_box.h"
 
 using namespace miniwin;
@@ -34,13 +35,10 @@ public:
 		layout_ = Instantiate<HBoxLayout>(self);
 		btn_ = Instantiate<Button>(self);
 		combo_box_ = Instantiate<ComboBox>(self);
-		list_ = Instantiate<ListView>(self);
-		list_model_ = Instantiate<StandardItemModel>(list_);
-		list_->SetModel(list_model_);
-
-		Connect(btn_, &Button::OnClicked, self, [this]() {
-			SetTitle(text_edit_->PlainText());
-		});
+		list_ = Instantiate<ListWidget>(self);
+		table_ = Instantiate<TableView>(self);
+		table_model_ = Instantiate<StandardItemModel>(self);
+		table_->SetModel(table_model_);
 	}
 
 	void Start() override {
@@ -54,11 +52,22 @@ public:
 
 		btn_->SetText("将文本值应用窗体");
 		combo_box_->SetText("组合框");
-		combo_box_->AddItems({ "abc", "123", "[];" });
+		combo_box_->AddItems({"abc", "123", "[];"});
+		
+		list_->SetRightLabel("列表");
+		list_->AddItems({"qwe", "ert", "yui", "tii"});
+		list_->SetHeight(100);
 
-		list_model_->SetColumnCount(1);
-		list_model_->SetRowCount(4);
-		list_model_->SetColumnTexts(0, 0, { "hfg", "yui", "lkj", "4435" });
+		table_model_->SetColumnCount(4);
+		table_model_->SetRowCount(5);
+		table_model_->SetHorizontalHeaderTexts({ "头0", "头1", "头2" , "头3" });
+		table_model_->SetRowTexts(0, 0, { "行0-0", "行0-1", "行0-2" });
+		table_model_->SetRowTexts(3, 0, { "行3-0", "行3-1", "行3-2" });
+		table_model_->SetColumnTexts(0, 3, { "列3-0", "列3-1","列3-2","列3-3","列3-4", });
+
+		Connect(btn_, &Button::OnClicked, shared_from_this(), [this]() {
+			SetTitle(text_edit_->PlainText());
+		});
 	}
 
 	std::shared_ptr<Label> label_;
@@ -66,8 +75,9 @@ public:
 	std::shared_ptr<HBoxLayout> layout_;
 	std::shared_ptr<Button> btn_;
 	std::shared_ptr<ComboBox> combo_box_;
-	std::shared_ptr<ListView> list_;
-	std::shared_ptr<StandardItemModel> list_model_;
+	std::shared_ptr<ListWidget> list_;
+	std::shared_ptr<TableView> table_;
+	std::shared_ptr<StandardItemModel> table_model_;
 };
 
 int main() {
@@ -75,7 +85,7 @@ int main() {
 	app.SetHideMainWindow(true);
 	auto window = Instantiate<ExampleWindow>(nullptr);
 	window->SetTitle("示例窗体");
-	window->SetSize({ 600, 400 });
+	window->SetSize({600, 400});
 	window->CenterWindow();
 	window->Show();
 

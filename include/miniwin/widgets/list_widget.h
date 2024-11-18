@@ -1,35 +1,13 @@
 #pragma once
-#include <miniwin/tools/variant.h>
+#include <miniwin/core/widget.h>
 #include <miniwin/delegate/base/abstract_item_delegate.h>
 #include <miniwin/model/base/abstract_item_model.h>
-#include <miniwin/widgets/base/abstract_item_view.h>
-#include <miniwin/tools/stringlist.h>
 
 namespace miniwin {
-class ComboBoxView : public AbstractItemView {
-	MW_OBJECT
+class ListWidget : public Widget {
 public:
-	ComboBoxView();
-	~ComboBoxView() override;
-
-	String Text() const;
-	void SetText(const String& text);
-
-protected:
-	void Awake() override;
-	void PaintBegin() override;
-
-	_MW_IMPL
-};
-
-class ComboBox : public Widget {
-	MW_OBJECT
-public:
-	ComboBox();
-	~ComboBox() override;
-
-	const String& Text() const;
-	void SetText(const String& text);
+	ListWidget();
+	~ListWidget() override;
 
 	void SetItemDelegate(const SharedItemDelegate& delegate);
 	const SharedItemDelegate& ItemDelegate() const;
@@ -46,6 +24,12 @@ public:
 
 	void InsertItem(size_t index, const String& text, const Variant& user_data = {});
 	void InsertItems(size_t index, const StringList& texts);
+
+	String RightLabel() const;
+	void SetRightLabel(const String& label);
+
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
 
 protected:
 	void Awake() override;

@@ -9,12 +9,12 @@ ListView::ListView() {
 
 ListView::~ListView() {}
 
-String ListView::Title() const {
+String ListView::RightLabel() const {
 	return Name();
 }
 
-void ListView::SetTitle(const String& title) {
-	SetName(title);
+void ListView::SetRightLabel(const String& label) {
+	SetName(label);
 }
 
 void ListView::Awake() {
@@ -25,7 +25,7 @@ void ListView::Awake() {
 void ListView::PaintBegin() {
 	AbstractItemView::PaintBegin();
 	auto m = Model();
-	if (imgui::BeginListBox(Title(), Size())) {
+	if (imgui::BeginListBox(RightLabel(), Size())) {
 		if (auto d = ItemDelegate()) {
 			impl_->clipper_.Begin(m->RowCount());
 			auto self = shared_from_this();
