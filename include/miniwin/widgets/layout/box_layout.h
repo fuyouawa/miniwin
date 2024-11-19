@@ -14,6 +14,9 @@ public:
 	float Alignment() const;
 	void SetAlignment(float alignment);
 
+	float AdditionSpacing(const SharedWidget& widget) const;
+	void SetAdditionSpacing(const SharedWidget& widget, float spacing);
+
 	_MW_IMPL
 };
 
@@ -32,6 +35,8 @@ class VBoxLayout : public BoxLayout {
 	MW_OBJECT
 public:
 	VBoxLayout();
+
+	float TotalHeight() const;
 
 protected:
 	void OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) override;

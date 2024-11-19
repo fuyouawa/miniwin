@@ -58,6 +58,10 @@ void Layout::ClearWidget() {
 	impl_->widgets_.Clear();
 }
 
+SharedWidget Layout::WidgetByIndex(size_t index) const {
+	return impl_->widgets_[index].lock();
+}
+
 List<SharedWidget> Layout::Widgets() const {
 	List<SharedWidget> total;
 	for (auto& w : impl_->widgets_) {

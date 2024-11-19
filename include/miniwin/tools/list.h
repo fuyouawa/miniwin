@@ -61,7 +61,7 @@ public:
 
 	void PushBack(const T& val);
 	void PushBack(T&& val);
-	void EmplaceBack(auto&&... args);
+	T& EmplaceBack(auto&&... args);
 
 	void SwapElem(size_type index, size_type index2);
 	void SwapElem(iterator iter, iterator iter2);
@@ -275,9 +275,9 @@ void List<T>::PushBack(T&& val)
 }
 
 template <class T>
-void List<T>::EmplaceBack(auto&&... args)
+T& List<T>::EmplaceBack(auto&&... args)
 {
-	vec_.emplace_back(std::forward<decltype(args)>(args)...);
+	return vec_.emplace_back(std::forward<decltype(args)>(args)...);
 }
 
 template<class T>

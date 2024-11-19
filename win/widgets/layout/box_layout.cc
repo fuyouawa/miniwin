@@ -7,12 +7,30 @@
 namespace miniwin {
 class BoxLayout::Impl {
 public:
+	struct WidgetItem {
+		WeakWidget widget;
+		float spacing = 0;
+	};
+
 	Impl(BoxLayout* owner) : owner_(owner) {
+	}
+
+	WidgetItem& GetItemWithClear(const SharedWidget& widget) {
+		MW_ASSERT_X(widget);
+		if (items_.size() > 10) {
+			items_.EraseIf([](const WidgetItem& i) { return !!i.widget.lock(); });
+		}
+		auto i = items_.FindIf([&widget](const WidgetItem& i) { return i.widget.lock() == widget; });
+		if (i.IsEnd()) {
+			return items_.EmplaceBack(widget);
+		}
+		return *i;
 	}
 
 	BoxLayout* owner_;
 	float spacing_ = 0;
 	float alignment_ = 0;
+	List<WidgetItem> items_;
 };
 
 BoxLayout::BoxLayout() {
@@ -37,6 +55,14 @@ void BoxLayout::SetAlignment(float alignment) {
 	impl_->alignment_ = alignment;
 }
 
+float BoxLayout::AdditionSpacing(const SharedWidget& widget) const {
+	return impl_->GetItemWithClear(widget).spacing;
+}
+
+void BoxLayout::SetAdditionSpacing(const SharedWidget& widget, float spacing) {
+	impl_->GetItemWithClear(widget).spacing = spacing;
+}
+
 
 HBoxLayout::HBoxLayout() {
 	SetSpacing(imgui::style::ItemSpacing().x());
@@ -45,7 +71,7 @@ HBoxLayout::HBoxLayout() {
 float HBoxLayout::TotalWidth() const {
 	float width = 0;
 	for (auto& w : Widgets()) {
-		width += w->CalcSize().x() + Spacing();
+		width += w->CalcSize().x() + Spacing() + AdditionSpacing(w);
 	}
 	return width;
 }
@@ -62,7 +88,7 @@ void HBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {
 	}
 
 	if (index != 0) {
-		imgui::SameLine(0, Spacing());
+		imgui::SameLine(0, Spacing() + AdditionSpacing(WidgetByIndex(index - 1)));
 	}
 }
 
@@ -70,11 +96,19 @@ VBoxLayout::VBoxLayout() {
 	SetSpacing(imgui::style::ItemSpacing().y());
 }
 
+float VBoxLayout::TotalHeight() const {
+	float height = 0;
+	for (auto& w : Widgets()) {
+		height += w->CalcSize().y() + Spacing() + AdditionSpacing(w);
+	}
+	return height;
+}
+
 void VBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {
 	BoxLayout::OnLayoutWidgetBegin(widget, index);
 
 	if (index != 0) {
-		imgui::Dummy({0, Spacing()});
+		imgui::Dummy({0, Spacing() + AdditionSpacing(widget) });
 	}
 }
 }

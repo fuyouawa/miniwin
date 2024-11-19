@@ -54,8 +54,8 @@ public:
 		text_edit_->SetPlainText("初始文本");
 
 		// 将标签和文本输入框水平布局
-		layout_->AddWidget(label_);
-		layout_->AddWidget(text_edit_);
+		// layout_->AddWidget(label_);
+		// layout_->AddWidget(text_edit_);
 
 		// 设置按钮文本
 		btn_->SetText("将文本值应用窗体");
@@ -99,6 +99,7 @@ public:
 			});
 
 		layout2_->AddWidget(combo_box_);
+		layout2_->SetAdditionSpacing(combo_box_, 10);
 		layout2_->AddWidget(btn2_);
 		layout2_->AddWidget(btn3_);
 		layout2_->SetAlignment(0.5f);	// 设置居中
