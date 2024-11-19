@@ -24,10 +24,11 @@ public:
 	void EnableTop(bool b);
 	void SetCollapsed(bool b);
 
-	void SetSize(const Vector2D& size) override;
+	Vector2D CalcSize() const override;
+	Vector2D CalcPosition() const override;
 
-	void SetPosition(const Vector2D& pos) override;
-	void SetPosition(const Vector2D& pos, const Vector2D& pivot);
+	Vector2D Pivot() const;
+	void SetPivot(Vector2D pivot);
 
 	bool IsDocking() const;
 	bool IsCollapsed() const;
@@ -40,8 +41,8 @@ public:
 
 protected:
 	void Awake() override;
-	void PaintBegin() override;
-	void PaintEnd() override;
+	void PaintBegin(size_t index) override;
+	void PaintEnd(size_t index) override;
 
 	virtual void OnPaintWindowBegin();
 	virtual void OnPaintWindowEnd();

@@ -22,8 +22,8 @@ void ListView::Awake() {
 	impl_->Awake();
 }
 
-void ListView::PaintBegin() {
-	AbstractItemView::PaintBegin();
+void ListView::PaintBegin(size_t index) {
+	AbstractItemView::PaintBegin(index);
 	auto m = Model();
 	if (imgui::BeginListBox(RightLabel(), Size())) {
 		if (auto d = ItemDelegate()) {

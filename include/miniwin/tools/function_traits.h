@@ -2,7 +2,6 @@
 #include <tuple>
 
 namespace miniwin {
-namespace internal {
 template<typename Func>
 struct FunctionTraits;
 
@@ -112,5 +111,4 @@ template<typename ExpectedFunc, typename ActualFunc>
 // 匹配两个可调用对象
 constexpr bool kIsMatchableFunctions = kIsArgumentsMatchableFunctions<ExpectedFunc, ActualFunc>&&
     kIsReturnTypeMatchableFunctions< ExpectedFunc, ActualFunc>;
-}
 }

@@ -16,18 +16,19 @@ public:
 
 };
 
+class SlotDisconnecter {
+public:
+	SlotDisconnecter() = default;
+	SlotDisconnecter(std::function<bool()> func);
+
+	bool Disconnect() const;
+
+private:
+	std::function<bool()> func_;
+};
+
 class Object : public std::enable_shared_from_this<Object> {
 public:
-	class Disconnecter {
-	public:
-		Disconnecter() = default;
-		Disconnecter(std::function<bool()>&& func);
-
-		bool Disconnect() const;
-
-	private:
-		std::function<bool()> func_;
-	};
 
 	Object();
 	virtual ~Object();
@@ -55,7 +56,7 @@ public:
 	MW_SIGNAL(OnDestroy)
 
 	template <std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
-	static Disconnecter Connect(
+	static SlotDisconnecter Connect(
 		const std::shared_ptr<Sender>& sender,
 		Signal signal,
 		const std::shared_ptr<Receiver>& receiver,
@@ -75,7 +76,7 @@ protected:
 	}
 
 private:
-	static Disconnecter ConnectImpl(
+	static SlotDisconnecter ConnectImpl(
 		const SharedObject& sender,
 		const std::type_info& signal_info,
 		const SharedObject& receiver,
@@ -94,12 +95,12 @@ private:
 };
 
 template <std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
-Object::Disconnecter Object::Connect(const std::shared_ptr<Sender>& sender, Signal signal,
+SlotDisconnecter Object::Connect(const std::shared_ptr<Sender>& sender, Signal signal,
                                      const std::shared_ptr<Receiver>& receiver, Slot&& slot,
                                      ConnectionFlags connection_flags, InvokeType invoke_type) {
-	using Traits = internal::FunctionTraits<Slot>;
+	using Traits = FunctionTraits<Slot>;
 
-	return [&] <class... Args>(std::tuple<Args...>) -> Disconnecter {
+	return [&] <class... Args>(std::tuple<Args...>) -> SlotDisconnecter {
 		if constexpr (std::is_member_function_pointer_v<Slot>) {
 			using SlotObject = internal::MemberSlotObject<Slot, Receiver, Args...>;
 

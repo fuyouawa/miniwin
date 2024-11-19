@@ -31,6 +31,9 @@ public:
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;
 
+	Vector2D CalcSize() const override;
+	Vector2D CalcPosition() const override;
+
 protected:
 	void Awake() override;
 

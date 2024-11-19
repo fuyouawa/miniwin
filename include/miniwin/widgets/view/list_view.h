@@ -12,9 +12,11 @@ public:
 	String RightLabel() const;
 	void SetRightLabel(const String& label);
 
+	//TODO Calc
+
 protected:
 	void Awake() override;
-    void PaintBegin() override;
+    void PaintBegin(size_t index) override;
 
 	_MW_IMPL
 };

@@ -42,8 +42,20 @@ public:
 
 	WidgetId Id() const;
 
+	/**
+	 * 计算控件大小
+	 *
+	 * 第一帧执行完成前由于控件都还未绘制，所以计算可能会有不准。
+	 */
+	virtual Vector2D CalcSize() const;
+	/**
+	 * 获取SetSize设置的大小，如果还没有调用过SetSize则为空
+	 *
+	 * 建议使用CalcSize
+	 */
 	virtual Vector2D Size() const;
 	virtual void SetSize(const Vector2D& size);
+	void SetSize(float width, float height);
 	void SetWidth(float width);
 	void SetHeight(float height);
 
@@ -52,6 +64,18 @@ public:
 	void SetAlpha(float alpha);
 	void SetBgAlpha(float alpha);
 
+	/**
+	 * 计算控件位置
+	 *
+	 * 注意：在第一帧绘制前始终为空，因为此时还未绘制，无法计算位置
+	 */
+	virtual Vector2D CalcPosition() const;
+
+	/**
+	 * 获取SetPosition设置的位置，如果还没有调用过SetPosition则为空
+	 *
+	 * 建议使用CalcPosition
+	 */
 	virtual Vector2D Position() const;
 	virtual void SetPosition(const Vector2D& pos);
 
@@ -78,14 +102,11 @@ protected:
 	// 开始绘制
 	// 会先调用父类的PaintBegin, 然后会递归调用所有子类的PaintBegin
 	// 相当于二叉树遍历中的左叶子
-	virtual void PaintBegin();
+	virtual void PaintBegin(size_t index);
 	// 结束绘制
 	// 和PaintBegin相对应
 	// 相当于二叉树遍历中的右叶子
-	virtual void PaintEnd();
-
-	virtual void OnBeforePaintChild(size_t child_index);
-	virtual void OnAfterPaintChild(size_t child_index);
+	virtual void PaintEnd(size_t index);
 
 private:
 	friend class WidgetsDriver;

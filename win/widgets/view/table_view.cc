@@ -26,8 +26,8 @@ void TableView::SetVerticalHeader(const SharedHeaderView& header) {
 	impl_->SetHeader(HeaderOrientation::Vertical, header);
 }
 
-void TableView::PaintBegin() {
-	AbstractItemView::PaintBegin();
+void TableView::PaintBegin(size_t index) {
+	AbstractItemView::PaintBegin(index);
 	auto m = Model();
 	auto col_count = m->ColumnCount();
 	auto row_count = m->RowCount();

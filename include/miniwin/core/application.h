@@ -5,6 +5,10 @@
 #include <miniwin/tools/string.h>
 
 namespace miniwin {
+struct BeginNewFrameEvent {
+    size_t total_frame;
+};
+
 class Application
 {
 public:

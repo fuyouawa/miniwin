@@ -12,13 +12,13 @@ public:
 
 Frame::Frame() {}
 
-void Frame::PaintBegin() {
-	AbstractMinimumControl::PaintBegin();
+void Frame::PaintBegin(size_t index) {
+	AbstractMinimumControl::PaintBegin(index);
 	imgui::BeginChildWindow(Id(), Size());
 }
 
-void Frame::PaintEnd() {
+void Frame::PaintEnd(size_t index) {
 	imgui::EndChildWindow();
-	AbstractMinimumControl::PaintEnd();
+	AbstractMinimumControl::PaintEnd(index);
 }
 }

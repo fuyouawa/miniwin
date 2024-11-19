@@ -65,8 +65,8 @@ public:
 		owner_->EnableFlags(imgui::kWindowNoInputs
 		                  | imgui::kWindowNoBackground
 		                  | imgui::kWindowNoTitleBar, true);
-		owner_->SetSize({});
-		owner_->SetPosition({}, {});
+		owner_->SetSize(Vector2D::kZero);
+		owner_->SetPosition(Vector2D::kZero);
 	}
 
 	void DoOpenFileDialog() {

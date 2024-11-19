@@ -27,7 +27,8 @@ void Window::SetTitle(const String& title) {
 void Window::CenterInScene() {
 	Invoke([this]() {
 		auto size = graphic::GetSceneSize();
-		SetPosition(size * 0.5f, {0.5f, 0.5f});
+		SetPosition(size * 0.5f);
+		SetPivot({ 0.5f, 0.5f });
 	});
 }
 
@@ -51,18 +52,23 @@ void Window::SetCollapsed(bool b) {
 	impl_->collapsed_sc_.SetControl(b);
 }
 
-void Window::SetSize(const Vector2D& size) {
-	Widget::SetSize(size);
-	impl_->size_to_set_ = size;
+Vector2D Window::CalcSize() const {
+	//TODO Calc
+	return impl_->calc_size_;
+
 }
 
-void Window::SetPosition(const Vector2D& pos) {
-	SetPosition(pos, {});
+Vector2D Window::CalcPosition() const {
+	//TODO Calc
+	return impl_->calc_pos_;
 }
 
-void Window::SetPosition(const Vector2D& pos, const Vector2D& pivot) {
-	Widget::SetPosition(pos);
-	impl_->pos_and_pivot_to_set_ = std::pair(pos, pivot);
+Vector2D Window::Pivot() const {
+	return impl_->pivot_sc_.cur_value();
+}
+
+void Window::SetPivot(Vector2D pivot) {
+	impl_->pivot_sc_.SetControl(pivot);
 }
 
 bool Window::IsDocking() const {
@@ -82,14 +88,14 @@ void Window::Awake() {
 	impl_->Awake();
 }
 
-void Window::PaintBegin() {
-	Widget::PaintBegin();
+void Window::PaintBegin(size_t index) {
+	Widget::PaintBegin(index);
 	impl_->PaintBegin();
 }
 
-void Window::PaintEnd() {
+void Window::PaintEnd(size_t index) {
 	impl_->PaintEnd();
-	Widget::PaintEnd();
+	Widget::PaintEnd(index);
 }
 
 void Window::OnPaintWindowBegin() {

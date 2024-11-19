@@ -17,7 +17,7 @@ public:
 
 protected:
 	void Awake() override;
-	void PaintBegin() override;
+	void PaintBegin(size_t index) override;
 
 	_MW_IMPL
 };

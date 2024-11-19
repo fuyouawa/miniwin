@@ -25,14 +25,19 @@ public:
 
     ScopeCondition top_sc_{ false };
     ScopeCondition collapsed_sc_{ false };
-    std::optional<std::pair<Vector2D, Vector2D>> pos_and_pivot_to_set_;
-    std::optional<Vector2D> size_to_set_;
+    ScopeVariable<Vector2D> pivot_sc_;
+
+    Vector2D prev_set_size_;
+    Vector2D prev_set_pos_;
+    Vector2D calc_size_;
+    Vector2D calc_pos_;
 
     bool is_docking_ = false;
     bool is_close_btn_enabled_ = true;
 
     void* hwnd_ = nullptr;
     void* prev_hwnd_ = nullptr;
+
     Window* owner_;
 };
 }

@@ -14,6 +14,8 @@ public:
 
 	virtual void PaintSection(size_t section);
 
+	//TODO Calc
+
 private:
 	using AbstractItemView::SetDrawFlags;
 

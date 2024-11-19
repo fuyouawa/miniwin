@@ -11,7 +11,7 @@ public:
 	MW_SIGNAL(OnClicked)
 
 protected:
-	void PaintBegin() override;
+	void PaintBegin(size_t index) override;
 
 	_MW_IMPL
 };

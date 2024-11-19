@@ -13,10 +13,10 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y) {
 	return static_cast<ConnectionFlags>(static_cast<int>(x) & static_cast<int>(y));
 }
 
-Object::Disconnecter::Disconnecter(std::function<bool()>&& func)
+SlotDisconnecter::SlotDisconnecter(std::function<bool()> func)
 	: func_(std::move(func)) {}
 
-bool Object::Disconnecter::Disconnect() const {
+bool SlotDisconnecter::Disconnect() const {
 	if (func_) {
 		return func_();
 	}
@@ -101,10 +101,10 @@ void Object::Initialize(const SharedObject& parent) {
 	impl_->Init(parent);
 }
 
-Object::Disconnecter Object::ConnectImpl(const SharedObject& sender, const std::type_info& signal_info,
-                                         const SharedObject& receiver, internal::UniqueSlotObject&& slot_obj, ConnectionFlags connection_flags,
-                                         InvokeType invoke_type)
-{
+SlotDisconnecter Object::ConnectImpl(const SharedObject& sender, const std::type_info& signal_info,
+                                 const SharedObject& receiver, internal::UniqueSlotObject&& slot_obj,
+                                 ConnectionFlags connection_flags,
+                                 InvokeType invoke_type) {
 	MW_ASSERT_X(receiver);
 	MW_ASSERT_X(slot_obj);
 	return Impl::ConnectImpl(sender, signal_info, receiver, std::move(slot_obj), connection_flags, invoke_type);

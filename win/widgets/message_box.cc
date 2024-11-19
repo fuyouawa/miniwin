@@ -14,7 +14,8 @@ public:
 		lab_msg_ = Instantiate<Label>(owner_->shared_from_this());
 		layout_btns_ = Instantiate<HBoxLayout>(owner_->shared_from_this());
 		layout_btns_->SetSpacing(10);
-		owner_->SetSize({200, 110});
+		layout_btns_->SetAlignment(1);
+		owner_->SetSize(200, 110);
 	}
 
 	void AddButton(const std::shared_ptr<Button>& btn) {

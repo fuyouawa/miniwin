@@ -65,6 +65,10 @@ void Widget::SetSize(const Vector2D& size) {
 	impl_->size_sc_.SetControl(size);
 }
 
+void Widget::SetSize(float width, float height) {
+	SetSize(Vector2D(width, height));
+}
+
 void Widget::SetWidth(float width) {
 	auto tmp = Size();
 	tmp.set_x(width);
@@ -93,6 +97,11 @@ void Widget::SetBgAlpha(float alpha) {
 	impl_->bg_alpha_ = alpha;
 }
 
+Vector2D Widget::CalcPosition() const {
+	MW_ASSERT(false, "Not implemented function!");
+	return {};
+}
+
 Vector2D Widget::Position() const {
 	return impl_->pos_sc_.cur_value();
 }
@@ -105,12 +114,17 @@ WidgetId Widget::Id() const {
 	return impl_->id_;
 }
 
+Vector2D Widget::CalcSize() const {
+	MW_ASSERT(false, "Not implemented function!");
+	return {};
+}
+
 bool Widget::Enabled() const {
 	return impl_->Enabled();
 }
 
 bool Widget::Visible() const {
-	return impl_->Visible();
+	return impl_->Visible() && !Orphaned();
 }
 
 void Widget::SetVisible(bool b) {
@@ -179,15 +193,11 @@ void Widget::PreparePaint() {
 	impl_->DoPendingFunctors();
 }
 
-void Widget::PaintBegin() {
+void Widget::PaintBegin(size_t index) {
 	impl_->PaintBegin();
 }
 
-void Widget::PaintEnd() {
+void Widget::PaintEnd(size_t index) {
 	impl_->PaintEnd();
 }
-
-void Widget::OnBeforePaintChild(size_t child_index) {}
-
-void Widget::OnAfterPaintChild(size_t child_index) {}
 }

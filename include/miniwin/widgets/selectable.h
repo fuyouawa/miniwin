@@ -14,7 +14,7 @@ public:
 	MW_SIGNAL(OnSelectionChanged, (bool) selected)
 
 protected:
-	void PaintBegin() override;
+	void PaintBegin(size_t index) override;
 
 	_MW_IMPL
 };

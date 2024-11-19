@@ -12,7 +12,7 @@ public:
 	bool RemoveWidget(const SharedWidget& widget);
 	void ClearWidget();
 
-	List<WeakWidget> Widgets() const;
+	List<SharedWidget> Widgets() const;
 	size_t IndexOfWidget(const SharedWidget& widget) const;
 	bool SetWidgetIndex(const SharedWidget& widget, size_t index);
 	size_t AdvanceWidget(const SharedWidget& widget, size_t count);
@@ -20,11 +20,13 @@ public:
 	size_t Count() const;
 	bool IsEmpty() const;
 
+	void Initialize(const SharedObject& parent) override;
+
 protected:
 	friend class WidgetsDriver;
 
-	virtual void OnLayoutWidgetBegin(const SharedWidget& widget);
-	virtual void OnLayoutWidgetEnd(const SharedWidget& widget);
+	virtual void OnLayoutWidgetBegin(const SharedWidget& widget, size_t index);
+	virtual void OnLayoutWidgetEnd(const SharedWidget& widget, size_t index);
 
 	_MW_IMPL
 };

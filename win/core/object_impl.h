@@ -39,7 +39,7 @@ public:
         void ClearDirty();
     };
 
-    static Disconnecter ConnectImpl(
+    static SlotDisconnecter ConnectImpl(
         const SharedObject& sender,
         const std::type_info& signal_info,
         const SharedObject& receiver,
@@ -54,7 +54,7 @@ public:
 
     bool DisconnectImpl(const SharedConnection& connection);
 
-    Disconnecter AddConnection(SharedConnection&& connection);
+    SlotDisconnecter AddConnection(SharedConnection&& connection);
 
     void SetParent(const SharedObject& parent);
 

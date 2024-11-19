@@ -33,7 +33,9 @@ private:
         kCloseAll
     };
 
-    static void UpdateRecursion(const SharedWidget& widget, bool force_ignore_children = false);
+    static void UpdateChildrenRecursion(const SharedWidget& widget);
+    static void UpdateWidget(const SharedWidget& widget, size_t* index);
+    static void UpdateLayout(const SharedLayout& layout, size_t* index);
     static void CallUpdateEarlyRecursion(const SharedWidget& widget);
     static void PrepareRecursion(const SharedWidget& widget);
     void Update();

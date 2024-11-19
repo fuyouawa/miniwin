@@ -66,7 +66,13 @@ Vector2D GetWindowSize();
 Vector2D GetWindowPos();
 
 void SetCursorPos(const Vector2D& pos);
+void SetCursorPosX(float x);
+void SetCursorPosY(float y);
 Vector2D GetCursorPos();
+float GetCursorPosX();
+float GetCursorPosY();
+
+Vector2D CalcTextSize(const String& text, bool hide_text_after_double_hash = false, float wrap_width = -1.0f);
 
 void PushItemWidth(float item_width);
 void PopItemWidth();
@@ -81,6 +87,9 @@ void PopStyleVar(size_t count = 1);
 
 bool IsWindowCollapsed();
 void SetWindowCollapsed(bool collapsed, Cond cond = kCondNone);
+
+Vector2D GetContentRegionAvail();
+void SetNextWindowBgAlpha(float alpha);
 
 void Dummy(const Vector2D& size);
 
@@ -135,7 +144,6 @@ void TableNextRow(
 
 void EndTable();
 
-void SetNextWindowBgAlpha(float alpha);
 
 bool BeginWindow(
 	const String& title,
@@ -192,5 +200,10 @@ bool BeginChildWindow(
 	int window_flags = 0);
 
 void EndChildWindow();
+
+namespace style {
+Vector2D FramePadding();
+Vector2D ItemSpacing();
+}
 }
 }

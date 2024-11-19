@@ -34,8 +34,8 @@ const String& TextEdit::PlainText() const {
 	return impl_->text_buffer_;
 }
 
-void TextEdit::PaintBegin() {
-	AbstractMinimumControl::PaintBegin();
+void TextEdit::PaintBegin(size_t index) {
+	AbstractMinimumControl::PaintBegin(index);
 	imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size());
 }
 }

@@ -4,89 +4,100 @@
 #include <miniwin/model/base/abstract_item_model.h>
 #include <miniwin/model/item_selection_model.h>
 
+#include "miniwin/core/imgui.h"
 #include "win/tools/debug.h"
 
 
 namespace miniwin {
 class AbstractItemView::Impl {
 public:
-    explicit Impl(AbstractItemView* owner) : owner_(owner) {}
+	explicit Impl(AbstractItemView* owner) : owner_(owner) {}
 
-    AbstractItemView* owner_;
+	AbstractItemView* owner_;
 
-    SharedItemModel model_;
-    SharedItemDelegate item_delegate_ ;
-    SharedItemSelectionModel selection_model_;
+	Vector2D calc_size_;
+	Vector2D calc_pos_;
+
+	SharedItemModel model_;
+	SharedItemDelegate item_delegate_;
+	SharedItemSelectionModel selection_model_;
 };
 
-AbstractItemView::AbstractItemView()
-{
-    impl_ = std::make_unique<Impl>(this);
+AbstractItemView::AbstractItemView() {
+	impl_ = std::make_unique<Impl>(this);
 }
 
-AbstractItemView::~AbstractItemView()
-{
+AbstractItemView::~AbstractItemView() {}
+
+void AbstractItemView::SetModel(const SharedItemModel& model) {
+	if (impl_->model_ == model)
+		return;
+
+	if (impl_->model_ && impl_->model_ != AbstractItemModel::StaticEmptyModel()) {
+		impl_->model_->SetParent(nullptr);
+	}
+	impl_->model_ = model ? model : AbstractItemModel::StaticEmptyModel();
+
+	if (impl_->model_ != AbstractItemModel::StaticEmptyModel()) {
+		impl_->model_->SetParent(shared_from_this());
+	}
+
+	auto m = Instantiate<ItemSelectionModel>(shared_from_this());
+	m->SetModel(impl_->model_);
+	SetSelectionModel(m);
 }
 
-void AbstractItemView::SetModel(const SharedItemModel& model)
-{
-    if (impl_->model_ == model)
-        return;
-
-    if (impl_->model_ && impl_->model_ != AbstractItemModel::StaticEmptyModel())
-    {
-        impl_->model_->SetParent(nullptr);
-    }
-    impl_->model_ = model ? model : AbstractItemModel::StaticEmptyModel();
-
-    if (impl_->model_ != AbstractItemModel::StaticEmptyModel())
-    {
-        impl_->model_->SetParent(shared_from_this());
-    }
-
-    auto m = Instantiate<ItemSelectionModel>(shared_from_this());
-    m->SetModel(impl_->model_);
-    SetSelectionModel(m);
+const SharedItemModel& AbstractItemView::Model() const {
+	return impl_->model_;
 }
 
-const SharedItemModel& AbstractItemView::Model() const
-{
-    return impl_->model_;
+void AbstractItemView::SetSelectionModel(const SharedItemSelectionModel& selection_model) {
+	if (impl_->selection_model_ == selection_model)
+		return;
+	MW_ASSERT_X(selection_model);
+	if (selection_model->Model() != impl_->model_) {
+		throw std::exception("AbstractItemView::SetSelectionModel() failed: "
+			"Trying to set a selection model, "
+			"which works on a different model than the view.");
+	}
+
+	impl_->selection_model_ = selection_model;
 }
 
-void AbstractItemView::SetSelectionModel(const SharedItemSelectionModel& selection_model)
-{
-    if (impl_->selection_model_ == selection_model)
-        return;
-    MW_ASSERT_X(selection_model);
-    if (selection_model->Model() != impl_->model_)
-    {
-        throw std::exception("AbstractItemView::SetSelectionModel() failed: "
-                             "Trying to set a selection model, "
-                             "which works on a different model than the view.");
-    }
-
-    impl_->selection_model_ = selection_model;
+SharedItemSelectionModel AbstractItemView::SelectionModel() const {
+	return impl_->selection_model_;
 }
 
-SharedItemSelectionModel AbstractItemView::SelectionModel() const
-{
-    return impl_->selection_model_;
+void AbstractItemView::SetItemDelegate(const SharedItemDelegate& item_delegate) {
+	if (impl_->item_delegate_ == item_delegate)
+		return;
+	MW_ASSERT_X(item_delegate);
+
+	impl_->item_delegate_ = item_delegate;
+
+	impl_->item_delegate_->SetParent(shared_from_this());
 }
 
-void AbstractItemView::SetItemDelegate(const SharedItemDelegate& item_delegate)
-{
-    if (impl_->item_delegate_ == item_delegate)
-        return;
-    MW_ASSERT_X(item_delegate);
-
-    impl_->item_delegate_ = item_delegate;
-
-    impl_->item_delegate_->SetParent(shared_from_this());
+const SharedItemDelegate& AbstractItemView::ItemDelegate() const {
+	return impl_->item_delegate_;
 }
 
-const SharedItemDelegate& AbstractItemView::ItemDelegate() const
-{
-    return impl_->item_delegate_;
+Vector2D AbstractItemView::CalcSize() const {
+	return impl_->calc_size_;
+}
+
+Vector2D AbstractItemView::CalcPosition() const {
+	return impl_->calc_pos_;
+}
+
+void AbstractItemView::PaintBegin(size_t index) {
+	Widget::PaintBegin(index);
+}
+
+void AbstractItemView::PaintEnd(size_t index) {
+	impl_->calc_size_ = imgui::GetWindowSize();
+	impl_->calc_pos_ = imgui::GetWindowPos();
+
+	Widget::PaintEnd(index);
 }
 }

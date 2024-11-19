@@ -48,7 +48,7 @@ void Object::Impl::ConnectionsManager::ClearDirty() {
 	}
 }
 
-Object::Disconnecter Object::Impl::ConnectImpl(
+SlotDisconnecter Object::Impl::ConnectImpl(
 	const SharedObject& sender,
 	const std::type_info& signal_info,
 	const SharedObject& receiver,
@@ -81,7 +81,7 @@ Object::Disconnecter Object::Impl::ConnectImpl(
 			}
 
 			auto conn = sender_conns->second.FindIf([receiver, &slot_obj](const SharedConnection& c) {
-				return c->receiver.lock() == receiver && c->slot_obj->Compare(slot_obj.get());
+				return c->receiver.lock() == receiver && c->slot_obj->Compare(*slot_obj);
 			});
 			MW_ASSERT_X((*conn)->signal_info == signal_info);
 
@@ -160,7 +160,7 @@ bool Object::Impl::DisconnectImpl(const SharedConnection& connection) {
 	return true;
 }
 
-Object::Disconnecter Object::Impl::AddConnection(SharedConnection&& connection) {
+SlotDisconnecter Object::Impl::AddConnection(SharedConnection&& connection) {
 	MW_ASSERT_X(connection->sender.lock().get() == owner_);
 
 	auto r = connection->receiver.lock();

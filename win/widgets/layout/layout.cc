@@ -1,6 +1,9 @@
 #include <miniwin/widgets/layout/layout.h>
 
 #include <miniwin/core/imgui.h>
+#include <miniwin/core/application.h>
+#include <miniwin/core/event_mgr.h>
+
 #include "win/core/object_impl.h"
 #include "win/core/widget_impl.h"
 
@@ -8,6 +11,8 @@ namespace miniwin {
 class Layout::Impl {
 public:
 	Impl(Layout* owner) : owner_(owner) {}
+
+	void Init() {}
 
 	Layout* owner_;
 	List<WeakWidget> widgets_;
@@ -52,8 +57,14 @@ void Layout::ClearWidget() {
 	impl_->widgets_.Clear();
 }
 
-List<WeakWidget> Layout::Widgets() const {
-	return impl_->widgets_;
+List<SharedWidget> Layout::Widgets() const {
+	List<SharedWidget> total;
+	for (auto& w : impl_->widgets_) {
+		if (auto w2 = w.lock()) {
+			total.PushBack(w2);
+		}
+	}
+	return total;
 }
 
 bool Layout::SetWidgetIndex(const SharedWidget& widget, size_t index) {
@@ -108,6 +119,12 @@ bool Layout::IsEmpty() const {
 	return Count() == 0;
 }
 
-void Layout::OnLayoutWidgetBegin(const SharedWidget& widget) {}
-void Layout::OnLayoutWidgetEnd(const SharedWidget& widget) {}
+void Layout::Initialize(const SharedObject& parent) {
+	Object::Initialize(parent);
+	impl_->Init();
+}
+
+void Layout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {}
+
+void Layout::OnLayoutWidgetEnd(const SharedWidget& widget, size_t index) {}
 }

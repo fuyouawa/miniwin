@@ -22,8 +22,10 @@
 using namespace miniwin;
 
 class ExampleWindow : public Window {
+	MW_OBJECT
 public:
 	ExampleWindow() {}
+
 	// Awake，在对象实例化时调用
 	void Awake() override {
 		Window::Awake();
@@ -35,6 +37,7 @@ public:
 		btn_ = Instantiate<Button>(self);
 		btn2_ = Instantiate<Button>(self);
 		btn3_ = Instantiate<Button>(self);
+		layout2_ = Instantiate<HBoxLayout>(self);
 		combo_box_ = Instantiate<ComboBox>(self);
 		list_ = Instantiate<ListWidget>(self);
 		table_ = Instantiate<TableView>(self);
@@ -45,33 +48,40 @@ public:
 	// Start，在对象绘制前调用，只会调用一次
 	void Start() override {
 		Window::Start();
+
 		// 设置标签和文本输入框的初始文本
 		label_->SetText("输入文本");
 		text_edit_->SetPlainText("初始文本");
+
 		// 将标签和文本输入框水平布局
 		layout_->AddWidget(label_);
 		layout_->AddWidget(text_edit_);
+
 		// 设置按钮文本
 		btn_->SetText("将文本值应用窗体");
+
 		// 设置组合框文本和数据
 		combo_box_->SetText("组合框");
-		combo_box_->AddItems({"abc", "123", "[];"});
+		combo_box_->AddItems({ "abc", "123", "[];" });
+
 		// 设置列表数据
 		list_->SetRightLabel("列表");
-		list_->AddItems({"qwe", "ert", "yui", "tii"});
+		list_->AddItems({ "qwe", "ert", "yui", "tii" });
 		list_->SetHeight(100);
+
 		// 设置表格模型的数据
 		table_model_->SetColumnCount(4);
 		table_model_->SetRowCount(5);
-		table_model_->SetHorizontalHeaderTexts({"头0", "头1", "头2", "头3"});					// 设置表头
-		table_model_->SetRowTexts(0, 0, {"行0-0", "行0-1", "行0-2"});							// 设置第一行中三列文本
-		table_model_->SetRowTexts(3, 0, {"行3-0", "行3-1", "行3-2"});							// 设置第四行中三列文本
-		table_model_->SetColumnTexts(0, 3, {"列3-0", "列3-1", "列3-2", "列3-3", "列3-4",});// 设置第四列的五行文本
+		table_model_->SetHorizontalHeaderTexts({ "头0", "头1", "头2", "头3" });					// 设置表头
+		table_model_->SetRowTexts(0, 0, { "行0-0", "行0-1", "行0-2" });							// 设置第一行中三列文本
+		table_model_->SetRowTexts(3, 0, { "行3-0", "行3-1", "行3-2" });							// 设置第四行中三列文本
+		table_model_->SetColumnTexts(0, 3, { "列3-0", "列3-1", "列3-2", "列3-3", "列3-4", });// 设置第四列的五行文本
+
 		// 连接按钮的点击信号，槽函数里面修改窗体标题
 		auto self = shared_from_this();
 		Connect(btn_, &Button::OnClicked, self, [this]() {
 			SetTitle(text_edit_->PlainText());
-		});
+			});
 
 		btn2_->SetText("打开资源管理器选择文件");
 		Connect(btn2_, &Button::OnClicked, self, [this]() {
@@ -86,6 +96,10 @@ public:
 				std::cout << "询问框的选择是：" << is_yes << std::endl;
 				});
 			});
+
+		layout2_->AddWidget(btn2_);
+		layout2_->AddWidget(btn3_);
+		layout2_->SetAlignment(0.5f);	// 设置居中
 	}
 
 	std::shared_ptr<Label> label_;
@@ -94,6 +108,7 @@ public:
 	std::shared_ptr<Button> btn_;
 	std::shared_ptr<Button> btn2_;
 	std::shared_ptr<Button> btn3_;
+	std::shared_ptr<HBoxLayout> layout2_;
 	std::shared_ptr<ComboBox> combo_box_;
 	std::shared_ptr<ListWidget> list_;
 	std::shared_ptr<TableView> table_;

@@ -44,6 +44,12 @@ using SharedConstItemSelectionModel = std::shared_ptr<const ItemSelectionModel>;
 using WeakItemSelectionModel = std::weak_ptr<ItemSelectionModel>;
 using WeakConstItemSelectionModel = std::weak_ptr<const ItemSelectionModel>;
 
+class Layout;
+using SharedLayout = std::shared_ptr<Layout>;
+using SharedConstLayout = std::shared_ptr<const Layout>;
+using WeakLayout = std::weak_ptr<Layout>;
+using WeakConstLayout = std::weak_ptr<const Layout>;
+
 class Window;
 using SharedWindow = std::shared_ptr<Window>;
 using SharedConstWindow = std::shared_ptr<const Window>;
@@ -63,7 +69,7 @@ public:
 	virtual ~SlotObjectBase() = default;
 
 	virtual void Call(const SharedObject& receiver, const SharedSlotArgsStore& args_store) const = 0;
-	virtual bool Compare(const SlotObjectBase* x) const = 0;
+	virtual bool Compare(const SlotObjectBase& x) const = 0;
 };
 
 using UniqueSlotObject = std::unique_ptr<SlotObjectBase>;
@@ -80,6 +86,7 @@ template <class Func, class Receiver, class... Args>
 class MemberSlotObject : public SlotObjectBase {
 public:
 	explicit MemberSlotObject(Func func) : func_(func) {}
+	~MemberSlotObject() override = default;
 
 	void Call(const SharedObject& receiver, const SharedSlotArgsStore& args_store) const override {
 		auto store = dynamic_cast<SlotArgsStore<Args...>*>(args_store.get());
@@ -88,8 +95,8 @@ public:
 		std::apply([r, this](const Args&... args) { std::invoke(func_, r, args...); }, store->args_);
 	}
 
-	bool Compare(const SlotObjectBase* x) const override {
-		auto xx = dynamic_cast<const MemberSlotObject*>(x);
+	bool Compare(const SlotObjectBase& x) const override {
+		auto xx = dynamic_cast<const MemberSlotObject*>(&x);
 		return xx != nullptr && xx->func_ == func_;
 	}
 
@@ -103,14 +110,15 @@ public:
 
 	FunctorSlotObject(const Func& func) : func_(func) {}
 	FunctorSlotObject(Func&& func) : func_(std::move(func)) {}
+	~FunctorSlotObject() override = default;
 
 	void Call(const SharedObject& receiver, const SharedSlotArgsStore& args_store) const override {
 		auto store = dynamic_cast<SlotArgsStore<Args...>*>(args_store.get());
 		std::apply(func_, store->args_);
 	}
 
-	bool Compare(const SlotObjectBase* x) const override {
-		auto xx = dynamic_cast<const FunctorSlotObject*>(x);
+	bool Compare(const SlotObjectBase& x) const override {
+		auto xx = dynamic_cast<const FunctorSlotObject*>(&x);
 		if (xx == nullptr
 			|| !!xx->func_ != !!func_
 			|| xx->func_.target_type() != func_.target_type())
@@ -171,9 +179,7 @@ using PureType = std::remove_cvref_t<std::remove_pointer_t<T>>;
 
 template<internal::IsUseObjectParent T>
 std::shared_ptr<T> Instantiate(const SharedObject& parent) {
-	auto p = std::make_shared<T>();
-	p->Initialize(parent);
-	return p;
+	return internal::Instantiate<T>(parent);
 }
 
 template<internal::IsUseWidgetParent T>

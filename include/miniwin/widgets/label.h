@@ -8,7 +8,7 @@ public:
 	Label();
 
 protected:
-	void PaintBegin() override;
+	void PaintBegin(size_t index) override;
 
 private:
 	void SetSize(const Vector2D& size) override;

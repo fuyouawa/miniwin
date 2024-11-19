@@ -147,8 +147,28 @@ void SetCursorPos(const Vector2D& pos) {
 	ImGui::SetCursorPos(CastToIm(pos));
 }
 
+void SetCursorPosX(float x) {
+	ImGui::SetCursorPosX(x);
+}
+
+void SetCursorPosY(float y) {
+	ImGui::SetCursorPosY(y);
+}
+
 Vector2D GetCursorPos() {
 	return CastFromIm(ImGui::GetCursorPos());
+}
+
+float GetCursorPosX() {
+	return ImGui::GetCursorPosX();
+}
+
+float GetCursorPosY() {
+	return ImGui::GetCursorPosY();
+}
+
+Vector2D CalcTextSize(const String& text, bool hide_text_after_double_hash, float wrap_width) {
+	return CastFromIm(ImGui::CalcTextSize(text.data(), text.data() + text.size(), hide_text_after_double_hash, wrap_width));
 }
 
 void PushItemWidth(float item_width) {
@@ -308,6 +328,10 @@ void EndChildWindow() {
 	return ImGui::EndChild();
 }
 
+Vector2D GetContentRegionAvail() {
+	return CastFromIm(ImGui::GetContentRegionAvail());
+}
+
 bool BeginTable(const String& id, size_t column, FlagsType flags, const Vector2D& size, float inner_width) {
 	return ImGui::BeginTable(id.data(), static_cast<int>(column), flags, CastToIm(size), inner_width);
 }
@@ -334,6 +358,16 @@ bool TableSetColumnIndex(size_t column_n) {
 
 void TableNextRow(FlagsType row_flags, float row_min_height) {
 	ImGui::TableNextRow(row_flags, row_min_height);
+}
+
+namespace style {
+Vector2D FramePadding() {
+	return CastFromIm(ImGui::GetStyle().FramePadding);
+}
+
+Vector2D ItemSpacing() {
+	return CastFromIm(ImGui::GetStyle().ItemSpacing);
+}
 }
 }
 }

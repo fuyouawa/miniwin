@@ -54,8 +54,8 @@ void ComboBoxView::Awake() {
 	impl_->Awake();
 }
 
-void ComboBoxView::PaintBegin() {
-	AbstractItemView::PaintBegin();
+void ComboBoxView::PaintBegin(size_t index) {
+	AbstractItemView::PaintBegin(index);
 	auto cs = SelectionModel()->CurrentSelection();
 	auto m = Model();
 	auto text = m->Data(cs.top_left()).ToString();

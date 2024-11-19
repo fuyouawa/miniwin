@@ -26,10 +26,9 @@ void WidgetsDriver::Update() {
 	DoPending();
 	Prepare();
 	CallUpdateEarly();
+	size_t i = 0;
 	for (auto& win : windows_) {
-		if (!win->Orphaned() && win->Visible()) {
-			UpdateRecursion(win, win->IsCollapsed());
-		}
+		UpdateWidget(win, &i);
 	}
 }
 
@@ -89,36 +88,64 @@ std::thread::id WidgetsDriver::UiThreadId() const {
 	return ui_thread_id_;
 }
 
-void WidgetsDriver::UpdateRecursion(const SharedWidget& widget, bool force_ignore_children) {
-	MW_ASSERT_X(widget->impl_->started_);
-	if (!widget->Visible())
-		return;
+void WidgetsDriver::UpdateChildrenRecursion(const SharedWidget& widget) {
+	MW_ASSERT_X(widget->impl_->started_ && widget->Visible());
 
-	auto ignore_self = (widget->GetDrawFlags() & Widget::kDrawIgnoreSelf) != 0;
 	auto ignore_children = (widget->GetDrawFlags() & Widget::kDrawIgnoreChildren) != 0;
 
-	if (!ignore_self) {
-		if (widget->impl_->layout_)
-			widget->impl_->layout_->OnLayoutWidgetBegin(widget);
-		widget->PaintBegin();
-	}
-
-	if (!ignore_children || force_ignore_children) {
+	if (!ignore_children) {
 		size_t i = 0;
-		for (auto w : widget->WidgetChildren()) {
-			if (!w->Orphaned()) {
-				widget->OnBeforePaintChild(i);
-				UpdateRecursion(w);
-				widget->OnAfterPaintChild(i);
-				++i;
+		for (auto& o : widget->Children()) {
+			if (o->IsLayout()) {
+				auto l = std::dynamic_pointer_cast<Layout>(o);
+				UpdateLayout(l, &i);
+				continue;
+			}
+			if (o->IsWidget()) {
+				auto w = std::dynamic_pointer_cast<Widget>(o);
+				if (w->impl_->layout_)
+					continue;
+				UpdateWidget(w, &i);
 			}
 		}
 	}
+}
 
+void WidgetsDriver::UpdateWidget(const SharedWidget& widget, size_t* index) {
+	MW_ASSERT_X(widget->impl_->started_ && widget->Visible());
+
+	// 判断是否要忽略自己
+	auto ignore_self = (widget->GetDrawFlags() & Widget::kDrawIgnoreSelf) != 0;
 	if (!ignore_self) {
-		widget->PaintEnd();
-		if (widget->impl_->layout_)
-			widget->impl_->layout_->OnLayoutWidgetEnd(widget);
+		widget->PaintBegin(*index);
+		++*index;
+	}
+
+	bool can_update_children = true;
+	// 如果是窗体并且折叠了，那就不绘制子控件
+	if (widget->IsWindow()) {
+		auto w = std::dynamic_pointer_cast<Window>(widget);
+		can_update_children = !w->IsCollapsed();
+	}
+
+	if (can_update_children && widget->Visible()) {
+		UpdateChildrenRecursion(widget);
+	}
+
+	if (!ignore_self)
+		widget->PaintEnd(*index);
+}
+
+void WidgetsDriver::UpdateLayout(const SharedLayout& layout, size_t* index) {
+	size_t i = 0;
+	for (auto& w : layout->Widgets()) {
+		MW_ASSERT_X(w->impl_->layout_ == layout.get());
+		if (w->Visible()) {
+			layout->OnLayoutWidgetBegin(w, i);
+			UpdateWidget(w, index);
+			layout->OnLayoutWidgetEnd(w, i);
+			++i;
+		}
 	}
 }
 

@@ -10,14 +10,17 @@ template<class T>
 class Vector2D
 {
 public:
-    Vector2D() : Vector2D(0, 0) {}
-    Vector2D(T x, T y) : x_(x), y_(y) {}
+    static Vector2D kZero;
+    static Vector2D kOne;
 
-    T x() const { return x_; }
-    void set_x(T x) { x_ = x; }
+    constexpr Vector2D() : Vector2D(0, 0) {}
+    constexpr Vector2D(T x, T y) : x_(x), y_(y) {}
 
-    T y() const { return y_; }
-    void set_y(T y) { y_ = y; }
+    constexpr T x() const { return x_; }
+    constexpr void set_x(T x) { x_ = x; }
+
+    constexpr T y() const { return y_; }
+    constexpr void set_y(T y) { y_ = y; }
 
     bool operator==(const Vector2D& right) const {
         if constexpr (std::is_floating_point_v<T>) {
@@ -30,57 +33,57 @@ public:
     bool operator!=(const Vector2D& right) const {
         return !operator==(right);
     }
-    Vector2D& operator*=(const Vector2D& right) {
+    constexpr Vector2D& operator*=(const Vector2D& right) {
         x_ *= right.x_;
         y_ *= right.y_;
         return *this;
     }
-    Vector2D& operator*=(const T& right) {
+    constexpr Vector2D& operator*=(const T& right) {
         x_ *= right;
         y_ *= right;
         return *this;
     }
-    Vector2D operator*(const Vector2D& right) const {
+    constexpr Vector2D operator*(const Vector2D& right) const {
         Vector2D tmp = *this;
         tmp *= right;
         return tmp;
     }
-    Vector2D operator*(const T& right) const {
+    constexpr Vector2D operator*(const T& right) const {
         Vector2D tmp = *this;
         tmp *= right;
         return tmp;
     }
-    Vector2D& operator+=(const Vector2D& right) {
+    constexpr Vector2D& operator+=(const Vector2D& right) {
         x_ += right.x_;
         y_ += right.y_;
         return *this;
     }
-    Vector2D& operator+=(const T& right) {
+    constexpr Vector2D& operator+=(const T& right) {
         x_ += right;
         y_ += right;
         return *this;
     }
-    Vector2D operator+(const Vector2D& right) const {
+    constexpr Vector2D operator+(const Vector2D& right) const {
         Vector2D tmp = *this;
         tmp += right;
         return tmp;
     }
-    Vector2D operator+(const T& right) const {
+    constexpr Vector2D operator+(const T& right) const {
         Vector2D tmp = *this;
         tmp += right;
         return tmp;
     }
-    Vector2D& operator-=(const Vector2D& right) {
+    constexpr Vector2D& operator-=(const Vector2D& right) {
         x_ -= right.x_;
         y_ -= right.y_;
         return *this;
     }
-    Vector2D operator-(const Vector2D& right) const {
+    constexpr Vector2D operator-(const Vector2D& right) const {
         Vector2D tmp = *this;
         tmp -= right;
         return tmp;
     }
-    Vector2D operator-(const T& right) const {
+    constexpr Vector2D operator-(const T& right) const {
         Vector2D tmp = *this;
         tmp -= right;
         return tmp;
@@ -90,6 +93,11 @@ private:
     T x_;
     T y_;
 };
+
+template<class T>
+Vector2D<T> Vector2D<T>::kZero{ 0, 0 };
+template<class T>
+Vector2D<T> Vector2D<T>::kOne{ 1, 1 };
 }
 
 using Vector2D = internal::Vector2D<float>;

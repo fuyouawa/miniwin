@@ -9,8 +9,8 @@ Label::Label()
 {
 }
 
-void Label::PaintBegin() {
-    AbstractMinimumControl::PaintBegin();
+void Label::PaintBegin(size_t index) {
+    AbstractMinimumControl::PaintBegin(index);
 	imgui::Text(Text());
 }
 

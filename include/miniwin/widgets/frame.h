@@ -8,8 +8,8 @@ public:
 	Frame();
 
 protected:
-	void PaintBegin() override;
-	void PaintEnd() override;
+	void PaintBegin(size_t index) override;
+	void PaintEnd(size_t index) override;
 
 	_MW_IMPL
 };

@@ -15,7 +15,7 @@ public:
 	const String& PlainText() const;
 
 protected:
-	void PaintBegin() override;
+	void PaintBegin(size_t index) override;
 
 	_MW_IMPL
 };

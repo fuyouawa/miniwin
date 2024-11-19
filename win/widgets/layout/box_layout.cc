@@ -1,16 +1,18 @@
 #include <miniwin/widgets/layout/box_layout.h>
 
 #include <miniwin/core/imgui.h>
-
+#include <miniwin/tools/mathf.h>
 #include "win/tools/debug.h"
 
 namespace miniwin {
 class BoxLayout::Impl {
 public:
-	Impl(BoxLayout* owner) : owner_(owner) {}
+	Impl(BoxLayout* owner) : owner_(owner) {
+	}
 
 	BoxLayout* owner_;
 	float spacing_ = 0;
+	float alignment_ = 0;
 };
 
 BoxLayout::BoxLayout() {
@@ -27,28 +29,51 @@ void BoxLayout::SetSpacing(float size) {
 	impl_->spacing_ = size;
 }
 
-HBoxLayout::HBoxLayout() {}
+float BoxLayout::Alignment() const {
+	return impl_->alignment_;
+}
 
-void HBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget) {
-	BoxLayout::OnLayoutWidgetBegin(widget);
+void BoxLayout::SetAlignment(float alignment) {
+	impl_->alignment_ = alignment;
+}
 
-	auto idx = IndexOfWidget(widget);
-	MW_ASSERT_X(idx != static_cast<size_t>(-1));
 
-	if (idx != 0) {
+HBoxLayout::HBoxLayout() {
+	SetSpacing(imgui::style::ItemSpacing().x());
+}
+
+float HBoxLayout::TotalWidth() const {
+	float width = 0;
+	for (auto& w : Widgets()) {
+		width += w->CalcSize().x() + Spacing();
+	}
+	return width;
+}
+
+void HBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {
+	BoxLayout::OnLayoutWidgetBegin(widget, index);
+
+	if (index == 0) {
+		auto avail = imgui::GetContentRegionAvail().x();
+		auto width = TotalWidth();
+		auto off = (avail - width) * Alignment();
+		if (off > 0)
+			imgui::SetCursorPosX(imgui::GetCursorPosX() + off);
+	}
+
+	if (index != 0) {
 		imgui::SameLine(0, Spacing());
 	}
 }
 
-VBoxLayout::VBoxLayout() {}
+VBoxLayout::VBoxLayout() {
+	SetSpacing(imgui::style::ItemSpacing().y());
+}
 
-void VBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget) {
-	BoxLayout::OnLayoutWidgetBegin(widget);
+void VBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {
+	BoxLayout::OnLayoutWidgetBegin(widget, index);
 
-	auto idx = IndexOfWidget(widget);
-	MW_ASSERT_X(idx != static_cast<size_t>(-1));
-
-	if (idx != 0) {
+	if (index != 0) {
 		imgui::Dummy({0, Spacing()});
 	}
 }

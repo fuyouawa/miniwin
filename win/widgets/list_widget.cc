@@ -99,6 +99,14 @@ void ListWidget::SetSize(const Vector2D& size) {
 	impl_->view_->SetSize(size);
 }
 
+Vector2D ListWidget::CalcSize() const {
+	return impl_->view_->CalcSize();
+}
+
+Vector2D ListWidget::CalcPosition() const {
+	return impl_->view_->CalcPosition();
+}
+
 void ListWidget::Awake() {
 	Widget::Awake();
 	impl_->Awake();

@@ -38,13 +38,13 @@ void CheckBox::SetChecked(bool b) {
 	impl_->checked_sc_.SetControl(b);
 }
 
-void CheckBox::PaintBegin() {
-	AbstractControl::PaintBegin();
+void CheckBox::PaintBegin(size_t index) {
+	AbstractControl::PaintBegin(index);
 	impl_->PaintBegin();
 }
 
-void CheckBox::PaintEnd() {
-	AbstractControl::PaintEnd();
+void CheckBox::PaintEnd(size_t index) {
+	AbstractControl::PaintEnd(index);
 }
 
 void CheckBox::SetSize(const Vector2D& size) {
