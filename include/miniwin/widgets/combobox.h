@@ -15,6 +15,8 @@ public:
 	String Text() const;
 	void SetText(const String& text);
 
+	Vector2D CalcSize() const override;
+
 protected:
 	void Awake() override;
 	void PaintBegin(size_t index) override;
@@ -28,7 +30,7 @@ public:
 	ComboBox();
 	~ComboBox() override;
 
-	const String& Text() const;
+	String Text() const;
 	void SetText(const String& text);
 
 	void SetItemDelegate(const SharedItemDelegate& delegate);
@@ -46,6 +48,10 @@ public:
 
 	void InsertItem(size_t index, const String& text, const Variant& user_data = {});
 	void InsertItems(size_t index, const StringList& texts);
+
+	Vector2D CalcSize() const override;
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
 
 protected:
 	void Awake() override;

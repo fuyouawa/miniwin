@@ -26,6 +26,7 @@ Layout::Layout() {
 Layout::~Layout() {}
 
 bool Layout::AddWidget(const SharedWidget& widget) {
+	//TODO widget检查
 	if (widget->impl_->layout_ == this)
 		return false;
 

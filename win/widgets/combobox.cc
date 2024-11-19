@@ -17,22 +17,8 @@ public:
 	}
 
 	ComboBoxView* owner_;
-};
-
-class ComboBox::Impl
-{
-public:
-	Impl(ComboBox* owner) : owner_(owner) {}
-
-	void Awake() {
-		view_ = Instantiate<ComboBoxView>(owner_->shared_from_this());
-		auto model = Instantiate<StandardItemModel>(owner_->shared_from_this());
-		model->SetColumnCount(1);
-		view_->SetModel(model);
-	}
-
-	ComboBox* owner_;
-	std::shared_ptr<ComboBoxView> view_ = nullptr;
+	bool begin_ = false;
+	Vector2D calc_size_;
 };
 
 ComboBoxView::ComboBoxView() {
@@ -47,6 +33,22 @@ String ComboBoxView::Text() const {
 
 void ComboBoxView::SetText(const String& text) {
 	SetName(text);
+}
+
+Vector2D ComboBoxView::CalcSize() const {
+	if (impl_->calc_size_ == Vector2D::kZero) {
+		auto m = Model();
+		auto cs = SelectionModel()->CurrentSelection();
+		String data;
+		if (cs.valid()) {
+			data = m->Data(cs.top_left().row()).ToString();
+		}
+		else {
+			data = m->Data(0).ToString();
+		}
+		return imgui::CalcTextSize(data) + imgui::style::FramePadding() * 2;
+	}
+	return impl_->calc_size_;
 }
 
 void ComboBoxView::Awake() {
@@ -68,7 +70,24 @@ void ComboBoxView::PaintBegin(size_t index) {
 		}
 		imgui::EndCombo();
 	}
+	impl_->calc_size_ = imgui::GetItemRectSize();
 }
+
+class ComboBox::Impl
+{
+public:
+	Impl(ComboBox* owner) : owner_(owner) {}
+
+	void Awake() {
+		view_ = Instantiate<ComboBoxView>(owner_->shared_from_this());
+		auto model = Instantiate<StandardItemModel>(owner_->shared_from_this());
+		model->SetColumnCount(1);
+		view_->SetModel(model);
+	}
+
+	ComboBox* owner_;
+	std::shared_ptr<ComboBoxView> view_ = nullptr;
+};
 
 ComboBox::ComboBox() {
 	impl_ = std::make_unique<Impl>(this);
@@ -76,7 +95,7 @@ ComboBox::ComboBox() {
 
 ComboBox::~ComboBox() {}
 
-const String& ComboBox::Text() const {
+String ComboBox::Text() const {
 	return impl_->view_->Text();
 }
 
@@ -139,6 +158,18 @@ void ComboBox::InsertItems(size_t index, const StringList& texts) {
 		m->SetData(index + i, t, ItemRole::Display);
 		++i;
 	}
+}
+
+Vector2D ComboBox::CalcSize() const {
+	return impl_->view_->CalcSize();
+}
+
+Vector2D ComboBox::Size() const {
+	return impl_->view_->Size();
+}
+
+void ComboBox::SetSize(const Vector2D& size) {
+	impl_->view_->SetSize(size);
 }
 
 void ComboBox::Awake() {

@@ -299,7 +299,9 @@ void EndPopup() {
 }
 
 bool BeginCombo(const String& label, const String& preview_value, FlagsType flags, const Vector2D& size) {
-	//TODO BeginCombo size
+	if (size.x() > 0) {
+		SetNextItemWidth(size.x());
+	}
 	return ImGui::BeginCombo(label.data(), preview_value.data(), flags);
 }
 

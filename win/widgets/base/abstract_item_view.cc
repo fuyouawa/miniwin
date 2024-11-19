@@ -81,23 +81,4 @@ void AbstractItemView::SetItemDelegate(const SharedItemDelegate& item_delegate) 
 const SharedItemDelegate& AbstractItemView::ItemDelegate() const {
 	return impl_->item_delegate_;
 }
-
-Vector2D AbstractItemView::CalcSize() const {
-	return impl_->calc_size_;
-}
-
-Vector2D AbstractItemView::CalcPosition() const {
-	return impl_->calc_pos_;
-}
-
-void AbstractItemView::PaintBegin(size_t index) {
-	Widget::PaintBegin(index);
-}
-
-void AbstractItemView::PaintEnd(size_t index) {
-	impl_->calc_size_ = imgui::GetWindowSize();
-	impl_->calc_pos_ = imgui::GetWindowPos();
-
-	Widget::PaintEnd(index);
-}
 }

@@ -62,6 +62,7 @@ public:
 
 		// 设置组合框文本和数据
 		combo_box_->SetText("组合框");
+		combo_box_->SetWidth(100);
 		combo_box_->AddItems({ "abc", "123", "[];" });
 
 		// 设置列表数据
@@ -97,6 +98,7 @@ public:
 				});
 			});
 
+		layout2_->AddWidget(combo_box_);
 		layout2_->AddWidget(btn2_);
 		layout2_->AddWidget(btn3_);
 		layout2_->SetAlignment(0.5f);	// 设置居中

@@ -19,13 +19,6 @@ public:
 	virtual void SetItemDelegate(const SharedItemDelegate& item_delegate);
 	const SharedItemDelegate& ItemDelegate() const;
 
-	Vector2D CalcSize() const override;
-	Vector2D CalcPosition() const override;
-
-protected:
-	void PaintBegin(size_t index) override;
-	void PaintEnd(size_t index) override;
-
 	_MW_IMPL
 };
 }
