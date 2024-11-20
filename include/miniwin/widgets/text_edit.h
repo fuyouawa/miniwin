@@ -5,6 +5,11 @@ namespace miniwin {
 class TextEdit : public AbstractMinimumControl {
 	MW_OBJECT
 public:
+	struct FilterInputCharArgs {
+		wchar_t input_char;
+		size_t cur_length;
+	};
+
 	TextEdit();
 	~TextEdit() override;
 
@@ -14,12 +19,15 @@ public:
 	void SetPlainText(const String& text);
 	const String& PlainText() const;
 
+	size_t MaxLength() const;
+	void SetMaxLength(size_t len);
+
 	MW_SIGNAL(OnTextChanged)
 
 protected:
 	void Awake() override;
 
-	virtual wchar_t OnFilterInputChar(wchar_t ch);
+	virtual wchar_t FilterInputChar(const FilterInputCharArgs& args);
 
 	void PaintBegin(size_t index) override;
 

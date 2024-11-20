@@ -2,6 +2,9 @@
 
 #include <Windows.h>
 
+#include <sstream>
+#include <bitset>
+
 #include <miniwin/tools/stringlist.h>
 #include "debug.h"
 
@@ -11,6 +14,25 @@ String String::FromUtf16(std::wstring_view wstr) {
 	String str(conv_size, 0);
 	WideCharToMultiByte(CP_UTF8, 0, wstr.data(), -1, str.data(), conv_size, nullptr, nullptr);
 	return str;
+}
+
+String String::FromNumber(uint64_t num, uint8_t base) {
+	if (!(base == 2 || base == 8 || base == 10 || base == 16)) {
+		MW_THROW_EX(std::invalid_argument, "Illegal 'base' = {}, must be 2 or 8 or 10 or 16", base);
+	}
+
+	if (base == 2)
+		return String(std::bitset<std::numeric_limits<uint64_t>::digits>(num).to_string());
+	if (base == 10)
+		return String(std::to_string(num));
+
+	std::ostringstream oss;
+	if (base == 8)
+		oss << std::oct;
+	else
+		oss << std::hex;
+	oss << num;
+	return String(oss.str());
 }
 
 String::String(char ch) : str_(1, ch) {}
@@ -70,6 +92,10 @@ std::wstring String::ToStdWString() const {
 	std::wstring wstr(conv_size, L'\0');
 	MultiByteToWideChar(CP_UTF8, 0, data(), size(), wstr.data(), conv_size);
 	return wstr;
+}
+
+uint64_t String::ToNumber(uint8_t base) const {
+	return std::stoull(str_, nullptr, base);
 }
 
 String& String::Replace(const String& before, const String& after) {
@@ -145,6 +171,23 @@ std::string::const_iterator StringConstIterator::StdIter() const {
 
 std::string::iterator StringIterator::StdIter() {
 	return const_cast<String*>(this->owner_)->ToStdIter(*this);
+}
+
+bool IsNumber(char ch, uint8_t base) {
+	MW_ASSERT_X(base == 2 || base == 8 || base == 10 || base == 16);
+	if (base != 16) {
+		return (ch - '0') < base;
+	}
+	return (ch >= '0' && ch <= '9') ||
+		(ch >= 'A' && ch <= 'F') ||
+		(ch >= 'a' && ch <= 'f');
+}
+
+bool IsNumber(wchar_t ch, uint8_t base) {
+	if (ch > (std::numeric_limits<char>::max)()) {
+		return false;
+	}
+	return IsNumber(static_cast<char>(ch), base);
 }
 
 String operator+(const String& x, const String& y) {

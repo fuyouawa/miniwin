@@ -24,9 +24,7 @@ public:
 	static String Format(const String& fmt, const auto&... args);
 
 	static String FromUtf16(std::wstring_view wstr);
-	template<class T>
-	requires std::is_integral_v<T> || std::is_floating_point_v<T>
-	static String FromNumber(T num);
+	static String FromNumber(uint64_t num, uint8_t base = 10);
 
 	String() = default;
 	String(char ch);
@@ -66,6 +64,8 @@ public:
 
 	std::string ToStdString() const;
 	std::wstring ToStdWString() const;
+
+	uint64_t ToNumber(uint8_t base = 10) const;
 
 	String& Replace(const String& before, const String& after);
 	StringList Split(const String& sep) const;
@@ -175,14 +175,12 @@ private:
 	std::string::iterator StdIter();
 };
 
+bool IsNumber(char ch, uint8_t base = 10);
+bool IsNumber(wchar_t ch, uint8_t base = 10);
+
 
 String String::Format(const String& fmt, const auto&... args) {
 	return std::vformat(fmt.ToStdString(), std::make_format_args(args...)).data();
-}
-
-template <class T> requires std::is_integral_v<T> || std::is_floating_point_v<T>
-String String::FromNumber(T num) {
-	return String(std::to_string(num));
 }
 
 String operator+(const String& x, const String& y);

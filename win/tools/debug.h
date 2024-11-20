@@ -40,4 +40,5 @@ void DebugOutput(const String& fmt, const Args&... args) {
 
 #endif
 
-#define MW_THROW(...)			throw std::exception(miniwin::internal::MsgOfThrow(__FILE__, __FUNCTION__, __LINE__, miniwin::String::Format(__VA_ARGS__)).data())
+#define MW_THROW_EX(e, ...)		throw e(miniwin::internal::MsgOfThrow(__FILE__, __FUNCTION__, __LINE__, miniwin::String::Format(__VA_ARGS__)).data())
+#define MW_THROW(...)			MW_THROW_EX(std::exception)

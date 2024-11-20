@@ -64,6 +64,8 @@ public:
 	size_t CursorPos() const;
 	void SetCursorPos(size_t pos);
 
+	size_t TextLength();
+
 	Vector2DInt Selection() const;
 	void SetSelection(const Vector2DInt& range);
 

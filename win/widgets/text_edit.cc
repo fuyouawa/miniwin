@@ -1,4 +1,4 @@
-#include <miniwin/widgets/textedit.h>
+#include <miniwin/widgets/text_edit.h>
 
 #include <miniwin/core/imgui.h>
 
@@ -10,6 +10,7 @@ public:
 	TextEdit* owner_;
 	String text_buffer_;
 	String right_label_;
+	size_t max_len_ = std::numeric_limits<uint64_t>::max();
 };
 
 TextEdit::TextEdit() {
@@ -40,8 +41,19 @@ void TextEdit::Awake() {
 	            | imgui::kInputTextCallbackCharFilter, true);
 }
 
-wchar_t TextEdit::OnFilterInputChar(wchar_t ch) {
-	return ch;
+wchar_t TextEdit::FilterInputChar(const FilterInputCharArgs& args) {
+	if (args.cur_length > impl_->max_len_) {
+		return 0;
+	}
+	return args.input_char;
+}
+
+size_t TextEdit::MaxLength() const {
+	return impl_->max_len_;
+}
+
+void TextEdit::SetMaxLength(size_t len) {
+	impl_->max_len_ = len;
 }
 
 void TextEdit::PaintBegin(size_t index) {
@@ -53,7 +65,7 @@ void TextEdit::PaintBegin(size_t index) {
 			OnTextChanged();
 			break;
 		case imgui::kInputTextCallbackCharFilter: {
-			auto ch = OnFilterInputChar(data.InputChar());
+			auto ch = FilterInputChar({ data.InputChar(), data.TextLength() });
 			data.SetInputChar(ch);
 			break;
 		}

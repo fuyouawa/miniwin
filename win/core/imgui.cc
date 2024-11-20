@@ -108,19 +108,28 @@ InputTextFlags InputTextCallbackData::EventFlag() const {
 }
 
 wchar_t InputTextCallbackData::InputChar() const {
-	return reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->EventChar;
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	return p->EventChar;
 }
 
 void InputTextCallbackData::SetInputChar(wchar_t ch) {
-	reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->EventChar = ch;
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	p->EventChar = ch;
 }
 
 size_t InputTextCallbackData::CursorPos() const {
-	return reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->CursorPos;
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	return p->CursorPos;
 }
 
 void InputTextCallbackData::SetCursorPos(size_t pos) {
-	reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->CursorPos = pos;
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	p->CursorPos = pos;
+}
+
+size_t InputTextCallbackData::TextLength() {
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	return p->BufTextLen;
 }
 
 Vector2DInt InputTextCallbackData::Selection() const {

@@ -4,7 +4,7 @@
 
 #include <miniwin/model/standard_item_model.h>
 #include <miniwin/widgets/combobox.h>
-#include <miniwin/widgets/textedit.h>
+#include <miniwin/widgets/text_edit.h>
 #include <miniwin/widgets/view/table_view.h>
 #include <miniwin/widgets/label.h>
 #include <miniwin/widgets/layout/box_layout.h>
@@ -18,6 +18,7 @@
 #include "miniwin/widgets/file_dialog.h"
 #include "miniwin/widgets/list_widget.h"
 #include "miniwin/widgets/message_box.h"
+#include "miniwin/widgets/number_edit.h"
 
 using namespace miniwin;
 
@@ -44,6 +45,8 @@ public:
 		table_model_ = Instantiate<StandardItemModel>(self);
 		check_box_ = Instantiate<CheckBox>(self);
 		table_->SetModel(table_model_);
+
+		number_edit_ = Instantiate<NumberEdit>(self);
 	}
 
 	// Start，在对象绘制前调用，只会调用一次
@@ -115,6 +118,11 @@ public:
 		Connect(text_edit_, &TextEdit::OnTextChanged, self, [this]() {
 			std::wcout << "文本改变了" << std::endl;
 			});
+
+		number_edit_->SetRightLabel("只能输入16进制");
+		number_edit_->SetBase(16);
+		number_edit_->SetNumber(0x114514);
+		number_edit_->SetMaxNumber(0x1919810);
 	}
 
 	std::shared_ptr<Label> label_;
@@ -129,6 +137,7 @@ public:
 	std::shared_ptr<ListWidget> list_;
 	std::shared_ptr<TableView> table_;
 	std::shared_ptr<StandardItemModel> table_model_;
+	std::shared_ptr<NumberEdit> number_edit_;
 };
 
 int main() {
