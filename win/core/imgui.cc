@@ -6,6 +6,7 @@
 
 #include <miniwin/core/widgetid_pool.h>
 #include "win/tools/debug.h"
+#include "imgui_cast.h"
 
 namespace miniwin {
 namespace imgui {
@@ -30,14 +31,6 @@ int InputTextCallbackImpl(ImGuiInputTextCallbackData* data) {
 		return user_data->callback(InputTextCallbackData(data)) ? 0 : 1;
 	}
 	return 0;
-}
-
-ImVec2 CastToIm(const Vector2D& vec) {
-	return {vec.x(), vec.y()};
-}
-
-Vector2D CastFromIm(const ImVec2& vec) {
-	return {vec.x, vec.y};
 }
 
 String CombineId(const String& text, WidgetId id) {

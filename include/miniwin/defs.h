@@ -94,12 +94,18 @@ enum class KeyCode : uint32_t
     kMouseLeft, kMouseRight, kMouseMiddle, kMouseX1, kMouseX2, kMouseWheelX, kMouseWheelY,
 };
 
-enum class IoKeyCode : uint32_t {
+enum class IoKeyCode : uint8_t {
     kNone,
 	kCtrl,
     kAlt,
     kShift,
     kSuper
+};
+
+enum class MouseButton : uint8_t {
+	kLeft,
+    kRight,
+    kMiddle
 };
 }
 
