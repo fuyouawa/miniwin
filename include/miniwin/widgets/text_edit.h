@@ -17,8 +17,9 @@ public:
 	String RightLabel() const;
 	void SetRightLabel(const String& label);
 
-	void SetText(const String& text);
+	void SetTextBuffer(const String& text);
 	const String& TextBuffer() const;
+	String& TextBuffer();
 
 	size_t MaxLength() const;
 	void SetMaxLength(size_t len);

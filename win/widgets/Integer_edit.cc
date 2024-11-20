@@ -31,12 +31,14 @@ void IntegerEdit::SetBase(uint8_t base) {
 }
 
 uint64_t IntegerEdit::ToUInteger() const {
-	auto str = TextBuffer();
+	auto& str = TextBuffer();
+	if (str.empty())
+		return 0;
 	return str.ToInteger(Base());
 }
 
 void IntegerEdit::SetUInteger(uint64_t val) {
-	SetText(String::FromInteger(val, Base()));
+	SetTextBuffer(String::FromInteger(val, Base()));
 }
 
 bool IntegerEdit::HasLimit() const {
@@ -94,7 +96,7 @@ void IntegerEdit::Start() {
 	TextEdit::Start();
 
 	if (TextBuffer().empty()) {
-		SetText("0");
+		SetTextBuffer("0");
 	}
 	//TODO 最小数值的处理
 	auto self = shared_from_this();
@@ -107,7 +109,7 @@ void IntegerEdit::PaintBegin(size_t index) {
 	TextEdit::PaintBegin(index);
 
 	if (TextBuffer().empty()) {
-		SetText("0");
+		SetTextBuffer("0");
 	}
 }
 

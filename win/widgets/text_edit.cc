@@ -27,7 +27,7 @@ void TextEdit::SetRightLabel(const String& label) {
 	impl_->right_label_ = label;
 }
 
-void TextEdit::SetText(const String& text) {
+void TextEdit::SetTextBuffer(const String& text) {
 	impl_->text_buffer_ = text;
 }
 
@@ -35,9 +35,13 @@ const String& TextEdit::TextBuffer() const {
 	return impl_->text_buffer_;
 }
 
+String& TextEdit::TextBuffer() {
+	return impl_->text_buffer_;
+}
+
 void TextEdit::Awake() {
 	AbstractMinimumControl::Awake();
-	EnableFlags(imgui::kInputTextCallbackCharFilter, true);
+	EnableFlags(imgui::kInputTextCallbackCharFilter | imgui::kInputTextCallbackResize, true);
 }
 
 bool TextEdit::FilterInput(FilterInputArgs& args) {

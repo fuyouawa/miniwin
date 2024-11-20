@@ -55,11 +55,11 @@ public:
 
 		// 设置标签和文本输入框的初始文本
 		label_->SetText("输入文本");
-		text_edit_->SetText("初始文本");
+		text_edit_->SetTextBuffer("初始文本");
 
 		// 将标签和文本输入框水平布局
-		// layout_->AddWidget(label_);
-		// layout_->AddWidget(text_edit_);
+		layout_->AddWidget(label_);
+		layout_->AddWidget(text_edit_);
 
 		// 设置按钮文本
 		btn_->SetText("将文本值应用窗体");
@@ -79,9 +79,9 @@ public:
 		table_model_->SetColumnCount(4);
 		table_model_->SetRowCount(5);
 		table_model_->SetHorizontalHeaderTexts({ "头0", "头1", "头2", "头3" });					// 设置表头
-		table_model_->SetRowTexts(0, 0, { "行0-0", "行0-1", "行0-2" });							// 设置第一行中三列文本
-		table_model_->SetRowTexts(3, 0, { "行3-0", "行3-1", "行3-2" });							// 设置第四行中三列文本
-		table_model_->SetColumnTexts(0, 3, { "列3-0", "列3-1", "列3-2", "列3-3", "列3-4", });// 设置第四列的五行文本
+		table_model_->SetRowTexts(0, 0, { "行0-0", "行0-1", "行0-2" });								// 设置第一行中三列文本
+		table_model_->SetRowTexts(3, 0, { "行3-0", "行3-1", "行3-2" });								// 设置第四行中三列文本
+		table_model_->SetColumnTexts(0, 3, { "列3-0", "列3-1", "列3-2", "列3-3", "列3-4", });	// 设置第四列的五行文本
 
 		auto self = shared_from_this();
 

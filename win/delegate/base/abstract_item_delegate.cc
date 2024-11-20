@@ -30,7 +30,7 @@ void AbstractItemDelegate::Paint(const SharedItemView& view, const ModelIndex& i
 }
 
 void AbstractItemDelegate::PaintBegin(const SharedItemView& view, const ModelIndex& index) {
-	imgui::PushID(impl_->id_);
+	imgui::PushID(String::Format("{}-{}-{}", impl_->id_, index.row(), index.column()));
 }
 
 void AbstractItemDelegate::PaintEnd(const SharedItemView& view, const ModelIndex& index) {
