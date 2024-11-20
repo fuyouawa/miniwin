@@ -46,7 +46,7 @@ public:
 		check_box_ = Instantiate<CheckBox>(self);
 		table_->SetModel(table_model_);
 
-		number_edit_ = Instantiate<IntegerEdit>(self);
+		integer_edit_ = Instantiate<IntegerEdit>(self);
 	}
 
 	// Start，在对象绘制前调用，只会调用一次
@@ -119,11 +119,11 @@ public:
 			std::wcout << "文本改变了" << std::endl;
 			});
 
-		number_edit_->SetWidth(100);
-		number_edit_->SetRightLabel("只能输入16进制(0x114514-0x1919810)");
-		number_edit_->SetBase(16);
-		number_edit_->SetMaxInteger(0x1919810);
-		number_edit_->SetMinInteger(0x114514);
+		integer_edit_->SetWidth(100);
+		integer_edit_->SetRightLabel("只能输入16进制(0x114514-0x1919810)");
+		integer_edit_->SetBase(16);
+		integer_edit_->SetMaxUInteger(0x1919810);
+		integer_edit_->SetMinUInteger(0x114514);
 	}
 
 	std::shared_ptr<Label> label_;
@@ -138,7 +138,7 @@ public:
 	std::shared_ptr<ListWidget> list_;
 	std::shared_ptr<TableView> table_;
 	std::shared_ptr<StandardItemModel> table_model_;
-	std::shared_ptr<IntegerEdit> number_edit_;
+	std::shared_ptr<IntegerEdit> integer_edit_;
 };
 
 int main() {

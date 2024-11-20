@@ -30,12 +30,12 @@ void IntegerEdit::SetBase(uint8_t base) {
 	impl_->base_ = base;
 }
 
-uint64_t IntegerEdit::ToInteger() const {
+uint64_t IntegerEdit::ToUInteger() const {
 	auto str = TextBuffer();
 	return str.ToInteger(Base());
 }
 
-void IntegerEdit::SetInteger(uint64_t val) {
+void IntegerEdit::SetUInteger(uint64_t val) {
 	SetText(String::FromInteger(val, Base()));
 }
 
@@ -50,22 +50,22 @@ void IntegerEdit::EnableLimit(bool b, bool auto_adjust) {
 	}
 }
 
-uint64_t IntegerEdit::MaxInteger() {
+uint64_t IntegerEdit::MaxUInteger() {
 	return impl_->max_int_;
 }
 
-void IntegerEdit::SetMaxInteger(uint64_t num, bool auto_adjust) {
+void IntegerEdit::SetMaxUInteger(uint64_t num, bool auto_adjust) {
 	impl_->max_int_ = num;
 	if (auto_adjust) {
 		AdjustInteger();
 	}
 }
 
-uint64_t IntegerEdit::MinInteger() const {
+uint64_t IntegerEdit::MinUInteger() const {
 	return impl_->min_int_;
 }
 
-void IntegerEdit::SetMinInteger(uint64_t num, bool auto_adjust) {
+void IntegerEdit::SetMinUInteger(uint64_t num, bool auto_adjust) {
 	impl_->min_int_ = num;
 	if (auto_adjust) {
 		AdjustInteger();
@@ -77,16 +77,16 @@ void IntegerEdit::AdjustInteger() {
 		return;
 
 	try {
-		auto num = ToInteger();
-		if (num > MaxInteger()) {
-			SetInteger(MaxInteger());
+		auto num = ToUInteger();
+		if (num > MaxUInteger()) {
+			SetUInteger(MaxUInteger());
 		}
-		else if (num < MinInteger()) {
-			SetInteger(MinInteger());
+		else if (num < MinUInteger()) {
+			SetUInteger(MinUInteger());
 		}
 	}
 	catch (const std::out_of_range&) {
-		SetInteger(MaxInteger());
+		SetUInteger(MaxUInteger());
 	}
 }
 
@@ -122,7 +122,7 @@ bool IntegerEdit::FilterInput(FilterInputArgs& args) {
 
 		if (HasLimit()) {
 			auto n = (TextBuffer() + static_cast<char>(args.input_char)).ToInteger(Base());
-			if (n > MaxInteger()) {
+			if (n > MaxUInteger()) {
 				return false;
 			}
 		}
