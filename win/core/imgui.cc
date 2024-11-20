@@ -41,7 +41,7 @@ Vector2D CastFromIm(const ImVec2& vec) {
 }
 
 String CombineId(const String& text, WidgetId id) {
-	return text + "###" + String::FromNumber(id);
+	return text + "###" + String::FromInteger(id);
 }
 }
 
@@ -105,6 +105,11 @@ InputTextCallbackData::InputTextCallbackData(void* impl_data) : impl_data_(impl_
 
 InputTextFlags InputTextCallbackData::EventFlag() const {
 	return static_cast<InputTextFlags>(reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->EventFlag);
+}
+
+KeyCode InputTextCallbackData::InputKey() const {
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	return static_cast<KeyCode>(p->EventKey);
 }
 
 wchar_t InputTextCallbackData::InputChar() const {

@@ -6,16 +6,27 @@
 
 namespace miniwin {
 namespace io {
-bool IsKeyDown(KeyCode kc) {
+bool IsIoKeyDown(IoKeyCode kc) {
 	auto& io = ImGui::GetIO();
-	switch (kc)
-	{
-	case KeyCode::kCtrl:
+	switch (kc) {
+	case IoKeyCode::kCtrl:
 		return io.KeyCtrl;
+	case IoKeyCode::kAlt:
+		return io.KeyAlt;
+	case IoKeyCode::kShift:
+		return io.KeyShift;
+	case IoKeyCode::kSuper:
+		return io.KeySuper;
 	default:
-		MW_ASSERT_X(false);
-		return false;
+		break;
 	}
+	return false;
+}
+
+bool IsKeyDown(KeyCode kc) {
+	MW_ASSERT_X(static_cast<uint32_t>(kc) < ImGuiKey_COUNT);
+	auto& io = ImGui::GetIO();
+	return io.KeysDown[static_cast<uint32_t>(kc)];
 }
 }
 }

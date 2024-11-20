@@ -58,6 +58,8 @@ public:
 	InputTextCallbackData(void* impl_data);
 
 	InputTextFlags EventFlag() const;
+	KeyCode InputKey() const;
+
 	wchar_t InputChar() const;
 	void SetInputChar(wchar_t ch);
 

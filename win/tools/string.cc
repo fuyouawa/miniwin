@@ -16,7 +16,7 @@ String String::FromUtf16(std::wstring_view wstr) {
 	return str;
 }
 
-String String::FromNumber(uint64_t num, uint8_t base) {
+String String::FromInteger(uint64_t num, uint8_t base) {
 	if (!(base == 2 || base == 8 || base == 10 || base == 16)) {
 		MW_THROW_EX(std::invalid_argument, "Illegal 'base' = {}, must be 2 or 8 or 10 or 16", base);
 	}
@@ -94,7 +94,7 @@ std::wstring String::ToStdWString() const {
 	return wstr;
 }
 
-uint64_t String::ToNumber(uint8_t base) const {
+uint64_t String::ToInteger(uint8_t base) const {
 	return std::stoull(str_, nullptr, base);
 }
 

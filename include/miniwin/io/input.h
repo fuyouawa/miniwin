@@ -1,12 +1,9 @@
 #pragma once
+#include <miniwin/defs.h>
 
 namespace miniwin {
-enum class KeyCode
-{
-	kCtrl
-};
-
 namespace io {
+bool IsIoKeyDown(IoKeyCode kc);
 bool IsKeyDown(KeyCode kc);
 }
 }

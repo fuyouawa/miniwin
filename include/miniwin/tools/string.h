@@ -24,7 +24,7 @@ public:
 	static String Format(const String& fmt, const auto&... args);
 
 	static String FromUtf16(std::wstring_view wstr);
-	static String FromNumber(uint64_t num, uint8_t base = 10);
+	static String FromInteger(uint64_t num, uint8_t base = 10);
 
 	String() = default;
 	String(char ch);
@@ -65,7 +65,7 @@ public:
 	std::string ToStdString() const;
 	std::wstring ToStdWString() const;
 
-	uint64_t ToNumber(uint8_t base = 10) const;
+	uint64_t ToInteger(uint8_t base = 10) const;
 
 	String& Replace(const String& before, const String& after);
 	StringList Split(const String& sep) const;

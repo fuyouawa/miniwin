@@ -18,7 +18,7 @@
 #include "miniwin/widgets/file_dialog.h"
 #include "miniwin/widgets/list_widget.h"
 #include "miniwin/widgets/message_box.h"
-#include "miniwin/widgets/number_edit.h"
+#include "miniwin/widgets/Integer_edit.h"
 
 using namespace miniwin;
 
@@ -46,7 +46,7 @@ public:
 		check_box_ = Instantiate<CheckBox>(self);
 		table_->SetModel(table_model_);
 
-		number_edit_ = Instantiate<NumberEdit>(self);
+		number_edit_ = Instantiate<IntegerEdit>(self);
 	}
 
 	// Start，在对象绘制前调用，只会调用一次
@@ -55,7 +55,7 @@ public:
 
 		// 设置标签和文本输入框的初始文本
 		label_->SetText("输入文本");
-		text_edit_->SetPlainText("初始文本");
+		text_edit_->SetText("初始文本");
 
 		// 将标签和文本输入框水平布局
 		// layout_->AddWidget(label_);
@@ -87,7 +87,7 @@ public:
 
 		// 连接按钮的点击信号，槽函数里面修改窗体标题
 		Connect(btn_, &Button::OnClicked, self, [this]() {
-			SetTitle(text_edit_->PlainText());
+			SetTitle(text_edit_->TextBuffer());
 			});
 
 		Connect(check_box_, &CheckBox::OnToggled, self, [](bool toggle) {
@@ -119,10 +119,11 @@ public:
 			std::wcout << "文本改变了" << std::endl;
 			});
 
-		number_edit_->SetRightLabel("只能输入16进制");
+		number_edit_->SetWidth(100);
+		number_edit_->SetRightLabel("只能输入16进制(0x114514-0x1919810)");
 		number_edit_->SetBase(16);
-		number_edit_->SetNumber(0x114514);
-		number_edit_->SetMaxNumber(0x1919810);
+		number_edit_->SetMaxInteger(0x1919810);
+		number_edit_->SetMinInteger(0x114514);
 	}
 
 	std::shared_ptr<Label> label_;
@@ -137,7 +138,7 @@ public:
 	std::shared_ptr<ListWidget> list_;
 	std::shared_ptr<TableView> table_;
 	std::shared_ptr<StandardItemModel> table_model_;
-	std::shared_ptr<NumberEdit> number_edit_;
+	std::shared_ptr<IntegerEdit> number_edit_;
 };
 
 int main() {

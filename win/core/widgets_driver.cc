@@ -40,13 +40,13 @@ void WidgetsDriver::Prepare() {
 	}
 	for (auto& win : windows_) {
 		MW_ASSERT_X(!win->Orphaned());
+		PrepareRecursion(win);
 
 		// 因为只有Widget是有权限调用的，所以得转成Widget
 		auto w = dynamic_cast<Widget*>(win.get());
 		if (!w->impl_->started_) {
 			w->Start();
 		}
-		PrepareRecursion(win);
 	}
 }
 
@@ -159,8 +159,8 @@ void WidgetsDriver::CallUpdateEarlyRecursion(const SharedWidget& widget) {
 void WidgetsDriver::PrepareRecursion(const SharedWidget& widget) {
 	for (auto& w : widget->WidgetChildren()) {
 		if (!w->impl_->started_) {
-			w->Start();
 			PrepareRecursion(w);
+			w->Start();
 		}
 	}
 }

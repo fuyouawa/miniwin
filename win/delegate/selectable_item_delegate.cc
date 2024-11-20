@@ -38,7 +38,7 @@ void SelectableItemDelegate::PaintBegin(const SharedItemView& view, const ModelI
 	bool is_selected = selection_model->IsSelected(index);
 
 	if (imgui::Selectable(text, &is_selected)) {
-		if (io::IsKeyDown(KeyCode::kCtrl) && IsAllocMultiSelect()) {
+		if (io::IsIoKeyDown(IoKeyCode::kCtrl) && IsAllocMultiSelect()) {
 			selection_model->Select(index, is_selected
 				? ItemSelectionType::Select
 				: ItemSelectionType::Deselect);

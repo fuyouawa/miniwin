@@ -19,7 +19,7 @@ TextEdit::TextEdit() {
 
 TextEdit::~TextEdit() {}
 
-const String& TextEdit::RightLabel() const {
+String TextEdit::RightLabel() const {
 	return impl_->right_label_;
 }
 
@@ -27,25 +27,24 @@ void TextEdit::SetRightLabel(const String& label) {
 	impl_->right_label_ = label;
 }
 
-void TextEdit::SetPlainText(const String& text) {
+void TextEdit::SetText(const String& text) {
 	impl_->text_buffer_ = text;
 }
 
-const String& TextEdit::PlainText() const {
+const String& TextEdit::TextBuffer() const {
 	return impl_->text_buffer_;
 }
 
 void TextEdit::Awake() {
 	AbstractMinimumControl::Awake();
-	EnableFlags(imgui::kInputTextCallbackEdit
-	            | imgui::kInputTextCallbackCharFilter, true);
+	EnableFlags(imgui::kInputTextCallbackCharFilter, true);
 }
 
-wchar_t TextEdit::FilterInputChar(const FilterInputCharArgs& args) {
+bool TextEdit::FilterInput(FilterInputArgs& args) {
 	if (args.cur_length > impl_->max_len_) {
-		return 0;
+		return false;
 	}
-	return args.input_char;
+	return true;
 }
 
 size_t TextEdit::MaxLength() const {
@@ -59,14 +58,14 @@ void TextEdit::SetMaxLength(size_t len) {
 void TextEdit::PaintBegin(size_t index) {
 	AbstractMinimumControl::PaintBegin(index);
 
-	imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size(), [this](imgui::InputTextCallbackData data) {
+	bool changed = imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size(), [this](imgui::InputTextCallbackData data) {
+		auto args = FilterInputArgs(data.InputChar(), data.InputKey(), data.TextLength());
+
 		switch (data.EventFlag()) {
-		case imgui::kInputTextCallbackEdit:
-			OnTextChanged();
-			break;
 		case imgui::kInputTextCallbackCharFilter: {
-			auto ch = FilterInputChar({ data.InputChar(), data.TextLength() });
-			data.SetInputChar(ch);
+			if (!FilterInput(args))
+				return false;
+			data.SetInputChar(args.input_char);
 			break;
 		}
 		default:
@@ -74,5 +73,8 @@ void TextEdit::PaintBegin(size_t index) {
 		}
 		return true;
 	});
+	if (changed) {
+		OnTextChanged();
+	}
 }
 }
