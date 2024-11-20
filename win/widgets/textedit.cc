@@ -34,8 +34,33 @@ const String& TextEdit::PlainText() const {
 	return impl_->text_buffer_;
 }
 
+void TextEdit::Awake() {
+	AbstractMinimumControl::Awake();
+	EnableFlags(imgui::kInputTextCallbackEdit
+	            | imgui::kInputTextCallbackCharFilter, true);
+}
+
+wchar_t TextEdit::OnFilterInputChar(wchar_t ch) {
+	return ch;
+}
+
 void TextEdit::PaintBegin(size_t index) {
 	AbstractMinimumControl::PaintBegin(index);
-	imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size());
+
+	imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size(), [this](imgui::InputTextCallbackData data) {
+		switch (data.EventFlag()) {
+		case imgui::kInputTextCallbackEdit:
+			OnTextChanged();
+			break;
+		case imgui::kInputTextCallbackCharFilter: {
+			auto ch = OnFilterInputChar(data.InputChar());
+			data.SetInputChar(ch);
+			break;
+		}
+		default:
+			break;
+		}
+		return true;
+	});
 }
 }

@@ -11,11 +11,6 @@ class Widget;
 class WidgetsDriver;
 class Layout;
 
-class MetaData {
-public:
-
-};
-
 class SlotDisconnecter {
 public:
 	SlotDisconnecter() = default;
@@ -55,6 +50,16 @@ public:
 
 	MW_SIGNAL(OnDestroy)
 
+	/**
+	 * 连接信号
+	 * @param sender 发送者, 发送槽函数的对象
+	 * @param signal 信号函数指针
+	 * @param receiver 接收者, 接收槽函数的对象
+	 * @param slot 槽函数的调用对象，可以是成员函数指针，也可以是lambda或者直接function
+	 * @param connection_flags 连接标志
+	 * @param invoke_type 调用方式
+	 * @return 可以断开连接的封装对象
+	 */
 	template <std::derived_from<Object> Sender, class Signal, std::derived_from<Object> Receiver, class Slot>
 	static SlotDisconnecter Connect(
 		const std::shared_ptr<Sender>& sender,
@@ -68,12 +73,7 @@ public:
 
 protected:
 	template <class Signal, class... Args>
-	void EmitSignal(Signal signal, Args&&... args) const {
-		using SlotArgsStore = internal::SlotArgsStore<Args...>;
-
-		EmitSignalImpl(typeid(signal),
-		               std::make_shared<SlotArgsStore>(std::forward<Args>(args)...));
-	}
+	void EmitSignal(Signal signal, Args&&... args) const;
 
 private:
 	static SlotDisconnecter ConnectImpl(
@@ -84,8 +84,9 @@ private:
 		ConnectionFlags connection_flags,
 		InvokeType invoke_type);
 
-	void EmitSignalImpl(const std::type_info& signal_info,
-	                    const internal::SharedSlotArgsStore& args_store) const;
+	void EmitSignalImpl(
+		const std::type_info& signal_info,
+	    const internal::SharedSlotArgsStore& args_store) const;
 
 	friend class Widget;
 	friend class WidgetsDriver;
@@ -122,5 +123,13 @@ SlotDisconnecter Object::Connect(const std::shared_ptr<Sender>& sender, Signal s
 			                   invoke_type);
 		}
 	}(typename Traits::Arguments());
+}
+
+template <class Signal, class ... Args>
+void Object::EmitSignal(Signal signal, Args&&... args) const {
+	using SlotArgsStore = internal::SlotArgsStore<Args...>;
+
+	EmitSignalImpl(typeid(signal),
+	               std::make_shared<SlotArgsStore>(std::forward<Args>(args)...));
 }
 }

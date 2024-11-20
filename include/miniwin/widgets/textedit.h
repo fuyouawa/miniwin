@@ -14,7 +14,13 @@ public:
 	void SetPlainText(const String& text);
 	const String& PlainText() const;
 
+	MW_SIGNAL(OnTextChanged)
+
 protected:
+	void Awake() override;
+
+	virtual wchar_t OnFilterInputChar(wchar_t ch);
+
 	void PaintBegin(size_t index) override;
 
 	_MW_IMPL

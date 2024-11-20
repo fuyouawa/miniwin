@@ -42,6 +42,7 @@ public:
 		list_ = Instantiate<ListWidget>(self);
 		table_ = Instantiate<TableView>(self);
 		table_model_ = Instantiate<StandardItemModel>(self);
+		check_box_ = Instantiate<CheckBox>(self);
 		table_->SetModel(table_model_);
 	}
 
@@ -59,6 +60,7 @@ public:
 
 		// 设置按钮文本
 		btn_->SetText("将文本值应用窗体");
+		check_box_->SetText("复选框");
 
 		// 设置组合框文本和数据
 		combo_box_->SetText("组合框");
@@ -78,10 +80,15 @@ public:
 		table_model_->SetRowTexts(3, 0, { "行3-0", "行3-1", "行3-2" });							// 设置第四行中三列文本
 		table_model_->SetColumnTexts(0, 3, { "列3-0", "列3-1", "列3-2", "列3-3", "列3-4", });// 设置第四列的五行文本
 
-		// 连接按钮的点击信号，槽函数里面修改窗体标题
 		auto self = shared_from_this();
+
+		// 连接按钮的点击信号，槽函数里面修改窗体标题
 		Connect(btn_, &Button::OnClicked, self, [this]() {
 			SetTitle(text_edit_->PlainText());
+			});
+
+		Connect(check_box_, &CheckBox::OnToggled, self, [](bool toggle) {
+			std::cout << "复选框被点击了：" << toggle << std::endl;
 			});
 
 		btn2_->SetText("打开资源管理器选择文件");
@@ -103,10 +110,16 @@ public:
 		layout2_->AddWidget(btn2_);
 		layout2_->AddWidget(btn3_);
 		layout2_->SetAlignment(0.5f);	// 设置居中
+
+
+		Connect(text_edit_, &TextEdit::OnTextChanged, self, [this]() {
+			std::wcout << "文本改变了" << std::endl;
+			});
 	}
 
 	std::shared_ptr<Label> label_;
 	std::shared_ptr<TextEdit> text_edit_;
+	std::shared_ptr<CheckBox> check_box_;
 	std::shared_ptr<HBoxLayout> layout_;
 	std::shared_ptr<Button> btn_;
 	std::shared_ptr<Button> btn2_;
@@ -131,3 +144,6 @@ int main() {
 	
 	app.Execute();					// 开始运行
 }
+
+// 未来某一时刻服务器下发了个id为114514，内含1.1f和false两个数据
+// 然后转发给所有注册了114514 id的接收器

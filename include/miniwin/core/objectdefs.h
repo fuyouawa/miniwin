@@ -69,7 +69,7 @@ public:
 	virtual ~SlotObjectBase() = default;
 
 	virtual void Call(const SharedObject& receiver, const SharedSlotArgsStore& args_store) const = 0;
-	virtual bool Compare(const SlotObjectBase& x) const = 0;
+	virtual bool operator==(const SlotObjectBase& x) const = 0;
 };
 
 using UniqueSlotObject = std::unique_ptr<SlotObjectBase>;
@@ -117,7 +117,7 @@ public:
 		std::apply(func_, store->args_);
 	}
 
-	bool Compare(const SlotObjectBase& x) const override {
+	bool operator==(const SlotObjectBase& x) const override {
 		auto xx = dynamic_cast<const FunctorSlotObject*>(&x);
 		if (xx == nullptr
 			|| !!xx->func_ != !!func_

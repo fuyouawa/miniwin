@@ -81,7 +81,7 @@ SlotDisconnecter Object::Impl::ConnectImpl(
 			}
 
 			auto conn = sender_conns->second.FindIf([receiver, &slot_obj](const SharedConnection& c) {
-				return c->receiver.lock() == receiver && c->slot_obj->Compare(*slot_obj);
+				return c->receiver.lock() == receiver && *c->slot_obj == *slot_obj;
 			});
 			MW_ASSERT_X((*conn)->signal_info == signal_info);
 

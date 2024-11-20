@@ -10,14 +10,13 @@
 namespace miniwin {
 namespace imgui {
 namespace {
-struct InputTextCallbackUserData {
+struct InputTextCallbackImplUserData {
 	String* Str;
-	ImGuiInputTextCallback ChainCallback;
-	void* ChainCallbackUserData;
+	InputTextCallback callback;
 };
 
-int InputTextCallback(ImGuiInputTextCallbackData* data) {
-	auto user_data = static_cast<InputTextCallbackUserData*>(data->UserData);
+int InputTextCallbackImpl(ImGuiInputTextCallbackData* data) {
+	auto user_data = static_cast<InputTextCallbackImplUserData*>(data->UserData);
 	if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
 		// Resize string callback
 		// If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
@@ -26,10 +25,9 @@ int InputTextCallback(ImGuiInputTextCallbackData* data) {
 		str->resize(data->BufTextLen);
 		data->Buf = str->data();
 	}
-	else if (user_data->ChainCallback) {
+	else if (user_data->callback) {
 		// Forward to user callback, if any
-		data->UserData = user_data->ChainCallbackUserData;
-		return user_data->ChainCallback(data);
+		return user_data->callback(InputTextCallbackData(data)) ? 0 : 1;
 	}
 	return 0;
 }
@@ -103,6 +101,55 @@ WidgetIdScope::~WidgetIdScope() {
 	}
 }
 
+InputTextCallbackData::InputTextCallbackData(void* impl_data) : impl_data_(impl_data) {}
+
+InputTextFlags InputTextCallbackData::EventFlag() const {
+	return static_cast<InputTextFlags>(reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->EventFlag);
+}
+
+wchar_t InputTextCallbackData::InputChar() const {
+	return reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->EventChar;
+}
+
+void InputTextCallbackData::SetInputChar(wchar_t ch) {
+	reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->EventChar = ch;
+}
+
+size_t InputTextCallbackData::CursorPos() const {
+	return reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->CursorPos;
+}
+
+void InputTextCallbackData::SetCursorPos(size_t pos) {
+	reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_)->CursorPos = pos;
+}
+
+Vector2DInt InputTextCallbackData::Selection() const {
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	return { p->SelectionStart, p->SelectionEnd };
+}
+
+void InputTextCallbackData::SetSelection(const Vector2DInt& range) {
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	p->SelectionStart = range.x();
+	p->SelectionEnd = range.y();
+}
+
+void InputTextCallbackData::SelectAll() {
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	p->SelectAll();
+}
+
+void InputTextCallbackData::ClearSelection() {
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	p->ClearSelection();
+}
+
+bool InputTextCallbackData::HasSelection() const {
+	auto p = reinterpret_cast<ImGuiInputTextCallbackData*>(impl_data_);
+	return p->HasSelection();
+}
+
+
 bool IsWindowDocked() {
 	return ImGui::IsWindowDocked();
 }
@@ -168,7 +215,8 @@ float GetCursorPosY() {
 }
 
 Vector2D CalcTextSize(const String& text, bool hide_text_after_double_hash, float wrap_width) {
-	return CastFromIm(ImGui::CalcTextSize(text.data(), text.data() + text.size(), hide_text_after_double_hash, wrap_width));
+	return CastFromIm(ImGui::CalcTextSize(text.data(), text.data() + text.size(), hide_text_after_double_hash,
+	                                      wrap_width));
 }
 
 void PushItemWidth(float item_width) {
@@ -235,14 +283,13 @@ bool Selectable(const String& label, bool* is_selected, FlagsType flags, const V
 		CastToIm(size));
 }
 
-bool InputText(const String& label, String* buffer, FlagsType flags, const Vector2D& size) {
-	MW_ASSERT_X((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-	flags = flags | ImGuiInputTextFlags_CallbackResize;
+bool InputText(const String& label, String* buffer, FlagsType flags, const Vector2D& size,
+               InputTextCallback callback) {
+	flags |= kInputTextCallbackResize;
 
-	InputTextCallbackUserData cb_user_data;
+	InputTextCallbackImplUserData cb_user_data;
 	cb_user_data.Str = buffer;
-	cb_user_data.ChainCallback = nullptr;
-	cb_user_data.ChainCallbackUserData = nullptr;
+	cb_user_data.callback = std::move(callback);
 
 	PushItemWidth(size.x());
 	return ImGui::InputText(
@@ -250,7 +297,7 @@ bool InputText(const String& label, String* buffer, FlagsType flags, const Vecto
 		buffer->data(),
 		buffer->capacity() + 1,
 		flags,
-		InputTextCallback,
+		InputTextCallbackImpl,
 		&cb_user_data);
 }
 

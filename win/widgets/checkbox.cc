@@ -16,6 +16,7 @@ public:
 		bool c = checked_sc_.cur_value();
 		imgui::CheckBox(owner_->Text(), &c);
 
+		// 如果选中有改变，发送OnToggled信号，传入选中bool
 		if (c != checked_sc_.cur_value() || checked_sc_.HasChange()) {
 			checked_sc_.SetValueDirectly(c);
 			owner_->OnToggled(c);

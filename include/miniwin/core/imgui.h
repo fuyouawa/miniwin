@@ -4,6 +4,8 @@
 #include <miniwin/defs.h>
 #include <miniwin/tools/string.h>
 
+#include <functional>
+
 namespace miniwin {
 namespace imgui {
 class ListClipper
@@ -50,6 +52,30 @@ private:
 	WidgetId id_;
 	Mode mode_;
 };
+
+class InputTextCallbackData {
+public:
+	InputTextCallbackData(void* impl_data);
+
+	InputTextFlags EventFlag() const;
+	wchar_t InputChar() const;
+	void SetInputChar(wchar_t ch);
+
+	size_t CursorPos() const;
+	void SetCursorPos(size_t pos);
+
+	Vector2DInt Selection() const;
+	void SetSelection(const Vector2DInt& range);
+
+	void SelectAll();
+	void ClearSelection();
+	bool HasSelection() const;
+
+private:
+	void* impl_data_;
+};
+
+using InputTextCallback = std::function<bool(InputTextCallbackData data)>;
 
 bool IsWindowDocked();
 
@@ -116,7 +142,8 @@ bool InputText(
 	const String& label,
 	String* buffer,
 	FlagsType flags = 0,
-	const Vector2D& size = {}
+	const Vector2D& size = {},
+	InputTextCallback callback = {}
 );
 
 
