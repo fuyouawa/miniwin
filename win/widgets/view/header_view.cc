@@ -35,4 +35,10 @@ void HeaderView::PaintSection(size_t section) {
 		//TODO 垂直表头
 	}
 }
+
+//TODO HeaderView::Position
+Vector2D HeaderView::Position() const { return {}; }
+void HeaderView::SetPosition(const Vector2D& pos) {}
+Vector2D HeaderView::Size() const { return {}; }
+void HeaderView::SetSize(const Vector2D& size) {}
 }

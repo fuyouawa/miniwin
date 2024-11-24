@@ -290,15 +290,13 @@ bool Selectable(const String& label, bool* is_selected, FlagsType flags, const V
 		CastToIm(size));
 }
 
-bool InputText(const String& label, String* buffer, FlagsType flags, const Vector2D& size,
-               InputTextCallback callback) {
+bool InputText(const String& label, String* buffer, FlagsType flags, InputTextCallback callback) {
 	flags |= kInputTextCallbackResize;
 
 	InputTextCallbackImplUserData cb_user_data;
 	cb_user_data.Str = buffer;
 	cb_user_data.callback = std::move(callback);
 
-	PushItemWidth(size.x());
 	return ImGui::InputText(
 		label.data(),
 		buffer->data(),
@@ -352,10 +350,7 @@ void EndPopup() {
 	ImGui::EndPopup();
 }
 
-bool BeginCombo(const String& label, const String& preview_value, FlagsType flags, const Vector2D& size) {
-	if (size.x() > 0) {
-		SetNextItemWidth(size.x());
-	}
+bool BeginCombo(const String& label, const String& preview_value, FlagsType flags) {
 	return ImGui::BeginCombo(label.data(), preview_value.data(), flags);
 }
 
@@ -375,12 +370,20 @@ void SameLine(float offset_from_start_x, float spacing) {
 	ImGui::SameLine(offset_from_start_x, spacing);
 }
 
-bool BeginChildWindow(WidgetId id, const Vector2D& size, int child_window_flags,
-                      int window_flags) {
+void BeginGroup() {
+	ImGui::BeginGroup();
+}
+
+void EndGroup() {
+	ImGui::EndGroup();
+}
+
+bool BeginChild(WidgetId id, const Vector2D& size, int child_window_flags,
+                int window_flags) {
 	return ImGui::BeginChild(id, CastToIm(size), child_window_flags, window_flags);
 }
 
-void EndChildWindow() {
+void EndChild() {
 	return ImGui::EndChild();
 }
 

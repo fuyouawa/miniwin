@@ -35,7 +35,7 @@ public:
 };
 
 SharedItemModel AbstractItemModel::StaticEmptyModel() {
-	static auto inst = Instantiate<EmptyItemModel>(nullptr);
+	static auto inst = Create<EmptyItemModel>(nullptr);
 	return inst;
 }
 

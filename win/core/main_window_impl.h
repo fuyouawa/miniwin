@@ -46,6 +46,8 @@ public:
 	void RegisterSubWindow(const SharedWindow& win);
 	const List<SharedWindow>& SubWindows() override;
 	std::thread::id ThreadId() override;
+	Vector2DInt ClientSize() const override;
+	Vector2DInt ClientPosition() const override;
 
 	float cur_dpi_scale_ = 0;
 	float prev_dpi_scale_ = 0;

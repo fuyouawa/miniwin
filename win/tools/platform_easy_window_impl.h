@@ -26,6 +26,8 @@ public:
 	void* PlatformHandle() const override;
 
 	virtual void OnResized(Vector2DInt size) = 0;
+	Vector2DInt ClientSize() const override;
+	Vector2DInt ClientPosition() const override;
 
 	SharedEasyWindow win_;
 };

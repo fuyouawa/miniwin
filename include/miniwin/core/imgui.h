@@ -146,7 +146,6 @@ bool InputText(
 	const String& label,
 	String* buffer,
 	FlagsType flags = 0,
-	const Vector2D& size = {},
 	InputTextCallback callback = {}
 );
 
@@ -214,8 +213,7 @@ void EndPopup();
 bool BeginCombo(
 	const String& label,
 	const String& preview_value,
-	FlagsType flags = 0,
-	const Vector2D& size = {});
+	FlagsType flags = 0);
 
 void EndCombo();
 
@@ -224,13 +222,16 @@ void EndListBox();
 
 void SameLine(float offset_from_start_x = 0.0f, float spacing = -1.0f);
 
-bool BeginChildWindow(
+void BeginGroup();
+void EndGroup();
+
+bool BeginChild(
 	WidgetId id,
 	const Vector2D& size = { 0, 0 },
 	int child_window_flags = 0,
 	int window_flags = 0);
 
-void EndChildWindow();
+void EndChild();
 
 namespace style {
 Vector2D FramePadding();

@@ -2,19 +2,51 @@
 
 #include <miniwin/core/imgui.h>
 
+#include "miniwin/tools/scope_variable.h"
 #include "win/tools/debug.h"
 
 namespace miniwin {
-Label::Label()
-{
+class Label::Impl {
+public:
+	Impl(Label* owner) : owner_(owner) {}
+
+	Vector2D CalcSize() const {
+		return imgui::CalcTextSize(owner_->Text());
+	}
+
+	Label* owner_;
+	ScopeVariable<Vector2D> size_sc_;
+};
+
+Label::Label() {
+	impl_ = std::make_unique<Impl>(this);
 }
 
-void Label::PaintBegin(size_t index) {
-    AbstractMinimumControl::PaintBegin(index);
-	imgui::Text(Text());
+Label::~Label() {}
+
+void Label::SetText(const String& text, bool adjust_size) {
+	AbstractControl::SetText(text);
+	if (adjust_size) {
+		SetSize(impl_->CalcSize());
+	}
+}
+
+Vector2D Label::Size() const {
+	return impl_->size_sc_.cur_value();
 }
 
 void Label::SetSize(const Vector2D& size) {
-	MW_ASSERT(false, "You cant set label size!");
+	//TODO Label::SetSize
+}
+
+void Label::Start() {
+	AbstractControl::Start();
+	impl_->size_sc_.SetValueDirectly(impl_->CalcSize());
+}
+
+void Label::PaintBegin(size_t index) {
+	AbstractMinimumControl::PaintBegin(index);
+
+	imgui::Text(Text());
 }
 }

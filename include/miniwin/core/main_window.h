@@ -50,7 +50,9 @@ public:
 	virtual void SetAlpha(uint8_t alpha) = 0;
 	virtual void SetCursor(CursorType cursor) = 0;
 
+	virtual Vector2DInt ClientSize() const = 0;
 	virtual Vector2DInt Size() const = 0;
+	virtual Vector2DInt ClientPosition() const = 0;
 	virtual Vector2DInt Position() const = 0;
 
 	virtual bool IsMaximized() const = 0;

@@ -102,7 +102,7 @@ public:
 
 void FileDialog::GetOpenFileNameAsync(const SharedWidget& parent, const String& title, CallbackOfGetOpenFileName callback,
                                       const String& dir, const String& filter) {
-	auto dlg = Instantiate<FileDialog>(parent);
+	auto dlg = Create<FileDialog>(parent);
 	dlg->SetTitle(title);
 	dlg->GetConfig() = Config(parent, dir, filter, [cb = std::move(callback)](const std::shared_ptr<FileDialog>& dlg) {
 		cb(std::move(dlg->impl_->file_), std::move(dlg->impl_->selected_filter));

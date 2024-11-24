@@ -8,8 +8,7 @@
 
 
 namespace miniwin {
-Window::Window()
-{
+Window::Window() {
 	impl_ = std::make_unique<Impl>(this);
 	Widget::impl_->is_window_ = true;
 }
@@ -39,11 +38,25 @@ void Window::SetMainWindow(const SharedMainWindow& win) {
 	impl_->main_window_ = win;
 }
 
-void Window::CenterInScene() {
-	Invoke([this]() {
-		auto size = graphic::GetSceneSize();
-		SetPosition(size * 0.5f);
-		SetPivot({ 0.5f, 0.5f });
+void Window::AlignCenter(CenterRelative relative) {
+	Invoke([this, relative]() {
+		switch (relative) {
+		case kCenterRelativeToMainWindow: {
+			auto size = OwnerMainWindow()->ClientSize();
+			SetPosition(VecIntToVec(size) * 0.5f);
+			SetPivot({0.5f, 0.5f});
+			break;
+		}
+		case kCenterRelativeToScene: {
+			auto size = graphic::GetSceneSize();
+			SetPosition(size * 0.5f);
+			SetPivot({0.5f, 0.5f});
+			break;
+		}
+		default:
+			MW_ASSERT_X(false);
+			break;
+		}
 	});
 }
 
@@ -67,17 +80,6 @@ void Window::SetCollapsed(bool b) {
 	impl_->collapsed_sc_.SetControl(b);
 }
 
-Vector2D Window::CalcSize() const {
-	//TODO Calc
-	return impl_->calc_size_;
-
-}
-
-Vector2D Window::CalcPosition() const {
-	//TODO Calc
-	return impl_->calc_pos_;
-}
-
 Vector2D Window::Pivot() const {
 	return impl_->pivot_sc_.cur_value();
 }
@@ -96,6 +98,22 @@ bool Window::IsCollapsed() const {
 
 void* Window::PlatformHandle() const {
 	return impl_->hwnd_;
+}
+
+Vector2D Window::Position() const {
+	return impl_->position_sc_.cur_value();
+}
+
+void Window::SetPosition(const Vector2D& pos) {
+	impl_->position_sc_.SetControl(pos);
+}
+
+Vector2D Window::Size() const {
+	return impl_->size_sc_.cur_value();
+}
+
+void Window::SetSize(const Vector2D& size) {
+	impl_->size_sc_.SetControl(size);
 }
 
 void Window::PaintBegin(size_t index) {

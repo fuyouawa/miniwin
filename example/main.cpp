@@ -33,21 +33,21 @@ public:
 		Window::Awake();
 		auto self = shared_from_this();
 		// 实例化
-		label_ = Instantiate<Label>(self);
-		text_edit_ = Instantiate<TextEdit>(self);
-		layout_ = Instantiate<HBoxLayout>(self);
-		btn_ = Instantiate<Button>(self);
-		btn2_ = Instantiate<Button>(self);
-		btn3_ = Instantiate<Button>(self);
-		layout2_ = Instantiate<HBoxLayout>(self);
-		combo_box_ = Instantiate<ComboBox>(self);
-		list_ = Instantiate<ListWidget>(self);
-		table_ = Instantiate<TableView>(self);
-		table_model_ = Instantiate<StandardItemModel>(self);
-		check_box_ = Instantiate<CheckBox>(self);
+		label_ = Create<Label>(self);
+		text_edit_ = Create<TextEdit>(self);
+		layout_ = Create<HBoxLayout>(self);
+		btn_ = Create<Button>(self);
+		btn2_ = Create<Button>(self);
+		btn3_ = Create<Button>(self);
+		layout2_ = Create<HBoxLayout>(self);
+		combo_box_ = Create<ComboBox>(self);
+		list_ = Create<ListWidget>(self);
+		table_ = Create<TableView>(self);
+		table_model_ = Create<StandardItemModel>(self);
+		check_box_ = Create<CheckBox>(self);
 		table_->SetModel(table_model_);
 
-		integer_edit_ = Instantiate<IntegerEdit>(self);
+		integer_edit_ = Create<IntegerEdit>(self);
 	}
 
 	// Start，在对象绘制前调用，只会调用一次
@@ -68,7 +68,7 @@ public:
 
 		// 设置组合框文本和数据
 		combo_box_->SetText("组合框");
-		combo_box_->SetWidth(100);
+		// combo_box_->SetWidth(100);
 		combo_box_->AddItems({ "abc", "123", "[];" });
 
 		// 设置列表数据
@@ -109,8 +109,8 @@ public:
 				});
 			});
 
-		layout2_->AddWidget(combo_box_);
-		layout2_->SetAdditionSpacing(combo_box_, 10);
+		// layout2_->AddWidget(combo_box_);
+		// layout2_->SetAdditionSpacing(combo_box_, 10);
 		layout2_->AddWidget(btn2_);
 		layout2_->AddWidget(btn3_);
 		layout2_->SetAlignment(0.5f);	// 设置居中
@@ -146,13 +146,13 @@ int main() {
 	auto& app = Application::Instance();
 	app.EnabledIniFile(false);		// 关闭缓存文件
 
-	auto win = MainWindow::Create("测试", { 600, 400 });
+	auto win = MainWindow::Create("测试", { 1000, 800 });
 
 	// 实例化示例窗体
-	auto window = Object::Instantiate<ExampleWindow>(nullptr);
+	auto window = Object::Create<ExampleWindow>(nullptr);
 	window->SetTitle("示例窗体");	// 设置标题
 	window->SetSize({600, 400});	// 设置大小
-	window->CenterInScene();		// 设置窗体在屏幕居中
+	window->AlignCenter();
 
 	window->SetMainWindow(win);
 

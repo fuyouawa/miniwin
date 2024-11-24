@@ -8,8 +8,10 @@ public:
 	AbstractMinimumControl();
 	~AbstractMinimumControl() override;
 
-	Vector2D CalcSize() const override;
 	bool Visible() const override;
+
+	Vector2D Position() const override;
+	void SetPosition(const Vector2D& pos) override;
 
 protected:
 	void PaintBegin(size_t index) override;
@@ -24,10 +26,8 @@ class AbstractControl : public AbstractMinimumControl {
 public:
 	AbstractControl();
 
-	String Text() const;
-	void SetText(const String& text);
-
-	Vector2D CalcSize() const override;
+	virtual String Text() const;
+	virtual void SetText(const String& text, bool adjust_size = true);
 
 	MW_SIGNAL(OnTextChanged, (String) text, (String) prev_text)
 };

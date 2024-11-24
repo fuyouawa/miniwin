@@ -26,8 +26,10 @@ public:
 protected:
 	friend class WidgetsDriver;
 
+	virtual void OnBeginLayout();
 	virtual void OnLayoutWidgetBegin(const SharedWidget& widget, size_t index);
 	virtual void OnLayoutWidgetEnd(const SharedWidget& widget, size_t index);
+	virtual void OnEndLayout();
 
 	_MW_IMPL
 };

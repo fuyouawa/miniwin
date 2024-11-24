@@ -1,86 +1,19 @@
 #include <miniwin/widgets/combobox.h>
-
 #include <miniwin/core/imgui.h>
 
-#include <miniwin/delegate/selectable_item_delegate.h>
+#include "combobox_view.h"
 #include <miniwin/model/standard_item_model.h>
 #include <miniwin/model/item_selection_model.h>
 
 namespace miniwin {
-class ComboBoxView::Impl {
-public:
-	Impl(ComboBoxView* owner) : owner_(owner) {}
-
-	void Awake() {
-		auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
-		owner_->SetItemDelegate(d);
-	}
-
-	ComboBoxView* owner_;
-	bool begin_ = false;
-	Vector2D calc_size_;
-};
-
-ComboBoxView::ComboBoxView() {
-	impl_ = std::make_unique<Impl>(this);
-}
-
-ComboBoxView::~ComboBoxView() {}
-
-String ComboBoxView::Text() const {
-	return Name();
-}
-
-void ComboBoxView::SetText(const String& text) {
-	SetName(text);
-}
-
-Vector2D ComboBoxView::CalcSize() const {
-	if (impl_->calc_size_ == Vector2D::kZero) {
-		auto m = Model();
-		auto cs = SelectionModel()->CurrentSelection();
-		String data;
-		if (cs.valid()) {
-			data = m->Data(cs.top_left().row()).ToString();
-		}
-		else {
-			data = m->Data(0).ToString();
-		}
-		return imgui::CalcTextSize(data) + imgui::style::FramePadding() * 2;
-	}
-	return impl_->calc_size_;
-}
-
-void ComboBoxView::Awake() {
-	AbstractItemView::Awake();
-	impl_->Awake();
-}
-
-void ComboBoxView::PaintBegin(size_t index) {
-	AbstractItemView::PaintBegin(index);
-	auto cs = SelectionModel()->CurrentSelection();
-	auto m = Model();
-	auto text = m->Data(cs.top_left()).ToString();
-	if (imgui::BeginCombo(Text(), text, Flags(), Size())) {
-		if (auto d = ItemDelegate()) {
-			auto self = shared_from_this();
-			for (size_t i = 0; i < m->RowCount(); ++i) {
-				d->Paint(self, {i, 0});
-			}
-		}
-		imgui::EndCombo();
-	}
-	impl_->calc_size_ = imgui::GetItemRectSize();
-}
-
 class ComboBox::Impl
 {
 public:
 	Impl(ComboBox* owner) : owner_(owner) {}
 
 	void Awake() {
-		view_ = Instantiate<ComboBoxView>(owner_->shared_from_this());
-		auto model = Instantiate<StandardItemModel>(owner_->shared_from_this());
+		view_ = Create<ComboBoxView>(owner_->shared_from_this());
+		auto model = Create<StandardItemModel>(owner_->shared_from_this());
 		model->SetColumnCount(1);
 		view_->SetModel(model);
 	}
@@ -160,16 +93,20 @@ void ComboBox::InsertItems(size_t index, const StringList& texts) {
 	}
 }
 
-Vector2D ComboBox::CalcSize() const {
-	return impl_->view_->CalcSize();
-}
-
 Vector2D ComboBox::Size() const {
 	return impl_->view_->Size();
 }
 
 void ComboBox::SetSize(const Vector2D& size) {
 	impl_->view_->SetSize(size);
+}
+
+Vector2D ComboBox::Position() const {
+	return impl_->view_->Position();
+}
+
+void ComboBox::SetPosition(const Vector2D& pos) {
+	impl_->view_->SetPosition(pos);
 }
 
 void ComboBox::Awake() {

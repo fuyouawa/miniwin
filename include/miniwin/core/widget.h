@@ -11,7 +11,7 @@ class Layout;
 class Widget : public Object {
 	MW_OBJECT
 public:
-	enum GetDrawFlags {
+	enum DrawFlags {
 		kDrawIgnoreNone = 0,
 		kDrawIgnoreChildren = 1 << 0,
 		kDrawIgnoreSelf = 1 << 1,
@@ -39,22 +39,16 @@ public:
 	virtual void SetVisible(bool b);
 	virtual bool Enabled() const;
 	virtual void SetEnable(bool b);
+	bool IsStarted() const;
+	bool IsUpdated() const;
 
 	WidgetId Id() const;
 
-	/**
-	 * 计算控件大小
-	 *
-	 * 第一帧执行完成前由于控件都还未绘制，所以计算可能会有不准。
-	 */
-	virtual Vector2D CalcSize() const;
-	/**
-	 * 获取SetSize设置的大小，如果还没有调用过SetSize则为空
-	 *
-	 * 建议使用CalcSize
-	 */
-	virtual Vector2D Size() const;
-	virtual void SetSize(const Vector2D& size);
+	virtual Vector2D Position() const = 0;
+	virtual void SetPosition(const Vector2D& pos) = 0;
+	virtual Vector2D Size() const = 0;
+	virtual void SetSize(const Vector2D& size) = 0;
+
 	void SetSize(float width, float height);
 	void SetWidth(float width);
 	void SetHeight(float height);
@@ -63,21 +57,6 @@ public:
 	float BgAlpha() const;
 	void SetAlpha(float alpha);
 	void SetBgAlpha(float alpha);
-
-	/**
-	 * 计算控件位置
-	 *
-	 * 注意：在第一帧绘制前始终为空，因为此时还未绘制，无法计算位置
-	 */
-	virtual Vector2D CalcPosition() const;
-
-	/**
-	 * 获取SetPosition设置的位置，如果还没有调用过SetPosition则为空
-	 *
-	 * 建议使用CalcPosition
-	 */
-	virtual Vector2D Position() const;
-	virtual void SetPosition(const Vector2D& pos);
 
 	FlagsType GetDrawFlags() const;
 	void SetDrawFlags(FlagsType flags);

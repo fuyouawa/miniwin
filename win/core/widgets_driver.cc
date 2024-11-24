@@ -135,11 +135,17 @@ void WidgetsDriver::UpdateLayout(const SharedLayout& layout, size_t* index) {
 	for (auto& w : layout->Widgets()) {
 		MW_ASSERT_X(w->impl_->layout_ == layout.get());
 		if (w->Visible()) {
+			if (i == 0) {
+				layout->OnBeginLayout();
+			}
 			layout->OnLayoutWidgetBegin(w, i);
 			UpdateWidget(w, index);
 			layout->OnLayoutWidgetEnd(w, i);
 			++i;
 		}
+	}
+	if (i != 0) {
+		layout->OnEndLayout();
 	}
 }
 

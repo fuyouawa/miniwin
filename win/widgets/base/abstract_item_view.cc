@@ -42,7 +42,7 @@ void AbstractItemView::SetModel(const SharedItemModel& model) {
 		impl_->model_->SetParent(shared_from_this());
 	}
 
-	auto m = Instantiate<ItemSelectionModel>(shared_from_this());
+	auto m = Create<ItemSelectionModel>(shared_from_this());
 	m->SetModel(impl_->model_);
 	SetSelectionModel(m);
 }

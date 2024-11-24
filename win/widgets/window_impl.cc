@@ -16,23 +16,34 @@ void Window::Impl::PaintBegin()
     top_sc_.Enter();
     collapsed_sc_.Enter();
     pivot_sc_.Enter();
+    position_sc_.Enter();
+    size_sc_.Enter();
 
-    auto pos = owner_->Position();
-    if (pos != prev_set_pos_ || pivot_sc_.HasChange()) {
-        imgui::SetNextWindowPos(pos, imgui::kCondAlways, pivot_sc_.cur_value());
-        prev_set_pos_ = pos;
+    if (position_sc_.HasChange() || pivot_sc_.HasChange()) {
+        imgui::SetNextWindowPos(position_sc_.cur_value(), imgui::kCondAlways, pivot_sc_.cur_value());
+        if (position_sc_.HasChange()) {
+            owner_->OnPositionChanged(position_sc_.cur_value(), position_sc_.prev_value());
+        }
     }
 
-    auto size = owner_->Size();
-    if (size != prev_set_size_) {
-        imgui::SetNextWindowSize(size, imgui::kCondAlways);
-        prev_set_size_ = size;
+    if (size_sc_.HasChange()) {
+        imgui::SetNextWindowSize(size_sc_.cur_value(), imgui::kCondAlways);
+        owner_->OnSizeChanged(size_sc_.cur_value(), size_sc_.prev_value());
     }
     imgui::SetNextWindowBgAlpha(owner_->BgAlpha());
     owner_->OnPaintWindowBegin();
 
-    calc_size_ = imgui::GetWindowSize();
-    calc_pos_ = imgui::GetWindowPos();
+    auto cur_size = imgui::GetWindowSize();
+    if (cur_size != size_sc_.cur_value()) {
+        owner_->OnSizeChanged(cur_size, size_sc_.cur_value());
+        size_sc_.SetValueDirectly(cur_size);
+    }
+
+    auto cur_pos = imgui::GetWindowPos();
+    if (cur_pos != position_sc_.cur_value()) {
+        owner_->OnPositionChanged(cur_pos, position_sc_.cur_value());
+        position_sc_.SetValueDirectly(cur_pos);
+    }
 
     if (collapsed_sc_.HasChange())
     {
@@ -75,6 +86,8 @@ void Window::Impl::PaintEnd()
     top_sc_.Exit();
     collapsed_sc_.Exit();
     pivot_sc_.Exit();
+    position_sc_.Exit();
+    size_sc_.Exit();
 }
 
 ImGuiWindow* Window::Impl::GetImGuiWindow() const {

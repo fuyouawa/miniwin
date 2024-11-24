@@ -129,7 +129,15 @@ void Layout::Initialize(const SharedObject& parent) {
 	impl_->Init();
 }
 
+void Layout::OnBeginLayout() {
+	imgui::BeginGroup();
+}
+
 void Layout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {}
 
 void Layout::OnLayoutWidgetEnd(const SharedWidget& widget, size_t index) {}
+
+void Layout::OnEndLayout() {
+	imgui::EndGroup();
+}
 }

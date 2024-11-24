@@ -32,19 +32,9 @@ void Widget::Impl::Close() {
 
 void Widget::Impl::PaintBegin() {
 	enable_sc_.Enter();
-	size_sc_.Enter();
-	pos_sc_.Enter();
 
 	if (enable_sc_.HasChange()) {
 		owner_->OnEnableChanged(enable_sc_.cur_value());
-	}
-
-	if (size_sc_.HasChange()) {
-		owner_->OnSizeChanged(size_sc_.cur_value(), size_sc_.prev_value());
-	}
-
-	if (pos_sc_.HasChange()) {
-		owner_->OnPositionChanged(pos_sc_.cur_value(), pos_sc_.prev_value());
 	}
 
 	imgui::PushStyleVar(imgui::kStyleVarAlpha, alpha_);
@@ -64,8 +54,7 @@ void Widget::Impl::PaintEnd() {
 	imgui::PopStyleVar();
 
 	enable_sc_.Exit();
-	size_sc_.Exit();
-	pos_sc_.Exit();
+	updated_ = true;
 }
 
 SharedWindow Widget::Impl::OwnerWindow() const {

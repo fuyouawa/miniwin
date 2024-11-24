@@ -71,21 +71,23 @@ HBoxLayout::HBoxLayout() {
 float HBoxLayout::TotalWidth() const {
 	float width = 0;
 	for (auto& w : Widgets()) {
-		width += w->CalcSize().x() + Spacing() + AdditionSpacing(w);
+		width += w->Size().x() + Spacing() + AdditionSpacing(w);
 	}
 	return width;
 }
 
+void HBoxLayout::OnBeginLayout() {
+	BoxLayout::OnBeginLayout();
+
+	auto avail = imgui::GetContentRegionAvail().x();
+	auto width = TotalWidth();
+	auto off = (avail - width) * Alignment();
+	if (off > 0)
+		imgui::SetCursorPosX(imgui::GetCursorPosX() + off);
+}
+
 void HBoxLayout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {
 	BoxLayout::OnLayoutWidgetBegin(widget, index);
-
-	if (index == 0) {
-		auto avail = imgui::GetContentRegionAvail().x();
-		auto width = TotalWidth();
-		auto off = (avail - width) * Alignment();
-		if (off > 0)
-			imgui::SetCursorPosX(imgui::GetCursorPosX() + off);
-	}
 
 	if (index != 0) {
 		imgui::SameLine(0, Spacing() + AdditionSpacing(WidgetByIndex(index - 1)));
@@ -99,7 +101,7 @@ VBoxLayout::VBoxLayout() {
 float VBoxLayout::TotalHeight() const {
 	float height = 0;
 	for (auto& w : Widgets()) {
-		height += w->CalcSize().y() + Spacing() + AdditionSpacing(w);
+		height += w->Size().y() + Spacing() + AdditionSpacing(w);
 	}
 	return height;
 }

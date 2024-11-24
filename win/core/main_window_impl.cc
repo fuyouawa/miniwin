@@ -165,4 +165,12 @@ const List<SharedWindow>& MainWindowImpl::SubWindows() {
 std::thread::id MainWindowImpl::ThreadId() {
 	return driver_.UiThreadId();
 }
+
+Vector2DInt MainWindowImpl::ClientSize() const {
+	return platform_win_->ClientSize();
+}
+
+Vector2DInt MainWindowImpl::ClientPosition() const {
+	return platform_win_->ClientPosition();
+}
 }

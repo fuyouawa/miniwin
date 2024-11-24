@@ -2,7 +2,7 @@
 
 namespace miniwin {
 EventManager& EventManager::Instance() {
-	static auto inst = Instantiate<EventManager>(nullptr);
+	static auto inst = Create<EventManager>(nullptr);
 	return *inst;
 }
 }

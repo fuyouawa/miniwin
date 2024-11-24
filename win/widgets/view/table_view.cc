@@ -32,7 +32,16 @@ void TableView::PaintBegin(size_t index) {
 	auto col_count = m->ColumnCount();
 	auto row_count = m->RowCount();
 
-	if (imgui::BeginTable(Name(), col_count, 0, Size())) {
+	if (imgui::BeginTable(Name(), col_count, 0, impl_->size_sc_.cur_value())) {
+
+		auto cur_size = imgui::GetItemRectSize();
+		if (cur_size != impl_->size_sc_.cur_value()) {
+			if (IsUpdated()) {
+				OnSizeChanged(cur_size, impl_->size_sc_.cur_value());
+			}
+			impl_->size_sc_.SetValueDirectly(cur_size);
+		}
+
 		auto hori = HorizontalHeader();
 		if (hori && hori->Visible()) {
 			for (size_t col = 0; col < col_count; ++col) {
@@ -84,6 +93,17 @@ void TableView::SetModel(const SharedItemModel& model) {
 			}
 		}
 	}
+}
+
+//TODO TableView::Position
+Vector2D TableView::Position() const { return {}; }
+void TableView::SetPosition(const Vector2D& pos) {}
+Vector2D TableView::Size() const {
+	//TODO TableView预测大小
+	return impl_->size_sc_.cur_value();
+}
+void TableView::SetSize(const Vector2D& size) {
+	impl_->size_sc_.SetControl(size);
 }
 
 void TableView::Awake() {

@@ -10,8 +10,8 @@ public:
 	Impl(ListWidget* owner) : owner_(owner) {}
 
 	void Awake() {
-		view_ = Instantiate<ListView>(owner_->shared_from_this());
-		auto model = Instantiate<StandardItemModel>(owner_->shared_from_this());
+		view_ = Create<ListView>(owner_->shared_from_this());
+		auto model = Create<StandardItemModel>(owner_->shared_from_this());
 		model->SetColumnCount(1);
 		view_->SetModel(model);
 	}
@@ -99,13 +99,13 @@ void ListWidget::SetSize(const Vector2D& size) {
 	impl_->view_->SetSize(size);
 }
 
-Vector2D ListWidget::CalcSize() const {
-	return impl_->view_->CalcSize();
+Vector2D ListWidget::Position() const {
+	return impl_->view_->Position();
+}
+void ListWidget::SetPosition(const Vector2D& pos) {
+	impl_->view_->SetPosition(pos);
 }
 
-Vector2D ListWidget::CalcPosition() const {
-	return impl_->view_->CalcPosition();
-}
 
 void ListWidget::Awake() {
 	Widget::Awake();

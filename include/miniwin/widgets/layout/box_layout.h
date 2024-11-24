@@ -28,6 +28,7 @@ public:
 	float TotalWidth() const;
 
 protected:
+	void OnBeginLayout() override;
 	void OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) override;
 };
 

@@ -13,6 +13,10 @@ public:
 	void SetOrientation(HeaderOrientation orientation);
 
 	virtual void PaintSection(size_t section);
+	Vector2D Position() const override;
+	void SetPosition(const Vector2D& pos) override;
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
 
 	//TODO Calc
 

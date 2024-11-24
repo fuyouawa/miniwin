@@ -11,14 +11,14 @@ public:
 
 	void SetChecked(bool b);
 
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
+
 	MW_SIGNAL(OnToggled, (bool) checked)
 
 protected:
 	void PaintBegin(size_t index) override;
 	void PaintEnd(size_t index) override;
-
-private:
-	void SetSize(const Vector2D& size) override;
 
 	_MW_IMPL
 };

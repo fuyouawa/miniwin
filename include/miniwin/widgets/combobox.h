@@ -6,24 +6,6 @@
 #include <miniwin/tools/stringlist.h>
 
 namespace miniwin {
-class ComboBoxView : public AbstractItemView {
-	MW_OBJECT
-public:
-	ComboBoxView();
-	~ComboBoxView() override;
-
-	String Text() const;
-	void SetText(const String& text);
-
-	Vector2D CalcSize() const override;
-
-protected:
-	void Awake() override;
-	void PaintBegin(size_t index) override;
-
-	_MW_IMPL
-};
-
 class ComboBox : public Widget {
 	MW_OBJECT
 public:
@@ -49,9 +31,10 @@ public:
 	void InsertItem(size_t index, const String& text, const Variant& user_data = {});
 	void InsertItems(size_t index, const StringList& texts);
 
-	Vector2D CalcSize() const override;
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;
+	Vector2D Position() const override;
+	void SetPosition(const Vector2D& pos) override;
 
 protected:
 	void Awake() override;

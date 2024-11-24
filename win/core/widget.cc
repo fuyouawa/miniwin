@@ -55,13 +55,12 @@ void Widget::SetEnable(bool b) {
 	impl_->SetEnable(b);
 }
 
-
-Vector2D Widget::Size() const {
-	return impl_->size_sc_.cur_value();
+bool Widget::IsStarted() const {
+	return impl_->started_;
 }
 
-void Widget::SetSize(const Vector2D& size) {
-	impl_->size_sc_.SetControl(size);
+bool Widget::IsUpdated() const {
+	return impl_->updated_;
 }
 
 void Widget::SetSize(float width, float height) {
@@ -96,26 +95,8 @@ void Widget::SetBgAlpha(float alpha) {
 	impl_->bg_alpha_ = alpha;
 }
 
-Vector2D Widget::CalcPosition() const {
-	MW_ASSERT(false, "Not implemented function!");
-	return {};
-}
-
-Vector2D Widget::Position() const {
-	return impl_->pos_sc_.cur_value();
-}
-
-void Widget::SetPosition(const Vector2D& pos) {
-	impl_->pos_sc_.SetControl(pos);
-}
-
 WidgetId Widget::Id() const {
 	return impl_->id_;
-}
-
-Vector2D Widget::CalcSize() const {
-	MW_ASSERT(false, "Not implemented function!");
-	return {};
 }
 
 bool Widget::Enabled() const {

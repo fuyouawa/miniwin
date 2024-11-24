@@ -93,4 +93,12 @@ bool PlatformEasyWindowImpl::Update() {
 void* PlatformEasyWindowImpl::PlatformHandle() const {
 	return win_->PlatformHandle();
 }
+
+Vector2DInt PlatformEasyWindowImpl::ClientSize() const {
+	return win_->ClientSize();
+}
+
+Vector2DInt PlatformEasyWindowImpl::ClientPosition() const {
+	return win_->ClientPosition();
+}
 }

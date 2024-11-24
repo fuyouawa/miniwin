@@ -59,10 +59,19 @@ void TextEdit::SetMaxLength(size_t len) {
 	impl_->max_len_ = len;
 }
 
+//TODO TextEdit::Size
+Vector2D TextEdit::Size() const {
+	return {};
+}
+
+void TextEdit::SetSize(const Vector2D& size) {
+	
+}
+
 void TextEdit::PaintBegin(size_t index) {
 	AbstractMinimumControl::PaintBegin(index);
 
-	bool changed = imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), Size(), [this](imgui::InputTextCallbackData data) {
+	bool changed = imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), [this](imgui::InputTextCallbackData data) {
 		auto args = FilterInputArgs(data.InputChar(), data.InputKey(), data.TextLength());
 
 		switch (data.EventFlag()) {

@@ -8,6 +8,10 @@ using SharedMainWindow = std::shared_ptr<MainWindow>;
 class Window : public Widget {
 	MW_OBJECT
 public:
+	enum CenterRelative {
+		kCenterRelativeToMainWindow,
+		kCenterRelativeToScene
+	};
 	Window();
 	~Window() override;
 
@@ -19,9 +23,8 @@ public:
 
 	/**
 	 * 将窗体居中
-	 * 注意：居中是相对于主窗体的，不是屏幕
 	 */
-	void CenterInScene();
+	void AlignCenter(CenterRelative relative = kCenterRelativeToMainWindow);
 
 	bool IsTopEnabled() const;
 	bool IsCloseButtonEnabled() const;
@@ -30,9 +33,6 @@ public:
 	void EnableTop(bool b);
 	void SetCollapsed(bool b);
 
-	Vector2D CalcSize() const override;
-	Vector2D CalcPosition() const override;
-
 	Vector2D Pivot() const;
 	void SetPivot(Vector2D pivot);
 
@@ -40,6 +40,11 @@ public:
 	bool IsCollapsed() const;
 
 	void* PlatformHandle() const;
+
+	Vector2D Position() const override;
+	void SetPosition(const Vector2D& pos) override;
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
 
 	MW_SIGNAL(OnTitleChanged, (String) title, (String) prev_title)
 	MW_SIGNAL(OnCollapseChanged, (bool) collapsed)

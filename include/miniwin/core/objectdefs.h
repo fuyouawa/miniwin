@@ -140,7 +140,7 @@ template<class T>
 concept IsUseWidgetParent = std::is_base_of_v<Widget, T>;
 
 template<class T, class E>
-std::shared_ptr<T> Instantiate(const std::shared_ptr<E>& parent) {
+std::shared_ptr<T> Create(const std::shared_ptr<E>& parent) {
 	auto p = std::make_shared<T>();
 	p->Initialize(parent);
 	return p;

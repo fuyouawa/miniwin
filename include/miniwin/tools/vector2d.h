@@ -44,6 +44,7 @@ public:
         y_ *= right.y_;
         return *this;
     }
+    
     constexpr Vector2D& operator*=(const T& right) noexcept {
         x_ *= right;
         y_ *= right;
@@ -95,7 +96,7 @@ public:
         return tmp;
     }
 
-private:
+protected:
     T x_;
     T y_;
 };
@@ -108,4 +109,7 @@ Vector2D<T> Vector2D<T>::kOne{ 1, 1 };
 
 using Vector2D = internal::Vector2D<float>;
 using Vector2DInt = internal::Vector2D<int>;
+
+Vector2DInt VecToVecInt(const Vector2D& v);
+Vector2D VecIntToVec(const Vector2DInt& v);
 }

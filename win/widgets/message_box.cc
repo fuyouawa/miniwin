@@ -11,11 +11,11 @@ public:
 	Impl(MessageBox* owner) : owner_(owner) {}
 
 	void Awake() {
-		lab_msg_ = Instantiate<Label>(owner_->shared_from_this());
-		layout_btns_ = Instantiate<HBoxLayout>(owner_->shared_from_this());
+		lab_msg_ = Create<Label>(owner_->shared_from_this());
+		layout_btns_ = Create<HBoxLayout>(owner_->shared_from_this());
 		layout_btns_->SetSpacing(10);
 		layout_btns_->SetAlignment(1);
-		owner_->SetSize(200, 110);
+		owner_->SetSize({ 200, 110 });
 	}
 
 	void AddButton(const std::shared_ptr<Button>& btn) {
@@ -36,11 +36,11 @@ public:
 
 void MessageBox::InformationAsync(const SharedWidget& parent, const String& title, const String& text, const String& ok,
                                   std::function<void()> callback) {
-	auto msg = Instantiate<MessageBox>(parent);
+	auto msg = Create<MessageBox>(parent);
 	msg->SetTitle(title);
 	msg->SetText(text);
 
-	auto btn = Instantiate<Button>(msg);
+	auto btn = Create<Button>(msg);
 	btn->SetText(ok);
 	msg->AddButton(btn);
 
@@ -60,13 +60,13 @@ void MessageBox::InformationAsync(const SharedWidget& parent, const String& titl
 
 void MessageBox::QuestionAsync(const SharedWidget& parent, const String& title, const String& text, const String& yes,
                                const String& no, std::function<void(bool is_yes)> callback) {
-	auto msg = Instantiate<MessageBox>(parent);
+	auto msg = Create<MessageBox>(parent);
 	msg->SetTitle(title);
 	msg->SetText(text);
 
-	auto yes_btn = Instantiate<Button>(msg);
+	auto yes_btn = Create<Button>(msg);
 	yes_btn->SetText(yes);
-	auto no_btn = Instantiate<Button>(msg);
+	auto no_btn = Create<Button>(msg);
 	no_btn->SetText(no);
 
 	msg->AddButton(yes_btn);

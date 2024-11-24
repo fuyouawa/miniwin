@@ -25,13 +25,13 @@ private:
 class Object : public std::enable_shared_from_this<Object> {
 public:
 	template<internal::IsUseObjectParent T>
-	static std::shared_ptr<T> Instantiate(const SharedObject& parent) {
-		return internal::Instantiate<T>(parent);
+	static std::shared_ptr<T> Create(const SharedObject& parent) {
+		return internal::Create<T>(parent);
 	}
 
 	template<internal::IsUseWidgetParent T>
-	static std::shared_ptr<T> Instantiate(const SharedWidget& parent) {
-		return internal::Instantiate<T>(parent);
+	static std::shared_ptr<T> Create(const SharedWidget& parent) {
+		return internal::Create<T>(parent);
 	}
 
 	Object();

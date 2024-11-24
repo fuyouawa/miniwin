@@ -24,6 +24,9 @@ public:
 	size_t MaxLength() const;
 	void SetMaxLength(size_t len);
 
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
+
 	MW_SIGNAL(OnTextChanged)
 
 protected:
@@ -33,6 +36,7 @@ protected:
 
 	void PaintBegin(size_t index) override;
 
+protected:
 	_MW_IMPL
 };
 }

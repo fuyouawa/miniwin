@@ -18,12 +18,16 @@ public:
 
 	void SetModel(const SharedItemModel& model) override;
 
-	//TODO Calc
+	Vector2D Position() const override;
+	void SetPosition(const Vector2D& pos) override;
+	Vector2D Size() const override;
+	void SetSize(const Vector2D& size) override;
 
 protected:
 	void Awake() override;
 	void PaintBegin(size_t index) override;
 
+protected:
 	_MW_IMPL
 };
 }

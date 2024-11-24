@@ -1,6 +1,7 @@
 #include "table_view_impl.h"
 
 #include <miniwin/delegate/selectable_item_delegate.h>
+#include <miniwin/model/item_selection_model.h>
 
 namespace miniwin {
 TableView::Impl::Impl(TableView* owner): owner_(owner)
@@ -9,10 +10,13 @@ TableView::Impl::Impl(TableView* owner): owner_(owner)
 
 void TableView::Impl::Awake()
 {
-    auto d = Instantiate<SelectableItemDelegate>(owner_->shared_from_this());
+    auto d = Create<SelectableItemDelegate>(owner_->shared_from_this());
     owner_->SetItemDelegate(d);
+    auto s = Create<ItemSelectionModel>(owner_->shared_from_this());
+    s->SetModel(owner_->Model());
+    owner_->SetSelectionModel(s);
 
-    auto hori = Instantiate<HeaderView>(owner_->shared_from_this());
+    auto hori = Create<HeaderView>(owner_->shared_from_this());
     hori->SetOrientation(HeaderOrientation::Horizontal);
     owner_->SetHorizontalHeader(hori);
     //TODO 垂直表头
