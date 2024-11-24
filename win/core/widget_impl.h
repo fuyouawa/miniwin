@@ -17,8 +17,6 @@ public:
     void PaintBegin();
     void PaintEnd();
 
-    void Awake();
-
     SharedWindow OwnerWindow() const;
 	SharedWidget WidgetParent() const;
     void SetWidgetParent(const SharedWidget& parent);

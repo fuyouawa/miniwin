@@ -91,9 +91,9 @@ SharedWidget Widget::Impl::WidgetParent() const {
 void Widget::Impl::SetWidgetParent(const SharedWidget& parent) {
 	if (parent == WidgetParent())
 		return;
-	WidgetsDriver::Instance().PushPendingFunctor([this, parent] {
-		owner_->Object::SetParent(parent);
-	});
+	// WidgetsDriver::Instance().PushPendingFunctor([this, parent] {
+	// 	owner_->Object::SetParent(parent);
+	// });
 }
 
 

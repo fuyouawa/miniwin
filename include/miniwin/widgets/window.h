@@ -2,6 +2,9 @@
 #include <miniwin/core/widget.h>
 
 namespace miniwin {
+class MainWindow;
+using SharedMainWindow = std::shared_ptr<MainWindow>;
+
 class Window : public Widget {
 	MW_OBJECT
 public:
@@ -10,6 +13,9 @@ public:
 
 	String Title() const;
 	void SetTitle(const String& title);
+
+	SharedMainWindow OwnerMainWindow() const;
+	void SetMainWindow(const SharedMainWindow& win);
 
 	/**
 	 * 将窗体居中
@@ -40,13 +46,14 @@ public:
 	MW_SIGNAL(OnDockingChanged)
 
 protected:
-	void Awake() override;
 	void PaintBegin(size_t index) override;
 	void PaintEnd(size_t index) override;
 
 	virtual void OnPaintWindowBegin();
 	virtual void OnPaintWindowEnd();
 
+private:
+	friend class MainWindow;
 	_MW_IMPL
 };
 }

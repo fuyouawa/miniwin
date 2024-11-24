@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <memory>
 
 namespace miniwin {
 using FlagsType = int32_t;
@@ -111,5 +112,10 @@ enum class MouseButton : uint8_t {
 
 #define _MW_IMPL                    \
 private:                            \
+    class Impl;                     \
+    std::unique_ptr<Impl> impl_;
+
+#define _MW_PUB_IMPL                \
+public:                             \
     class Impl;                     \
     std::unique_ptr<Impl> impl_;

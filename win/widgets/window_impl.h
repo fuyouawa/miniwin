@@ -11,8 +11,6 @@ class Window::Impl
 public:
     Impl(Window* owner);
 
-    void Awake();
-
     void PaintBegin();
     void PaintEnd();
 
@@ -38,6 +36,7 @@ public:
     void* hwnd_ = nullptr;
     void* prev_hwnd_ = nullptr;
 
+    std::weak_ptr<MainWindow> main_window_;
     Window* owner_;
 };
 }

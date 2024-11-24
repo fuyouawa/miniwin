@@ -32,7 +32,7 @@ Object::~Object() {
 }
 
 SharedObject Object::Parent() const {
-	return impl_->parent_;
+	return impl_->parent_.lock();
 }
 
 

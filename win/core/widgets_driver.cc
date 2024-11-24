@@ -8,14 +8,8 @@
 #include "win/widgets/window_impl.h"
 
 namespace miniwin {
-WidgetsDriver& WidgetsDriver::Instance() {
-	static WidgetsDriver inst;
-	static bool initialized = false;
-	if (!initialized) {
-		inst.ui_thread_id_ = std::this_thread::get_id();
-		initialized = true;
-	}
-	return inst;
+WidgetsDriver::WidgetsDriver() {
+	ui_thread_id_ = std::this_thread::get_id();
 }
 
 WidgetsDriver::~WidgetsDriver() {
@@ -168,5 +162,9 @@ void WidgetsDriver::PrepareRecursion(const SharedWidget& widget) {
 void WidgetsDriver::PushPendingFunctor(std::function<void()> func) {
 	std::lock_guard lk(mutex_);
 	pending_functors_.PushBack(std::move(func));
+}
+
+const List<SharedWindow>& WidgetsDriver::Windows() {
+	return windows_;
 }
 }

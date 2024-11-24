@@ -95,7 +95,7 @@ public:
 		std::apply([r, this](const Args&... args) { std::invoke(func_, r, args...); }, store->args_);
 	}
 
-	bool Compare(const SlotObjectBase& x) const override {
+	bool operator==(const SlotObjectBase& x) const override {
 		auto xx = dynamic_cast<const MemberSlotObject*>(&x);
 		return xx != nullptr && xx->func_ == func_;
 	}
@@ -149,17 +149,17 @@ std::shared_ptr<T> Instantiate(const std::shared_ptr<E>& parent) {
 
 enum class InvokeType {
 	/**
-	 * 如果非UI对象，则直接调用。
-	 * 如果是UI对象，并且调用方也在UI线程，则直接调用；反之如果调用方不在UI线程，则加入UI调用队列。（如果程序还没初始化，则都加入队列）
+	 * 如果非UI对象，直接调用
+	 * 如果是UI对象，加入调用队列
 	 */
 	kAuto,
 	/**
-	 * 直接调用。
+	 * 直接调用
 	 */
 	kDirect,
 	/**
-	 * 如果非UI对象，则直接调用。
-	 * 如果是UI对象，会加入UI调用队列。
+	 * 如果非UI对象，直接调用
+	 * 如果是UI对象，会加入UI调用队列
 	 */
 	kQueued
 };
@@ -176,16 +176,6 @@ ConnectionFlags operator&(ConnectionFlags x, ConnectionFlags y);
 
 template <class T>
 using PureType = std::remove_cvref_t<std::remove_pointer_t<T>>;
-
-template<internal::IsUseObjectParent T>
-std::shared_ptr<T> Instantiate(const SharedObject& parent) {
-	return internal::Instantiate<T>(parent);
-}
-
-template<internal::IsUseWidgetParent T>
-std::shared_ptr<T> Instantiate(const SharedWidget& parent) {
-	return internal::Instantiate<T>(parent);
-}
 }
 
 #define _MW_COMMON_IF_TRUE ,

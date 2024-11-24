@@ -1,40 +1,39 @@
 #pragma once
 #include <miniwin/core/application.h>
 
-#include <string>
+#include <thread>
+
+#include <miniwin/core/main_window.h>
+#include <miniwin/tools/list.h>
 
 namespace miniwin {
-class Application::Impl {
+class ApplicationImpl : public Application {
 public:
-    static Application* instance_;
+	ApplicationImpl();
 
-    Impl(Application* owner);
-    ~Impl();
+	~ApplicationImpl() override = default;
 
-    void OnAppStart();
-    void OnProcess();
-    bool IsDone();
-    void OnAppExit();
+	String IniFileName() const override;
 
-    bool SetDpiScale(float scale);
+	void SetIniFileName(const String& filename) override;
 
-    void WindowWannaClose();
+	bool IsIniFileEnabled() const override;
 
-    void DoFps() const;
+	void EnabledIniFile(bool b) override;
 
-    bool hide_main_window_ = false;
-    String main_window_class_name_ = "MiniWin";
-    String main_window_title_ = "MiniWin App";
-    String ini_filename_;
-    size_t fps_ = 60;
-    float cur_dpi_scale_ = 0;
-    float prev_dpi_scale_ = 0;
-    void* origin_hwnd_ = nullptr;
+	bool IsExecuting() const override;
 
-    bool close_in_next_frame_ = false;
-    bool is_executing_ = false;
-    size_t delta_time_ = 0;
-    uint64_t frame_count_ = 0;
-    Application* owner_;
+	int Execute() override;
+
+	const List<SharedMainWindow>& MainWindows() override;
+
+	void RegisterMainWindow(const SharedMainWindow& window);
+
+	String ini_filename_;
+	size_t fps_ = 60;
+	List<SharedMainWindow> main_windows_;
+	bool is_executing_ = false;
+	float delta_time_ = 0;
+	uint64_t frame_count_ = 0;
 };
 }

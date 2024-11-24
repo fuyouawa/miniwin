@@ -3,6 +3,8 @@
 #include "win/core/widget_impl.h"
 #include <miniwin/core/io.h>
 #include <miniwin/tools/graphic.h>
+#include "win/core/main_window_impl.h"
+#include "win/tools/debug.h"
 
 
 namespace miniwin {
@@ -22,6 +24,19 @@ void Window::SetTitle(const String& title) {
 	auto prev = Name();
 	SetName(title);
 	OnTitleChanged(title, prev);
+}
+
+SharedMainWindow Window::OwnerMainWindow() const {
+	auto p = impl_->main_window_.lock();
+	MW_ASSERT_X(p);
+	return p;
+}
+
+void Window::SetMainWindow(const SharedMainWindow& win) {
+	auto w = dynamic_cast<MainWindowImpl*>(win.get());
+	MW_ASSERT_X(w);
+	w->RegisterSubWindow(shared_from_this());
+	impl_->main_window_ = win;
 }
 
 void Window::CenterInScene() {
@@ -81,11 +96,6 @@ bool Window::IsCollapsed() const {
 
 void* Window::PlatformHandle() const {
 	return impl_->hwnd_;
-}
-
-void Window::Awake() {
-	Widget::Awake();
-	impl_->Awake();
 }
 
 void Window::PaintBegin(size_t index) {

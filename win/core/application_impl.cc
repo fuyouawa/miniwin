@@ -1,21 +1,10 @@
 #include "application_impl.h"
 
-#include <thread>
-
-#include <imgui/imgui.h>
-#include <miniwin/tools/mathf.h>
-#include <miniwin/core/event_mgr.h>
-#include "widgets_driver.h"
 #include "win/tools/debug.h"
+#include <imgui/imgui.h>
 
 namespace miniwin {
-Application* Application::Impl::instance_ = nullptr;
-
-Application::Impl::Impl(Application* owner)
-	: owner_(owner) {
-	MW_ASSERT_X(instance_ == nullptr);
-	instance_ = owner_;
-
+ApplicationImpl::ApplicationImpl() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -33,47 +22,54 @@ Application::Impl::Impl(Application* owner)
 	//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
 }
 
-Application::Impl::~Impl() {
-	instance_ = nullptr;
+String ApplicationImpl::IniFileName() const {
+	return ini_filename_;
 }
 
-void Application::Impl::OnAppStart() {
-	is_executing_ = true;
+void ApplicationImpl::SetIniFileName(const String& filename) {
+	ini_filename_ = filename;
 }
 
-void Application::Impl::OnProcess() {
-	EventManager::Instance().OnBeginNewFrame(frame_count_);
-	WidgetsDriver::Instance().Update();
-	++frame_count_;
-	if (close_in_next_frame_) {
-		MW_ASSERT_X(IsDone());
+bool ApplicationImpl::IsIniFileEnabled() const {
+	return ImGui::GetIO().IniFilename != nullptr;
+}
+
+void ApplicationImpl::EnabledIniFile(bool b) {
+	ImGui::GetIO().IniFilename = b ? ini_filename_.data() : nullptr;
+}
+
+bool ApplicationImpl::IsExecuting() const {
+	return is_executing_;
+}
+
+int ApplicationImpl::Execute() {
+	while (true) {
+		main_windows_.EraseIf([](const SharedMainWindow& win) { return win->Orphaned(); });
+
+		if (main_windows_.empty())
+			break;
+
+		delta_time_ = 0;
+		for (auto& win : main_windows_) {
+			win->Update();
+			delta_time_ += win->DeltaTime();
+		}
+
+		auto sleep_time = 1000 / fps_;
+		auto dt = static_cast<size_t>(delta_time_ * 1000);
+		if (sleep_time > dt) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time - dt));
+		}
 	}
+
+	return 0;
 }
 
-bool Application::Impl::IsDone() {
-	return WidgetsDriver::Instance().IsDone();
+const List<SharedMainWindow>& ApplicationImpl::MainWindows() {
+	return main_windows_;
 }
 
-void Application::Impl::OnAppExit() {
-	is_executing_ = false;
-}
-
-bool Application::Impl::SetDpiScale(float scale) {
-	cur_dpi_scale_ = scale > 1.0f ? scale : 1.0f;
-	bool changed = !Mathf::Approximately(cur_dpi_scale_, prev_dpi_scale_);
-	prev_dpi_scale_ = cur_dpi_scale_;
-	return changed;
-}
-
-void Application::Impl::WindowWannaClose() {
-	WidgetsDriver::Instance().CloseAll();
-	close_in_next_frame_ = true;
-}
-
-void Application::Impl::DoFps() const {
-	auto sleep_time = 1000 / fps_;
-	if (sleep_time > delta_time_) {
-		std::this_thread::sleep_for(std::chrono::milliseconds{sleep_time - delta_time_});
-	}
+void ApplicationImpl::RegisterMainWindow(const SharedMainWindow& window) {
+	main_windows_.PushBack(window);
 }
 }

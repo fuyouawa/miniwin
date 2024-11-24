@@ -11,13 +11,6 @@ Window::Impl::Impl(Window* owner)
     : owner_(owner)
 {
 }
-
-void Window::Impl::Awake() {
-    if (!owner_->WidgetParent()) {
-        WidgetsDriver::Instance().RegisterWindow(owner_->shared_from_this());
-    }
-}
-
 void Window::Impl::PaintBegin()
 {
     top_sc_.Enter();

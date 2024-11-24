@@ -68,7 +68,7 @@ public:
     bool dirty_ = false;
 
     Object* owner_ = nullptr;
-    SharedObject parent_;
+    WeakObject parent_;
     FlagsType flags_ = 0;
     String name_;
     std::mutex signal_mutex_;

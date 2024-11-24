@@ -1,50 +1,27 @@
 #pragma once
-#include <memory>
-
-#include <miniwin/defs.h>
+#include <miniwin/tools/list.h>
 #include <miniwin/tools/string.h>
 
 namespace miniwin {
-struct BeginNewFrameEvent {
-    size_t total_frame;
-};
+class MainWindow;
+using SharedMainWindow = std::shared_ptr<MainWindow>;
 
 class Application
 {
 public:
-    struct Config {
-        bool hide_main_window;
+    static Application& Instance();
 
-    };
+    virtual ~Application();
 
-    static const Application* instance();
+    virtual String IniFileName() const = 0;
+    virtual void SetIniFileName(const String& filename) = 0;
 
-	Application();
-    ~Application();
+    virtual bool IsIniFileEnabled() const = 0;
+    virtual void EnabledIniFile(bool b) = 0;
 
-    bool IsHideMainWindow() const;
-    void SetHideMainWindow(bool b);
+    virtual bool IsExecuting() const = 0;
+    virtual int Execute() = 0;
 
-    String MainWindowClassName() const;
-    void MainWindowClassName(const String& class_name);
-
-    String MainWindowTitle() const;
-    void SetMainWindowTitle(const String& title) const;
-
-    String IniFileName() const;
-    void SetIniFileName(const String& filename);
-
-    bool IsIniFileEnabled() const;
-    void EnabledIniFile(bool b);
-
-    size_t Fps() const;
-    void SetFps(size_t fps);
-
-    uint64_t FrameCount() const;
-    bool IsExecuting() const;
-
-    int Execute();
-
-    _MW_IMPL
+    virtual const List<SharedMainWindow>& MainWindows() = 0;
 };
 }

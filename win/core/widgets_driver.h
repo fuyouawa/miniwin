@@ -1,7 +1,5 @@
 #pragma once
 #include <functional>
-#include <vector>
-#include <queue>
 #include <mutex>
 
 #include <miniwin/tools/list.h>
@@ -14,19 +12,21 @@ class Widget;
 class WidgetsDriver
 {
 public:
-    static WidgetsDriver& Instance();
+    WidgetsDriver();
     ~WidgetsDriver();
 
     bool IsDone() const;
     void CloseAll();
     void RegisterWindow(const SharedWindow& window);
 
+    void Update();
     void PushPendingFunctor(std::function<void()> func);
+
+    const List<SharedWindow>& Windows();
 
     std::thread::id UiThreadId() const;
 
 private:
-    friend class Application;
     enum class Operation
     {
         kAdd,
@@ -38,7 +38,6 @@ private:
     static void UpdateLayout(const SharedLayout& layout, size_t* index);
     static void CallUpdateEarlyRecursion(const SharedWidget& widget);
     static void PrepareRecursion(const SharedWidget& widget);
-    void Update();
     void Prepare();
     void CallUpdateEarly() const;
     void DoPending();

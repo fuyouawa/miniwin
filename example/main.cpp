@@ -11,6 +11,7 @@
 #include <miniwin/widgets/view/list_view.h>
 
 #include "miniwin/core/imgui.h"
+#include "miniwin/core/main_window.h"
 #include "miniwin/tools/file.h"
 #include "miniwin/widgets/button.h"
 #include "miniwin/widgets/checkbox.h"
@@ -142,16 +143,19 @@ public:
 };
 
 int main() {
-	Application app;				// 实例化一个app对象，用于配置窗体等
-	app.SetHideMainWindow(true);	// 隐藏主窗体
+	auto& app = Application::Instance();
 	app.EnabledIniFile(false);		// 关闭缓存文件
+
+	auto win = MainWindow::Create("测试", { 600, 400 });
+
 	// 实例化示例窗体
-	auto window = Instantiate<ExampleWindow>(nullptr);
+	auto window = Object::Instantiate<ExampleWindow>(nullptr);
 	window->SetTitle("示例窗体");	// 设置标题
 	window->SetSize({600, 400});	// 设置大小
 	window->CenterInScene();		// 设置窗体在屏幕居中
-	window->Show();					// 显示窗体
-	
+
+	window->SetMainWindow(win);
+
 	app.Execute();					// 开始运行
 }
 

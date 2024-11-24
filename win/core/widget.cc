@@ -5,9 +5,8 @@
 #include <miniwin/core/widget.h>
 #include <miniwin/tools/vector2d.h>
 #include <miniwin/tools/scope_variable.h>
-
+#include <miniwin/core/main_window.h>
 #include <miniwin/widgets/window.h>
-#include <miniwin/core/application.h>
 #include "object_impl.h"
 #include "widgets_driver.h"
 #include "win/tools/debug.h"
@@ -140,14 +139,7 @@ void Widget::SetDrawFlags(FlagsType flags) {
 }
 
 void Widget::Invoke(std::function<void()> func, InvokeType invoke_type) const {
-	if (IsInUiThread()
-		&& invoke_type == InvokeType::kAuto
-		&& Application::instance()->IsExecuting()) {
-		invoke_type = InvokeType::kDirect;
-	}
-	else {
-		invoke_type = invoke_type == InvokeType::kAuto ? InvokeType::kQueued : invoke_type;
-	}
+	invoke_type = invoke_type == InvokeType::kAuto ? InvokeType::kQueued : invoke_type;
 
 	switch (invoke_type) {
 	case InvokeType::kDirect:
@@ -177,8 +169,8 @@ void Widget::Start() {
 	impl_->started_ = true;
 }
 
-bool Widget::IsInUiThread() {
-	return std::this_thread::get_id() == WidgetsDriver::Instance().UiThreadId();
+bool Widget::IsInUiThread() const {
+	return std::this_thread::get_id() == OwnerWindow()->OwnerMainWindow()->ThreadId();
 }
 
 void Widget::Show() {

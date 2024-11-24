@@ -21,7 +21,7 @@ public:
 	Widget();
 	~Widget() override;
 
-	static bool IsInUiThread();
+	bool IsInUiThread() const;
 
 	virtual void Show();
 	virtual void Hide();

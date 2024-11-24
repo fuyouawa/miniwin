@@ -27,8 +27,7 @@ Object::Impl::~Impl() {
 	for (auto& sender_conn : connected_sender_connections_) {
 		auto sc = sender_conn.lock();
 		if (!sc) continue;
-		MW_ASSERT(sc->sender.lock(), "The connection has not failed, but the sender has been destructed?");
-		MW_ASSERT_X(sc->receiver.lock().get() == owner_);
+		MW_ASSERT_X(sc->receiver.lock() == nullptr);
 		sc->receiver.reset();
 	}
 
@@ -189,7 +188,7 @@ SlotDisconnecter Object::Impl::AddConnection(SharedConnection&& connection) {
 }
 
 void Object::Impl::SetParent(const SharedObject& parent) {
-	auto prev_parent = parent_;
+	auto prev_parent = parent_.lock();
 	if (owner_ == parent.get() || prev_parent == parent)
 		return;
 

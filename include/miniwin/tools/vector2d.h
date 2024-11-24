@@ -13,16 +13,22 @@ public:
     static Vector2D kZero;
     static Vector2D kOne;
 
-    constexpr Vector2D() : Vector2D(0, 0) {}
-    constexpr Vector2D(T x, T y) : x_(x), y_(y) {}
+    constexpr Vector2D() noexcept : Vector2D(0, 0) {}
+    constexpr Vector2D(T x, T y) noexcept : x_(x), y_(y) {}
+    constexpr Vector2D(const Vector2D& right) noexcept : Vector2D(right.x_, right.y_) {}
+    constexpr Vector2D(Vector2D&& right) noexcept : Vector2D(right.x_, right.y_) { right.x_ = 0; right.y_ = 0; }
 
-    constexpr T x() const { return x_; }
-    constexpr void set_x(T x) { x_ = x; }
+    constexpr Vector2D& operator=(const Vector2D& right) noexcept { x_ = right.x_; y_ = right.y_; return *this; }
+    constexpr Vector2D& operator=(Vector2D&& right) noexcept { x_ = right.x_; y_ = right.y_; right.x_ = 0; right.y_ = 0; return *this;
+    }
 
-    constexpr T y() const { return y_; }
-    constexpr void set_y(T y) { y_ = y; }
+    constexpr T x() const noexcept { return x_; }
+    constexpr void set_x(T x) noexcept { x_ = x; }
 
-    bool operator==(const Vector2D& right) const {
+    constexpr T y() const noexcept { return y_; }
+    constexpr void set_y(T y) noexcept { y_ = y; }
+
+    bool operator==(const Vector2D& right) const noexcept {
         if constexpr (std::is_floating_point_v<T>) {
             return EqualFloatingPoint(x_, right.x_) && EqualFloatingPoint(y_, right.y_);
         }
@@ -30,60 +36,60 @@ public:
             return x_ == right.x_ && y_ == right.y_;
         }
     }
-    bool operator!=(const Vector2D& right) const {
+    bool operator!=(const Vector2D& right) const noexcept {
         return !operator==(right);
     }
-    constexpr Vector2D& operator*=(const Vector2D& right) {
+    constexpr Vector2D& operator*=(const Vector2D& right) noexcept {
         x_ *= right.x_;
         y_ *= right.y_;
         return *this;
     }
-    constexpr Vector2D& operator*=(const T& right) {
+    constexpr Vector2D& operator*=(const T& right) noexcept {
         x_ *= right;
         y_ *= right;
         return *this;
     }
-    constexpr Vector2D operator*(const Vector2D& right) const {
+    constexpr Vector2D operator*(const Vector2D& right) const noexcept {
         Vector2D tmp = *this;
         tmp *= right;
         return tmp;
     }
-    constexpr Vector2D operator*(const T& right) const {
+    constexpr Vector2D operator*(const T& right) const noexcept {
         Vector2D tmp = *this;
         tmp *= right;
         return tmp;
     }
-    constexpr Vector2D& operator+=(const Vector2D& right) {
+    constexpr Vector2D& operator+=(const Vector2D& right) noexcept {
         x_ += right.x_;
         y_ += right.y_;
         return *this;
     }
-    constexpr Vector2D& operator+=(const T& right) {
+    constexpr Vector2D& operator+=(const T& right) noexcept {
         x_ += right;
         y_ += right;
         return *this;
     }
-    constexpr Vector2D operator+(const Vector2D& right) const {
+    constexpr Vector2D operator+(const Vector2D& right) const noexcept {
         Vector2D tmp = *this;
         tmp += right;
         return tmp;
     }
-    constexpr Vector2D operator+(const T& right) const {
+    constexpr Vector2D operator+(const T& right) const noexcept {
         Vector2D tmp = *this;
         tmp += right;
         return tmp;
     }
-    constexpr Vector2D& operator-=(const Vector2D& right) {
+    constexpr Vector2D& operator-=(const Vector2D& right) noexcept {
         x_ -= right.x_;
         y_ -= right.y_;
         return *this;
     }
-    constexpr Vector2D operator-(const Vector2D& right) const {
+    constexpr Vector2D operator-(const Vector2D& right) const noexcept {
         Vector2D tmp = *this;
         tmp -= right;
         return tmp;
     }
-    constexpr Vector2D operator-(const T& right) const {
+    constexpr Vector2D operator-(const T& right) const noexcept {
         Vector2D tmp = *this;
         tmp -= right;
         return tmp;
