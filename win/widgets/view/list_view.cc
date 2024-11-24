@@ -7,8 +7,7 @@
 #include "miniwin/tools/scope_variable.h"
 
 namespace miniwin {
-class ListView::Impl
-{
+class ListView::Impl {
 public:
 	Impl(ListView* owner) : owner_(owner) {}
 
@@ -25,7 +24,8 @@ public:
 	bool visible_ = false;
 	imgui::ListClipper clipper_;
 	ScopeVariable<Vector2D> position_sc_;
-	ScopeVariable<Vector2D> size_sc_;
+	Vector2D size_to_set_;
+	Vector2D really_size_;
 };
 
 ListView::ListView() {
@@ -42,16 +42,21 @@ void ListView::SetRightLabel(const String& label) {
 	SetName(label);
 }
 
-Vector2D ListView::Position() const { return {}; }
+//TODO ListView::Position
+Vector2D ListView::Position() const {
+	return {};
+}
+
 void ListView::SetPosition(const Vector2D& pos) {}
 
 Vector2D ListView::Size() const {
-	//TODO ListView预测大小
-	return impl_->size_sc_.cur_value();
+	return impl_->really_size_ == Vector2D::kZero
+		       ? impl_->size_to_set_
+		       : impl_->really_size_;
 }
 
 void ListView::SetSize(const Vector2D& size) {
-	impl_->size_sc_.SetControl(size);
+	impl_->size_to_set_ = size;
 }
 
 void ListView::Awake() {
@@ -63,14 +68,13 @@ void ListView::PaintBegin(size_t index) {
 	AbstractItemView::PaintBegin(index);
 	auto m = Model();
 
-	if ((impl_->visible_ = imgui::BeginListBox(RightLabel(), impl_->size_sc_.cur_value()))) {
-
+	if ((impl_->visible_ = imgui::BeginListBox(RightLabel(), impl_->size_to_set_))) {
 		auto cur_size = imgui::GetItemRectSize();
-		if (cur_size != impl_->size_sc_.cur_value()) {
+		if (cur_size != impl_->really_size_) {
 			if (IsUpdated()) {
-				OnSizeChanged(cur_size, impl_->size_sc_.cur_value());
+				OnSizeChanged(cur_size, impl_->really_size_);
 			}
-			impl_->size_sc_.SetValueDirectly(cur_size);
+			impl_->really_size_ = cur_size;
 		}
 
 		if (auto d = ItemDelegate()) {
@@ -91,6 +95,5 @@ void ListView::PaintEnd(size_t index) {
 		imgui::EndListBox();
 	}
 	AbstractItemView::PaintEnd(index);
-
 }
 }

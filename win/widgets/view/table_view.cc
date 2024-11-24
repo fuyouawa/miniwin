@@ -32,14 +32,13 @@ void TableView::PaintBegin(size_t index) {
 	auto col_count = m->ColumnCount();
 	auto row_count = m->RowCount();
 
-	if (imgui::BeginTable(Name(), col_count, 0, impl_->size_sc_.cur_value())) {
-
+	if (imgui::BeginTable(Name(), col_count, 0, impl_->size_to_set_)) {
 		auto cur_size = imgui::GetItemRectSize();
-		if (cur_size != impl_->size_sc_.cur_value()) {
+		if (cur_size != impl_->really_size_) {
 			if (IsUpdated()) {
-				OnSizeChanged(cur_size, impl_->size_sc_.cur_value());
+				OnSizeChanged(cur_size, impl_->really_size_);
 			}
-			impl_->size_sc_.SetValueDirectly(cur_size);
+			impl_->really_size_ = cur_size;
 		}
 
 		auto hori = HorizontalHeader();
@@ -98,12 +97,14 @@ void TableView::SetModel(const SharedItemModel& model) {
 //TODO TableView::Position
 Vector2D TableView::Position() const { return {}; }
 void TableView::SetPosition(const Vector2D& pos) {}
+
 Vector2D TableView::Size() const {
-	//TODO TableView预测大小
-	return impl_->size_sc_.cur_value();
+	return impl_->really_size_ == Vector2D::kZero
+		? impl_->size_to_set_
+		: impl_->really_size_;
 }
 void TableView::SetSize(const Vector2D& size) {
-	impl_->size_sc_.SetControl(size);
+	impl_->size_to_set_ = size;
 }
 
 void TableView::Awake() {

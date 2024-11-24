@@ -197,6 +197,10 @@ Vector2D GetWindowPos() {
 	return CastFromIm(ImGui::GetWindowPos());
 }
 
+float GetFrameHeight() {
+	return ImGui::GetFrameHeight();
+}
+
 void SetCursorPos(const Vector2D& pos) {
 	ImGui::SetCursorPos(CastToIm(pos));
 }

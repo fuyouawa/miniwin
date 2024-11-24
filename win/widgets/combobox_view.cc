@@ -37,9 +37,9 @@ public:
 
 	ComboBoxView* owner_;
 	bool is_open_ = false;
-	Vector2D calc_size_;
+	Vector2D really_size_;
+	float width_to_set_ = 0;
 	ScopeVariable<Vector2D> position_sc_;
-	ScopeVariable<Vector2D> size_sc_;
 };
 
 ComboBoxView::ComboBoxView() {
@@ -65,13 +65,13 @@ void ComboBoxView::SetPosition(const Vector2D& pos) {
 }
 
 Vector2D ComboBoxView::Size() const {
-	return impl_->size_sc_.cur_value();
+	return impl_->really_size_ == Vector2D::kZero
+		       ? Vector2D(impl_->width_to_set_, imgui::GetFrameHeight())
+		       : impl_->really_size_;
 }
 
 void ComboBoxView::SetSize(const Vector2D& size) {
-	Vector2D s = size;
-	s.set_y(impl_->size_sc_.cur_value().y());
-	impl_->size_sc_.SetControl(std::move(s));
+	impl_->width_to_set_ = size.x();
 }
 
 void ComboBoxView::Awake() {
@@ -95,12 +95,8 @@ void ComboBoxView::PaintBegin(size_t index) {
 		}
 	}
 
-	if (impl_->size_sc_.HasChange()) {
-		OnSizeChanged(impl_->size_sc_.cur_value(), impl_->size_sc_.prev_value());
-	}
-	auto width = impl_->size_sc_.cur_value().x();
-	if (!Mathf::Approximately(width, 0.f)) {
-		imgui::PushItemWidth(width);
+	if (!Mathf::Approximately(impl_->width_to_set_, 0.f)) {
+		imgui::PushItemWidth(impl_->width_to_set_);
 	}
 
 	auto cs = SelectionModel()->CurrentSelection();
@@ -115,7 +111,13 @@ void ComboBoxView::PaintBegin(size_t index) {
 		}
 	}
 
-	//TODO Combo的Size
+	auto really_size = imgui::GetItemRectSize();
+	if (really_size != impl_->really_size_) {
+		if (IsUpdated()) {
+			OnSizeChanged(really_size, impl_->really_size_);
+		}
+		impl_->really_size_ = really_size;
+	}
 }
 
 void ComboBoxView::PaintEnd(size_t index) {

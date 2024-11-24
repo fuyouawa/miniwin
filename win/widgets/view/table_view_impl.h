@@ -17,6 +17,7 @@ public:
     TableView* owner_;
     std::unordered_map<HeaderOrientation, SharedHeaderView> headers_;
     ScopeVariable<Vector2D> position_sc_;
-    ScopeVariable<Vector2D> size_sc_;
+    Vector2D size_to_set_;
+    Vector2D really_size_;
 };
 }

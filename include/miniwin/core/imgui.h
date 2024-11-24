@@ -94,6 +94,7 @@ void EndDisabled();
 Vector2D GetItemRectSize();
 Vector2D GetWindowSize();
 Vector2D GetWindowPos();
+float GetFrameHeight();
 
 void SetCursorPos(const Vector2D& pos);
 void SetCursorPosX(float x);
@@ -217,7 +218,7 @@ bool BeginCombo(
 
 void EndCombo();
 
-bool BeginListBox(const String& label, const Vector2D& size);
+bool BeginListBox(const String& label, const Vector2D& size = {});
 void EndListBox();
 
 void SameLine(float offset_from_start_x = 0.0f, float spacing = -1.0f);
