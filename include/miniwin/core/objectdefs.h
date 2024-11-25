@@ -2,7 +2,7 @@
 #include <functional>
 #include <memory>
 
-#include <miniwin/defs.h>
+#include <miniwin/global/defs.h>
 #include <miniwin/tools/macro.h>
 #include <miniwin/tools/list.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <miniwin/tools/vector2d.h>
 #include <miniwin/core/imgui_flags.h>
-#include <miniwin/defs.h>
+#include <miniwin/global/defs.h>
 #include <miniwin/tools/string.h>
 
 #include <functional>

@@ -2,7 +2,7 @@
 #include <miniwin/tools/string.h>
 #include <miniwin/tools/vector2d.h>
 #include <miniwin/tools/rect.h>
-#include <miniwin/defs.h>
+#include <miniwin/global/defs.h>
 
 #include <functional>
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <miniwin/tools/vector2d.h>
-#include <miniwin/defs.h>
+#include <miniwin/global/defs.h>
 #include <imgui/imgui.h>
 
 namespace miniwin {

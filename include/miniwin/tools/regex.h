@@ -1,6 +1,6 @@
 #pragma once
 #include <miniwin/tools/string.h>
-#include <miniwin/defs.h>
+#include <miniwin/global/defs.h>
 
 namespace miniwin {
 class RegexMatch;

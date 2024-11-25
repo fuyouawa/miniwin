@@ -28,6 +28,7 @@ aux_source_directory(${IMGUI_SRC_PATH}/misc/cpp IMGUI_SRC)
 
 aux_source_directory(./tools SRC)
 aux_source_directory(./core SRC)
+aux_source_directory(./global SRC)
 aux_source_directory(./widgets SRC)
 aux_source_directory(./widgets/layout SRC)
 aux_source_directory(./widgets/view SRC)

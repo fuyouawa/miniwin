@@ -1,5 +1,5 @@
 #pragma once
-#include <miniwin/defs.h>
+#include <miniwin/global/defs.h>
 
 #include <miniwin/tools/vector2d.h>
 

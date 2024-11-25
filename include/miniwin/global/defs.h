@@ -133,6 +133,9 @@ enum class WindowRelativeTo : uint8_t {
     kMainWindow,
     kScene
 };
+
+Alignment operator|(Alignment x, Alignment y);
+Alignment operator&(Alignment x, Alignment y);
 }
 
 #define _MW_IMPL                    \
