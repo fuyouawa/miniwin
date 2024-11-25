@@ -17,7 +17,7 @@ public:
 	SharedMainWindow OwnerMainWindow() const;
 	void SetMainWindow(const SharedMainWindow& win);
 
-	void AlignWindow(Alignment alignment, WindowRelativeTo relative);
+	void AlignWindow(Alignment alignment, WindowRelativeTo relative = WindowRelativeTo::kScene);
 
 	bool IsTopEnabled() const;
 	bool IsCloseButtonEnabled() const;
@@ -35,8 +35,8 @@ public:
 
 	void* PlatformHandle() const;
 
-	Vector2D Position() const override;
-	void SetPosition(const Vector2D& pos) override;
+	Vector2D Position(WindowRelativeTo relative = WindowRelativeTo::kScene) const;
+	void SetPosition(const Vector2D& pos, WindowRelativeTo relative = WindowRelativeTo::kScene);
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;
 

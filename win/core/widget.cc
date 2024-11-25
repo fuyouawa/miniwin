@@ -67,18 +67,6 @@ bool Widget::IsUpdated() const {
 	return impl_->updated_;
 }
 
-void Widget::SetPositionX(float x) {
-	auto p = Position();
-	p.set_x(x);
-	SetPosition(p);
-}
-
-void Widget::SetPositionY(float y) {
-	auto p = Position();
-	p.set_y(y);
-	SetPosition(p);
-}
-
 void Widget::SetWidth(float width) {
 	auto tmp = Size();
 	tmp.set_x(width);

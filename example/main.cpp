@@ -74,7 +74,7 @@ public:
 		// 设置列表数据
 		list_->SetRightLabel("列表");
 		list_->SetWidth(200);
-		list_->SetRelativePosition({ 20, 100 });
+		list_->SetPosition({ 20, 100 }, ControlRelativeTo::kCursor);
 		list_->AddItems({ "qwe", "ert", "yui", "tii" });
 		list_->SetHeight(100);
 

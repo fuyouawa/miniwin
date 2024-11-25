@@ -11,10 +11,21 @@ class AbstractControl::Impl {
 public:
 	Impl() = default;
 
+	Vector2D GetPos(const Vector2D& pos) {
+		switch (relative_to_) {
+		case ControlRelativeTo::kWindow:
+			return pos;
+		case ControlRelativeTo::kCursor:
+			return pos + imgui::GetCursorPos();
+		}
+		MW_ASSERT_X(false);
+		return pos;
+	}
+
 	Vector2D position_to_set_;
 	Vector2D really_pos_;
 	Vector2D origin_pos_;
-	bool is_relative_ = false;
+	ControlRelativeTo relative_to_ = ControlRelativeTo::kWindow;
 };
 
 AbstractControl::AbstractControl() {
@@ -32,37 +43,24 @@ bool AbstractControl::IsControl() const {
 	return true;
 }
 
-Vector2D AbstractControl::Position() const {
+Vector2D AbstractControl::Position(ControlRelativeTo relative) const {
+	switch (relative) {
+	case ControlRelativeTo::kWindow:
+		return impl_->really_pos_;
+	case ControlRelativeTo::kCursor: {
+		if (impl_->relative_to_ == ControlRelativeTo::kCursor) {
+			return impl_->position_to_set_;
+		}
+		return impl_->really_pos_ - impl_->origin_pos_;
+	}
+	}
+	MW_ASSERT_X(false);
 	return impl_->really_pos_;
 }
 
-void AbstractControl::SetPosition(const Vector2D& pos) {
+void AbstractControl::SetPosition(const Vector2D& pos, ControlRelativeTo relative) {
 	impl_->position_to_set_ = pos;
-	impl_->is_relative_ = false;
-}
-
-Vector2D AbstractControl::RelativePosition() const {
-	if (impl_->is_relative_)
-		return impl_->position_to_set_;
-
-	return impl_->really_pos_ - impl_->origin_pos_;
-}
-
-void AbstractControl::SetRelativePosition(const Vector2D& pos) {
-	impl_->position_to_set_ = pos;
-	impl_->is_relative_ = true;
-}
-
-void AbstractControl::SetRelativePositionX(float x) {
-	auto p = RelativePosition();
-	p.set_x(x);
-	SetRelativePosition(p);
-}
-
-void AbstractControl::SetRelativePositionY(float y) {
-	auto p = RelativePosition();
-	p.set_y(y);
-	SetRelativePosition(p);
+	impl_->relative_to_ = relative;
 }
 
 void AbstractControl::PaintBegin(size_t index) {
@@ -72,11 +70,7 @@ void AbstractControl::PaintBegin(size_t index) {
 
 	bool is_custom_pos = impl_->position_to_set_ != Vector2D::kZero;
 	if (is_custom_pos) {
-		auto target_pos = impl_->position_to_set_;
-		if (impl_->is_relative_) {
-			target_pos += impl_->origin_pos_;
-		}
-		imgui::SetCursorPos(target_pos);
+		imgui::SetCursorPos(impl_->GetPos(impl_->position_to_set_));
 	}
 
 	auto cur_pos = imgui::GetCursorPos();

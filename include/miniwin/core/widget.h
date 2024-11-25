@@ -45,13 +45,9 @@ public:
 
 	WidgetId Id() const;
 
-	virtual Vector2D Position() const = 0;
-	virtual void SetPosition(const Vector2D& pos) = 0;
 	virtual Vector2D Size() const = 0;
 	virtual void SetSize(const Vector2D& size) = 0;
 
-	void SetPositionX(float x);
-	void SetPositionY(float y);
 	void SetWidth(float width);
 	void SetHeight(float height);
 

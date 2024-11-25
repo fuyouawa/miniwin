@@ -11,13 +11,8 @@ public:
 	bool Visible() const override;
 	bool IsControl() const override;
 
-	Vector2D Position() const override;
-	void SetPosition(const Vector2D& pos) override;
-
-	virtual Vector2D RelativePosition() const;
-	virtual void SetRelativePosition(const Vector2D& pos);
-	void SetRelativePositionX(float x);
-	void SetRelativePositionY(float y);
+	Vector2D Position(ControlRelativeTo relative = ControlRelativeTo::kWindow) const;
+	void SetPosition(const Vector2D& pos, ControlRelativeTo relative = ControlRelativeTo::kWindow);
 
 protected:
 	void PaintBegin(size_t index) override;

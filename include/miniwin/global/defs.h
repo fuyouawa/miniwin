@@ -129,6 +129,11 @@ enum class Alignment : uint8_t {
     kCenter
 };
 
+enum class ControlRelativeTo : uint8_t {
+    kWindow,
+    kCursor
+};
+
 enum class WindowRelativeTo : uint8_t {
     kMainWindow,
     kScene

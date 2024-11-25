@@ -39,23 +39,21 @@ void Window::SetMainWindow(const SharedMainWindow& win) {
 
 void Window::AlignWindow(Alignment alignment, WindowRelativeTo relative) {
 	Invoke([this, alignment, relative]() {
+		Vector2D pos;
+		//TODO AlignWindow的alignment
 		switch (relative) {
 		case WindowRelativeTo::kMainWindow: {
-			auto size = VecIntToVec(OwnerMainWindow()->ClientSize());
-			auto pos = VecIntToVec(OwnerMainWindow()->ClientPosition());
-
-			SetPosition(pos + size * 0.5f);
-			SetPivot({ 0.5f, 0.5f });
+			pos = VecIntToVec(OwnerMainWindow()->ClientSize()) * 0.5f;
 			break;
 		}
 		case WindowRelativeTo::kScene: {
-			auto size = graphic::GetSceneSize();
-			SetPosition(size * 0.5f);
-			SetPivot({ 0.5f, 0.5f });
+			pos = graphic::GetSceneSize() * 0.5f;
 			break;
 		}
 		}
-		});
+		SetPosition(pos, relative);
+		SetPivot({0.5f, 0.5f});
+	});
 }
 
 bool Window::IsTopEnabled() const {
@@ -102,12 +100,33 @@ void* Window::PlatformHandle() const {
 	return impl_->hwnd_;
 }
 
-Vector2D Window::Position() const {
-	return impl_->position_sc_.cur_value();
+Vector2D Window::Position(WindowRelativeTo relative) const {
+	auto p = impl_->position_sc_.cur_value();
+	switch (relative) {
+	case WindowRelativeTo::kMainWindow: {
+		if (p == Vector2D::kZero) {
+			return p;
+		}
+		//TODO 预测位置
+		return p - VecIntToVec(OwnerMainWindow()->ClientPosition());
+	}
+	case WindowRelativeTo::kScene:
+		return p;
+	}
+	MW_ASSERT_X(false);
+	return p;
 }
 
-void Window::SetPosition(const Vector2D& pos) {
-	impl_->position_sc_.SetControl(pos);
+void Window::SetPosition(const Vector2D& pos, WindowRelativeTo relative) {
+	auto p = pos;
+	switch (relative) {
+	case WindowRelativeTo::kMainWindow:
+		p += VecIntToVec(OwnerMainWindow()->ClientPosition());
+		break;
+	case WindowRelativeTo::kScene:
+		break;
+	}
+	impl_->position_sc_.SetControl(std::move(p));
 }
 
 Vector2D Window::Size() const {
