@@ -41,8 +41,12 @@ void Selectable::SetSize(const Vector2D& size) {
 	impl_->size_sc_.SetControl(size);
 }
 
+String Selectable::Text() const {
+	return Name();
+}
+
 void Selectable::SetText(const String& text, bool adjust_size) {
-	AbstractControl::SetText(text);
+	SetName(text);
 	if (adjust_size) {
 		SetSize(impl_->CalcSize());
 	}

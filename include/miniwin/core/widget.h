@@ -27,7 +27,8 @@ public:
 	virtual void Hide();
 	virtual void Close();
 
-	bool IsWindow() const;
+	virtual bool IsWindow() const;
+	virtual bool IsControl() const;
 
 	SharedWindow OwnerWindow() const;
 	SharedWidget WidgetParent() const;
@@ -49,7 +50,8 @@ public:
 	virtual Vector2D Size() const = 0;
 	virtual void SetSize(const Vector2D& size) = 0;
 
-	void SetSize(float width, float height);
+	void SetPositionX(float x);
+	void SetPositionY(float y);
 	void SetWidth(float width);
 	void SetHeight(float height);
 
@@ -89,7 +91,6 @@ protected:
 
 private:
 	friend class WidgetsDriver;
-	friend class Window;
 	friend class Layout;
 
 	using Object::Parent;

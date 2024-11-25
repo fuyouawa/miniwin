@@ -14,7 +14,8 @@ public:
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;
 
-	void SetText(const String& text, bool adjust_size = true) override;
+	String Text() const;
+	void SetText(const String& text, bool adjust_size = true);
 
 	MW_SIGNAL(OnSelectionChanged, (bool) selected)
 

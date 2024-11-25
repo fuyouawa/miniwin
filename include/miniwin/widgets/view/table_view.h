@@ -1,6 +1,5 @@
 #pragma once
 #include <miniwin/widgets/base/abstract_item_view.h>
-#include <miniwin/widgets/view/header_view.h>
 
 
 namespace miniwin {
@@ -10,16 +9,12 @@ public:
 	TableView();
 	~TableView() override;
 
-	SharedHeaderView HorizontalHeader() const;
-	void SetHorizontalHeader(const SharedHeaderView& header);
+	void SetHeaderVisible(HeaderOrientation orientation, bool b);
+	bool IsHeaderVisible(HeaderOrientation orientation) const;
 
-	SharedHeaderView VerticalHeader() const;
-	void SetVerticalHeader(const SharedHeaderView& header);
+	virtual void SetHeaderItemDelegate(HeaderOrientation orientation, const SharedItemDelegate& item_delegate);
+	const SharedItemDelegate& HeaderItemDelegate(HeaderOrientation orientation) const;
 
-	void SetModel(const SharedItemModel& model) override;
-
-	Vector2D Position() const override;
-	void SetPosition(const Vector2D& pos) override;
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;
 

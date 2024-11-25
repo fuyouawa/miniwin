@@ -2,7 +2,7 @@
 #include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
-class TextEdit : public AbstractMinimumControl {
+class TextEdit : public AbstractControl {
 	MW_OBJECT
 public:
 	struct FilterInputArgs {

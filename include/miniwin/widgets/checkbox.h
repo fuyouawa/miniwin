@@ -11,6 +11,8 @@ public:
 
 	void SetChecked(bool b);
 
+	String Text() const;
+	void SetText(const String& text);
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;
 

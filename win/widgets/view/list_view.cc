@@ -42,13 +42,6 @@ void ListView::SetRightLabel(const String& label) {
 	SetName(label);
 }
 
-//TODO ListView::Position
-Vector2D ListView::Position() const {
-	return {};
-}
-
-void ListView::SetPosition(const Vector2D& pos) {}
-
 Vector2D ListView::Size() const {
 	return impl_->really_size_ == Vector2D::kZero
 		       ? impl_->size_to_set_

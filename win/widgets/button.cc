@@ -22,8 +22,12 @@ Button::Button() {
 
 Button::~Button() {}
 
+String Button::Text() const {
+	return Name();
+}
+
 void Button::SetText(const String& text, bool adjust_size) {
-	AbstractControl::SetText(text);
+	SetName(text);
 	if (adjust_size) {
 		SetSize(impl_->CalcSize());
 	}

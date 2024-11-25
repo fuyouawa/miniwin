@@ -15,9 +15,6 @@ public:
 
 	AbstractItemView* owner_;
 
-	Vector2D calc_size_;
-	Vector2D calc_pos_;
-
 	SharedItemModel model_;
 	SharedItemDelegate item_delegate_;
 	SharedItemSelectionModel selection_model_;
@@ -64,7 +61,7 @@ void AbstractItemView::SetSelectionModel(const SharedItemSelectionModel& selecti
 	impl_->selection_model_ = selection_model;
 }
 
-SharedItemSelectionModel AbstractItemView::SelectionModel() const {
+const SharedItemSelectionModel& AbstractItemView::SelectionModel() const {
 	return impl_->selection_model_;
 }
 

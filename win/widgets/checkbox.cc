@@ -29,6 +29,14 @@ void CheckBox::SetChecked(bool b) {
 	impl_->checked_sc_.SetControl(b);
 }
 
+String CheckBox::Text() const {
+	return Name();
+}
+
+void CheckBox::SetText(const String& text) {
+	SetName(text);
+}
+
 Vector2D CheckBox::Size() const {
 	//TODO CheckBox::Size
 	return {};

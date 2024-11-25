@@ -24,7 +24,7 @@ void Frame::SetSize(const Vector2D& size) {
 }
 
 void Frame::PaintBegin(size_t index) {
-	AbstractMinimumControl::PaintBegin(index);
+	AbstractControl::PaintBegin(index);
 
 	impl_->size_sc_.Enter();
 	if (impl_->size_sc_.HasChange()) {
@@ -47,6 +47,6 @@ void Frame::PaintEnd(size_t index) {
 	imgui::EndChild();
 
 	impl_->size_sc_.Exit();
-	AbstractMinimumControl::PaintEnd(index);
+	AbstractControl::PaintEnd(index);
 }
 }

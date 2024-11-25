@@ -4,17 +4,6 @@
 #include <miniwin/tools/variant.h>
 
 namespace miniwin {
-enum class HeaderOrientation {
-	Horizontal,
-	Vertical
-};
-
-enum class ItemRole {
-	Display,
-	UserData,
-	Flags
-};
-
 class AbstractItemModel : public Object {
 	MW_OBJECT
 public:
@@ -40,13 +29,13 @@ public:
 
 	virtual void Clear() = 0;
 
-	virtual Variant Data(const ModelIndex& index, ItemRole role = ItemRole::Display) const = 0;
-	virtual void SetData(const ModelIndex& index, const Variant& data, ItemRole role = ItemRole::Display) = 0;
+	virtual Variant Data(const ModelIndex& index, ItemRole role = ItemRole::kDisplay) const = 0;
+	virtual void SetData(const ModelIndex& index, const Variant& data, ItemRole role = ItemRole::kDisplay) = 0;
 
 	virtual Variant HeaderData(size_t section, HeaderOrientation orientation,
-	                           ItemRole role = ItemRole::Display) const = 0;
+	                           ItemRole role = ItemRole::kDisplay) const = 0;
 	virtual void SetHeaderData(size_t section, HeaderOrientation orientation, const Variant& data,
-	                           ItemRole role = ItemRole::Display) = 0;
+	                           ItemRole role = ItemRole::kDisplay) = 0;
 
 	virtual bool IsValidIndex(const ModelIndex& index) const;
 

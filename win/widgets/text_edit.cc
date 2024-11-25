@@ -40,7 +40,7 @@ String& TextEdit::TextBuffer() {
 }
 
 void TextEdit::Awake() {
-	AbstractMinimumControl::Awake();
+	AbstractControl::Awake();
 	EnableFlags(imgui::kInputTextCallbackCharFilter | imgui::kInputTextCallbackResize, true);
 }
 
@@ -69,7 +69,7 @@ void TextEdit::SetSize(const Vector2D& size) {
 }
 
 void TextEdit::PaintBegin(size_t index) {
-	AbstractMinimumControl::PaintBegin(index);
+	AbstractControl::PaintBegin(index);
 
 	bool changed = imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), [this](imgui::InputTextCallbackData data) {
 		auto args = FilterInputArgs(data.InputChar(), data.InputKey(), data.TextLength());

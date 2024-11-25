@@ -10,7 +10,6 @@
 namespace miniwin {
 Window::Window() {
 	impl_ = std::make_unique<Impl>(this);
-	Widget::impl_->is_window_ = true;
 }
 
 Window::~Window() {}
@@ -38,26 +37,25 @@ void Window::SetMainWindow(const SharedMainWindow& win) {
 	impl_->main_window_ = win;
 }
 
-void Window::AlignCenter(CenterRelative relative) {
-	Invoke([this, relative]() {
+void Window::AlignWindow(Alignment alignment, WindowRelativeTo relative) {
+	Invoke([this, alignment, relative]() {
 		switch (relative) {
-		case kCenterRelativeToMainWindow: {
-			auto size = OwnerMainWindow()->ClientSize();
-			SetPosition(VecIntToVec(size) * 0.5f);
-			SetPivot({0.5f, 0.5f});
+		case WindowRelativeTo::kMainWindow: {
+			auto size = VecIntToVec(OwnerMainWindow()->ClientSize());
+			auto pos = VecIntToVec(OwnerMainWindow()->ClientPosition());
+
+			SetPosition(pos + size * 0.5f);
+			SetPivot({ 0.5f, 0.5f });
 			break;
 		}
-		case kCenterRelativeToScene: {
+		case WindowRelativeTo::kScene: {
 			auto size = graphic::GetSceneSize();
 			SetPosition(size * 0.5f);
-			SetPivot({0.5f, 0.5f});
+			SetPivot({ 0.5f, 0.5f });
 			break;
 		}
-		default:
-			MW_ASSERT_X(false);
-			break;
 		}
-	});
+		});
 }
 
 bool Window::IsTopEnabled() const {
@@ -94,6 +92,10 @@ bool Window::IsDocking() const {
 
 bool Window::IsCollapsed() const {
 	return impl_->collapsed_sc_.cur_value();
+}
+
+bool Window::IsWindow() const {
+	return true;
 }
 
 void* Window::PlatformHandle() const {

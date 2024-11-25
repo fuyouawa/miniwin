@@ -8,7 +8,8 @@ public:
 	Label();
 	~Label() override;
 
-	void SetText(const String& text, bool adjust_size = true) override;
+	String Text() const;
+	void SetText(const String& text, bool adjust_size = true);
 
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;

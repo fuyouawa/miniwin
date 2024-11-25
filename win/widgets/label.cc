@@ -24,8 +24,12 @@ Label::Label() {
 
 Label::~Label() {}
 
+String Label::Text() const {
+	return Name();
+}
+
 void Label::SetText(const String& text, bool adjust_size) {
-	AbstractControl::SetText(text);
+	SetName(text);
 	if (adjust_size) {
 		SetSize(impl_->CalcSize());
 	}
@@ -45,7 +49,7 @@ void Label::Start() {
 }
 
 void Label::PaintBegin(size_t index) {
-	AbstractMinimumControl::PaintBegin(index);
+	AbstractControl::PaintBegin(index);
 
 	imgui::Text(Text());
 }

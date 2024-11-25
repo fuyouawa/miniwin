@@ -68,11 +68,13 @@ public:
 
 		// 设置组合框文本和数据
 		combo_box_->SetText("组合框");
-		// combo_box_->SetWidth(100);
+		combo_box_->SetWidth(150);
 		combo_box_->AddItems({ "abc", "123", "[];" });
 
 		// 设置列表数据
 		list_->SetRightLabel("列表");
+		list_->SetWidth(200);
+		list_->SetRelativePosition({ 20, 100 });
 		list_->AddItems({ "qwe", "ert", "yui", "tii" });
 		list_->SetHeight(100);
 
@@ -109,8 +111,8 @@ public:
 				});
 			});
 
-		// layout2_->AddWidget(combo_box_);
-		// layout2_->SetAdditionSpacing(combo_box_, 10);
+		layout2_->AddWidget(combo_box_);
+		layout2_->SetAdditionSpacing(combo_box_, 10);
 		layout2_->AddWidget(btn2_);
 		layout2_->AddWidget(btn3_);
 		layout2_->SetAlignment(0.5f);	// 设置居中
@@ -152,7 +154,7 @@ int main() {
 	auto window = Object::Create<ExampleWindow>(nullptr);
 	window->SetTitle("示例窗体");	// 设置标题
 	window->SetSize({600, 400});	// 设置大小
-	window->AlignCenter();
+	window->AlignWindow(Alignment::kCenter, WindowRelativeTo::kMainWindow);
 
 	window->SetMainWindow(win);
 

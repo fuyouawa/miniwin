@@ -41,13 +41,13 @@ void Widget::Impl::PaintBegin() {
 	imgui::BeginDisabled(!enable_sc_.cur_value());
 
 	// 如果是window，需要自己管理id
-	if (!is_window_) {
+	if (!owner_->IsWindow()) {
 		imgui::PushID(owner_->Id());
 	}
 }
 
 void Widget::Impl::PaintEnd() {
-	if (!is_window_) {
+	if (!owner_->IsWindow()) {
 		imgui::PopID();
 	}
 	imgui::EndDisabled();
@@ -58,7 +58,7 @@ void Widget::Impl::PaintEnd() {
 }
 
 SharedWindow Widget::Impl::OwnerWindow() const {
-	if (is_window_) {
+	if (owner_->IsWindow()) {
 		auto w = std::dynamic_pointer_cast<Window>(owner_->shared_from_this());
 		MW_ASSERT_X(w);
 		return w;

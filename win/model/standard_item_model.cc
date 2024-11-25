@@ -55,12 +55,12 @@ void StandardItemModel::SetData(const ModelIndex& index, const Variant& data, It
 }
 
 String StandardItemModel::Text(const ModelIndex& index) const {
-	auto d = Data(index, ItemRole::Display);
+	auto d = Data(index, ItemRole::kDisplay);
 	return d.ToString();
 }
 
 void StandardItemModel::SetText(const ModelIndex& index, const String& text) {
-	SetData(index, text, ItemRole::Display);
+	SetData(index, text, ItemRole::kDisplay);
 }
 
 void StandardItemModel::SetRowTexts(size_t row, size_t begin_column, const StringList& texts) {
@@ -82,22 +82,22 @@ void StandardItemModel::SetColumnTexts(size_t begin_row, size_t column, const St
 }
 
 int StandardItemModel::Flags(const ModelIndex& index) const {
-	auto d = Data(index, ItemRole::Flags);
+	auto d = Data(index, ItemRole::kFlags);
 	return d.ToInt32();
 }
 
 void StandardItemModel::SetFlags(const ModelIndex& index, int flags) {
-	SetData(index, flags, ItemRole::Flags);
+	SetData(index, flags, ItemRole::kFlags);
 }
 
 
 Variant StandardItemModel::HeaderData(size_t section, HeaderOrientation orientation, ItemRole role) const {
 	StandardLineItems* items = nullptr;
 	switch (orientation) {
-	case HeaderOrientation::Horizontal:
+	case HeaderOrientation::kHorizontal:
 		items = &impl_->horizontal_header_items_;
 		break;
-	case HeaderOrientation::Vertical:
+	case HeaderOrientation::kVertical:
 		items = &impl_->vertical_header_items_;
 		break;
 	default:
@@ -117,10 +117,10 @@ void StandardItemModel::SetHeaderData(size_t section, HeaderOrientation orientat
                                       ItemRole role) {
 	StandardLineItems* items = nullptr;
 	switch (orientation) {
-	case HeaderOrientation::Horizontal:
+	case HeaderOrientation::kHorizontal:
 		items = &impl_->horizontal_header_items_;
 		break;
-	case HeaderOrientation::Vertical:
+	case HeaderOrientation::kVertical:
 		items = &impl_->vertical_header_items_;
 		break;
 	default:
@@ -131,19 +131,19 @@ void StandardItemModel::SetHeaderData(size_t section, HeaderOrientation orientat
 }
 
 String StandardItemModel::HeaderText(int section, HeaderOrientation orientation) const {
-	auto d = HeaderData(section, orientation, ItemRole::Display);
+	auto d = HeaderData(section, orientation, ItemRole::kDisplay);
 	return d.ToString();
 }
 
 void StandardItemModel::SetHeaderText(int section, HeaderOrientation orientation, const String& text) {
-	SetHeaderData(section, orientation, text, ItemRole::Display);
+	SetHeaderData(section, orientation, text, ItemRole::kDisplay);
 }
 
 void StandardItemModel::SetHorizontalHeaderTexts(const StringList& texts) {
 	MW_ASSERT_X(texts.size() <= ColumnCount());
 	size_t i = 0;
 	for (auto& t : texts) {
-		SetHeaderText(i, HeaderOrientation::Horizontal, t);
+		SetHeaderText(i, HeaderOrientation::kHorizontal, t);
 		++i;
 	}
 }
@@ -152,18 +152,18 @@ void StandardItemModel::SetVerticalHeaderTexts(const StringList& texts) {
 	MW_ASSERT_X(texts.size() <= RowCount());
 	size_t i = 0;
 	for (auto& t : texts) {
-		SetHeaderText(i, HeaderOrientation::Vertical, t);
+		SetHeaderText(i, HeaderOrientation::kVertical, t);
 		++i;
 	}
 }
 
 int StandardItemModel::HeaderFlags(int section, HeaderOrientation orientation) const {
-	auto d = HeaderData(section, orientation, ItemRole::Flags);
+	auto d = HeaderData(section, orientation, ItemRole::kFlags);
 	return d.ToInt32();
 }
 
 void StandardItemModel::SetHeaderFlags(int section, HeaderOrientation orientation, int flags) {
-	SetHeaderData(section, orientation, flags, ItemRole::Flags);
+	SetHeaderData(section, orientation, flags, ItemRole::kFlags);
 }
 
 void StandardItemModel::Clear() {

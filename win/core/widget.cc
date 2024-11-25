@@ -24,7 +24,11 @@ void Widget::Close() {
 }
 
 bool Widget::IsWindow() const {
-	return impl_->is_window_;
+	return false;
+}
+
+bool Widget::IsControl() const {
+	return false;
 }
 
 SharedWindow Widget::OwnerWindow() const {
@@ -63,8 +67,16 @@ bool Widget::IsUpdated() const {
 	return impl_->updated_;
 }
 
-void Widget::SetSize(float width, float height) {
-	SetSize(Vector2D(width, height));
+void Widget::SetPositionX(float x) {
+	auto p = Position();
+	p.set_x(x);
+	SetPosition(p);
+}
+
+void Widget::SetPositionY(float y) {
+	auto p = Position();
+	p.set_y(y);
+	SetPosition(p);
 }
 
 void Widget::SetWidth(float width) {

@@ -37,7 +37,6 @@ public:
     bool updated_ = false;
     bool visible_ = true;
     bool is_painting_children_ = false;
-    bool is_window_ = false;
     FlagsType draw_flags_ = 0;
 
     Widget* owner_;

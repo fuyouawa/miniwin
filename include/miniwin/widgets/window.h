@@ -8,10 +8,6 @@ using SharedMainWindow = std::shared_ptr<MainWindow>;
 class Window : public Widget {
 	MW_OBJECT
 public:
-	enum CenterRelative {
-		kCenterRelativeToMainWindow,
-		kCenterRelativeToScene
-	};
 	Window();
 	~Window() override;
 
@@ -21,10 +17,7 @@ public:
 	SharedMainWindow OwnerMainWindow() const;
 	void SetMainWindow(const SharedMainWindow& win);
 
-	/**
-	 * 将窗体居中
-	 */
-	void AlignCenter(CenterRelative relative = kCenterRelativeToMainWindow);
+	void AlignWindow(Alignment alignment, WindowRelativeTo relative);
 
 	bool IsTopEnabled() const;
 	bool IsCloseButtonEnabled() const;
@@ -38,6 +31,7 @@ public:
 
 	bool IsDocking() const;
 	bool IsCollapsed() const;
+	bool IsWindow() const override;
 
 	void* PlatformHandle() const;
 

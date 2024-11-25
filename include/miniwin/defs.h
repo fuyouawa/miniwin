@@ -108,6 +108,31 @@ enum class MouseButton : uint8_t {
     kRight,
     kMiddle
 };
+
+enum class HeaderOrientation : uint8_t {
+    kHorizontal,
+    kVertical
+};
+
+enum class ItemRole : uint8_t {
+    kDisplay,
+    kUserData,
+    kFlags
+};
+
+enum class Alignment : uint8_t {
+    kNone,
+	kLeft,
+    kRight,
+    kTop,
+    kBottom,
+    kCenter
+};
+
+enum class WindowRelativeTo : uint8_t {
+    kMainWindow,
+    kScene
+};
 }
 
 #define _MW_IMPL                    \

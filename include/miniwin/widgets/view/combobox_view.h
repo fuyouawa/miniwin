@@ -1,9 +1,7 @@
 #pragma once
 #include <miniwin/widgets/base/abstract_item_view.h>
-#include <miniwin/tools/vector2d.h>
 
 namespace miniwin {
-
 class ComboBoxView : public AbstractItemView {
 	MW_OBJECT
 public:
@@ -13,8 +11,6 @@ public:
 	String Text() const;
 	void SetText(const String& text);
 
-	Vector2D Position() const override;
-	void SetPosition(const Vector2D& pos) override;
 	Vector2D Size() const override;
 	void SetSize(const Vector2D& size) override;
 

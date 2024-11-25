@@ -1,6 +1,5 @@
 #include <miniwin/widgets/list_widget.h>
 
-#include <miniwin/widgets/view/list_view.h>
 #include <miniwin/model/standard_item_model.h>
 #include <miniwin/model/item_selection_model.h>
 
@@ -10,14 +9,12 @@ public:
 	Impl(ListWidget* owner) : owner_(owner) {}
 
 	void Awake() {
-		view_ = Create<ListView>(owner_->shared_from_this());
 		auto model = Create<StandardItemModel>(owner_->shared_from_this());
 		model->SetColumnCount(1);
-		view_->SetModel(model);
+		owner_->SetModel(model);
 	}
 
 	ListWidget* owner_;
-	std::shared_ptr<ListView> view_;
 };
 
 ListWidget::ListWidget() {
@@ -26,24 +23,8 @@ ListWidget::ListWidget() {
 
 ListWidget::~ListWidget() {}
 
-void ListWidget::SetItemDelegate(const SharedItemDelegate& delegate) {
-	impl_->view_->SetItemDelegate(delegate);
-}
-
-const SharedItemDelegate& ListWidget::ItemDelegate() const {
-	return impl_->view_->ItemDelegate();
-}
-
-void ListWidget::SetModel(const SharedItemModel& model) {
-	impl_->view_->SetModel(model);
-}
-
-const SharedItemModel& ListWidget::Model() const {
-	return impl_->view_->Model();
-}
-
 size_t ListWidget::CurrentIndex() const {
-	auto s = impl_->view_->SelectionModel()->CurrentSelection();
+	auto s = SelectionModel()->CurrentSelection();
 	if (s.valid()) {
 		return s.top_left().row();
 	}
@@ -55,7 +36,7 @@ Variant ListWidget::CurrentData(ItemRole role) const {
 }
 
 String ListWidget::CurrentText() const {
-	return CurrentData(ItemRole::Display).ToString();
+	return CurrentData(ItemRole::kDisplay).ToString();
 }
 
 void ListWidget::AddItem(const String& text, const Variant& user_data) {
@@ -69,8 +50,8 @@ void ListWidget::AddItems(const StringList& texts) {
 void ListWidget::InsertItem(size_t index, const String& text, const Variant& user_data) {
 	auto m = Model();
 	m->InsertRow(index);
-	m->SetData(index, text, ItemRole::Display);
-	m->SetData(index, user_data, ItemRole::UserData);
+	m->SetData(index, text, ItemRole::kDisplay);
+	m->SetData(index, user_data, ItemRole::kUserData);
 }
 
 void ListWidget::InsertItems(size_t index, const StringList& texts) {
@@ -78,37 +59,17 @@ void ListWidget::InsertItems(size_t index, const StringList& texts) {
 	m->InsertRows(index, texts.size());
 	int i = 0;
 	for (auto t : texts) {
-		m->SetData(index + i, t, ItemRole::Display);
+		m->SetData(index + i, t, ItemRole::kDisplay);
 		++i;
 	}
 }
 
-String ListWidget::RightLabel() const {
-	return impl_->view_->RightLabel();
-}
-
-void ListWidget::SetRightLabel(const String& label) {
-	impl_->view_->SetRightLabel(label);
-}
-
-Vector2D ListWidget::Size() const {
-	return impl_->view_->Size();
-}
-
-void ListWidget::SetSize(const Vector2D& size) {
-	impl_->view_->SetSize(size);
-}
-
-Vector2D ListWidget::Position() const {
-	return impl_->view_->Position();
-}
-void ListWidget::SetPosition(const Vector2D& pos) {
-	impl_->view_->SetPosition(pos);
-}
-
-
 void ListWidget::Awake() {
-	Widget::Awake();
+	ListView::Awake();
 	impl_->Awake();
+}
+
+void ListWidget::PaintBegin(size_t index) {
+	ListView::PaintBegin(index);
 }
 }

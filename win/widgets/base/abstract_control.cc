@@ -4,65 +4,97 @@
 #include <miniwin/core/imgui.h>
 #include <miniwin/tools/scope_variable.h>
 
+#include "win/tools/debug.h"
+
 namespace miniwin {
-class AbstractMinimumControl::Impl {
+class AbstractControl::Impl {
 public:
 	Impl() = default;
 
-	ScopeVariable<Vector2D> position_sc_;
+	Vector2D position_to_set_;
+	Vector2D really_pos_;
+	Vector2D origin_pos_;
+	bool is_relative_ = false;
 };
 
-AbstractMinimumControl::AbstractMinimumControl() {
+AbstractControl::AbstractControl() {
 	impl_ = std::make_unique<Impl>();
 }
 
-AbstractMinimumControl::~AbstractMinimumControl() = default;
+AbstractControl::~AbstractControl() = default;
 
-bool AbstractMinimumControl::Visible() const {
+bool AbstractControl::Visible() const {
 	//TODO ImGui::GetCurrentWindow
 	return Widget::Visible() && !ImGui::GetCurrentWindow()->SkipItems;
 }
 
-Vector2D AbstractMinimumControl::Position() const {
-	return impl_->position_sc_.cur_value();
-}
-void AbstractMinimumControl::SetPosition(const Vector2D& pos) {
-	impl_->position_sc_.SetControl(pos);
+bool AbstractControl::IsControl() const {
+	return true;
 }
 
-void AbstractMinimumControl::PaintBegin(size_t index) {
+Vector2D AbstractControl::Position() const {
+	return impl_->really_pos_;
+}
+
+void AbstractControl::SetPosition(const Vector2D& pos) {
+	impl_->position_to_set_ = pos;
+	impl_->is_relative_ = false;
+}
+
+Vector2D AbstractControl::RelativePosition() const {
+	if (impl_->is_relative_)
+		return impl_->position_to_set_;
+
+	return impl_->really_pos_ - impl_->origin_pos_;
+}
+
+void AbstractControl::SetRelativePosition(const Vector2D& pos) {
+	impl_->position_to_set_ = pos;
+	impl_->is_relative_ = true;
+}
+
+void AbstractControl::SetRelativePositionX(float x) {
+	auto p = RelativePosition();
+	p.set_x(x);
+	SetRelativePosition(p);
+}
+
+void AbstractControl::SetRelativePositionY(float y) {
+	auto p = RelativePosition();
+	p.set_y(y);
+	SetRelativePosition(p);
+}
+
+void AbstractControl::PaintBegin(size_t index) {
 	Widget::PaintBegin(index);
 
-	impl_->position_sc_.Enter();
+	impl_->origin_pos_ = imgui::GetCursorPos();
 
-	if (impl_->position_sc_.HasChange()) {
-		OnPositionChanged(impl_->position_sc_.cur_value(), impl_->position_sc_.prev_value());
-		imgui::SetCursorPos(impl_->position_sc_.cur_value());
-	}
-	else {
-		auto cur_pos = imgui::GetCursorPos();
-		if (cur_pos != impl_->position_sc_.cur_value()) {
-			OnPositionChanged(cur_pos, impl_->position_sc_.cur_value());
-			impl_->position_sc_.SetValueDirectly(cur_pos);
+	bool is_custom_pos = impl_->position_to_set_ != Vector2D::kZero;
+	if (is_custom_pos) {
+		auto target_pos = impl_->position_to_set_;
+		if (impl_->is_relative_) {
+			target_pos += impl_->origin_pos_;
 		}
+		imgui::SetCursorPos(target_pos);
+	}
+
+	auto cur_pos = imgui::GetCursorPos();
+	if (cur_pos != impl_->really_pos_) {
+		if (IsUpdated()) {
+			OnPositionChanged(cur_pos, impl_->really_pos_);
+		}
+		else {
+			// 如果是第一次更新前，并且是自定义位置，则依然发送信号
+			if (is_custom_pos) {
+				OnPositionChanged(cur_pos, impl_->origin_pos_);
+			}
+		}
+		impl_->really_pos_ = cur_pos;
 	}
 }
 
-void AbstractMinimumControl::PaintEnd(size_t index) {
-	impl_->position_sc_.Exit();
-
+void AbstractControl::PaintEnd(size_t index) {
 	Widget::PaintEnd(index);
-}
-
-AbstractControl::AbstractControl() {}
-
-String AbstractControl::Text() const {
-	return Name();
-}
-
-void AbstractControl::SetText(const String& text, bool adjust_size) {
-	auto prev = Name();
-	SetName(text);
-	OnTextChanged(text, std::move(prev));
 }
 }

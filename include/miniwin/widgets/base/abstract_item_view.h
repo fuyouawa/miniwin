@@ -1,10 +1,10 @@
 #pragma once
-#include <miniwin/core/widget.h>
+#include <miniwin/widgets/base/abstract_control.h>
 
 namespace miniwin {
 class AbstractItemDelegate;
 
-class AbstractItemView : public Widget {
+class AbstractItemView : public AbstractControl {
 	MW_OBJECT
 public:
 	AbstractItemView();
@@ -14,7 +14,7 @@ public:
 	const SharedItemModel& Model() const;
 
 	virtual void SetSelectionModel(const SharedItemSelectionModel& selection_model);
-	SharedItemSelectionModel SelectionModel() const;
+	const SharedItemSelectionModel& SelectionModel() const;
 
 	virtual void SetItemDelegate(const SharedItemDelegate& item_delegate);
 	const SharedItemDelegate& ItemDelegate() const;

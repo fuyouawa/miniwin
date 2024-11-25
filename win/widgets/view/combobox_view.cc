@@ -1,4 +1,4 @@
-#include "combobox_view.h"
+#include <miniwin/widgets/view/combobox_view.h>
 
 #include <miniwin/core/imgui.h>
 #include <miniwin/delegate/selectable_item_delegate.h>
@@ -39,7 +39,6 @@ public:
 	bool is_open_ = false;
 	Vector2D really_size_;
 	float width_to_set_ = 0;
-	ScopeVariable<Vector2D> position_sc_;
 };
 
 ComboBoxView::ComboBoxView() {
@@ -54,14 +53,6 @@ String ComboBoxView::Text() const {
 
 void ComboBoxView::SetText(const String& text) {
 	SetName(text);
-}
-
-Vector2D ComboBoxView::Position() const {
-	return impl_->position_sc_.cur_value();
-}
-
-void ComboBoxView::SetPosition(const Vector2D& pos) {
-	impl_->position_sc_.SetControl(pos);
 }
 
 Vector2D ComboBoxView::Size() const {
@@ -81,19 +72,6 @@ void ComboBoxView::Awake() {
 
 void ComboBoxView::PaintBegin(size_t index) {
 	AbstractItemView::PaintBegin(index);
-	impl_->position_sc_.Enter();
-
-	if (impl_->position_sc_.HasChange()) {
-		OnPositionChanged(impl_->position_sc_.cur_value(), impl_->position_sc_.prev_value());
-		imgui::SetCursorPos(impl_->position_sc_.cur_value());
-	}
-	else {
-		auto cur_pos = imgui::GetCursorPos();
-		if (cur_pos != impl_->position_sc_.cur_value()) {
-			OnPositionChanged(cur_pos, impl_->position_sc_.cur_value());
-			impl_->position_sc_.SetValueDirectly(cur_pos);
-		}
-	}
 
 	if (!Mathf::Approximately(impl_->width_to_set_, 0.f)) {
 		imgui::PushItemWidth(impl_->width_to_set_);
@@ -124,7 +102,6 @@ void ComboBoxView::PaintEnd(size_t index) {
 	if (impl_->is_open_) {
 		imgui::EndCombo();
 	}
-	impl_->position_sc_.Exit();
 
 	AbstractItemView::PaintEnd(index);
 }
