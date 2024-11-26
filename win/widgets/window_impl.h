@@ -33,7 +33,7 @@ public:
     void* hwnd_ = nullptr;
     void* prev_hwnd_ = nullptr;
 
-    std::weak_ptr<MainWindow> main_window_;
+    std::weak_ptr<miniwin::PlatformWindow> platform_win_;
     Window* owner_;
 };
 }

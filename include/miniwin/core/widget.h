@@ -27,13 +27,14 @@ public:
 	virtual void Hide();
 	virtual void Close();
 
+	bool IsWidget() const override;
 	virtual bool IsWindow() const;
 	virtual bool IsControl() const;
 
 	SharedWindow OwnerWindow() const;
 	SharedWidget WidgetParent() const;
 
-	void SetWidgetParent(const SharedWidget& parent);
+	virtual void SetWidgetParent(const SharedWidget& parent);
 	List<SharedWidget> WidgetChildren() const;
 
 	virtual bool Visible() const;
@@ -59,7 +60,7 @@ public:
 	FlagsType GetDrawFlags() const;
 	void SetDrawFlags(FlagsType flags);
 
-	void Invoke(std::function<void()> func, InvokeType invoke_type = InvokeType::kAuto) const override;
+	bool Invoke(std::function<void()> func, InvokeType invoke_type = InvokeType::kAuto) const override;
 
 	void Initialize(const SharedObject& parent) override;
 
@@ -90,7 +91,7 @@ private:
 	friend class Layout;
 
 	using Object::Parent;
-	using Object::SetParent;
+	void SetParent(const SharedObject& parent) const override;
 
 	_MW_IMPL
 };

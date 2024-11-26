@@ -47,9 +47,6 @@ public:
         ConnectionFlags connection_flags,
         InvokeType invoke_type);
 
-
-    void Init(const SharedObject& parent);
-
     void EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store);
 
     bool DisconnectImpl(const SharedConnection& connection);
@@ -59,10 +56,7 @@ public:
     void SetParent(const SharedObject& parent);
 
     List<SharedObject> GetChildrenWithProcess();
-    void DeleteChildren();
 
-    bool is_widget_ = false;
-    bool is_layout_ = false;
     bool deleting_ = false;
     bool orphaned_ = false;
     bool dirty_ = false;

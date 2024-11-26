@@ -8,10 +8,6 @@ class Dialog::Impl {
 public:
 	Impl(Dialog* owner) : owner_(owner) {}
 
-	void Awake() {
-		owner_->SetVisible(false);
-	}
-
 	Dialog* owner_;
 	bool is_opened_ = true;
 };
@@ -21,15 +17,6 @@ Dialog::Dialog() {
 }
 
 Dialog::~Dialog() = default;
-
-void Dialog::Open() {
-	Show();
-}
-
-void Dialog::Awake() {
-	Window::Awake();
-	impl_->Awake();
-}
 
 void Dialog::OnPaintWindowBegin() {
 	if (!imgui::IsPopupOpen(Title(), Id(), Flags())) {

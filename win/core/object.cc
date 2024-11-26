@@ -78,11 +78,11 @@ List<SharedObject> Object::Children() const {
 }
 
 bool Object::IsWidget() const {
-	return impl_->is_widget_;
+	return false;
 }
 
 bool Object::IsLayout() const {
-	return impl_->is_layout_;
+	return false;
 }
 
 String Object::DebugName() const {
@@ -93,12 +93,13 @@ String Object::ClassName() const {
 	return String(Type().name()).Split(' ')[1];
 }
 
-void Object::Invoke(std::function<void()> func, InvokeType invoke_type) const {
+bool Object::Invoke(std::function<void()> func, InvokeType invoke_type) const {
 	func();
+	return true;
 }
 
 void Object::Initialize(const SharedObject& parent) {
-	impl_->Init(parent);
+	SetParent(parent);
 }
 
 SlotDisconnecter Object::ConnectImpl(const SharedObject& sender, const std::type_info& signal_info,

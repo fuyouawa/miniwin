@@ -1,5 +1,7 @@
 #include "application_impl.h"
 
+#include <mutex>
+
 #include "win/tools/debug.h"
 #include <imgui/imgui.h>
 
@@ -43,14 +45,16 @@ bool ApplicationImpl::IsExecuting() const {
 }
 
 int ApplicationImpl::Execute() {
+	thread_id_ = std::this_thread::get_id();
 	while (true) {
-		main_windows_.EraseIf([](const SharedMainWindow& win) { return win->Orphaned(); });
+		DoPending();
+		platform_windows_.EraseIf([](const SharedPlatformWindow& win) { return win->IsDone(); });
 
-		if (main_windows_.empty())
+		if (IsDone())
 			break;
 
 		delta_time_ = 0;
-		for (auto& win : main_windows_) {
+		for (auto& win : platform_windows_) {
 			win->Update();
 			delta_time_ += win->DeltaTime();
 		}
@@ -65,11 +69,36 @@ int ApplicationImpl::Execute() {
 	return 0;
 }
 
-const List<SharedMainWindow>& ApplicationImpl::MainWindows() {
-	return main_windows_;
+const List<SharedPlatformWindow>& ApplicationImpl::MainWindows() {
+	return platform_windows_;
 }
 
-void ApplicationImpl::RegisterMainWindow(const SharedMainWindow& window) {
-	main_windows_.PushBack(window);
+void ApplicationImpl::RegisterMainWindow(const SharedPlatformWindow& window) {
+	platform_windows_.PushBack(window);
+}
+
+void ApplicationImpl::PushPendingFunctor(std::function<void()> func) {
+	std::lock_guard lk(mutex_);
+	pending_functors_.EmplaceBack(std::move(func));
+}
+
+void ApplicationImpl::DoPending() {
+	List<std::function<void()>> functors;
+	{
+		std::lock_guard lk(mutex_);
+		functors.Swap(pending_functors_);
+	}
+	for (auto& f : functors) {
+		f();
+	}
+	functors.Clear();
+}
+
+std::thread::id ApplicationImpl::ThreadId() const {
+	return thread_id_;
+}
+
+bool ApplicationImpl::IsDone() const {
+	return platform_windows_.empty() && pending_functors_.empty();
 }
 }

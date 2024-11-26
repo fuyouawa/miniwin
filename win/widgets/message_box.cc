@@ -13,6 +13,7 @@ public:
 	void Awake() {
 		lab_msg_ = Create<Label>(owner_->shared_from_this());
 		layout_btns_ = Create<HBoxLayout>(owner_->shared_from_this());
+
 		layout_btns_->SetSpacing(10);
 		layout_btns_->SetAlignment(1);
 		owner_->SetSize({ 200, 110 });
@@ -54,8 +55,6 @@ void MessageBox::InformationAsync(const SharedWidget& parent, const String& titl
 			cb();
 		}
 	});
-
-	msg->Open();
 }
 
 void MessageBox::QuestionAsync(const SharedWidget& parent, const String& title, const String& text, const String& yes,
@@ -84,8 +83,6 @@ void MessageBox::QuestionAsync(const SharedWidget& parent, const String& title, 
 			cb(false);
 		}
 	});
-
-	msg->Open();
 }
 
 MessageBox::MessageBox() {

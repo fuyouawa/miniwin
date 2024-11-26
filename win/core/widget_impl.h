@@ -19,7 +19,6 @@ public:
 
     SharedWindow OwnerWindow() const;
 	SharedWidget WidgetParent() const;
-    void SetWidgetParent(const SharedWidget& parent);
 
     void PushPendingFunctor(std::function<void()>&& func);
     void DoPendingFunctors();

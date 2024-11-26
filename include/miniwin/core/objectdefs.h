@@ -149,8 +149,9 @@ std::shared_ptr<T> Create(const std::shared_ptr<E>& parent) {
 
 enum class InvokeType {
 	/**
-	 * 如果非UI对象，直接调用
-	 * 如果是UI对象，加入调用队列
+	 * 如果非ui对象，则为kDirect
+	 *
+	 * 如果是ui对象，则为kQueued
 	 */
 	kAuto,
 	/**
@@ -158,10 +159,19 @@ enum class InvokeType {
 	 */
 	kDirect,
 	/**
-	 * 如果非UI对象，直接调用
-	 * 如果是UI对象，会加入UI调用队列
+	 * 如果非ui对象，直接调用
+	 *
+	 * 如果是ui对象，会加入调用该函数的ui的调用队列，当update到该ui时正式调用
 	 */
-	kQueued
+	kQueued,
+	/**
+	 * 加入内部UI驱动器的调用队列，在新一帧渲染开始时调用，会先于所有ui的更新
+	 *
+	 * 适用与可能会对ui关系结构造成更改的逻辑
+	 *
+	 * 【多为内部使用】
+	 */
+	kEarlyQueued
 };
 
 enum class ConnectionFlags {

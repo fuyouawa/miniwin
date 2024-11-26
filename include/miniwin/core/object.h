@@ -41,8 +41,8 @@ public:
 	virtual void SetParent(const SharedObject& parent) const;
 	List<SharedObject> Children() const;
 
-	bool IsWidget() const;
-	bool IsLayout() const;
+	virtual bool IsWidget() const;
+	virtual bool IsLayout() const;
 
 	String Name() const;
 	void SetName(const String& name) const;
@@ -55,7 +55,7 @@ public:
 	virtual void SetFlags(FlagsType flags);
 	void EnableFlags(FlagsType flags, bool enable);
 
-	virtual void Invoke(std::function<void()> func, InvokeType invoke_type = InvokeType::kAuto) const;
+	virtual bool Invoke(std::function<void()> func, InvokeType invoke_type = InvokeType::kAuto) const;
 
 	MW_SIGNAL(OnDestroy)
 
@@ -97,9 +97,8 @@ private:
 		const std::type_info& signal_info,
 	    const internal::SharedSlotArgsStore& args_store) const;
 
-	friend class Widget;
 	friend class WidgetsDriver;
-	friend class Layout;
+	friend class Widget;
 
 	_MW_IMPL
 };

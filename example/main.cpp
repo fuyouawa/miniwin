@@ -11,7 +11,7 @@
 #include <miniwin/widgets/view/list_view.h>
 
 #include "miniwin/core/imgui.h"
-#include "miniwin/core/main_window.h"
+#include "miniwin/core/platform_window.h"
 #include "miniwin/tools/file.h"
 #include "miniwin/widgets/button.h"
 #include "miniwin/widgets/checkbox.h"
@@ -148,7 +148,7 @@ int main() {
 	auto& app = Application::Instance();
 	app.EnabledIniFile(false);		// 关闭缓存文件
 
-	auto win = MainWindow::Create("测试", { 1000, 800 });
+	auto win = PlatformWindow::Create("测试", { 1000, 800 });
 
 	// 实例化示例窗体
 	auto window = Object::Create<ExampleWindow>(nullptr);
@@ -156,7 +156,7 @@ int main() {
 	window->SetSize({600, 400});	// 设置大小
 	window->AlignWindow(Alignment::kCenter, WindowRelativeTo::kMainWindow);
 
-	window->SetMainWindow(win);
+	window->SetPlatformWindow(win);
 
 	app.Execute();					// 开始运行
 }

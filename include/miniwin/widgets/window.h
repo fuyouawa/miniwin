@@ -2,8 +2,8 @@
 #include <miniwin/core/widget.h>
 
 namespace miniwin {
-class MainWindow;
-using SharedMainWindow = std::shared_ptr<MainWindow>;
+class PlatformWindow;
+using SharedPlatformWindow = std::shared_ptr<PlatformWindow>;
 
 class Window : public Widget {
 	MW_OBJECT
@@ -13,9 +13,6 @@ public:
 
 	String Title() const;
 	void SetTitle(const String& title);
-
-	SharedMainWindow OwnerMainWindow() const;
-	void SetMainWindow(const SharedMainWindow& win);
 
 	void AlignWindow(Alignment alignment, WindowRelativeTo relative = WindowRelativeTo::kScene);
 
@@ -33,7 +30,9 @@ public:
 	bool IsCollapsed() const;
 	bool IsWindow() const override;
 
+	SharedPlatformWindow PlatformWindow() const;
 	void* PlatformHandle() const;
+	void SetPlatformWindow(const SharedPlatformWindow& win);
 
 	Vector2D Position(WindowRelativeTo relative = WindowRelativeTo::kScene) const;
 	void SetPosition(const Vector2D& pos, WindowRelativeTo relative = WindowRelativeTo::kScene);
@@ -52,7 +51,7 @@ protected:
 	virtual void OnPaintWindowEnd();
 
 private:
-	friend class MainWindow;
+	friend class PlatformWindow;
 	_MW_IMPL
 };
 }

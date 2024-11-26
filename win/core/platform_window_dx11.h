@@ -1,20 +1,20 @@
 #pragma once
-#include "main_window_impl.h"
+#include "platform_window_impl.h"
 
 namespace miniwin {
 class PlatformEasyWindowDx11;
 }
 
 namespace miniwin {
-class MainWindowDx11 : public MainWindowImpl {
+class PlatformWindowDx11 : public PlatformWindowImpl {
 public:
-	MainWindowDx11(
+	PlatformWindowDx11(
 		const String& title,
 		const Vector2DInt& size,
 		bool adjust_size,
 		FlagsType styles,
-		const SharedMainWindow& parent);
-	~MainWindowDx11() override;
+		const SharedPlatformWindow& parent);
+	~PlatformWindowDx11() override;
 
 	void Initialize() override;
 	void PlatformStartFrame() override;

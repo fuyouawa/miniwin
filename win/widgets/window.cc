@@ -3,7 +3,9 @@
 #include "win/core/widget_impl.h"
 #include <miniwin/core/io.h>
 #include <miniwin/tools/graphic.h>
-#include "win/core/main_window_impl.h"
+
+#include "miniwin/core/application.h"
+#include "win/core/platform_window_impl.h"
 #include "win/tools/debug.h"
 
 
@@ -24,26 +26,13 @@ void Window::SetTitle(const String& title) {
 	OnTitleChanged(title, prev);
 }
 
-SharedMainWindow Window::OwnerMainWindow() const {
-	auto p = impl_->main_window_.lock();
-	MW_ASSERT_X(p);
-	return p;
-}
-
-void Window::SetMainWindow(const SharedMainWindow& win) {
-	auto w = dynamic_cast<MainWindowImpl*>(win.get());
-	MW_ASSERT_X(w);
-	w->RegisterSubWindow(shared_from_this());
-	impl_->main_window_ = win;
-}
-
 void Window::AlignWindow(Alignment alignment, WindowRelativeTo relative) {
 	Invoke([this, alignment, relative]() {
 		Vector2D pos;
 		//TODO AlignWindow的alignment
 		switch (relative) {
 		case WindowRelativeTo::kMainWindow: {
-			pos = VecIntToVec(OwnerMainWindow()->ClientSize()) * 0.5f;
+			pos = io::DisplaySize() * 0.5f;
 			break;
 		}
 		case WindowRelativeTo::kScene: {
@@ -96,8 +85,19 @@ bool Window::IsWindow() const {
 	return true;
 }
 
+SharedPlatformWindow Window::PlatformWindow() const {
+	auto w = OwnerWindow()->impl_->platform_win_.lock();
+	MW_ASSERT(w, "Window must have a owner platform window");
+	return w;
+}
+
 void* Window::PlatformHandle() const {
 	return impl_->hwnd_;
+}
+
+void Window::SetPlatformWindow(const SharedPlatformWindow& win) {
+	impl_->platform_win_ = win;
+	dynamic_cast<PlatformWindowImpl*>(win.get())->RegisterSubWindow(shared_from_this());
 }
 
 Vector2D Window::Position(WindowRelativeTo relative) const {
@@ -108,7 +108,7 @@ Vector2D Window::Position(WindowRelativeTo relative) const {
 			return p;
 		}
 		//TODO 预测位置
-		return p - VecIntToVec(OwnerMainWindow()->ClientPosition());
+		return p - VecIntToVec(PlatformWindow()->ClientSize());
 	}
 	case WindowRelativeTo::kScene:
 		return p;
@@ -121,7 +121,7 @@ void Window::SetPosition(const Vector2D& pos, WindowRelativeTo relative) {
 	auto p = pos;
 	switch (relative) {
 	case WindowRelativeTo::kMainWindow:
-		p += VecIntToVec(OwnerMainWindow()->ClientPosition());
+		p += VecIntToVec(PlatformWindow()->ClientPosition());
 		break;
 	case WindowRelativeTo::kScene:
 		break;

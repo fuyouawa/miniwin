@@ -6,10 +6,10 @@
 #include <thread>
 
 namespace miniwin {
-class MainWindow;
-using SharedMainWindow = std::shared_ptr<MainWindow>;
+class PlatformWindow;
+using SharedPlatformWindow = std::shared_ptr<PlatformWindow>;
 
-class MainWindow : public std::enable_shared_from_this<MainWindow> {
+class PlatformWindow : public std::enable_shared_from_this<PlatformWindow> {
 public:
 	enum StyleFlags : uint8_t {
 		kStyleNormal,
@@ -28,14 +28,14 @@ public:
 		kCursorResizeNESW
 	};
 
-	static SharedMainWindow Create(
+	static SharedPlatformWindow Create(
 		const String& title,
 		const Vector2DInt& size,
 		bool adjust_size = true, 
 		FlagsType styles = kStyleNormal, 
-		const SharedMainWindow& parent = nullptr);
+		const SharedPlatformWindow& parent = nullptr);
 
-	virtual ~MainWindow();
+	virtual ~PlatformWindow();
 
 	virtual void Repaint() = 0;
 	virtual void Show(bool show_or_hide = true) = 0;
@@ -62,13 +62,12 @@ public:
 
 	virtual float DeltaTime() const = 0;
 
-	virtual bool Orphaned() const = 0;
+	virtual bool IsDone() const = 0;
 	virtual bool Update() = 0;
+	virtual bool IsUpdated() = 0;
 
 	virtual void* PlatformHandle() const = 0;
 
 	virtual const List<SharedWindow>& SubWindows() = 0;
-
-	virtual std::thread::id ThreadId() = 0;
 };
 }

@@ -1,4 +1,4 @@
-#include "main_window_dx11.h"
+#include "platform_window_dx11.h"
 #include "win/tools/platform_easy_window_dx11.h"
 
 #include <imgui/imgui.h>
@@ -12,22 +12,22 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace miniwin {
-SharedMainWindow MainWindow::Create(const String& title, const Vector2DInt& size, bool adjust_size, FlagsType styles,
-                                const SharedMainWindow& parent) {
+SharedPlatformWindow PlatformWindow::Create(const String& title, const Vector2DInt& size, bool adjust_size, FlagsType styles,
+                                const SharedPlatformWindow& parent) {
 	static bool is_initialized = false;
 	if (!is_initialized) {
 		ImGui_ImplWin32_EnableDpiAwareness();
 		is_initialized = true;
 	}
 
-	auto inst = std::make_shared<MainWindowDx11>(title, size, adjust_size, styles, parent);
+	auto inst = std::make_shared<PlatformWindowDx11>(title, size, adjust_size, styles, parent);
 	inst->Initialize();
 	return inst;
 }
 
-MainWindowDx11::MainWindowDx11(const String& title, const Vector2DInt& size, bool adjust_size, FlagsType styles,
-                           const SharedMainWindow& parent)
-	: MainWindowImpl(title, size, adjust_size, styles, parent) {
+PlatformWindowDx11::PlatformWindowDx11(const String& title, const Vector2DInt& size, bool adjust_size, FlagsType styles,
+                           const SharedPlatformWindow& parent)
+	: PlatformWindowImpl(title, size, adjust_size, styles, parent) {
 	platform_win_dx11_ = dynamic_cast<PlatformEasyWindowDx11*>(platform_win_.get());
 
 	platform_win_dx11_->on_dpi_changed_ = [this](RectInt rect, uint16_t dpi) {
@@ -46,14 +46,14 @@ MainWindowDx11::MainWindowDx11(const String& title, const Vector2DInt& size, boo
 	};
 }
 
-MainWindowDx11::~MainWindowDx11() {
+PlatformWindowDx11::~PlatformWindowDx11() {
 	// Cleanup
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 }
 
-void MainWindowDx11::Initialize() {
-	MainWindowImpl::Initialize();
+void PlatformWindowDx11::Initialize() {
+	PlatformWindowImpl::Initialize();
 
 	// Setup Dear ImGui context
 	ImGuiIO& io = ImGui::GetIO();
@@ -93,16 +93,16 @@ void MainWindowDx11::Initialize() {
 	//IM_ASSERT(font != nullptr);
 }
 
-void MainWindowDx11::PlatformStartFrame() {
+void PlatformWindowDx11::PlatformStartFrame() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 }
 
-void MainWindowDx11::PlatformAdditionRender() {
+void PlatformWindowDx11::PlatformAdditionRender() {
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void MainWindowDx11::PlatformPreRender() {
+void PlatformWindowDx11::PlatformPreRender() {
 	AdjustDpiScale(ImGui_ImplWin32_GetDpiScaleForHwnd(PlatformHandle()));
 }
 }

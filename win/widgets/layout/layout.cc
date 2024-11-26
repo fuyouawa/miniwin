@@ -11,16 +11,13 @@ namespace miniwin {
 class Layout::Impl {
 public:
 	Impl(Layout* owner) : owner_(owner) {}
-
-	void Init() {}
-
+	
 	Layout* owner_;
 	List<WeakWidget> widgets_;
 };
 
 Layout::Layout() {
 	impl_ = std::make_unique<Impl>(this);
-	Object::impl_->is_layout_ = true;
 }
 
 Layout::~Layout() {}
@@ -56,6 +53,10 @@ bool Layout::RemoveWidget(const SharedWidget& widget) {
 
 void Layout::ClearWidget() {
 	impl_->widgets_.Clear();
+}
+
+bool Layout::IsLayout() const {
+	return true;
 }
 
 SharedWidget Layout::WidgetByIndex(size_t index) const {
@@ -125,8 +126,9 @@ bool Layout::IsEmpty() const {
 }
 
 void Layout::Initialize(const SharedObject& parent) {
-	Object::Initialize(parent);
-	impl_->Init();
+	Application::Instance().PushPendingFunctor([self = shared_from_this(), parent]() {
+		self->SetParent(parent);
+		});
 }
 
 void Layout::OnBeginLayout() {

@@ -1,20 +1,20 @@
 #pragma once
-#include <miniwin/core/main_window.h>
+#include <miniwin/core/platform_window.h>
 
 #include "widgets_driver.h"
 #include "win/tools/easy_window.h"
 #include "win/tools/platform_easy_window.h"
 
 namespace miniwin {
-class MainWindowImpl : public MainWindow {
+class PlatformWindowImpl : public PlatformWindow {
 public:
-	MainWindowImpl(
+	PlatformWindowImpl(
 		const String& title,
 		const Vector2DInt& size,
 		bool adjust_size,
 		FlagsType styles,
-		const SharedMainWindow& parent);
-	~MainWindowImpl() override;
+		const SharedPlatformWindow& parent);
+	~PlatformWindowImpl() override;
 
 	virtual void Initialize();
 
@@ -35,7 +35,7 @@ public:
 	bool IsMinimized() const override;
 	uint64_t FrameCount() const override;
 	float DeltaTime() const override;
-	bool Orphaned() const override;
+	bool IsDone() const override;
 	void* PlatformHandle() const override;
 	bool Update() override;
 	bool AdjustDpiScale(float scale);
@@ -45,9 +45,9 @@ public:
 	virtual void PlatformAdditionRender() = 0;
 	void RegisterSubWindow(const SharedWindow& win);
 	const List<SharedWindow>& SubWindows() override;
-	std::thread::id ThreadId() override;
 	Vector2DInt ClientSize() const override;
 	Vector2DInt ClientPosition() const override;
+	bool IsUpdated() override;
 
 	float cur_dpi_scale_ = 0;
 	float prev_dpi_scale_ = 0;
@@ -56,5 +56,6 @@ public:
 	uint64_t frame_count_ = 0;
 	size_t delta_time_ = 0;
 	bool orphaned_ = false;
+	bool updated_ = false;
 };
 }

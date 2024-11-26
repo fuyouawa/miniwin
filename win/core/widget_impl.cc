@@ -8,6 +8,7 @@
 #include <miniwin/core/widgetid_pool.h>
 #include "object_impl.h"
 #include "widgets_driver.h"
+#include "miniwin/core/platform_window.h"
 #include "win/tools/debug.h"
 
 namespace miniwin {
@@ -58,15 +59,16 @@ void Widget::Impl::PaintEnd() {
 }
 
 SharedWindow Widget::Impl::OwnerWindow() const {
+	auto p = WidgetParent();
+	if (p) {
+		return p->impl_->OwnerWindow();
+	}
 	if (owner_->IsWindow()) {
 		auto w = std::dynamic_pointer_cast<Window>(owner_->shared_from_this());
 		MW_ASSERT_X(w);
 		return w;
 	}
-	auto p = WidgetParent();
-	if (p) {
-		return p->impl_->OwnerWindow();
-	}
+	MW_ASSERT(false, "A widget({}) has no owner window?", owner_->DebugName());
 	return {};
 }
 
@@ -76,15 +78,6 @@ SharedWidget Widget::Impl::WidgetParent() const {
 	}
 	return {};
 }
-
-void Widget::Impl::SetWidgetParent(const SharedWidget& parent) {
-	if (parent == WidgetParent())
-		return;
-	// WidgetsDriver::Instance().PushPendingFunctor([this, parent] {
-	// 	owner_->Object::SetParent(parent);
-	// });
-}
-
 
 void Widget::Impl::PushPendingFunctor(std::function<void()>&& func) {
 	std::lock_guard lk(pending_functors_mutex_);

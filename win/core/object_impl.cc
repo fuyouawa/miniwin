@@ -30,9 +30,6 @@ Object::Impl::~Impl() {
 		MW_ASSERT_X(sc->receiver.lock() == nullptr);
 		sc->receiver.reset();
 	}
-
-	DeleteChildren();
-	SetParent(nullptr);
 }
 
 void Object::Impl::ConnectionsManager::ClearDirty() {
@@ -104,10 +101,6 @@ SlotDisconnecter Object::Impl::ConnectImpl(
 	                                         invoke_type);
 
 	return sender->impl_->AddConnection(std::move(conn));
-}
-
-void Object::Impl::Init(const SharedObject& parent) {
-	SetParent(parent);
 }
 
 void Object::Impl::EmitSignalImpl(const type_info& signal_info, const internal::SharedSlotArgsStore& args_store) {
@@ -232,9 +225,5 @@ List<SharedObject> Object::Impl::GetChildrenWithProcess() {
 	pending_addition_children_.Clear();
 
 	return children_;
-}
-
-void Object::Impl::DeleteChildren() {
-	children_.Clear();
 }
 }

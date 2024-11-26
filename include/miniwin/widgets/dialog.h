@@ -8,10 +8,7 @@ public:
 	Dialog();
 	~Dialog() override;
 
-	void Open();
-
 protected:
-	void Awake() override;
 	void OnPaintWindowBegin() override;
 	void OnPaintWindowEnd() override;
 

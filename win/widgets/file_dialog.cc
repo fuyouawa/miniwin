@@ -108,8 +108,6 @@ void FileDialog::GetOpenFileNameAsync(const SharedWidget& parent, const String& 
 		cb(std::move(dlg->impl_->file_), std::move(dlg->impl_->selected_filter));
 		dlg->Close();
 		});
-
-	dlg->Open();
 }
 
 FileDialog::FileDialog()
@@ -118,7 +116,9 @@ FileDialog::FileDialog()
 }
 
 FileDialog::~FileDialog() {
-	impl_->open_file_dialog_thread_.join();
+	if (impl_->open_file_dialog_thread_.joinable()) {
+		impl_->open_file_dialog_thread_.join();
+	}
 }
 
 FileDialog::Config& FileDialog::GetConfig() const {

@@ -12,6 +12,8 @@ public:
 	bool RemoveWidget(const SharedWidget& widget);
 	void ClearWidget();
 
+	bool IsLayout() const override;
+
 	SharedWidget WidgetByIndex(size_t index) const;
 	List<SharedWidget> Widgets() const;
 	size_t IndexOfWidget(const SharedWidget& widget) const;

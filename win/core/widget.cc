@@ -5,22 +5,27 @@
 #include <miniwin/core/widget.h>
 #include <miniwin/tools/vector2d.h>
 #include <miniwin/tools/scope_variable.h>
-#include <miniwin/core/main_window.h>
+#include <miniwin/core/platform_window.h>
 #include <miniwin/widgets/window.h>
+
 #include "object_impl.h"
 #include "widgets_driver.h"
+#include "miniwin/core/application.h"
 #include "win/tools/debug.h"
 
 namespace miniwin {
 Widget::Widget() {
 	impl_ = std::make_unique<Impl>(this);
-	Object::impl_->is_widget_ = true;
 }
 
 Widget::~Widget() {}
 
 void Widget::Close() {
 	impl_->Close();
+}
+
+bool Widget::IsWidget() const {
+	return true;
 }
 
 bool Widget::IsWindow() const {
@@ -40,7 +45,25 @@ SharedWidget Widget::WidgetParent() const {
 }
 
 void Widget::SetWidgetParent(const SharedWidget& parent) {
-	impl_->SetWidgetParent(parent);
+	if (parent) {
+		if (!parent->IsWidget()) {
+			MW_THROW_EX(std::invalid_argument, "The parent of a widget must also be a widget");
+		}
+		auto w = std::dynamic_pointer_cast<Widget>(parent);
+
+		Invoke([self = shared_from_this(), parent]() {
+			self->SetParent(parent);
+		}, InvokeType::kEarlyQueued);
+	}
+	else {
+		if (!IsWindow()) {
+			MW_THROW_EX(std::invalid_argument, "The parent of a widget cannot be null");
+		}
+
+		Invoke([self = shared_from_this()]() {
+			self->SetParent(nullptr);
+		}, InvokeType::kEarlyQueued);
+	}
 }
 
 List<SharedWidget> Widget::WidgetChildren() const {
@@ -119,31 +142,44 @@ void Widget::SetDrawFlags(FlagsType flags) {
 	impl_->draw_flags_ = flags;
 }
 
-void Widget::Invoke(std::function<void()> func, InvokeType invoke_type) const {
+bool Widget::Invoke(std::function<void()> func, InvokeType invoke_type) const {
 	invoke_type = invoke_type == InvokeType::kAuto ? InvokeType::kQueued : invoke_type;
 
 	switch (invoke_type) {
 	case InvokeType::kDirect:
 		func();
-		break;
+		return true;
 	case InvokeType::kQueued:
 		impl_->PushPendingFunctor(std::move(func));
-		break;
-	default:
-		MW_ASSERT_X(invoke_type == InvokeType::kDirect || invoke_type == InvokeType::kQueued);
-		break;
+		return true;
+	case InvokeType::kEarlyQueued: {
+		Application::Instance().PushPendingFunctor(std::move(func));
+		return true;
 	}
+	}
+	MW_ASSERT_X(false);
+	return false;
 }
 
 void Widget::Initialize(const SharedObject& parent) {
-	Object::Initialize(parent);
-	if (parent)
-		MW_ASSERT(parent->IsWidget(), "The parent of a widget must also be a widget");
+	if (parent) {
+		if (!parent->IsWidget()) {
+			MW_THROW_EX(std::invalid_argument, "The parent of a widget must also be a widget");
+		}
+		auto w = std::dynamic_pointer_cast<Widget>(parent);
+		SetWidgetParent(w);
+	}
+	else {
+		if (!IsWindow()) {
+			MW_THROW_EX(std::invalid_argument, "The parent of a widget cannot be null");
+		}
+		SetWidgetParent(nullptr);
+	}
+
 	Awake();
 }
 
-void Widget::Awake() {
-}
+void Widget::Awake() {}
 
 void Widget::Start() {
 	MW_ASSERT_X(!impl_->started_);
@@ -151,7 +187,7 @@ void Widget::Start() {
 }
 
 bool Widget::IsInUiThread() const {
-	return std::this_thread::get_id() == OwnerWindow()->OwnerMainWindow()->ThreadId();
+	return std::this_thread::get_id() == Application::Instance().ThreadId();
 }
 
 void Widget::Show() {
@@ -172,5 +208,12 @@ void Widget::PaintBegin(size_t index) {
 
 void Widget::PaintEnd(size_t index) {
 	impl_->PaintEnd();
+}
+
+void Widget::SetParent(const SharedObject& parent) const {
+	if (parent) {
+		MW_ASSERT_X(parent->IsWidget());
+	}
+	Object::SetParent(parent);
 }
 }

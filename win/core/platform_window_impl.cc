@@ -1,103 +1,103 @@
-#include "main_window_impl.h"
+#include "platform_window_impl.h"
 
 #include "application_impl.h"
 #include <miniwin/tools/mathf.h>
 #include <imgui/imgui.h>
 
 namespace miniwin {
-MainWindowImpl::MainWindowImpl(const String& title, const Vector2DInt& size, bool adjust_size, FlagsType styles,
-	const SharedMainWindow& parent)
+PlatformWindowImpl::PlatformWindowImpl(const String& title, const Vector2DInt& size, bool adjust_size, FlagsType styles,
+	const SharedPlatformWindow& parent)
 {
-	auto p = dynamic_cast<MainWindowImpl*>(parent.get());
+	auto p = dynamic_cast<PlatformWindowImpl*>(parent.get());
 	platform_win_ = PlatformEasyWindow::Create(title, size, adjust_size, styles, p ? p->platform_win_ : nullptr);
 }
 
-MainWindowImpl::~MainWindowImpl() {
+PlatformWindowImpl::~PlatformWindowImpl() {
 	ImGui::DestroyContext();
 }
 
-void MainWindowImpl::Initialize() {
+void PlatformWindowImpl::Initialize() {
 	auto p = dynamic_cast<ApplicationImpl*>(&Application::Instance());
 	p->RegisterMainWindow(shared_from_this());
 }
 
-void MainWindowImpl::Repaint() {
+void PlatformWindowImpl::Repaint() {
 	platform_win_->Repaint();
 }
 
-void MainWindowImpl::Show(bool show_or_hide) {
+void PlatformWindowImpl::Show(bool show_or_hide) {
 	platform_win_->Show(show_or_hide);
 }
 
-bool MainWindowImpl::IsFocused() const {
+bool PlatformWindowImpl::IsFocused() const {
 	return platform_win_->IsFocused();
 }
 
-void MainWindowImpl::SetFocus() {
+void PlatformWindowImpl::SetFocus() {
 	platform_win_->SetFocus();
 }
 
-void MainWindowImpl::SetSize(const Vector2DInt& size, bool adjust) {
+void PlatformWindowImpl::SetSize(const Vector2DInt& size, bool adjust) {
 	platform_win_->SetSize(size, adjust);
 }
 
-void MainWindowImpl::SetPosition(const Vector2DInt& pos, bool adjust) {
+void PlatformWindowImpl::SetPosition(const Vector2DInt& pos, bool adjust) {
 	platform_win_->SetPosition(pos, adjust);
 }
 
-void MainWindowImpl::SetMaximized(bool b) {
+void PlatformWindowImpl::SetMaximized(bool b) {
 	platform_win_->SetMaximized(b);
 }
 
-void MainWindowImpl::SetMinimized(bool b) {
+void PlatformWindowImpl::SetMinimized(bool b) {
 	platform_win_->SetMinimized(b);
 }
 
-void MainWindowImpl::SetTitle(const String& title) {
+void PlatformWindowImpl::SetTitle(const String& title) {
 	platform_win_->SetTitle(title);
 }
 
-void MainWindowImpl::SetAlpha(uint8_t alpha) {
+void PlatformWindowImpl::SetAlpha(uint8_t alpha) {
 	platform_win_->SetAlpha(alpha);
 }
 
-void MainWindowImpl::SetCursor(CursorType cursor) {
+void PlatformWindowImpl::SetCursor(CursorType cursor) {
 	platform_win_->SetCursor(static_cast<EasyWindow::CursorType>(cursor));
 }
 
-Vector2DInt MainWindowImpl::Size() const {
+Vector2DInt PlatformWindowImpl::Size() const {
 	return platform_win_->Size();
 }
 
-Vector2DInt MainWindowImpl::Position() const {
+Vector2DInt PlatformWindowImpl::Position() const {
 	return platform_win_->Position();
 }
 
-bool MainWindowImpl::IsMaximized() const {
+bool PlatformWindowImpl::IsMaximized() const {
 	return platform_win_->IsMaximized();
 }
 
-bool MainWindowImpl::IsMinimized() const {
+bool PlatformWindowImpl::IsMinimized() const {
 	return platform_win_->IsMinimized();
 }
 
-uint64_t MainWindowImpl::FrameCount() const {
+uint64_t PlatformWindowImpl::FrameCount() const {
 	return frame_count_;
 }
 
-float MainWindowImpl::DeltaTime() const {
+float PlatformWindowImpl::DeltaTime() const {
 	return static_cast<float>(delta_time_) / 1000.f;
 }
 
-bool MainWindowImpl::Orphaned() const {
-	return orphaned_;
+bool PlatformWindowImpl::IsDone() const {
+	return orphaned_ || driver_.IsDone();
 }
 
-void* MainWindowImpl::PlatformHandle() const {
+void* PlatformWindowImpl::PlatformHandle() const {
 	return platform_win_->PlatformHandle();
 }
 
-bool MainWindowImpl::Update() {
+bool PlatformWindowImpl::Update() {
 	auto start_time = std::chrono::steady_clock::now();
 
 	bool exit = !platform_win_->Update();	// 逻辑的更新（比如消息处理事件发派之类的）
@@ -131,10 +131,11 @@ bool MainWindowImpl::Update() {
 
 	++frame_count_;
 	orphaned_ = exit;
+	updated_ = true;
 	return !exit;
 }
 
-bool MainWindowImpl::AdjustDpiScale(float scale) {
+bool PlatformWindowImpl::AdjustDpiScale(float scale) {
 	cur_dpi_scale_ = scale > 1.0f ? scale : 1.0f;
 
 	if (!Mathf::Approximately(cur_dpi_scale_, prev_dpi_scale_)) {
@@ -154,23 +155,23 @@ bool MainWindowImpl::AdjustDpiScale(float scale) {
 	return true;
 }
 
-void MainWindowImpl::RegisterSubWindow(const SharedWindow& win) {
+void PlatformWindowImpl::RegisterSubWindow(const SharedWindow& win) {
 	driver_.RegisterWindow(win);
 }
 
-const List<SharedWindow>& MainWindowImpl::SubWindows() {
+const List<SharedWindow>& PlatformWindowImpl::SubWindows() {
 	return driver_.Windows();
 }
 
-std::thread::id MainWindowImpl::ThreadId() {
-	return driver_.UiThreadId();
-}
-
-Vector2DInt MainWindowImpl::ClientSize() const {
+Vector2DInt PlatformWindowImpl::ClientSize() const {
 	return platform_win_->ClientSize();
 }
 
-Vector2DInt MainWindowImpl::ClientPosition() const {
+Vector2DInt PlatformWindowImpl::ClientPosition() const {
 	return platform_win_->ClientPosition();
+}
+
+bool PlatformWindowImpl::IsUpdated() {
+	return updated_;
 }
 }

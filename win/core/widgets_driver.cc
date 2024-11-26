@@ -9,7 +9,6 @@
 
 namespace miniwin {
 WidgetsDriver::WidgetsDriver() {
-	ui_thread_id_ = std::this_thread::get_id();
 }
 
 WidgetsDriver::~WidgetsDriver() {
@@ -17,30 +16,15 @@ WidgetsDriver::~WidgetsDriver() {
 }
 
 void WidgetsDriver::Update() {
-	DoPending();
-	Prepare();
 	CallUpdateEarly();
 	size_t i = 0;
-	for (auto& win : windows_) {
-		UpdateWidget(win, &i);
-	}
-}
-
-void WidgetsDriver::Prepare() {
 	{
 		windows_.EraseIf([](auto w) {
 			return w->Orphaned();
-		});
+			});
 	}
 	for (auto& win : windows_) {
-		MW_ASSERT_X(!win->Orphaned());
-		PrepareRecursion(win);
-
-		// 因为只有Widget是有权限调用的，所以得转成Widget
-		auto w = dynamic_cast<Widget*>(win.get());
-		if (!w->impl_->started_) {
-			w->Start();
-		}
+		UpdateWidget(win, &i);
 	}
 }
 
@@ -50,36 +34,23 @@ void WidgetsDriver::CallUpdateEarly() const {
 	}
 }
 
-void WidgetsDriver::DoPending() {
-	List<std::function<void()>> functors;
-	{
-		std::lock_guard lk(mutex_);
-		functors.Swap(pending_functors_);
-	}
-	for (auto& f : functors) {
-		f();
-	}
-	functors.Clear();
-}
-
 bool WidgetsDriver::IsDone() const {
-	return windows_.empty() && pending_functors_.empty();
+	return windows_.empty();
 }
 
 void WidgetsDriver::CloseAll() {
-	PushPendingFunctor([this] {
+	Application::Instance().PushPendingFunctor([this] {
+		for (auto& w : windows_) {
+			w->Close();
+		}
 		windows_.Clear();
 	});
 }
 
 void WidgetsDriver::RegisterWindow(const SharedWindow& window) {
-	PushPendingFunctor([window, this] {
+	Application::Instance().PushPendingFunctor([window, this] {
 		windows_.PushBack(window);
 	});
-}
-
-std::thread::id WidgetsDriver::UiThreadId() const {
-	return ui_thread_id_;
 }
 
 void WidgetsDriver::UpdateChildrenRecursion(const SharedWidget& widget) {
@@ -150,24 +121,13 @@ void WidgetsDriver::UpdateLayout(const SharedLayout& layout, size_t* index) {
 }
 
 void WidgetsDriver::CallUpdateEarlyRecursion(const SharedWidget& widget) {
+	if (!widget->IsStarted()) {
+		widget->Start();
+	}
 	widget->PreparePaint();
 	for (auto& w : widget->WidgetChildren()) {
 		CallUpdateEarlyRecursion(w);
 	}
-}
-
-void WidgetsDriver::PrepareRecursion(const SharedWidget& widget) {
-	for (auto& w : widget->WidgetChildren()) {
-		if (!w->impl_->started_) {
-			PrepareRecursion(w);
-			w->Start();
-		}
-	}
-}
-
-void WidgetsDriver::PushPendingFunctor(std::function<void()> func) {
-	std::lock_guard lk(mutex_);
-	pending_functors_.PushBack(std::move(func));
 }
 
 const List<SharedWindow>& WidgetsDriver::Windows() {
