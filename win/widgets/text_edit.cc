@@ -68,8 +68,8 @@ void TextEdit::SetSize(const Vector2D& size) {
 	
 }
 
-void TextEdit::PaintBegin(size_t index) {
-	AbstractControl::PaintBegin(index);
+void TextEdit::BeginUpdate(size_t index) {
+	AbstractControl::BeginUpdate(index);
 
 	bool changed = imgui::InputText(RightLabel(), &impl_->text_buffer_, Flags(), [this](imgui::InputTextCallbackData data) {
 		auto args = FilterInputArgs(data.InputChar(), data.InputKey(), data.TextLength());

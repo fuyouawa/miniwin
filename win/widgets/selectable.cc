@@ -57,8 +57,8 @@ void Selectable::Start() {
 	impl_->size_sc_.SetValueDirectly(impl_->CalcSize());
 }
 
-void Selectable::PaintBegin(size_t index) {
-	AbstractControl::PaintBegin(index);
+void Selectable::BeginUpdate(size_t index) {
+	AbstractControl::BeginUpdate(index);
 
 	imgui::Selectable(Text(), &impl_->cur_selected_, 0, impl_->size_sc_.cur_value());
 	if (impl_->cur_selected_ != impl_->prev_selected_) {

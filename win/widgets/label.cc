@@ -48,8 +48,8 @@ void Label::Start() {
 	impl_->size_sc_.SetValueDirectly(impl_->CalcSize());
 }
 
-void Label::PaintBegin(size_t index) {
-	AbstractControl::PaintBegin(index);
+void Label::BeginUpdate(size_t index) {
+	AbstractControl::BeginUpdate(index);
 
 	imgui::Text(Text());
 }

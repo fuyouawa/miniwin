@@ -15,8 +15,8 @@ public:
 	void SetPosition(const Vector2D& pos, ControlRelativeTo relative = ControlRelativeTo::kWindow);
 
 protected:
-	void PaintBegin(size_t index) override;
-	void PaintEnd(size_t index) override;
+	void BeginUpdate(size_t index) override;
+	void EndUpdate(size_t index) override;
 
 	_MW_IMPL
 };

@@ -105,8 +105,8 @@ void IntegerEdit::Start() {
 		});
 }
 
-void IntegerEdit::PaintBegin(size_t index) {
-	TextEdit::PaintBegin(index);
+void IntegerEdit::BeginUpdate(size_t index) {
+	TextEdit::BeginUpdate(index);
 
 	if (TextBuffer().empty()) {
 		SetTextBuffer("0");

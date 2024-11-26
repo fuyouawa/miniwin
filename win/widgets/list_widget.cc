@@ -69,7 +69,7 @@ void ListWidget::Awake() {
 	impl_->Awake();
 }
 
-void ListWidget::PaintBegin(size_t index) {
-	ListView::PaintBegin(index);
+void ListWidget::BeginUpdate(size_t index) {
+	ListView::BeginUpdate(index);
 }
 }

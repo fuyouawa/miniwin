@@ -57,8 +57,8 @@ void ListView::Awake() {
 	impl_->Awake();
 }
 
-void ListView::PaintBegin(size_t index) {
-	AbstractItemView::PaintBegin(index);
+void ListView::BeginUpdate(size_t index) {
+	AbstractItemView::BeginUpdate(index);
 	auto m = Model();
 
 	if ((impl_->visible_ = imgui::BeginListBox(RightLabel(), impl_->size_to_set_))) {
@@ -83,10 +83,10 @@ void ListView::PaintBegin(size_t index) {
 	}
 }
 
-void ListView::PaintEnd(size_t index) {
+void ListView::EndUpdate(size_t index) {
 	if (impl_->visible_) {
 		imgui::EndListBox();
 	}
-	AbstractItemView::PaintEnd(index);
+	AbstractItemView::EndUpdate(index);
 }
 }

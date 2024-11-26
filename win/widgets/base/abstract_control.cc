@@ -63,8 +63,8 @@ void AbstractControl::SetPosition(const Vector2D& pos, ControlRelativeTo relativ
 	impl_->relative_to_ = relative;
 }
 
-void AbstractControl::PaintBegin(size_t index) {
-	Widget::PaintBegin(index);
+void AbstractControl::BeginUpdate(size_t index) {
+	Widget::BeginUpdate(index);
 
 	impl_->origin_pos_ = imgui::GetCursorPos();
 
@@ -88,7 +88,7 @@ void AbstractControl::PaintBegin(size_t index) {
 	}
 }
 
-void AbstractControl::PaintEnd(size_t index) {
-	Widget::PaintEnd(index);
+void AbstractControl::EndUpdate(size_t index) {
+	Widget::EndUpdate(index);
 }
 }

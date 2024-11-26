@@ -19,8 +19,8 @@ public:
 	MW_SIGNAL(OnToggled, (bool) checked)
 
 protected:
-	void PaintBegin(size_t index) override;
-	void PaintEnd(size_t index) override;
+	void BeginUpdate(size_t index) override;
+	void EndUpdate(size_t index) override;
 
 	_MW_IMPL
 };

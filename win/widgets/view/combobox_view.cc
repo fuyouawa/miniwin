@@ -20,20 +20,20 @@ public:
 		owner_->SetSelectionModel(s);
 	}
 
-	Vector2D CalcSize() const {
-		auto m = owner_->Model();
-		auto cs = owner_->SelectionModel()->CurrentSelection();
-		String data;
-		if (m->RowCount() > 0) {
-			if (cs.valid()) {
-				data = m->Data(cs.top_left().row()).ToString();
-			}
-			else {
-				data = m->Data(0).ToString();
-			}
-		}
-		return imgui::CalcTextSize(data) + imgui::style::FramePadding() * 2;
-	}
+	// Vector2D CalcSize() const {
+	// 	auto m = owner_->Model();
+	// 	auto cs = owner_->SelectionModel()->CurrentSelection();
+	// 	String data;
+	// 	if (m->RowCount() > 0) {
+	// 		if (cs.valid()) {
+	// 			data = m->Data(cs.top_left().row()).ToString();
+	// 		}
+	// 		else {
+	// 			data = m->Data(0).ToString();
+	// 		}
+	// 	}
+	// 	return imgui::CalcTextSize(data) + imgui::style::FramePadding() * 2;
+	// }
 
 	ComboBoxView* owner_;
 	bool is_open_ = false;
@@ -70,8 +70,8 @@ void ComboBoxView::Awake() {
 	impl_->Awake();
 }
 
-void ComboBoxView::PaintBegin(size_t index) {
-	AbstractItemView::PaintBegin(index);
+void ComboBoxView::BeginUpdate(size_t index) {
+	AbstractItemView::BeginUpdate(index);
 
 	if (!Mathf::Approximately(impl_->width_to_set_, 0.f)) {
 		imgui::PushItemWidth(impl_->width_to_set_);
@@ -87,6 +87,7 @@ void ComboBoxView::PaintBegin(size_t index) {
 				d->Paint(self, {i, 0});
 			}
 		}
+		imgui::EndCombo();
 	}
 
 	auto really_size = imgui::GetItemRectSize();
@@ -96,13 +97,5 @@ void ComboBoxView::PaintBegin(size_t index) {
 		}
 		impl_->really_size_ = really_size;
 	}
-}
-
-void ComboBoxView::PaintEnd(size_t index) {
-	if (impl_->is_open_) {
-		imgui::EndCombo();
-	}
-
-	AbstractItemView::PaintEnd(index);
 }
 }

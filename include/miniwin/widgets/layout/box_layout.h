@@ -28,8 +28,8 @@ public:
 	float TotalWidth() const;
 
 protected:
-	void OnBeginLayout() override;
-	void OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) override;
+	void OnPrepareLayout() override;
+	void OnBeginLayoutWidget(const SharedWidget& widget, size_t index) override;
 };
 
 class VBoxLayout : public BoxLayout {
@@ -40,6 +40,6 @@ public:
 	float TotalHeight() const;
 
 protected:
-	void OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) override;
+	void OnBeginLayoutWidget(const SharedWidget& widget, size_t index) override;
 };
 }

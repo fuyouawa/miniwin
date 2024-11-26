@@ -198,15 +198,15 @@ void Widget::Hide() {
 	SetVisible(false);
 }
 
-void Widget::PreparePaint() {
+void Widget::PrepareUpdate() {
 	impl_->DoPendingFunctors();
 }
 
-void Widget::PaintBegin(size_t index) {
+void Widget::BeginUpdate(size_t index) {
 	impl_->PaintBegin();
 }
 
-void Widget::PaintEnd(size_t index) {
+void Widget::EndUpdate(size_t index) {
 	impl_->PaintEnd();
 }
 

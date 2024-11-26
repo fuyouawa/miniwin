@@ -137,14 +137,14 @@ void Window::SetSize(const Vector2D& size) {
 	impl_->size_sc_.SetControl(size);
 }
 
-void Window::PaintBegin(size_t index) {
-	Widget::PaintBegin(index);
+void Window::BeginUpdate(size_t index) {
+	Widget::BeginUpdate(index);
 	impl_->PaintBegin();
 }
 
-void Window::PaintEnd(size_t index) {
+void Window::EndUpdate(size_t index) {
 	impl_->PaintEnd();
-	Widget::PaintEnd(index);
+	Widget::EndUpdate(index);
 }
 
 void Window::OnPaintWindowBegin() {

@@ -23,8 +23,8 @@ void Frame::SetSize(const Vector2D& size) {
 	impl_->size_sc_.SetControl(size);
 }
 
-void Frame::PaintBegin(size_t index) {
-	AbstractControl::PaintBegin(index);
+void Frame::BeginUpdate(size_t index) {
+	AbstractControl::BeginUpdate(index);
 
 	impl_->size_sc_.Enter();
 	if (impl_->size_sc_.HasChange()) {
@@ -43,10 +43,10 @@ void Frame::PaintBegin(size_t index) {
 	}
 }
 
-void Frame::PaintEnd(size_t index) {
+void Frame::EndUpdate(size_t index) {
 	imgui::EndChild();
 
 	impl_->size_sc_.Exit();
-	AbstractControl::PaintEnd(index);
+	AbstractControl::EndUpdate(index);
 }
 }

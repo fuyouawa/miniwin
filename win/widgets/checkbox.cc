@@ -46,8 +46,8 @@ void CheckBox::SetSize(const Vector2D& size) {
 	//TODO CheckBox::SetSize
 }
 
-void CheckBox::PaintBegin(size_t index) {
-	AbstractControl::PaintBegin(index);
+void CheckBox::BeginUpdate(size_t index) {
+	AbstractControl::BeginUpdate(index);
 
 	impl_->checked_sc_.Enter();
 
@@ -61,8 +61,8 @@ void CheckBox::PaintBegin(size_t index) {
 	}
 }
 
-void CheckBox::PaintEnd(size_t index) {
+void CheckBox::EndUpdate(size_t index) {
 	impl_->checked_sc_.Exit();
-	AbstractControl::PaintEnd(index);
+	AbstractControl::EndUpdate(index);
 }
 }

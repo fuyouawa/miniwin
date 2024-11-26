@@ -34,7 +34,7 @@ protected:
 
 	virtual bool FilterInput(FilterInputArgs& args);
 
-	void PaintBegin(size_t index) override;
+	void BeginUpdate(size_t index) override;
 
 protected:
 	_MW_IMPL

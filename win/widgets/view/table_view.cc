@@ -58,8 +58,8 @@ const SharedItemDelegate& TableView::HeaderItemDelegate(HeaderOrientation orient
 	return impl_->headers_delegate_[static_cast<size_t>(orientation)];
 }
 
-void TableView::PaintBegin(size_t index) {
-	AbstractItemView::PaintBegin(index);
+void TableView::BeginUpdate(size_t index) {
+	AbstractItemView::BeginUpdate(index);
 	auto m = Model();
 	auto self = shared_from_this();
 	auto col_count = m->ColumnCount();

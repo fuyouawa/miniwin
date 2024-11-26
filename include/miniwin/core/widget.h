@@ -74,17 +74,17 @@ protected:
 	virtual void Awake();
 	virtual void Start();
 
-	// 是所有绘制之前的准备工作
-	// 会先调用完所有Widget的PreparePaint后才会进入PaintBegin
-	virtual void PreparePaint();
-	// 开始绘制
-	// 会先调用父类的PaintBegin, 然后会递归调用所有子类的PaintBegin
+	// 是所有更新之前的准备工作
+	// 会先调用完所有Widget的PrepareUpdate后才会进入BeginUpdate
+	virtual void PrepareUpdate();
+	// 开始新一帧的更新
+	// 会先调用父类的BeginUpdate, 然后会递归调用所有子类的BeginUpdate
 	// 相当于二叉树遍历中的左叶子
-	virtual void PaintBegin(size_t index);
-	// 结束绘制
-	// 和PaintBegin相对应
+	virtual void BeginUpdate(size_t index);
+	// 结束当前帧的更新
+	// 和BeginUpdate相对应
 	// 相当于二叉树遍历中的右叶子
-	virtual void PaintEnd(size_t index);
+	virtual void EndUpdate(size_t index);
 
 private:
 	friend class WidgetsDriver;

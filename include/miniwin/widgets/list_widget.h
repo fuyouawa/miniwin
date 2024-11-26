@@ -22,7 +22,7 @@ public:
 
 protected:
 	void Awake() override;
-	void PaintBegin(size_t index) override;
+	void BeginUpdate(size_t index) override;
 
 	_MW_IMPL
 };

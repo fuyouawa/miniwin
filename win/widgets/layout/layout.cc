@@ -131,15 +131,15 @@ void Layout::Initialize(const SharedObject& parent) {
 		});
 }
 
-void Layout::OnBeginLayout() {
+void Layout::OnPrepareLayout() {
 	imgui::BeginGroup();
 }
 
-void Layout::OnLayoutWidgetBegin(const SharedWidget& widget, size_t index) {}
+void Layout::OnBeginLayoutWidget(const SharedWidget& widget, size_t index) {}
 
-void Layout::OnLayoutWidgetEnd(const SharedWidget& widget, size_t index) {}
+void Layout::OnEndLayoutWidget(const SharedWidget& widget, size_t index) {}
 
-void Layout::OnEndLayout() {
+void Layout::OnFinishedLayout() {
 	imgui::EndGroup();
 }
 }

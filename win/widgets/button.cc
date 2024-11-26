@@ -46,8 +46,8 @@ void Button::Start() {
 	impl_->size_sc_.SetValueDirectly(impl_->CalcSize());
 }
 
-void Button::PaintBegin(size_t index) {
-	AbstractControl::PaintBegin(index);
+void Button::BeginUpdate(size_t index) {
+	AbstractControl::BeginUpdate(index);
 	impl_->size_sc_.Enter();
 
 	if (impl_->size_sc_.HasChange()) {
@@ -59,9 +59,9 @@ void Button::PaintBegin(size_t index) {
 	}
 }
 
-void Button::PaintEnd(size_t index) {
+void Button::EndUpdate(size_t index) {
 	impl_->size_sc_.Exit();
 
-	AbstractControl::PaintEnd(index);
+	AbstractControl::EndUpdate(index);
 }
 }
