@@ -34,7 +34,6 @@ public:
 	bool IsMaximized() const override;
 	bool IsMinimized() const override;
 	uint64_t FrameCount() const override;
-	float DeltaTime() const override;
 	bool IsDone() const override;
 	void* PlatformHandle() const override;
 	bool Update() override;
@@ -54,7 +53,6 @@ public:
 	SharedPlatformEasyWindow platform_win_;
 	WidgetsDriver driver_;
 	uint64_t frame_count_ = 0;
-	size_t delta_time_ = 0;
 	bool orphaned_ = false;
 	bool updated_ = false;
 };

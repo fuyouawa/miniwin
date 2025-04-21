@@ -45,25 +45,34 @@ bool ApplicationImpl::IsExecuting() const {
 }
 
 int ApplicationImpl::Execute() {
-	thread_id_ = std::this_thread::get_id();
+	thread_id_ = std::this_thread::get_id();					// 记录主线程ID
 	while (true) {
-		DoPending();
-		platform_windows_.EraseIf([](const SharedPlatformWindow& win) { return win->IsDone(); });
+		auto start_time = std::chrono::steady_clock::now();		// 开始时间
 
-		if (IsDone())
+		DoPendingFunctors();									// 处理待处理函数
+		ClearDoneWindow();										// 清理已经完成（死亡）的窗体
+
+		if (IsDone())											// 如果完成（没有窗体在运行了）就退出
 			break;
 
-		delta_time_ = 0;
-		for (auto& win : platform_windows_) {
+		for (auto& win : platform_windows_) {					// 更新所有平台窗体（主窗体）
 			win->Update();
-			delta_time_ += win->DeltaTime();
 		}
 
-		auto sleep_time = 1000 / fps_;
-		auto dt = static_cast<size_t>(delta_time_ * 1000);
-		if (sleep_time > dt) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time - dt));
+		auto end_time = std::chrono::steady_clock::now();		// 结束时间
+
+		// 计算上面这些逻辑需要的时间（开始时间减结束时间）
+		auto logic_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+		// 根据设定的FPS计算每帧休眠时间
+		auto sleep_time = std::chrono::milliseconds(1000ull / fps_);
+		// 假设休眠时间为0.2s，逻辑运行时间为0.15s
+		// 那么实际所需休眠时间为0.2s - 0.15s = 0.05s
+		// 如果逻辑运行时间比休眠时间长，就不休眠
+		if (sleep_time > logic_time) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time - logic_time));
 		}
+		// 计算当前帧的时间
+		delta_time_ = std::max(sleep_time, logic_time);
 	}
 
 	return 0;
@@ -82,7 +91,7 @@ void ApplicationImpl::PushPendingFunctor(std::function<void()> func) {
 	pending_functors_.EmplaceBack(std::move(func));
 }
 
-void ApplicationImpl::DoPending() {
+void ApplicationImpl::DoPendingFunctors() {
 	List<std::function<void()>> functors;
 	{
 		std::lock_guard lk(mutex_);
@@ -100,5 +109,11 @@ std::thread::id ApplicationImpl::ThreadId() const {
 
 bool ApplicationImpl::IsDone() const {
 	return platform_windows_.empty() && pending_functors_.empty();
+}
+
+void ApplicationImpl::ClearDoneWindow() {
+	platform_windows_.EraseIf([](const SharedPlatformWindow& win) {
+		return win->IsDone();
+	});
 }
 }

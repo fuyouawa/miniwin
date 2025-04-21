@@ -145,20 +145,20 @@ public:
 };
 
 int main() {
-	auto& app = Application::Instance();
-	app.EnabledIniFile(false);		// 关闭缓存文件
+	auto& app = Application::Instance();							// 应用程序实例
+	app.EnabledIniFile(false);										// 关闭缓存文件
 
-	auto win = PlatformWindow::Create("测试", { 1000, 800 });
+	auto win = PlatformWindow::Create("测试", { 1000, 800 });	// 创建一个1000x800的主窗体
 
 	// 实例化示例窗体
-	auto window = Object::Create<ExampleWindow>(nullptr);
-	window->SetTitle("示例窗体");	// 设置标题
-	window->SetSize({600, 400});	// 设置大小
-	window->AlignWindow(Alignment::kCenter, WindowRelativeTo::kMainWindow);
+	auto window = Object::Create<ExampleWindow>(nullptr);			// 创建一个示例窗体
+	window->SetTitle("示例窗体");									// 设置标题
+	window->SetSize({600, 400});									// 设置大小
+	window->AlignWindow(Alignment::kCenter, WindowRelativeTo::kMainWindow);	// 在主窗体中剧中
 
-	window->SetPlatformWindow(win);
+	window->SetPlatformWindow(win);									// 将该窗体设置到主窗体下
 
-	app.Execute();					// 开始运行
+	app.Execute();													// 开始运行
 }
 
 // 未来某一时刻服务器下发了个id为114514，内含1.1f和false两个数据

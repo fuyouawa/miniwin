@@ -60,8 +60,6 @@ public:
 
 	virtual uint64_t FrameCount() const = 0;
 
-	virtual float DeltaTime() const = 0;
-
 	virtual bool IsDone() const = 0;
 	virtual bool Update() = 0;
 	virtual bool IsUpdated() = 0;

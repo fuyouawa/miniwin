@@ -85,10 +85,6 @@ uint64_t PlatformWindowImpl::FrameCount() const {
 	return frame_count_;
 }
 
-float PlatformWindowImpl::DeltaTime() const {
-	return static_cast<float>(delta_time_) / 1000.f;
-}
-
 bool PlatformWindowImpl::IsDone() const {
 	return orphaned_ || driver_.IsDone();
 }
@@ -98,8 +94,6 @@ void* PlatformWindowImpl::PlatformHandle() const {
 }
 
 bool PlatformWindowImpl::Update() {
-	auto start_time = std::chrono::steady_clock::now();
-
 	bool exit = !platform_win_->Update();	// 逻辑的更新（比如消息处理事件发派之类的）
 	if (!exit) {
 		PlatformPreRender();
@@ -125,9 +119,6 @@ bool PlatformWindowImpl::Update() {
 			platform_win_->Present();					// 提交渲染结果到屏幕
 		}
 	}
-
-	auto end_time_ = std::chrono::steady_clock::now();
-	delta_time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_time_ - start_time).count();
 
 	++frame_count_;
 	orphaned_ = exit;

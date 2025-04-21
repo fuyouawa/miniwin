@@ -30,9 +30,11 @@ public:
 
 	void RegisterMainWindow(const SharedPlatformWindow& window);
 	void PushPendingFunctor(std::function<void()> func) override;
-	void DoPending();
+	void DoPendingFunctors();
 	std::thread::id ThreadId() const override;
 	bool IsDone() const override;
+
+	void ClearDoneWindow();
 
 	String ini_filename_;
 	size_t fps_ = 60;
@@ -40,7 +42,7 @@ public:
 	List<std::function<void()>> pending_functors_;
 	std::mutex mutex_;
 	bool is_executing_ = false;
-	float delta_time_ = 0;
+	std::chrono::milliseconds delta_time_;
 	uint64_t frame_count_ = 0;
 	std::thread::id thread_id_;
 };
